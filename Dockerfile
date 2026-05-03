@@ -1,76 +1,89 @@
-FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
+# Build openclaw from source to avoid npm packaging gaps (some dist files are not shipped).
+FROM node:22-bookworm AS openclaw-build
 
-# Which hermes-agent revision to install. Accepts any git ref the upstream
-# repo publishes — a release tag (recommended for reproducibility) or a
-# branch name (`main`) for bleeding edge.
-#
-# To bump: check https://github.com/NousResearch/hermes-agent/releases for the
-# newest tag (format `vYYYY.M.D`, e.g. `v2026.4.23`) and update the default
-# below. Use `main` only if you accept that every rebuild can pull arbitrary
-# new upstream commits.
-ARG HERMES_REF=v2026.4.30
+# Dependencies needed for openclaw build
+RUN apt-get update \
+  && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    git \
+    ca-certificates \
+    curl \
+    python3 \
+    make \
+    g++ \
+  && rm -rf /var/lib/apt/lists/*
 
-# tini = tiny init that we run as PID 1. Without it, hermes's grandchild
-# processes (MCP stdio servers, git, bun, browser daemons spawned by tools)
-# reparent to PID 1 when their parents exit and pile up as zombies. After
-# weeks of uptime that exhausts the kernel's PID table → "fork: cannot
-# allocate memory" and the container dies. tini reaps zombies in the
-# background and forwards SIGTERM/SIGINT to our entrypoint so Railway's
-# stop signal still triggers our graceful shutdown. Standard container init
-# (same as Docker's `--init` flag and Kubernetes' pause container).
-#
-# Node.js is required only at build time to compile the Hermes React dashboard.
-# We strip the source + apt lists afterwards to keep the image lean.
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends curl ca-certificates git tini && \
-    curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
-    apt-get install -y --no-install-recommends nodejs && \
-    rm -rf /var/lib/apt/lists/*
+# Install Bun (openclaw build uses it)
+RUN curl -fsSL https://bun.sh/install | bash
+ENV PATH="/root/.bun/bin:${PATH}"
 
-# Install hermes-agent (provides the `hermes` CLI) and pre-build its React
-# dashboard so `hermes dashboard` has nothing to build at runtime.
-# Deleting web/ afterwards makes hermes's internal _build_web_ui skip the
-# rebuild step (it early-returns when package.json is absent), so container
-# startup is fast and no runtime npm dependency is needed.
-RUN git clone --depth 1 --branch ${HERMES_REF} https://github.com/NousResearch/hermes-agent.git /opt/hermes-agent && \
-    cd /opt/hermes-agent && \
-    uv pip install --system --no-cache -e ".[all]" && \
-    cd /opt/hermes-agent/web && \
-    npm install --silent && \
-    npm run build && \
-    cd /opt/hermes-agent/ui-tui && \
-    npm install --silent --no-fund --no-audit --progress=false && \
-    npm run build && \
-    rm -rf /opt/hermes-agent/web /opt/hermes-agent/.git /root/.npm
+RUN corepack enable
 
-# Why pre-build ui-tui (and why we don't delete it after):
-# - The dashboard's embedded Chat tab spawns `node ui-tui/dist/entry.js`
-#   on every WebSocket connect to /api/pty.
-# - hermes's _make_tui_argv runs `npm install` + `npm run build` via
-#   *synchronous* subprocess.run if dist/entry.js is missing or stale —
-#   that would block the dashboard's asyncio event loop for 30-60s on
-#   the first chat-open, freezing every other request.
-# - Pre-building at image time costs ~200-300 MB of node_modules but
-#   makes first-chat-open instant and surfaces any build failure here
-#   instead of at user request time.
-# - We keep ui-tui/ entirely (node_modules + dist + src) so hermes's
-#   freshness checks don't trigger a re-install at runtime.
+WORKDIR /openclaw
 
-COPY requirements.txt /app/requirements.txt
-RUN uv pip install --system --no-cache -r /app/requirements.txt
+# Pin to a known-good ref (tag/branch). Override in Railway template settings if needed.
+# Using a released tag avoids build breakage when `main` temporarily references unpublished packages.
+ARG OPENCLAW_GIT_REF=v2026.2.9
+RUN git clone --depth 1 --branch "${OPENCLAW_GIT_REF}" https://github.com/openclaw/openclaw.git .
 
-RUN mkdir -p /data/.hermes
+# Patch: relax version requirements for packages that may reference unpublished versions.
+# Apply to all extension package.json files to handle workspace protocol (workspace:*).
+RUN set -eux; \
+  find ./extensions -name 'package.json' -type f | while read -r f; do \
+    sed -i -E 's/"openclaw"[[:space:]]*:[[:space:]]*">=[^"]+"/"openclaw": "*"/g' "$f"; \
+    sed -i -E 's/"openclaw"[[:space:]]*:[[:space:]]*"workspace:[^"]+"/"openclaw": "*"/g' "$f"; \
+  done
 
-COPY server.py /app/server.py
-COPY templates/ /app/templates/
-COPY start.sh /app/start.sh
-RUN chmod +x /app/start.sh
+RUN pnpm install --no-frozen-lockfile
+RUN pnpm build
+ENV OPENCLAW_PREFER_PNPM=1
+RUN pnpm ui:install && pnpm ui:build
 
-ENV HOME=/data
-ENV HERMES_HOME=/data/.hermes
 
-# tini wraps start.sh so it runs as PID 1's child instead of as PID 1 itself.
-# `-g` propagates signals to the whole process group so `docker stop` /
-# Railway's SIGTERM cleanly terminates the entire tree, not just start.sh.
-ENTRYPOINT ["/usr/bin/tini", "-g", "--"]
-CMD ["/app/start.sh"]
+# Runtime image
+FROM node:22-bookworm
+ENV NODE_ENV=production
+
+RUN apt-get update \
+  && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    ca-certificates \
+    tini \
+    python3 \
+    python3-venv \
+  && rm -rf /var/lib/apt/lists/*
+
+# `openclaw update` expects pnpm. Provide it in the runtime image.
+RUN corepack enable && corepack prepare pnpm@10.23.0 --activate
+
+# Persist user-installed tools by default by targeting the Railway volume.
+# - npm global installs -> /data/npm
+# - pnpm global installs -> /data/pnpm (binaries) + /data/pnpm-store (store)
+ENV NPM_CONFIG_PREFIX=/data/npm
+ENV NPM_CONFIG_CACHE=/data/npm-cache
+ENV PNPM_HOME=/data/pnpm
+ENV PNPM_STORE_DIR=/data/pnpm-store
+ENV PATH="/data/npm/bin:/data/pnpm:${PATH}"
+
+WORKDIR /app
+
+# Wrapper deps
+COPY package.json ./
+RUN npm install --omit=dev && npm cache clean --force
+
+# Copy built openclaw
+COPY --from=openclaw-build /openclaw /openclaw
+
+# Provide an openclaw executable
+RUN printf '%s\n' '#!/usr/bin/env bash' 'exec node /openclaw/dist/entry.js "$@"' > /usr/local/bin/openclaw \
+  && chmod +x /usr/local/bin/openclaw
+
+COPY src ./src
+
+# The wrapper listens on $PORT.
+# IMPORTANT: Do not set a default PORT here.
+# Railway injects PORT at runtime and routes traffic to that port.
+# If we force a different port, deployments can come up but the domain will route elsewhere.
+EXPOSE 8080
+
+# Ensure PID 1 reaps zombies and forwards signals.
+ENTRYPOINT ["tini", "--"]
+CMD ["node", "src/server.js"]

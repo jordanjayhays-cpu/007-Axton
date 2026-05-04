@@ -1111,6 +1111,64 @@ app.use(async (req, res) => {
   return proxy.web(req, res, { target: GATEWAY_TARGET });
 });
 
+// Sync OpenRouter auth from env vars at startup
+async function syncOpenRouterAuth() {
+  const apiKey = process.env.OPENROUTER_API_KEY?.trim();
+  if (!apiKey) return;
+
+  const profileId = "openrouter:manual";
+  const agentDir = path.join(STATE_DIR, "agents", "main", "agent");
+  const authProfilesPath = path.join(agentDir, "auth-profiles.json");
+
+  let store = { profiles: {}, order: {} };
+  try {
+    if (fs.existsSync(authProfilesPath)) {
+      store = JSON.parse(fs.readFileSync(authProfilesPath, "utf8"));
+    }
+  } catch (err) {
+    console.warn(`[wrapper] could not read auth-profiles: ${err.message}`);
+  }
+
+  if (store.profiles[profileId]) {
+    console.log(`[wrapper] OpenRouter auth profile already exists (${profileId})`);
+    return;
+  }
+
+  fs.mkdirSync(agentDir, { recursive: true });
+  store.profiles[profileId] = {
+    type: "token",
+    provider: "openrouter",
+    token: apiKey,
+  };
+  if (!store.order.openrouter) {
+    store.order.openrouter = [];
+  }
+  if (!store.order.openrouter.includes(profileId)) {
+    store.order.openrouter.unshift(profileId);
+  }
+
+  fs.writeFileSync(authProfilesPath, JSON.stringify(store, null, 2));
+  console.log(`[wrapper] OpenRouter auth profile written to ${authProfilesPath}`);
+}
+
+// Sync OpenRouter model from env vars at startup
+async function syncOpenRouterModel() {
+  const model = process.env.OPENROUTER_MODEL?.trim();
+  if (!model) return;
+
+  try {
+    console.log(`[wrapper] setting OpenRouter model to: ${model}`);
+    const result = await runCmd(
+      OPENCLAW_NODE,
+      clawArgs(["models", "set", model])
+    );
+    console.log(`[wrapper] models set exit=${result.code}`);
+    if (result.output) console.log(result.output);
+  } catch (err) {
+    console.warn(`[wrapper] failed to set OpenRouter model: ${err.message}`);
+  }
+}
+
 const server = app.listen(PORT, () => {
   console.log(`[wrapper] listening on port ${PORT}`);
   console.log(`[wrapper] setup wizard: http://localhost:${PORT}/setup`);
@@ -1127,6 +1185,9 @@ const server = app.listen(PORT, () => {
       } catch (err) {
         console.warn(`[wrapper] doctor --fix failed: ${err.message}`);
       }
+      // Sync OpenRouter auth + model from Railway env vars
+      await syncOpenRouterAuth();
+      await syncOpenRouterModel();
       await ensureGatewayRunning();
     })().catch((err) => {
       console.error(`[wrapper] failed to start gateway at boot: ${err.message}`);

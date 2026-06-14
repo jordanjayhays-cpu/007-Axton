@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Harvard GSCM — Practice Quiz</title>
+  <style>
+    /* ── Same base as GitHub Pages rendered markdown ── */
+    :root {
+      --bg: #ffffff;
+      --text: #24292e;
+      --muted: #586069;
+      --link: #0366d6;
+      --border: #e1e4e8;
+      --border-dark: #c6cbd1;
+      --accent: #0366d6;
+      --accent-light: #f1f8ff;
+      --green: #28a745;
+      --green-light: #dcffe4;
+      --red: #cb2431;
+      --red-light: #ffdce0;
+      --code-bg: rgba(27,31,35,0.06);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.5;
+      padding: 24px 16px;
+    }
+    .container { max-width: 800px; margin: 0 auto; }
+
+    h1 {
+      font-size: 2em;
+      font-weight: 600;
+      padding-bottom: 0.3em;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 16px;
+      margin-top: 24px;
+    }
+    h2 {
+      font-size: 1.5em;
+      font-weight: 600;
+      padding-bottom: 0.3em;
+      border-bottom: 1px solid var(--border);
+      margin-top: 32px;
+      margin-bottom: 16px;
+    }
+    p { margin-bottom: 16px; }
+
+    /* ── Room cards ── */
+    .room {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+    .room-header {
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 16px;
+      font-weight: 600;
+      font-size: 1em;
+      color: var(--text);
+    }
+    .room-body { padding: 16px; }
+
+    /* ── Tables ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 16px;
+      display: block;
+      overflow: auto;
+    }
+    th {
+      font-weight: 600;
+      padding: 6px 13px;
+      border: 1px solid var(--border-dark);
+      background: #f6f8fa;
+    }
+    td {
+      padding: 6px 13px;
+      border: 1px solid var(--border);
+    }
+    tr:nth-child(2n) td { background-color: #f6f8fa; }
+    .best { color: var(--accent); font-weight: 700; }
+    .best::after { content: ' ◄ BEST'; font-size: 0.8rem; }
+
+    /* ── Question blocks ── */
+    .q {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+    }
+    .q-label {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+      font-size: 0.875em;
+    }
+    .q-text { margin-bottom: 12px; font-size: 0.95rem; }
+
+    input[type="text"] {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border-dark);
+      border-radius: 6px;
+      color: var(--text);
+      padding: 8px 12px;
+      font-size: 0.9rem;
+      outline: none;
+    }
+    input[type="text"]:focus { border-color: var(--accent); outline: none; }
+
+    /* ── Buttons ── */
+    .check-btn {
+      display: inline-block;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 16px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    .check-btn:hover { opacity: 0.85; }
+
+    /* ── Feedback ── */
+    .answer {
+      display: none;
+      margin-top: 10px;
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    .answer.show { display: block; }
+    .answer.correct { background: var(--green-light); border: 1px solid var(--green); color: var(--green); }
+    .answer.wrong  { background: var(--red-light);   border: 1px solid var(--red);   color: var(--red); }
+
+    /* ── Board grid ── */
+    .board-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .board-item {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-size: 0.85rem;
+    }
+    .board-item strong { color: var(--accent); display: block; margin-bottom: 2px; }
+
+    /* ── Math boxes ── */
+    .math-box {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+      font-size: 0.9rem;
+    }
+    .math-box h4 { font-weight: 600; margin-bottom: 4px; font-size: 0.875em; }
+    code {
+      background: var(--code-bg);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.85em;
+      font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+    }
+
+    /* ── Supplier best picks ── */
+    .cheap { color: var(--accent); font-weight: 600; }
+    .fast  { color: var(--accent); font-weight: 600; }
+
+    /* ── Rule label ── */
+    .rule-label {
+      background: var(--accent-light);
+      border: 1px solid var(--accent);
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin-bottom: 16px;
+      font-size: 0.9rem;
+    }
+
+    /* ── Footer ── */
+    .footer-note {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.85rem;
+      margin-top: 32px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+    .footer-note a { color: var(--link); }
+
+    /* ── Score box ── */
+    #score-box {
+      background: var(--accent-light);
+      border: 2px solid var(--accent);
+      border-radius: 8px;
+      padding: 16px;
+      text-align: center;
+      margin-bottom: 24px;
+      display: none;
+    }
+    #score-box.show { display: block; }
+    #score-box h3 { color: var(--accent); font-size: 1.2rem; margin-bottom: 4px; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <h1>Harvard GSCM — Practice Quiz</h1>
+  <p>4 Rooms + Bonus. Self-check. Refresh page for fresh numbers.</p>
+
+  <div id="score-box">
+    <h3 id="score-text"></h3>
+    <p id="score-detail"></p>
+  </div>
+
+  <!-- ROOM 1 — DESIGN ROOM -->
+  <div class="room">
+    <div class="room-header">Room 1 — Design Room</div>
+    <div class="room-body">
+      <div class="rule-label">
+        <strong>Rule:</strong> Pick the option with the <strong>highest profit per unit</strong>.<br>
+        <code>Profit = Price − Total Cost</code>
+      </div>
+      <table id="design-table">
+        <thead><tr><th>ID</th><th>Option</th><th>+Cost</th><th>Total Cost</th><th>Profit/Unit</th><th>Margin%</th></tr></thead>
+        <tbody id="design-rows"></tbody>
+      </table>
+      <div class="q">
+        <div class="q-label">Question</div>
+        <div class="q-text" id="design-q-text"></div>
+        <input type="text" id="design-answer" placeholder="Type your answer (e.g. A2, B3)">
+        <button class="check-btn" onclick="checkDesign()">Check</button>
+        <div class="answer" id="design-feedback"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROOM 2 — FORECASTING ROOM -->
+  <div class="room">
+    <div class="room-header">Room 2 — Forecasting Room</div>
+    <div class="room-body">
+      <div class="rule-label">
+        <strong>Rule:</strong> Average the 6 forecasters. Multiply by 8 (8-month sales window May–Dec).
+      </div>
+      <table>
+        <thead><tr><th>Forecaster</th><th>Estimate (units)</th></tr></thead>
+        <tbody id="forecast-rows"></tbody>
+      </table>
+      <div style="text-align:right;color:var(--muted);font-size:0.85rem;padding:4px 0;" id="consensus-line"></div>
+      <div class="q">
+        <div class="q-label">Question 1</div>
+        <div class="q-text">What is the <strong>consensus forecast</strong>? (average of all 6)</div>
+        <input type="text" id="forecast1-answer" placeholder="Type the consensus number">
+        <button class="check-btn" onclick="checkForecast1()">Check</button>
+        <div class="answer" id="forecast1-feedback"></div>
+      </div>
+      <div class="q">
+        <div class="q-label">Question 2</div>
+        <div class="q-text">Sales window is <strong>8 months</strong>. What is <strong>total demand</strong>?</div>
+        <input type="text" id="forecast2-answer" placeholder="consensus × 8">
+        <button class="check-btn" onclick="checkForecast2()">Check</button>
+        <div class="answer" id="forecast2-feedback"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROOM 3 — PRODUCTION ROOM -->
+  <div class="room">
+    <div class="room-header">Room 3 — Production Room</div>
+    <div class="room-body">
+      <div class="rule-label">
+        <strong>Model A:</strong> cheapest supplier. <strong>Model B:</strong> fastest supplier.
+      </div>
+      <table>
+        <thead><tr><th>Supplier</th><th>Cost/Unit</th><th>Lead Time</th></tr></thead>
+        <tbody id="supplier-rows"></tbody>
+      </table>
+      <div class="q">
+        <div class="q-label">Question 1</div>
+        <div class="q-text">Model A is cost-sensitive. <strong>Which supplier?</strong></div>
+        <input type="text" id="prod1-answer" placeholder="Type supplier name">
+        <button class="check-btn" onclick="checkProd1()">Check</button>
+        <div class="answer" id="prod1-feedback"></div>
+      </div>
+      <div class="q">
+        <div class="q-label">Question 2</div>
+        <div class="q-text">Model B needs speed for demand spikes. <strong>Which supplier?</strong></div>
+        <input type="text" id="prod2-answer" placeholder="Type supplier name">
+        <button class="check-btn" onclick="checkProd2()">Check</button>
+        <div class="answer" id="prod2-feedback"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROOM 4 — BOARDROOM -->
+  <div class="room">
+    <div class="room-header">Room 4 — Boardroom</div>
+    <div class="room-body">
+      <div class="rule-label">Match each board member to their priority. Click to reveal.</div>
+      <div class="board-grid" id="board-grid"></div>
+      <button class="check-btn" onclick="revealBoard()">Reveal Answers</button>
+    </div>
+  </div>
+
+  <!-- NEWSVENDOR -->
+  <div class="room">
+    <div class="room-header">Bonus — Newsvendor (Model B)</div>
+    <div class="room-body">
+      <div class="math-box">
+        <h4>The Numbers</h4>
+        Model B &nbsp;|&nbsp; Price: <strong>$285</strong> &nbsp;|&nbsp; Cost: <strong>$195</strong>
+      </div>
+      <div class="math-box">
+        <h4>The Formula</h4>
+        Underage cost (Cu) = Price − Cost = $285 − $195 = <strong>$90</strong><br>
+        Overage cost (Co) = Cost = <strong>$195</strong>
+      </div>
+      <div class="math-box">
+        <h4>The Rule</h4>
+        If <strong>Co > Cu</strong> → <span style="color:var(--accent)">UNDERPRODUCE</span><br>
+        If <strong>Cu > Co</strong> → <span style="color:var(--green)">OVERPRODUCE</span>
+      </div>
+      <div class="q">
+        <div class="q-label">Question</div>
+        <div class="q-text">Model B: demand is volatile and unpredictable.<br><strong>Overproduce or underproduce?</strong></div>
+        <input type="text" id="news-answer" placeholder="Type 'overproduce' or 'underproduce'">
+        <button class="check-btn" onclick="checkNews()">Check</button>
+        <div class="answer" id="news-feedback"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MATH CHEAT SHEET -->
+  <div class="room">
+    <div class="room-header">Math Cheat Sheet — Memorize these 3</div>
+    <div class="room-body">
+      <div class="math-box">
+        <h4>1. Profit Per Unit</h4>
+        <code>Profit = Price − Total Cost</code><br>
+        <code>Total Cost = Base Cost + Design Add-on</code>
+      </div>
+      <div class="math-box">
+        <h4>2. Margin %</h4>
+        <code>Margin% = (Profit / Price) × 100</code>
+      </div>
+      <div class="math-box">
+        <h4>3. Total Demand</h4>
+        <code>Total Demand = Consensus × 8</code><br>
+        <span style="font-size:0.8rem;color:var(--muted)">8-month window: May–December</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    <a href="harvard-simulation-prep-guide.html">← Back to Prep Guide</a>
+  </div>
+
+</div>
+
+<script>
+const SUPPLIERS = [
+  { name: "FarFarAway",   cost: 10, lead: 4   },
+  { name: "Far Away",     cost: 15, lead: 2   },
+  { name: "PrettyClose",  cost: 20, lead: 1   },
+  { name: "Very Fast",    cost: 25, lead: 0.5 },
+];
+const DESIGNS = [
+  { id:"A1",model:"A",option:"Basic",    cost_add: 0, },
+  { id:"A2",model:"A",option:"Standard", cost_add: 25,},
+  { id:"A3",model:"A",option:"Premium",  cost_add: 50,},
+  { id:"A4",model:"A",option:"Deluxe",   cost_add: 75,},
+  { id:"B1",model:"B",option:"Basic",    cost_add: 0, },
+  { id:"B2",model:"B",option:"Standard",cost_add: 30,},
+  { id:"B3",model:"B",option:"Premium",  cost_add: 60,},
+  { id:"B4",model:"B",option:"Deluxe",   cost_add: 90,},
+];
+const FORECASTER_NAMES = ["Andrei","Aya","Claire","Lorenzo","Byron","Ruth"];
+const BOARD_PREFS = [
+  { name:"Mia",    pref:"Flexible capacity — keep slack for surprises" },
+  { name:"Ankit",  pref:"Low variance — prefers steady, predictable orders" },
+  { name:"Carla",  pref:"Use mathematical average NOT consensus feeling" },
+  { name:"Matheo", pref:"Cost efficiency — minimize total supply chain cost" },
+  { name:"Adele",  pref:"Early Model B flexibility — start production early" },
+];
+
+let S = {};
+
+function ri(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+function shuffle(a){ const b=[...a]; for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];} return b; }
+
+function init(){
+  S.model = Math.random()>0.5?"A":"B";
+  S.price = S.model==="A"?245:285;
+  S.baseCost = S.model==="A"?175:195;
+  const opts = shuffle(DESIGNS.filter(d=>d.model===S.model));
+  S.designRows = opts.map(o=>({...o,totalCost:S.baseCost+o.cost_add,profit:S.price-(S.baseCost+o.cost_add),margin:((S.price-(S.baseCost+o.cost_add))/S.price*100).toFixed(1)}));
+  S.bestDesign = S.designRows.reduce((a,b)=>b.profit>a.profit?b:a);
+
+  const base=ri(40,80);
+  S.estimates=FORECASTER_NAMES.map(n=>({name:n,value:Math.max(10,base+ri(-15,15))}));
+  S.consensus=Math.round(S.estimates.reduce((s,e)=>s+e.value,0)/6);
+  S.totalDemand=S.consensus*8;
+
+  S.cheapest=SUPPLIERS.reduce((a,b)=>a.cost<b.cost?a:b);
+  S.fastest=SUPPLIERS.reduce((a,b)=>a.lead<b.lead?a:b);
+
+  S.boardShuffled=shuffle(BOARD_PREFS);
+
+  render();
+}
+
+function render(){
+  document.getElementById("design-rows").innerHTML=S.designRows.map(r=>
+    `<tr><td>${r.id}</td><td>${r.option}</td><td>+$${r.cost_add}</td><td>$${r.totalCost}</td><td class="${r.id===S.bestDesign.id?'best':''}">$${r.profit}</td><td>${r.margin}%</td></tr>`
+  ).join("");
+
+  document.getElementById("design-q-text").innerHTML=
+    `Model ${S.model} | Price: <strong>$${S.price}</strong> | Base Cost: <strong>$${S.baseCost}</strong><br>Which design option gives the <strong>HIGHEST profit per unit</strong>?`;
+
+  document.getElementById("forecast-rows").innerHTML=S.estimates.map(e=>
+    `<tr><td>${e.name}</td><td>${e.value} units</td></tr>`
+  ).join("");
+  document.getElementById("consensus-line").innerHTML=`Consensus (avg of 6): <strong>${S.consensus}</strong>`;
+
+  document.getElementById("supplier-rows").innerHTML=SUPPLIERS.map(s=>
+    `<tr><td>${s.name}</td><td class="${s.name===S.cheapest.name?'cheap':''}">$${s.cost}/unit${s.name===S.cheapest.name?' ◄ cheapest':''}</td><td class="${s.name===S.fastest.name?'fast':''}">${s.lead} wk${s.name===S.fastest.name?' ◄ fastest':''}</td></tr>`
+  ).join("");
+
+  document.getElementById("board-grid").innerHTML=S.boardShuffled.map(b=>
+    `<div class="board-item" id="b-${b.name}"><strong>${b.name}</strong><span style="color:var(--muted)">? (click reveal)</span></div>`
+  ).join("");
+}
+
+function show(elId,ans,correct,detail){
+  const el=document.getElementById(elId);
+  const ok=(ans.trim().toLowerCase()===String(correct).toLowerCase());
+  el.className="answer "+(ok?"correct":"wrong")+" show";
+  el.innerHTML=ok?`✅ Correct! ${detail}`:`❌ Wrong. Correct: ${detail}`;
+}
+
+function checkDesign(){ show("design-feedback",document.getElementById("design-answer").value,S.bestDesign.id,`${S.bestDesign.id} (${S.bestDesign.option}) — $${S.bestDesign.profit}/unit`); }
+function checkForecast1(){ show("forecast1-feedback",document.getElementById("forecast1-answer").value,S.consensus,`${S.consensus}`); }
+function checkForecast2(){ show("forecast2-feedback",document.getElementById("forecast2-answer").value,S.totalDemand,`${S.consensus} × 8 = ${S.totalDemand}`); }
+function checkProd1(){ show("prod1-feedback",document.getElementById("prod1-answer").value,S.cheapest.name,`${S.cheapest.name} — $${S.cheapest.cost}/unit (cheapest for Model A)`); }
+function checkProd2(){ show("prod2-feedback",document.getElementById("prod2-answer").value,S.fastest.name,`${S.fastest.name} — ${S.fastest.lead}-week lead (fastest for Model B)`); }
+function checkNews(){ show("news-feedback",document.getElementById("news-answer").value,"underproduce","UNDERPRODUCE — Co($195) > Cu($90)"); }
+
+function revealBoard(){
+  BOARD_PREFS.forEach(b=>{
+    const el=document.getElementById(`b-${b.name}`);
+    if(el) el.querySelector("span").innerHTML=b.pref;
+  });
+}
+
+init();
+</script>
+</body>
+</html>

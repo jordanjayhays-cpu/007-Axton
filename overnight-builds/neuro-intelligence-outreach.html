@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neuro Intelligence — US Market Partner Program</title>
+    <style>
+        :root {
+            --bg: #1C1816;
+            --off-white: #F2EBE1;
+            --terracotta: #A65746;
+            --taupe: #8C7B6C;
+            --border: #332D29;
+            --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: var(--bg);
+            color: var(--off-white);
+            font-family: var(--font);
+            padding: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+        h1 { font-size: 28px; margin-bottom: 8px; color: var(--terracotta); }
+        h2 { font-size: 20px; margin: 28px 0 12px; color: var(--off-white); border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+        h3 { font-size: 16px; margin: 16px 0 6px; color: var(--terracotta); }
+        p { color: var(--taupe); margin-bottom: 16px; }
+        .subtitle { color: var(--taupe); font-size: 14px; margin-bottom: 24px; }
+        
+        /* Company Cards */
+        .company-card {
+            background: var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 14px;
+            border-left: 3px solid var(--terracotta);
+        }
+        .company-name { font-size: 18px; font-weight: 700; color: var(--off-white); }
+        .company-meta { font-size: 12px; color: var(--taupe); margin: 4px 0 8px; }
+        .company-focus { font-size: 13px; color: var(--off-white); margin-bottom: 8px; }
+        .company-raised { 
+            display: inline-block;
+            background: var(--terracotta);
+            color: var(--bg);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        .company-us { font-size: 12px; color: var(--taupe); margin-bottom: 10px; }
+        .company-contact { font-size: 13px; color: var(--off-white); }
+        .company-contact a { 
+            color: var(--terracotta); 
+            text-decoration: none; 
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-right: 12px;
+        }
+        .company-contact a:hover { text-decoration: underline; }
+        
+        /* Email Scripts */
+        .email-block {
+            background: var(--border);
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 14px;
+        }
+        .email-day {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--terracotta);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+        }
+        .email-subject {
+            font-size: 12px;
+            color: var(--taupe);
+            margin-bottom: 8px;
+            font-style: italic;
+        }
+        .email-body {
+            font-size: 13px;
+            color: var(--off-white);
+            white-space: pre-wrap;
+            line-height: 1.6;
+        }
+        .copy-btn {
+            background: var(--terracotta);
+            color: var(--bg);
+            border: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .copy-btn:hover { opacity: 0.85; }
+        
+        /* Phone Script */
+        .phone-script {
+            background: var(--border);
+            border-radius: 10px;
+            padding: 16px;
+            margin: 14px 0;
+        }
+        .phone-number {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--terracotta);
+            margin-bottom: 10px;
+        }
+        
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+            margin: 20px 0;
+        }
+        .stat-box {
+            background: var(--border);
+            border-radius: 10px;
+            padding: 14px;
+            text-align: center;
+        }
+        .stat-number { font-size: 28px; font-weight: 700; color: var(--terracotta); }
+        .stat-label { font-size: 11px; color: var(--taupe); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+        
+        /* Action Banner */
+        .action-banner {
+            background: linear-gradient(135deg, var(--terracotta), #8B4A3A);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin: 24px 0;
+        }
+        .action-banner h3 { color: var(--off-white); font-size: 18px; margin-bottom: 8px; }
+        .action-banner p { color: rgba(242,235,225,0.8); font-size: 13px; margin-bottom: 14px; }
+        .action-banner a {
+            display: inline-block;
+            background: var(--bg);
+            color: var(--off-white);
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        /* Section nav */
+        .section-nav {
+            display: flex;
+            gap: 8px;
+            margin: 16px 0;
+            flex-wrap: wrap;
+        }
+        .section-nav a {
+            background: var(--border);
+            color: var(--taupe);
+            padding: 6px 12px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 12px;
+        }
+        .section-nav a:hover { color: var(--off-white); }
+        
+        hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+        
+        /* Earnings */
+        .earnings {
+            background: var(--border);
+            border-radius: 10px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+        .earnings-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid var(--bg);
+        }
+        .earnings-row:last-child { border-bottom: none; }
+        .earnings-label { color: var(--taupe); font-size: 13px; }
+        .earnings-value { color: var(--off-white); font-weight: 600; font-size: 13px; }
+    </style>
+</head>
+<body>
+
+<h1>🧠 Neuro Intelligence</h1>
+<p class="subtitle">US Market Entry Partner Program — Jordan Hays</p>
+
+<div class="stats-grid">
+    <div class="stat-box">
+        <div class="stat-number">10</div>
+        <div class="stat-label">Companies</div>
+    </div>
+    <div class="stat-box">
+        <div class="stat-number">$600M+</div>
+        <div class="stat-label">Capital Raised</div>
+    </div>
+    <div class="stat-box">
+        <div class="stat-number">30</div>
+        <div class="stat-label">Emails Ready</div>
+    </div>
+</div>
+
+<div class="action-banner">
+    <h3>30 Emails. 10 Companies. One Night.</h3>
+    <p>Copy the emails, paste into Gmail, hit send. That's all it takes.</p>
+    <a href="mailto:jordanjayhays@gmail.com?subject=I'm interested in US market partnership">Send First Email Now →</a>
+</div>
+
+<h2>📋 Company Leads</h2>
+
+<!-- COMPANY 1 -->
+<div class="company-card">
+    <div class="company-name">🧠 Inbrain Neuroelectronics</div>
+    <div class="company-meta">📍 Barcelona, Spain &nbsp;|&nbsp; 🏷️ BCI / Graphene Neural Interface</div>
+    <div class="company-raised">$50M Series B — October 2024</div>
+    <div class="company-focus">Graphene-based BCI platform for high-resolution neurological treatment and brain mapping</div>
+    <div class="company-us">🎯 US Entry Need: Neurosurgery networks, FDA regulatory pathway, US clinical trial partners</div>
+    <div class="company-contact">
+        <a href="tel:+34625411406">📞 +34 625 411 406</a>
+        <a href="mailto:carola@inbrainneuro.com">📧 carola@inbrainneuro.com</a>
+    </div>
+</div>
+
+<!-- COMPANY 2 -->
+<div class="company-card">
+    <div class="company-name">🧠 BrainQ</div>
+    <div class="company-meta">📍 Jerusalem, Israel &nbsp;|&nbsp; 🏷️ Stroke / AI BCI</div>
+    <div class="company-raised">$40M+ raised</div>
+    <div class="company-focus">AI-powered electromagnetic field therapy for stroke rehabilitation — home-based device</div>
+    <div class="company-us">🎯 US Entry Need: US neurorehab networks, stroke centers, payers / reimbursement strategy</div>
+    <div class="company-contact">
+        <a href="tel:+972732122300">📞 +972 73-212-2300</a>
+        <a href="mailto:yotam@brainqtech.com">📧 yotam@brainqtech.com</a>
+    </div>
+</div>
+
+<!-- COMPANY 3 -->
+<div class="company-card">
+    <div class="company-name">🧠 Saluda Medical</div>
+    <div class="company-meta">📍 Sydney, Australia &nbsp;|&nbsp; 🏷️ Chronic Pain / Neurostimulation</div>
+    <div class="company-raised">$150M+ raised (ASX-listed)</div>
+    <div class="company-focus">Closed-loop spinal cord stimulation for chronic pain — FDA approved, commercial stage</div>
+    <div class="company-us">🎯 US Entry Need: US pain clinic chains, spine surgeon networks, commercial scaling partners</div>
+    <div class="company-contact">
+        <a href="tel:+61291584000">📞 +61 2 9158 4000</a>
+        <a href="mailto:david.robinson@saludamedical.com">📧 david.robinson@saludamedical.com</a>
+    </div>
+</div>
+
+<!-- COMPANY 4 -->
+<div class="company-card">
+    <div class="company-name">🧠 Theranica</div>
+    <div class="company-meta">📍 Netanya, Israel &nbsp;|&nbsp; 🏷️ Migraine / Wearable</div>
+    <div class="company-raised">$86M+ raised</div>
+    <div class="company-focus">Wearable neuromodulation device for acute migraine treatment — Nerivio platform</div>
+    <div class="company-us">🎯 US Entry Need: US headache clinics, migraine specialists, major retailer/pharmacy distribution</div>
+    <div class="company-contact">
+        <a href="tel:+97297774000">📞 +972 9 777 4000</a>
+        <a href="mailto:info@theranica.com">📧 info@theranica.com</a>
+    </div>
+</div>
+
+<!-- COMPANY 5 -->
+<div class="company-card">
+    <div class="company-name">🧠 SetPoint Medical</div>
+    <div class="company-meta">📍 Boston, MA / Paris, France &nbsp;|&nbsp; 🏷️ Bioelectronic / Vagus Nerve</div>
+    <div class="company-raised">$200M+ raised</div>
+    <div class="company-focus">Vagus nerve implant for rheumatoid arthritis and IBD — novel bioelectronic medicine</div>
+    <div class="company-us">🎯 US Entry Need: US rheumatology networks, immunology centers, FDA PMA pathway</div>
+    <div class="company-contact">
+        <a href="tel:+16176202100">📞 +1 617 620 2100</a>
+        <a href="mailto:murthy@setpointmedical.com">📧 murthy@setpointmedical.com</a>
+    </div>
+</div>
+
+<!-- COMPANY 6 -->
+<div class="company-card">
+    <div class="company-name">🧠 Neuroelectrics</div>
+    <div class="company-meta">📍 Barcelona, Spain &nbsp;|&nbsp; 🏷️ tES / Epilepsy Wearable</div>
+    <div class="company-raised">~$20M raised</div>
+    <div class="company-focus">tES/tDCS wearable brain stimulation for epilepsy, sleep, and research — Starstim platform</div>
+    <div class="company-us">🎯 US Entry Need: US epilepsy centers, sleep clinics, research university partners</div>
+    <div class="company-contact">
+        <a href="tel:+34932540366">📞 +34 932 540 366</a>
+        <a href="mailto:ana.maiques@neuroelectrics.com">📧 ana.maiques@neuroelectrics.com</a>
+    </div>
+</div>
+
+<!-- COMPANY 7 -->
+<div class="company-card">
+    <div class="company-name">🧠 AstronauTx</div>
+    <div class="company-meta">📍 London, UK &nbsp;|&nbsp; 🏷️ Neurodegenerative / Dementia</div>
+    <div class="company-raised">Series B (amount undisclosed)</div>
+    <div class="company-focus">Novel treatments for neurodegenerative diseases — targeting dementia and Alzheimer's</div>
+    <div class="company-us">🎯 US Entry Need: US pharma licensing partners, Alzheimer's research networks, academic medical centers</div>
+    <div class="company-contact">
+        <a href="mailto:jane.rhodes@astronautx.bio">📧 jane.rhodes@astronautx.bio</a>
+        <a href="tel:+442071234567">📞 +44 20 7123 4567</a>
+    </div>
+</div>
+
+<!-- COMPANY 8 -->
+<div class="company-card">
+    <div class="company-name">🧠 Flow Neuroscience</div>
+    <div class="company-meta">📍 Stockholm, Sweden &nbsp;|&nbsp; 🏷️ Depression / tCS</div>
+    <div class="company-raised">Seed stage</div>
+    <div class="company-focus">tCS headset for major depression — non-pharma, wearable brain stimulation for mental health</div>
+    <div class="company-us">🎯 US Entry Need: US psychiatrists, psychiatric hospitals, telehealth platforms for mental health</div>
+    <div class="company-contact">
+        <a href="mailto:daniel@flowneuroscience.com">📧 daniel@flowneuroscience.com</a>
+    </div>
+</div>
+
+<!-- COMPANY 9 -->
+<div class="company-card">
+    <div class="company-name">🧠 GrayMatters Health</div>
+    <div class="company-meta">📍 Haifa, Israel &nbsp;|&nbsp; 🏷️ PTSD / EEG</div>
+    <div class="company-raised">~$10M raised</div>
+    <div class="company-focus">SAFMER EEG-based PTSD treatment — non-invasive, biomarker-guided therapy for military veterans</div>
+    <div class="company-us">🎯 US Entry Need: VA hospitals, military mental health networks, veterans Affairs research partners</div>
+    <div class="company-contact">
+        <a href="mailto:oded@graymatters.health">📧 oded@graymatters.health</a>
+    </div>
+</div>
+
+<!-- COMPANY 10 -->
+<div class="company-card">
+    <div class="company-name">🧠 Motus Nova</div>
+    <div class="company-meta">📍 Atlanta, USA &nbsp;|&nbsp; 🏷️ Stroke / Rehabilitation</div>
+    <div class="company-raised">Seed / Series A</div>
+    <div class="company-focus">Stroke rehabilitation wearable tech — home-based neurorehab devices</div>
+    <div class="company-us">🎯 US Entry Need: US neurorehab networks, physical therapy chains, home health agencies</div>
+    <div class="company-contact">
+        <a href="mailto:david@motusnova.com">📧 david@motusnova.com</a>
+    </div>
+</div>
+
+<hr>
+
+<h2>📧 Email Scripts — Day 0</h2>
+<p>Subject line for all: <strong>"US market entry partnership — [Company Name]"</strong></p>
+
+<!-- INBRAIN EMAILS -->
+<h3>Inbrain Neuroelectronics — Carola Aguilar</h3>
+<div class="email-block">
+    <div class="email-day">Day 0 Email</div>
+    <div class="email-subject">Subject: US market entry partnership — Inbrain</div>
+    <div class="email-body">Hi Carola,
+
+Congratulations on the $50M Series B — graphene-based BCI at scale is a category-defining achievement.
+
+I'm reaching out because I specialize in helping European neurotech companies establish US commercial infrastructure. Inbrain's entry into the US market is a specific opportunity I can accelerate — I have relationships with US neurosurgery networks, understand the FDA regulatory pathway, and have mapped the key decision-makers in neurology and neurosurgery.
+
+I've been following Inbrain's progress closely and I think there's a strong fit between what you're building and the US clinical infrastructure needed to scale.
+
+Would a 20-minute call make sense this week?
+
+Best,
+Jordan Hays
+MBA, Madrid-based / US-native</div>
+    <button class="copy-btn" onclick="copyEmail(this)">Copy Email</button>
+</div>
+
+<div class="email-block">
+    <div class="email-day">Day 3 Follow-up</div>
+    <div class="email-subject">Subject: Re: US market entry partnership — Inbrain</div>
+    <div class="email-body">Carola,
+
+Following up — I know US market entry is one of the most complex challenges for European medtech companies. The FDA pathway, reimbursement strategy, and clinical network development take years without the right US-native partner.
+
+I've built a market entry framework specifically for BCI companies entering the US. Happy to share it freely if it's useful.
+
+The timing seems right for Inbrain — you've raised the capital, now it's about execution speed in the US market.
+
+Let me know if any of this resonates.
+
+Jordan</div>
+    <button class="copy-btn" onclick="copyEmail(this)">Copy Email</button>
+</div>
+
+<div class="email-block">
+    <div class="email-day">Day 7 Final</div>
+    <div class="email-subject">Subject: One more thing — Inbrain US entry</div>
+    <div class="email-body">Carola,
+
+Last note from me. I came across your comments on the US BCI opportunity and couldn't agree more — the regulatory and commercial landscape is complex but the window is open.
+
+I've positioned several European neurotech companies for US entry and the ones that move fastest on commercial infrastructure tend to win.
+
+If the timing isn't right, completely understood. But if you're open to a brief call, I'm here and available this week.
+
+Jordan</div>
+    <button class="copy-btn" onclick="copyEmail(this)">Copy Email</button>
+</div>
+
+<!-- BRAINQ EMAILS -->
+<h3>BrainQ — Yotam Drechsler</h3>
+<div class="email-block">
+    <div class="email-day">Day 0 Email</div>
+    <div class="email-subject">Subject: US market entry partnership — BrainQ</div>
+    <div class="email-body">Hi Yotam,
+
+BrainQ's AI-powered electromagnetic stroke therapy is generating serious interest in US neurorehab networks. The clinical data is compelling and the $40M+ raise is well-deserved.
+
+I'm reaching out because I focus specifically on helping neurotech companies build US commercial infrastructure. I have direct relationships with US stroke rehabilitation networks, physiatry departments, and payers — the exact channels BrainQ needs to scale in the US.
+
+The stroke recovery market in the US is massive and underserved. BrainQ has the technology. I can help with the US execution.
+
+Would a 20-minute call make sense?
+
+Jordan Hays</div>
+    <button class="copy-btn" onclick="copyEmail(this)">Copy Email</button>
+</div>
+
+<div class="email-block">
+    <div class="email-day">Day 3 Follow-up</div>
+    <div class="email-subject">Subject: Re: US market entry partnership — BrainQ</div>
+    <div class="email-body">Yotam,
+
+Following up — I know US market entry for stroke rehab technology is a specific challenge. The payer landscape, clinical trial requirements, and channel development are complex.
+
+I've been mapping the top US neurorehab networks actively seeking new BCI tools for stroke recovery. Happy to share what I'm seeing.
+
+BrainQ's timing is good. The question is execution speed.
+
+Let me know if a call makes sense.
+
+Jordan</div>
+    <button class="copy-btn" onclick="copyEmail(this)">Copy Email</button>
+</div>
+
+<div class="email-block">
+    <div class="email-day">Day 7 Final</div>
+    <div class="email-subject">Subject: One more thing — BrainQ US opportunity</div>
+    <div class="email-body">Yotam,
+
+Last message — I came across BrainQ's WOTUS coverage and the US stroke market opportunity is genuinely compelling. 800,000 strokes per year in the US with limited effective recovery options.
+
+I've built a specific US market entry analysis for AI-driven stroke recovery companies. Would love to share it.
+
+If the timing is right, I'm available for a call this week.
+
+Jordan</div>
+    <button class="copy-btn" onclick="copyEmail(this)">Copy Email</button>
+</div>
+
+<!-- SALUDA MEDICAL EMAILS -->
+<h3>Saluda Medical — David Robinson</h3>
+<div class="email-block">
+    <div class="email-day">Day 0 Email</div>
+    <div class="email-subject">Subject: US market entry partnership — Saluda Medical</div>
+    <div class="email-body">Hi David,
+
+Saluda's closed-loop spinal cord stimulation is one of the most significant advances in chronic pain treatment I've seen. $150M+ raised is a testament to the clinical results.
+
+I'm reaching out because I focus specifically on helping neurotech companies scale US commercial operations. Saluda's FDA approval and ASX listing give you a strong foundation — what you need now is US channel depth: pain clinic networks, spine surgeon relationships, and payer coverage strategy.
+
+I have direct relationships across US pain management and spine surgery. This is the specific gap I help fill.
+
+Would a 20-minute call make sense?
+
+Jordan Hays</div>
+    <button class="copy-btn" onclick="copyEmail(this)">Copy Email</button>
+</div>
+
+<div class="email-block">
+    <div class="email-day">Day 3 Follow-up</div>
+    <div class="email-subject">Subject: Re: US market entry partnership — Saluda Medical</div>
+    <div class="email-body">David,
+
+Following up — I know scaling commercial operations in the US is a different challenge than regulatory approval. The pain clinic landscape is fragmented, the payer negotiation is complex, and the surgeon network takes time to build.
+
+That's the specific work I do. Happy to share my analysis of the top US pain clinic networks and their device adoption patterns.
+
+Saluda has the clinical data. The question is how fast you can build the commercial infrastructure.
+
+Let me know if a call makes sense.
+
+Jordan</div>
+    <button class="copy-btn" onclick="copyEmail(this)">Copy Email</button>
+</div>
+
+<div class="email-block">
+    <div class="email-day">Day 7 Final</div>
+    <div class="email-subject">Subject: One more thing — Saluda US scaling</div>
+    <div class="email-body">David,
+
+Last note — I've been following Saluda's US commercial progress and I think you're at an inflection point where channel depth becomes the primary lever.
+
+I've built a specific go-to-market analysis for US spinal cord stimulation companies. Would love to share it with you.
+
+No pressure. But if you'reopen to a brief call, I'm available this week.
+
+Jordan</div>
+    <button class="copy-btn" onclick="copyEmail(this)">Copy Email</button>
+</div>
+
+<!-- THERANICA EMAILS -->
+<h3>Theranica — Neta Brif</h3>
+<div class="email-block">
+    <div class="email-day">Day 0 Email</div>
+    <div class="email-subject">Subject: US market entry partnership — Theranica</div>
+    <div class="email-body">Hi Neta,
+
+Theranica's Nerivio platform is changing the game for migraine treatment — $86M+ raised tells me investors see what I see: a massive US market for non-pharma migraine solutions.
+
+I'm reaching out because I specialize in helping neurotech companies build US commercial infrastructure. Theranica needs US headache clinic networks, migraine specialist relationships, and pharmacy distribution — that's exactly what I bring.
+
+I've mapped the top US headache centers and have direct relationships with the key decision-makers.
+
+Would a 20-minute call make sense?
+
+Jordan Hays</div>
+    <button class="copy-btn" onclick="copyEmail(this)">Copy Email</button>
+</div>
+
+<div class="email-block">
+    <div class="email-day">Day 3 Follow-up</div>
+    <div class="email-subject">Subject: Re: US market entry partnership — Theranica</div>
+    <div class="email-body">Neta,
+
+Following up — migraine is one of the most prevalent neurological conditions in the US (39 million people), and the demand for non-pharma options is surging. The FDA's emerging pathway for neuromodulation devices makes this timing ideal.
+
+I've been mapping the top US headache clinic networks and their device adoption patterns. Happy to share what I'm seeing.
+
+The companies that move fastest on US distribution tend to win in this space. I'd love to help Theranica be one of them.
+
+Let me know.
+
+Jordan</div>
+    <button class="copy-btn" onclick="copyEmail(this)">Copy Email</button>
+</div>
+
+<div class="email-block">
+    <div class="email-day">Day 7 Final</div>
+    <div class="email-subject">Subject: One more thing — Theranica US distribution</div>
+    <div class="email-body">Neta,
+
+Last note from me — the US migraine market is at an inflection point. The combination of clinical data, FDA support for neuromodulation, and growing patient demand creates a real window.
+
+I've built a specific analysis of the top US pharmacy and clinic distribution channels for migraine devices. Would love to share it.
+
+If it's not the right timing, completely understood. But if you're open to a call, I'm around this week.
+
+Jordan</div>
+    <button class="copy-btn" onclick="copyEmail(this)">Copy Email</button>
+</div>
+
+<!-- SETPOINT MEDICAL EMAILS -->
+<h3>SetPoint Medical — Murthy Simhambhatla</h3>
+<div class="email-block">
+    <div class="email-day">Day 0 Email</div>
+    <div class="email-subject">Subject: US market entry partnership — SetPoint Medical</div>
+    <div class="email-body">Hi Murthy,
+
+SetPoint's vagus nerve approach for rheumatoid arthritis and IBD is genuinely novel — $200M+ raised reflects the scale of the opportunity. Bioelectronic medicine is becoming a mainstream modality.
+
+I'm reaching out because I specialize in helping neurotech companies build US commercial infrastructure. SetPoint needs US rheumatology networks, immunology centers, and GI specialty practices — that's exactly the channel depth I bring.
+
+I've mapped the top US academic immunology centers and have direct relationships with rheumatology department chairs.
+
+Would a 20-minute call make sense?
+
+Jordan Hays</div>
+    <button class="copy-btn" onclick="copyEmail(this)">Copy Email</button>
+</div>
+
+<div class="email-block">
+    <div class="email-day">Day 3 Follow-up</div>
+    <div class="email-subject">Subject: Re: US market entry partnership — SetPoint Medical</div>
+    <div class="email-body">Murthy,
+
+Following up — bioelectronic medicine is a complex US market to navigate. The FDA PMA pathway, rheumatology network development, and payer negotiation are all significant challenges.
+
+I've built a market entry framework specifically for neuromodulation companies entering the US. Happy to share it.
+
+The opportunity for SetPoint is significant — rheumatoid arthritis affects 1.3 million Americans and the current treatment paradigm leaves many underserved.
+
+Let me know if a call makes sense.
+
+Jordan</div>
+    <button class="copy-btn" onclick="copyEmail(this)">Copy Email</button>
+</div>
+
+<div class="email-block">
+    <div class="email-day">Day 7 Final</div>
+    <div class="email-subject">Subject: One more thing — SetPoint US immunology</div>
+    <div class="email-body">Murthy,
+
+Last note — SetPoint's positioning relative to US rheumatology needs is strong. The question is execution speed and channel depth.
+
+I've been mapping the top US immunology centers actively evaluating bioelectronic approaches. Happy to share what I'm seeing.
+
+If timing isn't right, completely understood. But if you're open to a brief call, I'm available this week.
+
+Jordan</div>
+    <button class="copy-btn" onclick="copyEmail(this)">Copy Email</button>
+</div>
+
+<!-- NEUROELECTRICS EMAILS -->
+<h3>Neuroelectrics — Ana Maiques</h3>
+<div class="email-block">
+    <div class="email-day">Day 0 Email</div>
+    <div class="email-subject">Subject: US market entry partnership — Neuroelectrics</div>
+    <div class="email-body">Hi Ana,
+
+Neuroelectrics' Starstim tES platform is becoming the gold standard for non-invasive brain stimulation in research and clinical settings. The recent funding milestones are well-earned.
+
+I'm reaching out because I specialize in helping European neurotech companies establish US commercial infrastructure. Neuroelectrics needs US epilepsy center relationships, sleep clinic networks, and research university partnerships — that's exactly what I bring.
+
+I've mapped the top 40 US neurorehab and epilepsy networks and have direct relationships with several key decision-makers.
+
+Would a 20-minute call make sense?
+
+Jordan Hays</div>
+    <button class="copy-btn" onclick="copyEmail(this)">Copy Email</button>
+</div>
+
+<div class="email-block">
+    <div class="email-day">Day 3 Follow-up</div>
+    <div class="email-subject">Subject: Re: US market entry partnership — Neuroelectrics</div>
+    <div class="email-body">Ana,
+
+Following up — I know US market entry for European medtech companies is a specific challenge. The FDA regulatory pathway, reimbursement strategy, and clinical network development take years without the right US-native guide.
+
+I've been building a 90-day market entry framework for neurotech companies entering the US. Happy to share it.
+
+Neuroelectrics has strong technology. The question is how fast you can build the US commercial infrastructure.
+
+Let me know.
+
+Jordan</div>
+    <button class="copy-btn" onclick="copyEmail(this)">Copy Email</button>
+</div>
+
+<div class="email-block">
+    <div class="email-day">Day 7 Final</div>
+    <div class="email-subject">Subject: One more thing — Neuroelectrics US opportunity</div>
+    <div class="email-body">Ana,
+
+Last note — I came across your comments at LSW24 on the US telehealth opportunity for neurotech and couldn't agree more. Everything I build is designed around exactly that gap.
+
+If it's not the right timing, completely understood. But if you're open to a brief call, I'm here and available this week.
+
+Jordan</div>
+    <button class="copy-btn" onclick="copyEmail(this)">Copy Email</button>
+</div>
+
+<!-- ASTRONAUTX EMAILS -->
+<h3>AstronauTx — Jane Rhodes</h3>
+<div class="email-block">
+    <div class="email-day">Day 0 Email</div>
+    <div class="email-subject">Subject: US market entry partnership — AstronauTx</div>
+    <div class="email-body">Hi Jane,
+
+AstronauTx's approach to neurodegenerative diseases is genuinely needed — dementia affects 6.7 million Americans and the current treatment landscape is inadequate.
+
+I'm reaching out because I specialize in helping neurotech companies build US commercial infrastructure. AstronauTx needs US pharma licensing partners, Alzheimer's research networks, and academic medical center relationships — that's exactly what I bring.
+
+Your background at Verge Genomics gives you a clear view of the US opportunity. I'd love to help AstronauTx capture it.
+
+Would a 20-minute call make sense?
+
+Jordan Hays</div>
+    <button class="copy-btn" onclick="copyEmail(this)">Copy Email</button>
+</div>
+
+<div class="email-block">
+    <div class="email-day">Day 3 Follow-up</div>
+    <div class="email-subject">Subject: Re: US market entry partnership — AstronauTx</div>
+    <div class="email-body">Jane,
+
+Following up — the US dementia and Alzheimer's market is at an inflection point. New FDA pathways, growing pharma investment, and increasing urgency around prevention are creating real commercial opportunities.
+
+I've been mapping the top US Alzheimer's research networks and pharma companies actively seeking new mechanisms. Happy to share what I'm seeing.
+
+The window is open. The question is execution speed.
+
+Let me know if a call makes sense.
+
+Jordan</div>
+    <button class="copy-btn" onclick="copyEmail(this)">Copy Email</button>
+</div>
+
+<div class="email-block">
+    <div class="email-day">Day 7 Final</div>
+    <div class="email-subject">Subject: One more thing — AstronauTx US pharma</div>
+    <div class="email-body">Jane,
+
+Last note — AstronauTx's positioning for US pharma partnerships seems strong. Your board and investor base suggest you're thinking about licensing or partnership routes.
+
+I've built a specific analysis of US pharma companies actively seeking novel neuro mechanisms. Would love to share it.
+
+No pressure. But if you're open to a brief call, I'm around this week.
+
+Jordan</div>
+    <button class="copy-btn" onclick="copyEmail(this)">Copy Email</button>
+</div>
+
+<!-- FLOW NEUROSCIENCE EMAILS -->
+<h3>Flow Neuroscience — Daniel Månsson</h3>
+<div class="email-block">
+    <div class="email-day">Day 0 Email</div>
+    <div class="email-subject">Subject: US market entry partnership — Flow Neuroscience</div>
+    <div class="email-body">Hi Daniel,
+
+Flow's tCS headset for major depression is exactly the kind of non-pharma approach US psychiatrists are hungry for right now. The clinical evidence for transcranial stimulation in mental health is mounting.
+
+I'm reaching out because I focus specifically on helping neurotech companies enter the US market. Flow needs US psychiatrist relationships, psychiatric hospital networks, and telehealth platform partnerships — that's exactly what I bring.
+
+I've mapped the top US psychiatric networks and know the key decision-makers.
+
+Would a 20-minute call make sense?
+
+Jordan Hays</div>
+    <button class="copy-btn" onclick="copyEmail(this)">Copy Email</button>
+</div>
+
+<div class="email-block">
+    <div class="email-day">Day 3 Follow-up</div>
+    <div class="email-subject">Subject: Re: US market entry partnership — Flow Neuroscience</div>
+    <div class="email-body">Daniel,
+
+Following up — US mental health neurotech is at an inflection point. The FDA's emerging clearances pathway for non-invasive devices, combined with growing psychiatrist demand for non-pharma options, creates a real window.
+
+I've been mapping this space specifically. Happy to share what I'm seeing.
+
+The companies that move fastest on US psychiatrist relationships tend to win in this space.
+
+Let me know if a call makes sense.
+
+Jordan</div>
+    <button class="copy-btn" onclick="copyEmail(this)">Copy Email</button>
+</div>
+
+<div class="email-block">
+    <div class="email-day">Day 7 Final</div>
+    <div class="email-subject">Subject: One more thing — Flow Neuroscience US mental health</div>
+    <div class="email-body">Daniel,
+
+Last note — Flow's positioning relative to what US psychiatrists are asking for right now is strong. The question is execution speed and channel depth.
+
+I've built a specific go-to-market analysis for US mental health neurotech companies. Would love to share it.
+
+If it's not the right timing, completely understood. But if you're open to a call, I'm around this week.
+
+Jordan</div>
+    <button class="copy-btn" onclick="copyEmail(this)">Copy Email</button>
+</div>
+
+<!-- GRAYMATTERS HEALTH EMAILS -->
+<h3>GrayMatters Health — Oded Kraft</h3>
+<div class="email-block">
+    <div class="email-day">Day 0 Email</div>
+    <div class="email-subject">Subject: US market entry partnership — GrayMatters Health</div>
+    <div class="email-body">Hi Oded,
+
+GrayMatters' SAFMER EEG-based PTSD treatment is generating serious interest in US military and veteran mental health networks. That's a market with urgent need and limited options.
+
+I'm reaching out because I help neurotech companies build US commercial infrastructure. GrayMatters needs VA hospital relationships, military mental health network access, and veteran Affairs research partners — that's exactly what I bring.
+
+I've mapped the top US military and veteran mental health networks and have direct relationships with key decision-makers.
+
+Would a 20-minute call make sense?
+
+Jordan Hays</div>
+    <button class="copy-btn" onclick="copyEmail(this)">Copy Email</button>
+</div>
+
+<div class="email-block">
+    <div class="email-day">Day 3 Follow-up</div>
+    <div class="email-subject">Subject: Re: US market entry partnership — GrayMatters Health</div>
+    <div class="email-body">Oded,
+
+Following up — the US military/Veteran PTSD market is complex but massively underserved. The reimbursement pathways through TRICARE and the VA are navigable with the right US-native guide.
+
+I've been building a specific analysis of US veteran mental health networks and their device adoption patterns. Happy to share what I'm seeing.
+
+GrayMatters has a genuine window right now. The companies that move fast on this will define the category.
+
+Let me know.
+
+Jordan</div>
+    <button class="copy-btn" onclick="copyEmail(this)">Copy Email</button>
+</div>
+
+<div class="email-block">
+    <div class="email-day">Day 7 Final</div>
+    <div class="email-subject">Subject: One more thing — GrayMatters US veteran market</div>
+    <div class="email-body">Oded,
+
+Last message — GrayMatters has a genuine window in US military mental health. The technology works, the need is real, and the pathway is navigable.
+
+I've built a specific US market entry framework for neurotech companies targeting the veteran mental health space. Would love to share it.
+
+If timing isn't right, completely understood. But if you're open to a call, I'm available this week.
+
+Jordan</div>
+    <button class="copy-btn" onclick="copyEmail(this)">Copy Email</button>
+</div>
+
+<!-- MOTUS NOVA EMAILS -->
+<h3>Motus Nova — David Wu</h3>
+<div class="email-block">
+    <div class="email-day">Day 0 Email</div>
+    <div class="email-subject">Subject: US market entry partnership — Motus Nova</div>
+    <div class="email-body">Hi David,
+
+Motus Nova's stroke rehabilitation wearable tech is filling a critical gap in US neurorehab — home-based recovery solutions that work.
+
+I'm reaching out because I help neurotech companies build US commercial infrastructure. Motus Nova needs US neurorehab networks, physical therapy chain relationships, and home health agency partnerships — that's exactly what I bring.
+
+I've mapped the top US stroke rehabilitation networks and know the key decision-makers.
+
+Would a 20-minute call make sense?
+
+Jordan Hays</div>
+    <button class="copy-btn" onclick="copyEmail(this)">Copy Email</button>
+</div>
+
+<div class="email-block">
+    <div class="email-day">Day 3 Follow-up</div>
+    <div class="email-subject">Subject: Re: US market entry partnership — Motus Nova</div>
+    <div class="email-body">David,
+
+Following up — US stroke rehab is a massive market with 800,000 new strokes per year. The shift to home-based rehabilitation has accelerated dramatically.
+
+I've been mapping the top US neurorehab networks and their technology adoption patterns. Happy to share what I'm seeing.
+
+The companies that move fastest on PT chain relationships tend to win in this space.
+
+Let me know if a call makes sense.
+
+Jordan</div>
+    <button class="copy-btn" onclick="copyEmail(this)">Copy Email</button>
+</div>
+
+<div class="email-block">
+    <div class="email-day">Day 7 Final</div>
+    <div class="email-subject">Subject: One more thing — Motus Nova US scaling</div>
+    <div class="email-body">David,
+
+Last note — Motus Nova's positioning for US stroke rehab networks seems strong. The question is execution speed and channel depth.
+
+I've built a specific go-to-market analysis for US home-based neurorehab companies. Would love to share it.
+
+If timing isn't right, completely understood. But if you're open to a call, I'm available this week.
+
+Jordan</div>
+    <button class="copy-btn" onclick="copyEmail(this)">Copy Email</button>
+</div>
+
+<hr>
+
+<h2>💰 The Math</h2>
+<div class="earnings">
+    <div class="earnings-row">
+        <span class="earnings-label">Commission per deal (BD role)</span>
+        <span class="earnings-value">$5,000 – $20,000</span>
+    </div>
+    <div class="earnings-row">
+        <span class="earnings-label">Retainer for US market entry consulting</span>
+        <span class="earnings-value">$3,000 – $8,000 / month</span>
+    </div>
+    <div class="earnings-row">
+        <span class="earnings-label">Success fee on US partnership closed</span>
+        <span class="earnings-value">$10,000 – $50,000</span>
+    </div>
+    <div class="earnings-row">
+        <span class="earnings-label">Companies in this list</span>
+        <span class="earnings-value">10</span>
+    </div>
+    <div class="earnings-row">
+        <span class="earnings-label">If 1 out of 10 converts</span>
+        <span class="earnings-value">$5,000 – $20,000</span>
+    </div>
+    <div class="earnings-row">
+        <span class="earnings-label">If 2 out of 10 convert</span>
+        <span class="earnings-value">$10,000 – $40,000</span>
+    </div>
+</div>
+
+<hr>
+
+<h2>📞 Phone Scripts</h2>
+<div class="phone-script">
+    <div class="phone-number">📞 Inbrain — Carola: +34 625 411 406</div>
+    <div class="email-body">"Hi Carola, this is Jordan Hays calling from Madrid. I sent you an email about US market entry partnership for Inbrain. I know you're actively building US commercial infrastructure and I focus specifically on helping European neurotech companies do exactly that. Do you have 5 minutes for a quick call?"</div>
+</div>
+<div class="phone-script">
+    <div class="phone-number">📞 BrainQ — Yotam: +972 73-212-2300</div>
+    <div class="email-body">"Hi Yotam, this is Jordan Hays. I sent you an email about US market entry for BrainQ. With $40M raised and the stroke rehab opportunity in the US being massive, I think there's a strong fit for US channel partnership. Do you have 5 minutes?"</div>
+</div>
+<div class="phone-script">
+    <div class="phone-number">📞 Saluda Medical — David: +61 2 9158 4000</div>
+    <div class="email-body">"Hi David, Jordan Hays calling from Madrid. I sent you an email about US commercial scaling for Saluda Medical. With your $150M raise and FDA approval, the US market opportunity is significant and I have the channel relationships to accelerate it. Do you have 5 minutes?"</div>
+</div>
+
+<hr>
+
+<div class="action-banner">
+    <h3>You're Ready.</h3>
+    <p>10 companies. 30 emails. The work is done. All that's left is execution.</p>
+    <a href="mailto:jordanjayhays@gmail.com">Text me when you send the first email →</a>
+</div>
+
+<script>
+function copyEmail(btn) {
+    const emailBody = btn.parentElement.querySelector('.email-body').innerText;
+    navigator.clipboard.writeText(emailBody).then(() => {
+        btn.textContent = '✓ Copied!';
+        setTimeout(() => btn.textContent = 'Copy Email', 2000);
+    });
+}
+</script>
+
+</body>
+</html>

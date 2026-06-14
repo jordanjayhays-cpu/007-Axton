@@ -1,0 +1,390 @@
+{
+  "name": "Niah Afterparty – South Summit Matchmaking",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "niah-south-summit-rsvp",
+        "responseMode": "responseNode",
+        "options": {"rawBody": false}
+      },
+      "id": "tally-trigger",
+      "name": "Tally Form Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [0, 300]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {"name": "name", "value": "={{ $json.body.fields.name.value }}"},
+            {"name": "email", "value": "={{ $json.body.fields.email.value }}"},
+            {"name": "phone", "value": "={{ $json.body.fields.phone.value }}"},
+            {"name": "role", "value": "={{ $json.body.fields.role.value }}"},
+            {"name": "company", "value": "={{ $json.body.fields.company.value }}"},
+            {"name": "what_brings_you", "value": "={{ $json.body.fields.what_brings_you.value }}"},
+            {"name": "who_to_meet", "value": "={{ $json.body.fields.who_to_meet.value }}"},
+            {"name": "what_can_you_help", "value": "={{ $json.body.fields.what_can_you_help.value }}"},
+            {"name": "preferences", "value": "={{ $json.body.fields.preferences.value }}"},
+            {"name": "status", "value": "RSVP Received"},
+            {"name": "submitted_at", "value": "={{ $json.body.created_at }}"}
+          ]
+        },
+        "options": {}
+      },
+      "id": "parse-tally",
+      "name": "Parse Tally Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [220, 300]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "sheetName": "Attendees",
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "name": "={{ $json.name }}",
+            "email": "={{ $json.email }}",
+            "phone": "={{ $json.phone }}",
+            "role": "={{ $json.role }}",
+            "company": "={{ $json.company }}",
+            "what_brings_you": "={{ $json.what_brings_you }}",
+            "who_to_meet": "={{ $json.who_to_meet }}",
+            "what_can_you_help": "={{ $json.what_can_you_help }}",
+            "preferences": "={{ $json.preferences }}",
+            "status": "={{ $json.status }}",
+            "submitted_at": "={{ $json.submitted_at }}"
+          }
+        },
+        "options": {}
+      },
+      "id": "sheets-append",
+      "name": "Add to Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 3,
+      "position": [440, 180],
+      "credentials": {"googleSheetsOAuth2Api": {"id": "", "name": "Google Sheets"}}
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.mailchimp.com/3.0/lists/{{ $env.MAILCHIMP_LIST_ID }}/members",
+        "sendBody": true,
+        "specifyBody": "json",
+        "bodyParameters": {
+          "parameters": [
+            {"name": "email_address", "value": "={{ $json.email }}"},
+            {"name": "status", "value": "subscribed"},
+            {"name": "merge_fields", "value": "{\"FNAME\": \"={{ $json.name }}\", \"COMPANY\": \"={{ $json.company }}\", \"ROLE\": \"={{ $json.role }}\"}"}
+          ]
+        },
+        "options": {}
+      },
+      "id": "mailchimp-subscribe",
+      "name": "Add to Mailchimp",
+      "type": "n8n-nodes-base.mailchimp",
+      "typeVersion": 1,
+      "position": [440, 360],
+      "credentials": {"mailchimpApi": {"id": "", "name": "Mailchimp"}}
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v21.0/{{ $env.WHATSAPP_PHONE_NUMBER_ID }}/messages",
+        "sendBody": true,
+        "specifyBody": "json",
+        "bodyParameters": {
+          "parameters": [
+            {"name": "messaging_product", "value": "whatsapp"},
+            {"name": "to", "value": "={{ $json.phone }}"},
+            {"name": "type", "value": "template"},
+            {"name": "template", "value": "{\"name\": \"rsvp_confirmation\", \"language\": {\"code\": \"es\"}, \"components\": [{\"type\": \"body\", \"parameters\": [{\"type\": \"text\", \"text\": \"={{ $json.name }}\"}]}]}"}
+          ]
+        },
+        "options": {}
+      },
+      "id": "whatsapp-confirm",
+      "name": "WhatsApp Confirmation",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [440, 540]
+    },
+    {
+      "parameters": {
+        "operation": "read",
+        "sheetName": "Attendees",
+        "options": {}
+      },
+      "id": "sheets-get-all",
+      "name": "Get All Attendees",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 3,
+      "position": [880, 300],
+      "credentials": {"googleSheetsOAuth2Api": {"id": "", "name": "Google Sheets"}}
+    },
+    {
+      "parameters": {
+        "jsCode": "// Niah AI Matching Engine\n// Reads all attendees, scores compatibility, generates match pairs\n\nconst attendees = $input.all();\nconst matches = [];\n\n// Group by role\nconst investors = attendees.filter(a => ajson.role?.toLowerCase().includes('investor') || ajson.role?.toLowerCase().includes('lp'));\nconst startups = attendees.filter(a => ajson.role?.toLowerCase().includes('founder') || ajson.role?.toLowerCase().includes('ceo') || ajson.role?.toLowerCase().includes('startup'));\nconst corporates = attendees.filter(a => ajson.role?.toLowerCase().includes('corporate') || ajson.role?.toLowerCase().includes('business'));\n\n// Score function\nfunction score(a, b) {\n  let s = 0;\n  // Company complementarity\n  if (a.json.what_can_you_help && b.json.who_to_meet) {\n    const help = a.json.what_can_you_help.toLowerCase();\n    const need = b.json.who_to_meet.toLowerCase();\n    if (help.some(h => need.includes(h))) s += 3;\n  }\n  // Role geometry: investor-startup, corporate-startup, etc.\n  const geo = {'investor': startups, 'startup': [...investors, ...corporates], 'corporate': startups};\n  const aType = investors.includes(a) ? 'investor' : startups.includes(a) ? 'startup' : 'corporate';\n  if (geo[aType]?.includes(b)) s += 5;\n  // preferences overlap\n  if (a.json.preferences && b.json.preferences) {\n    const ap = a.json.preferences.split(',').map(x=>x.trim());\n    const bp = b.json.preferences.split(',').map(x=>x.trim());\n    const overlap = ap.filter(x => bp.includes(x)).length;\n    s += overlap;\n  }\n  return s;\n}\n\n// Generate top-3 matches per attendee\nfor (const att of attendees) {\n  const scores = attendees\n    .filter(a => a.json.email !== att.json.email)\n    .map(a => ({ person: a, score: score(att, a) }))\n    .sort((a, b) => b.score - a.score)\n    .slice(0, 3)\n    .filter(x => x.score > 0);\n  \n  for (const m of scores) {\n    matches.push({\n      json: {\n        person_a: att.json.name,\n        email_a: att.json.email,\n        person_b: m.person.json.name,\n        email_b: m.person.json.email,\n        score: m.score,\n        rationale: `${att.json.name} is looking for ${att.json.who_to_meet} — ${m.person.json.name} can help with ${m.person.json.what_can_you_help}`,\n        status: 'Pending',\n        created_at: new Date().toISOString()\n      }\n    });\n  }\n}\n\nreturn matches.slice(0, 50); // Cap at 50 match pairs per run"
+      },
+      "id": "ai-match",
+      "name": "AI Matching Engine",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1100, 300]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "sheetName": "Matches",
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "person_a": "={{ $json.person_a }}",
+            "email_a": "={{ $json.email_a }}",
+            "person_b": "={{ $json.person_b }}",
+            "email_b": "={{ $json.email_b }}",
+            "score": "={{ $json.score }}",
+            "rationale": "={{ $json.rationale }}",
+            "status": "={{ $json.status }}",
+            "created_at": "={{ $json.created_at }}"
+          }
+        },
+        "options": {}
+      },
+      "id": "sheets-save-matches",
+      "name": "Save Matches to Sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 3,
+      "position": [1320, 300],
+      "credentials": {"googleSheetsOAuth2Api": {"id": "", "name": "Google Sheets"}}
+    },
+    {
+      "parameters": {
+        "operation": "read",
+        "sheetName": "Matches",
+        "options": {"filter": {"operator": "equals", "value": "Pending", "property": "status"}}
+      },
+      "id": "sheets-pending",
+      "name": "Get Pending Matches",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 3,
+      "position": [1540, 300],
+      "credentials": {"googleSheetsOAuth2Api": {"id": "", "name": "Google Sheets"}}
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {"caseSensitive": true, "leftValue": "", "typeValidation": "strict"},
+          "conditions": [{"id": "cond-left", "leftValue": "={{ $json.status }}", "operator": {"type": "string", "operation": "equals"}, "rightValue": "Pending"}],
+          "combineMode": "AND"
+        },
+        "options": {}
+      },
+      "id": "check-pending",
+      "name": "Has Pending Matches?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1760, 300]
+    },
+    {
+      "parameters": {
+        "operation": "read",
+        "sheetName": "Attendees",
+        "options": {"filter": {"operator": "equals", "value": "RSVP Received", "property": "status"}}
+      },
+      "id": "sheets-rsvp",
+      "name": "Get RSVP'd Attendees",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 3,
+      "position": [1540, 500],
+      "credentials": {"googleSheetsOAuth2Api": {"id": "", "name": "Google Sheets"}}
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.mailchimp.com/3.0/campaigns",
+        "sendBody": true,
+        "specifyBody": "json",
+        "bodyParameters": {"parameters": [
+          {"name": "type", "value": "regular"},
+          {"name": "recipients", "value": "{\"list_id\": \"{{ $env.MAILCHIMP_LIST_ID }}\"}"},
+          {"name": "settings", "value": "{\"subject_line\": \"Your South Summit After Party matches are ready!\", \"from_name\": \"Niah\", \"reply_to\": \"team@niah.ai\"}"}
+        ]},
+        "options": {}
+      },
+      "id": "mailchimp-campaign",
+      "name": "Create Match Campaign",
+      "type": "n8n-nodes-base.mailchimp",
+      "typeVersion": 1,
+      "position": [1760, 500],
+      "credentials": {"mailchimpApi": {"id": "", "name": "Mailchimp"}}
+    },
+    {
+      "parameters": {
+        "operation": "read",
+        "sheetName": "Matches",
+        "options": {"filter": {"operator": "equals", "value": "Notified", "property": "status"}}
+      },
+      "id": "sheets-notified",
+      "name": "Get Notified Contacts",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 3,
+      "position": [2200, 300],
+      "credentials": {"googleSheetsOAuth2Api": {"id": "", "name": "Google Sheets"}}
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://n8n.io/webhook/niah-satisfaction",
+        "sendBody": true,
+        "bodyParameters": {"parameters": [
+          {"name": "name", "value": "={{ $json.person_a }}"},
+          {"name": "email", "value": "={{ $json.email_a }}"},
+          {"name": "event", "value": "South Summit Afterparty 2026"}
+        ]},
+        "options": {}
+      },
+      "id": "http-survey",
+      "name": "Send Satisfaction Survey",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [2420, 300]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "sheetName": "Attendees",
+        "updateKey": "email",
+        "columnsToUpdate": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "={{ $json.status }}"
+          }
+        },
+        "options": {}
+      },
+      "id": "sheets-update-status",
+      "name": "Update Status to Notified",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 3,
+      "position": [1980, 300],
+      "credentials": {"googleSheetsOAuth2Api": {"id": "", "name": "Google Sheets"}}
+    },
+    {
+      "parameters": {
+        "rule": {"interval": [{"field": "cron", "expression": "0 9 * * 1"}]}
+      },
+      "id": "schedule-trigger",
+      "name": "Weekly AI Match Run",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [660, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v21.0/{{ $env.WHATSAPP_PHONE_NUMBER_ID }}/messages",
+        "sendBody": true,
+        "specifyBody": "json",
+        "bodyParameters": {"parameters": [
+          {"name": "messaging_product", "value": "whatsapp"},
+          {"name": "to", "value": "={{ $json.email_b }}"},
+          {"name": "type", "value": "template"},
+          {"name": "template", "value": "{\"name\": \"match_notification\", \"language\": {\"code\": \"es\"}, \"components\": [{\"type\": \"body\", \"parameters\": [{\"type\": \"text\", \"text\": \"={{ $json.person_a }}\"}, {\"type\": \"text\", \"text\": \"={{ $json.person_b }}\"}]}]}"}
+        ]},
+        "options": {}
+      },
+      "id": "whatsapp-match",
+      "name": "WhatsApp Match (FREE)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1980, 120]
+    },
+    {
+      "parameters": {
+        "template": "<p>Hi {{ $json.person_a }},</p><p>You have a new match: <strong>{{ $json.person_b }}</strong>.</p><p>{{ $json.rationale }}</p><p>Reply here to accept or pass.</p>",
+        "subject": "Your South Summit After Party Match",
+        "options": {}
+      },
+      "id": "mailchimp-match-email",
+      "name": "Mailchimp Match Email",
+      "type": "n8n-nodes-base.mailchimp",
+      "typeVersion": 1,
+      "position": [1980, 480],
+      "credentials": {"mailchimpApi": {"id": "", "name": "Mailchimp"}}
+    }
+  ],
+  "connections": {
+    "Tally Form Trigger": {
+      "main": [[{"node": "Parse Tally Data", "type": "main"}]]
+    },
+    "Parse Tally Data": {
+      "main": [[
+        {"node": "Add to Google Sheets", "type": "main"},
+        {"node": "Add to Mailchimp", "type": "main"},
+        {"node": "WhatsApp Confirmation", "type": "main"}
+      ]]
+    },
+    "Add to Google Sheets": {
+      "main": [[{"node": "", "type": "main"}]]
+    },
+    "Add to Mailchimp": {
+      "main": [[{"node": "", "type": "main"}]]
+    },
+    "WhatsApp Confirmation": {
+      "main": [[{"node": "", "type": "main"}]]
+    },
+    "Weekly AI Match Run": {
+      "main": [[{"node": "Get All Attendees", "type": "main"}]]
+    },
+    "Get All Attendees": {
+      "main": [[{"node": "AI Matching Engine", "type": "main"}]]
+    },
+    "AI Matching Engine": {
+      "main": [[{"node": "Save Matches to Sheet", "type": "main"}]]
+    },
+    "Save Matches to Sheet": {
+      "main": [[{"node": "Get Pending Matches", "type": "main"}]]
+    },
+    "Get Pending Matches": {
+      "main": [[{"node": "Has Pending Matches?", "type": "main"}]]
+    },
+    "Has Pending Matches?": {
+      "main": [
+        [{"node": "Get RSVP'd Attendees", "type": "main"}],
+        []
+      ]
+    },
+    "Get RSVP'd Attendees": {
+      "main": [[{"node": "Create Match Campaign", "type": "main"}]]
+    },
+    "Create Match Campaign": {
+      "main": [[{"node": "WhatsApp Match (FREE)", "type": "main"}]]
+    },
+    "WhatsApp Match (FREE)": {
+      "main": [[{"node": "Mailchimp Match Email", "type": "main"}]]
+    },
+    "Mailchimp Match Email": {
+      "main": [[{"node": "Update Status to Notified", "type": "main"}]]
+    },
+    "Update Status to Notified": {
+      "main": [[{"node": "", "type": "main"}]]
+    },
+    "Get Notified Contacts": {
+      "main": [[{"node": "Send Satisfaction Survey", "type": "main"}]]
+    },
+    "Send Satisfaction Survey": {
+      "main": [[{"node": "", "type": "main"}]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v2",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "staticData": null,
+  "tags": []
+}

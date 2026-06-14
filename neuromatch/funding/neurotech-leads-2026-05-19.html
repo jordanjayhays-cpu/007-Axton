@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neurotech Lead Intelligence — 2026-05-19</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #0a0a0f;
+            color: #e2e8f0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid #1e1e2e;
+        }
+        h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: #06b6d4;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #64748b;
+            font-size: 1.1em;
+        }
+        .date-badge {
+            display: inline-block;
+            background: #1e1e2e;
+            color: #a855f7;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-top: 15px;
+            border: 1px solid #6366f1;
+        }
+        .new-badge {
+            display: inline-block;
+            background: rgba(239,68,68,0.2);
+            color: #ef4444;
+            padding: 3px 10px;
+            border-radius: 8px;
+            font-size: 0.7em;
+            font-weight: 700;
+            margin-left: 8px;
+            text-transform: uppercase;
+        }
+        .search-box {
+            width: 100%;
+            padding: 15px 20px;
+            background: #141420;
+            border: 2px solid #1e1e2e;
+            border-radius: 12px;
+            color: #e2e8f0;
+            font-size: 1em;
+            margin-bottom: 30px;
+            transition: border-color 0.2s;
+        }
+        .search-box:focus {
+            outline: none;
+            border-color: #6366f1;
+        }
+        .search-box::placeholder {
+            color: #64748b;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #141420;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        th {
+            background: #1e1e2e;
+            color: #06b6d4;
+            padding: 16px 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #6366f1;
+        }
+        td {
+            padding: 20px 12px;
+            border-bottom: 1px solid #1e1e2e;
+            vertical-align: top;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        tr:hover td {
+            background: #1a1a24;
+        }
+        .company-cell {
+            font-weight: 600;
+            color: #e2e8f0;
+            font-size: 1.05em;
+        }
+        .country {
+            display: inline-block;
+            font-size: 1.2em;
+            margin-right: 6px;
+        }
+        .tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            font-weight: 600;
+            margin-right: 4px;
+        }
+        .tag-bci { background: #06b6d4; color: #0a0a0f; }
+        .tag-neuro { background: #a855f7; color: #0a0a0f; }
+        .tag-ai { background: #6366f1; color: #fff; }
+        .tag-clinical { background: #ef4444; color: #fff; }
+        .tag-partnership { background: #22c55e; color: #0a0a0f; }
+        .tag-regulatory { background: #38bdf8; color: #0a0a0f; }
+        .tag-new { background: #f59e0b; color: #0a0a0f; }
+        .tag-fda { background: #22c55e; color: #0a0a0f; }
+        .funding {
+            color: #22c55e;
+            font-weight: 600;
+        }
+        .signal {
+            color: #f59e0b;
+        }
+        .product {
+            color: #94a3b8;
+            font-size: 0.9em;
+            max-width: 200px;
+        }
+        .buyer {
+            color: #e2e8f0;
+            font-size: 0.9em;
+        }
+        .jordan-angle {
+            color: #a855f7;
+            font-size: 0.85em;
+            font-style: italic;
+        }
+        footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #1e1e2e;
+            text-align: center;
+            color: #64748b;
+            font-size: 0.9em;
+        }
+        footer a {
+            color: #06b6d4;
+            text-decoration: none;
+        }
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .metric-card {
+            background: #141420;
+            border: 1px solid #1e1e2e;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+        .metric-value {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #06b6d4;
+        }
+        .metric-label {
+            font-size: 0.8em;
+            color: #64748b;
+            text-transform: uppercase;
+        }
+        .update-note {
+            background: rgba(99,102,241,0.1);
+            border: 1px solid rgba(99,102,241,0.3);
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 24px;
+            color: #818cf8;
+            font-size: 0.9em;
+        }
+        @media (max-width: 768px) {
+            th, td {
+                padding: 12px 8px;
+                font-size: 0.85em;
+            }
+            h1 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧠 Neurotech Lead Intelligence</h1>
+            <p class="subtitle">Non-US Companies Entering the US Market</p>
+            <span class="date-badge">May 19, 2026</span>
+        </header>
+
+        <div class="update-note">
+            📍 <strong>New This Week:</strong> 3 companies added — Neurovalens (UK), Compumedics (Australia), Neurable (UK). 
+            Full database: 11 companies tracked.
+        </div>
+
+        <div class="metrics">
+            <div class="metric-card">
+                <div class="metric-value">11</div>
+                <div class="metric-label">Companies</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">9</div>
+                <div class="metric-label">Countries</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">$312M+</div>
+                <div class="metric-label">Total Raised</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">7</div>
+                <div class="metric-label">FDA Signals</div>
+            </div>
+        </div>
+
+        <input type="text" class="search-box" placeholder="Search companies, countries, products, signals..." onkeyup="filterTable(this.value)">
+
+        <table id="leads-table">
+            <thead>
+                <tr>
+                    <th>Company</th>
+                    <th>Product</th>
+                    <th>Funding</th>
+                    <th>US Signal</th>
+                    <th>Buyer Persona</th>
+                    <th>Jordan Angle</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- NEW: Neurovalens -->
+                <tr data-search="Neurovalens UK Northern Ireland Belfast Jason McKeown Modius Sleep FDA insomnia VA veterans">
+                    <td>
+                        <span class="company-cell">
+                            <span class="country">🇬🇧</span>Neurovalens
+                            <span class="new-badge">NEW</span>
+                        </span>
+                        <span class="tag tag-neuro">Neurostimulation</span>
+                        <span class="tag tag-fda">FDA Cleared</span>
+                    </td>
+                    <td class="product">Non-invasive vagus nerve stimulation for insomnia (Modius Sleep) and anxiety (Modius Calm). FDA 510(k) cleared.</td>
+                    <td class="funding">£6M raised Aug 2025<br>~$8.1M total</td>
+                    <td class="signal">£750K from Growth Finance Fund specifically for US launch. Modius Sleep now available to US Veterans via VA program. FDA-cleared, seeking US healthcare partnerships.</td>
+                    <td class="buyer">VA hospitals, sleep clinics, primary care, telehealth platforms, health insurers</td>
+                    <td class="jordan-angle">UK company with FDA clearance and VA access. Needs US reimbursement strategy + channel partners for civilian market.</td>
+                </tr>
+                <!-- NEW: Compumedics/Somfit D -->
+                <tr data-search="Compumedics Australia Somfit D sleep monitoring FDA cleared US launch 2026 Craig Gallivan">
+                    <td>
+                        <span class="company-cell">
+                            <span class="country">🇦🇺</span>Compumedics (Somfit D)
+                            <span class="new-badge">NEW</span>
+                        </span>
+                        <span class="tag tag-neuro">Sleep Tech</span>
+                        <span class="tag tag-fda">FDA Cleared</span>
+                    </td>
+                    <td class="product">Somfit-D: single-use, home-based sleep monitoring device. Disposable EEG for sleep disorders diagnosis. FDA cleared Sept 2025.</td>
+                    <td class="funding">ASX-listed<br>Dedicated US salesforce</td>
+                    <td class="signal">FDA 510(k) clearance Sept 2025. US launch first half 2026. Dedicated US sales team already in place (Craig Gallivan as National VP Sales). Doubles addressable US market.</td>
+                    <td class="buyer">Sleep centers, home sleep testing providers, pulmonary clinics, employer wellness programs</td>
+                    <td class="jordan-angle">Australian company with US sales infrastructure ready. Could need distribution partners, group purchasing organization access, or health system contracts.</td>
+                </tr>
+                <!-- NEW: Neurable -->
+                <tr data-search="Neurable UK London Ramses Alcaide Series A 2025 OEM integration brain data headphones">
+                    <td>
+                        <span class="company-cell">
+                            <span class="country">🇬🇧</span>Neurable
+                            <span class="new-badge">NEW</span>
+                        </span>
+                        <span class="tag tag-bci">BCI</span>
+                        <span class="tag tag-ai">AI</span>
+                    </td>
+                    <td class="product">EEG brain-computer interface for consumer wearables (headphones). AI interprets neural signals for focus/cognitive state. OEM integration model.</td>
+                    <td class="funding">$35M Series A<br>Dec 2025 reset</td>
+                    <td class="signal">Won $8.9M US DoD contract (2022). UK MoD partnership. New VP of Business Development (Eugene Goldberg) focused on OEM partnerships. Pivoting to global scale.</td>
+                    <td class="buyer">Consumer electronics OEMs, gaming companies, productivity apps, defense contractors</td>
+                    <td class="jordan-angle">UK BCI with DoD credentials. OEM licensing model — could use US tech company partnerships. Jordan's Bay Area neurotech positioning fits.</td>
+                </tr>
+                <!-- EXISTING from May 18 report -->
+                <tr data-search="INBRAIN Neuroelectronics Spain Barcelona graphene BCI Parkinson FDA breakthrough Mayo Clinic Microsoft Boston">
+                    <td>
+                        <span class="company-cell">
+                            <span class="country">🇪🇸</span>INBRAIN Neuroelectronics
+                        </span>
+                        <span class="tag tag-bci">BCI</span>
+                        <span class="tag tag-regulatory">FDA Breakthrough</span>
+                    </td>
+                    <td class="product">Graphene-based BCI for Parkinson's, epilepsy, stroke. Real-time AI precision neurology. First-in-human completed.</td>
+                    <td class="funding">$124M total<br>$50M Series B (2024)</td>
+                    <td class="signal">Boston office opening, Mayo Clinic partnership, Microsoft AI collaboration, West Coast planned. FDA breakthrough designation.</td>
+                    <td class="buyer">Mayo Clinic neurology dept, U.S. hospital systems, Parkinson's advocacy groups</td>
+                    <td class="jordan-angle">Bay Area neurotech consultant positioning. Graphene BCI is next-gen — they need US clinical + commercial strategy.</td>
+                </tr>
+                <tr data-search="MindMaze Switzerland Lausanne FDA cleared neurorehab stroke Parkinson new CEO expansion">
+                    <td>
+                        <span class="company-cell">
+                            <span class="country">🇨🇭</span>MindMaze
+                        </span>
+                        <span class="tag tag-neuro">Neurotherapeutics</span>
+                        <span class="tag tag-clinical">FDA Cleared</span>
+                    </td>
+                    <td class="product">AI-driven digital neurorestorative treatments for stroke, Parkinson's. Hospital + home settings. Reimbursable platform.</td>
+                    <td class="funding">$105M+ raised<br>Listed SIX Swiss</td>
+                    <td class="signal">New CEO hired March 2026 (Zach Henderson) specifically for US expansion. Aggressive commercialization push.</td>
+                    <td class="buyer">US hospital CIOs, stroke rehab networks, Value-based care orgs, payers</td>
+                    <td class="jordan-angle">Swiss company needs US healthcare navigation. FDA clearance already there — needs reimbursement + channel strategy.</td>
+                </tr>
+                <tr data-search="Zander Labs Netherlands Germany pBCI passive BCI Bay Area San Francisco partnership 2026">
+                    <td>
+                        <span class="company-cell">
+                            <span class="country">🇳🇱🇩🇪</span>Zander Labs
+                        </span>
+                        <span class="tag tag-bci">pBCI</span>
+                        <span class="tag tag-new">Hot Target</span>
+                    </td>
+                    <td class="product">Passive brain-computer interface (pBCI) for human-machine interaction. Neuroadaptive tech for XR and computing.</td>
+                    <td class="funding">$33M contract<br>$1.54M raised</td>
+                    <td class="signal">Entering US market 2026. Actively seeking Bay Area partners. CES + MWC 2026 presence.</td>
+                    <td class="buyer">West Coast tech cos (VR/AR, computing), defense contractors, research institutions</td>
+                    <td class="jordan-angle">On record seeking Bay Area partners NOW. Best fit — CEO direct connection opportunity.</td>
+                </tr>
+                <tr data-search="Neo-Bionica Australia Melbourne US expansion Boston medtech bionic devices manufacturing">
+                    <td>
+                        <span class="company-cell">
+                            <span class="country">🇦🇺</span>Neo-Bionica
+                        </span>
+                        <span class="tag tag-neuro">MedTech</span>
+                        <span class="tag tag-partnership">Hiring US</span>
+                    </td>
+                    <td class="product">Bionic and smart medical devices. Neuromodulation, advanced implantables, electrode design, hermetic enclosures.</td>
+                    <td class="funding">70% revenue non-AU<br>US expansion funded</td>
+                    <td class="signal">US expansion announced. Hired Uli Gommel (CTO, ex-Siemens/Advanced Bionics) and JoJo Platt (BD). 70% clients non-Australian.</td>
+                    <td class="buyer">US bionic device startups, medtech manufacturers, hospital R&D</td>
+                    <td class="jordan-angle">B2B manufacturing services. Could use US channel partner for client acquisition.</td>
+                </tr>
+                <tr data-search="Audicin Finland Helsinki seed audio neuro wellness Oura defense HRV">
+                    <td>
+                        <span class="company-cell">
+                            <span class="country">🇫🇮</span>Audicin
+                        </span>
+                        <span class="tag tag-neuro">Neuro-wellness</span>
+                        <span class="tag tag-new">Seed</span>
+                    </td>
+                    <td class="product">Passive audio for nervous system regulation. Binaural beats + 360° sound. Bluetooth-free sleep headband ($299). Biometric sync with Oura/Whoop/Garmin.</td>
+                    <td class="funding">$1.9M Seed<br>$3M total</td>
+                    <td class="signal">US expansion targeting defense sector. $8M pipeline including US defense partners. Hiring in Texas/Austin.</td>
+                    <td class="buyer">US defense (VA, DoD), enterprise wellness, healthcare systems (burnout prevention)</td>
+                    <td class="jordan-angle">Finnish company with Oura founders backing. Needs US defense/healthcare channel. Early but hot signal.</td>
+                </tr>
+                <tr data-search="Brainomix UK Oxford Series C FDA stroke imaging AI AI cleared">
+                    <td>
+                        <span class="company-cell">
+                            <span class="country">🇬🇧</span>Brainomix
+                        </span>
+                        <span class="tag tag-ai">AI Imaging</span>
+                        <span class="tag tag-regulatory">FDA Cleared</span>
+                    </td>
+                    <td class="product">Brainomix 360 — AI-powered stroke imaging platform. Fully automated, FDA-cleared and CE-marked. CT scan analysis.</td>
+                    <td class="funding">$25.4M Series C<br>Extended for US</td>
+                    <td class="signal">Extended Series C specifically for US expansion. FDA-cleared stroke AI. WVU Health deployment. Chicago office.</td>
+                    <td class="buyer">US stroke networks, hospital systems, radiology groups, insurers</td>
+                    <td class="jordan-angle">UK company with Chicago office, Boehringer Ingelheim partnership. Medical AI imaging — needs US reimbursement strategy.</td>
+                </tr>
+                <tr data-search="brain.space Israel EEG brain data Toyota Ventures Series A mental model AI">
+                    <td>
+                        <span class="company-cell">
+                            <span class="country">🇮🇱</span>brain.space
+                        </span>
+                        <span class="tag tag-neuro">EEG/Brain Data</span>
+                        <span class="tag tag-ai">AI</span>
+                    </td>
+                    <td class="product">Brain data collection and analysis platform. EEG equipment + AI for predicting human behavior. Consumer and health applications.</td>
+                    <td class="funding">$11M Series A<br>Toyota Ventures led</td>
+                    <td class="signal">Toyota Ventures backed. Israel neurotech with global ambition. No explicit US signal yet — likely next step.</td>
+                    <td class="buyer">Tech companies (UX research), healthcare systems, research institutions</td>
+                    <td class="jordan-angle">Toyota connection is interesting. Could approach Toyota AI/robotics divisions as entry point to US market.</td>
+                </tr>
+                <tr data-search="4DMedical Australia lung imaging US expansion funding 2026">
+                    <td>
+                        <span class="company-cell">
+                            <span class="country">🇦🇺</span>4DMedical
+                        </span>
+                        <span class="tag tag-ai">AI Imaging</span>
+                        <span class="tag tag-new">ASX Listed</span>
+                    </td>
+                    <td class="product">Lung imaging SaaS using AI. XV LVAS technology for quantitative lung ventilation imaging. Originally Australian, expanding globally.</td>
+                    <td class="funding">$100M+ raised<br>A$150M round</td>
+                    <td class="signal">$100M+ raised specifically for US expansion. ASX-listed, institutional backing. US market entry mode.</td>
+                    <td class="buyer">US hospital systems, pulmonology departments, respiratory care networks</td>
+                    <td class="jordan-angle">Australian medtech with fresh capital. Needs US hospital channel + reimbursement navigation.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <footer>
+            <p><strong>Jordan Hays</strong> | Niah | <a href="mailto:jordan@niah.io">jordan@niah.io</a></p>
+            <p style="margin-top: 8px; color: #475569;">Non-US neurotech companies with explicit US market entry signals</p>
+            <p style="margin-top: 12px; color: #475569; font-size: 0.8em;">
+                Sources: Neurotech Futures (Naveen Rao), MassDevice, Yahoo Finance, Crunchbase, company filings
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        function filterTable(query) {
+            const rows = document.querySelectorAll('#leads-table tbody tr');
+            const lowerQuery = query.toLowerCase();
+            
+            rows.forEach(row => {
+                const searchText = row.getAttribute('data-search') || '';
+                row.style.display = searchText.includes(lowerQuery) || lowerQuery === '' ? '' : 'none';
+            });
+        }
+    </script>
+</body>
+</html>

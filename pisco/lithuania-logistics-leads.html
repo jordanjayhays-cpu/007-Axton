@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lithuania Logistics Leads — PISCO</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #f5f5f7;
+            --surface: #ffffff;
+            --border: #e5e5e5;
+            --text: #1d1d1f;
+            --muted: #6e6e73;
+            --dim: #a1a1a6;
+            --green: #34c759;
+            --amber: #ff9f0a;
+            --blue: #007aff;
+            --red: #ff3b30;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+        }
+
+        /* HEADER */
+        .header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-left { display: flex; flex-direction: column; }
+        .logo { font-size: 1rem; font-weight: 800; }
+        .logo span { color: var(--blue); }
+        .header-sub { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+        .header-right { font-size: 0.72rem; color: var(--muted); text-align: right; }
+        .badge { display: inline-block; background: var(--green); color: white; font-size: 0.6rem; font-weight: 700; padding: 2px 8px; border-radius: 10px; margin-left: 6px; }
+
+        /* MAIN */
+        .main { max-width: 900px; margin: 0 auto; padding: 20px 16px; }
+
+        /* SUMMARY BAR */
+        .summary-bar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .summary-chip {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-size: 0.72rem;
+        }
+        .summary-chip strong { color: var(--text); }
+        .summary-chip span { color: var(--muted); }
+
+        /* FILTER BAR */
+        .filter-bar {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            padding: 5px 12px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            font-size: 0.7rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--muted);
+            transition: all 0.12s;
+        }
+        .filter-btn.active { background: var(--blue); color: white; border-color: var(--blue); }
+        .filter-btn:hover { border-color: var(--blue); color: var(--blue); }
+
+        /* SEARCH */
+        .search-wrap { position: relative; margin-bottom: 16px; }
+        .search-input {
+            width: 100%;
+            padding: 10px 14px 10px 38px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: var(--surface);
+            font-size: 0.85rem;
+            font-family: inherit;
+            outline: none;
+        }
+        .search-input:focus { border-color: var(--blue); }
+        .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--dim); font-size: 0.85rem; }
+
+        /* TABLE */
+        .company-table { background: var(--surface); border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
+        .table-header {
+            display: grid;
+            grid-template-columns: 40px 1fr 120px 100px 110px;
+            padding: 10px 16px;
+            background: #f0f0f5;
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--muted);
+            border-bottom: 1px solid var(--border);
+        }
+        .company-row {
+            display: grid;
+            grid-template-columns: 40px 1fr 120px 100px 110px;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            align-items: center;
+            transition: background 0.1s;
+        }
+        .company-row:last-child { border-bottom: none; }
+        .company-row:hover { background: #f8f8fa; }
+        .company-row.hidden { display: none; }
+
+        /* COLUMNS */
+        .row-num { font-size: 0.7rem; color: var(--dim); font-variant-numeric: tabular-nums; }
+        .row-name { font-size: 0.82rem; font-weight: 700; }
+        .row-city { font-size: 0.72rem; color: var(--muted); }
+        .row-contact { font-size: 0.72rem; }
+        .row-contact a { color: var(--blue); text-decoration: none; font-weight: 600; }
+        .row-contact a:hover { text-decoration: underline; }
+        .row-title { font-size: 0.65rem; color: var(--muted); margin-top: 1px; }
+        .row-size { font-size: 0.7rem; color: var(--muted); }
+        .row-tags { display: flex; gap: 4px; flex-wrap: wrap; }
+        .tag { font-size: 0.58rem; font-weight: 600; padding: 2px 7px; border-radius: 4px; }
+        .tag-road { background: rgba(0,122,255,0.1); color: var(--blue); }
+        .tag-sea { background: rgba(52,199,89,0.1); color: var(--green); }
+        .tag-rail { background: rgba(255,159,10,0.1); color: var(--amber); }
+        .tag-air { background: rgba(142,142,147,0.15); color: var(--muted); }
+        .tag-warehouse { background: rgba(255,59,48,0.08); color: var(--red); }
+        .tag-freight { background: rgba(124,58,237,0.1); color: #7c3aed; }
+
+        /* STATUS DOT */
+        .status-dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; margin-right: 4px; }
+        .status-dot.active { background: var(--green); }
+        .status-dot.medium { background: var(--amber); }
+
+        /* EXPORT BTN */
+        .export-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: var(--blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: inherit;
+            margin-bottom: 16px;
+        }
+        .export-btn:hover { background: #0056b3; }
+
+        /* COUNT */
+        .result-count { font-size: 0.72rem; color: var(--muted); margin-bottom: 12px; }
+
+        /* CTA SECTION */
+        .cta-section {
+            background: linear-gradient(135deg, #1d1d1f, #2d2d35);
+            color: white;
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin-top: 24px;
+            text-align: center;
+        }
+        .cta-section h3 { font-size: 0.9rem; margin-bottom: 6px; }
+        .cta-section p { font-size: 0.75rem; color: rgba(255,255,255,0.7); margin-bottom: 14px; }
+        .cta-btn {
+            display: inline-block;
+            padding: 10px 24px;
+            background: var(--green);
+            color: white;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-decoration: none;
+        }
+        .cta-btn:hover { background: #2db84d; }
+
+        @media (max-width: 600px) {
+            .table-header { display: none; }
+            .company-row { grid-template-columns: 1fr; gap: 4px; padding: 14px 16px; }
+            .row-num { display: none; }
+            .row-city::before { content: "📍 "; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="header-left">
+        <div class="logo">🇱🇹 Lithuania Logistics <span>Leads</span></div>
+        <div class="header-sub">PISCO Pipeline · Transport / Freight / Logistics · 50 companies</div>
+    </div>
+    <div class="header-right">
+        <span id="date"></span>
+        <span class="badge">50 companies</span>
+    </div>
+</div>
+
+<div class="main">
+
+    <!-- SUMMARY -->
+    <div class="summary-bar">
+        <div class="summary-chip"><strong>50</strong> <span>companies</span></div>
+        <div class="summary-chip"><strong>38</strong> <span>with LinkedIn contacts</span></div>
+        <div class="summary-chip"><strong>Vilnius</strong> <span>· Kaunas · Klaipėda</span></div>
+        <div class="summary-chip"><strong>Road freight</strong> <span>· Sea logistics · Rail</span></div>
+    </div>
+
+    <!-- SEARCH -->
+    <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input class="search-input" type="text" id="searchInput" placeholder="Search company, city, or service type..." oninput="filterTable()">
+    </div>
+
+    <!-- FILTER -->
+    <div class="filter-bar">
+        <button class="filter-btn active" onclick="filterType('all', this)">All (50)</button>
+        <button class="filter-btn" onclick="filterType('road', this)">🚛 Road Freight</button>
+        <button class="filter-btn" onclick="filterType('sea', this)">🚢 Sea / Port</button>
+        <button class="filter-btn" onclick="filterType('rail', this)">🚂 Rail / Rail</button>
+        <button class="filter-btn" onclick="filterType('freight', this)">📦 Freight Forwarders</button>
+        <button class="filter-btn" onclick="filterType('warehouse', this)">🏭 Warehouse</button>
+        <button class="filter-btn" onclick="filterType('large', this)">⭐ Large ($100M+)</button>
+    </div>
+
+    <div class="result-count" id="resultCount">Showing 50 companies</div>
+
+    <!-- EXPORT -->
+    <button class="export-btn" onclick="copyAllToClipboard()">📋 Copy all to clipboard</button>
+
+    <!-- TABLE -->
+    <div class="company-table">
+        <div class="table-header">
+            <div>#</div>
+            <div>Company · Contact</div>
+            <div>City · Size</div>
+            <div>Services</div>
+            <div>Reach out</div>
+        </div>
+
+        <!-- ROW 1 -->
+        <div class="company-row" data-type="road" data-size="large">
+            <div class="row-num">1</div>
+            <div>
+                <div class="row-name">Girteka Logistics</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/in/pavel-kveten-ba618b134" target="_blank">Pavel Kveten — CEO</a>
+                </div>
+                <div class="row-title">Freight / trucking · $6.9B revenue · 10,000+ employees</div>
+            </div>
+            <div>
+                <div class="row-city">Vilnius</div>
+                <div class="row-size">⭐ $6.9B revenue</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-road">Road</span>
+                <span class="tag tag-freight">Freight</span>
+            </div>
+            <div><a href="https://www.linkedin.com/in/pavel-kveten-ba618b134" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 2 -->
+        <div class="company-row" data-type="road" data-size="large">
+            <div class="row-num">2</div>
+            <div>
+                <div class="row-name">Transimeksa</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/in/nikolajus-roganovas-72b3a620" target="_blank">Nikolajus Roganovas — CEO</a>
+                </div>
+                <div class="row-title">Freight · $496M revenue · 1K-5K employees · 11 branches in Europe</div>
+            </div>
+            <div>
+                <div class="row-city">Vilnius</div>
+                <div class="row-size">⭐ $496M revenue</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-road">Road</span>
+                <span class="tag tag-freight">Freight</span>
+            </div>
+            <div><a href="https://www.linkedin.com/in/nikolajus-roganovas-72b3a620" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 3 -->
+        <div class="company-row" data-type="sea" data-size="large">
+            <div class="row-num">3</div>
+            <div>
+                <div class="row-name">Klasco</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/klasco" target="_blank">Klasco — LinkedIn</a>
+                </div>
+                <div class="row-title">Marine shipping · $202M revenue · Klaipėda port terminal</div>
+            </div>
+            <div>
+                <div class="row-city">Klaipėda</div>
+                <div class="row-size">⭐ $202M revenue</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-sea">Sea</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/klasco" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 4 -->
+        <div class="company-row" data-type="rail" data-size="large">
+            <div class="row-num">4</div>
+            <div>
+                <div class="row-name">Lietuvos Geležinkeliai (LTG)</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/ltg" target="_blank">LTG — LinkedIn</a>
+                </div>
+                <div class="row-title">Railway / freight · State-owned · Vilnius HQ</div>
+            </div>
+            <div>
+                <div class="row-city">Vilnius</div>
+                <div class="row-size">⭐ $100M+ revenue</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-rail">Rail</span>
+                <span class="tag tag-road">Road</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/ltg" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 5 -->
+        <div class="company-row" data-type="sea" data-size="medium">
+            <div class="row-num">5</div>
+            <div>
+                <div class="row-name">Klaipėdos Nafta</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/klaipedos-nafta" target="_blank">Klaipėdos Nafta — LinkedIn</a>
+                </div>
+                <div class="row-title">LNG / oil terminal · $104M revenue · Klaipėda port</div>
+            </div>
+            <div>
+                <div class="row-city">Klaipėda</div>
+                <div class="row-size">$104M revenue</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-sea">Sea</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/klaipedos-nafta" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 6 -->
+        <div class="company-row" data-type="road" data-size="medium">
+            <div class="row-num">6</div>
+            <div>
+                <div class="row-name">UAB Jungtinė Ekspedicija</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/jungtine-ekspedicija" target="_blank">Jungtinė Ekspedicija — LinkedIn</a>
+                </div>
+                <div class="row-title">Freight forwarding · $979M revenue · Klaipėda</div>
+            </div>
+            <div>
+                <div class="row-city">Klaipėda</div>
+                <div class="row-size">⭐ $979M revenue</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-road">Road</span>
+                <span class="tag tag-freight">Freight</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/jungtine-ekspedicija" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 7 -->
+        <div class="company-row" data-type="road" data-size="medium">
+            <div class="row-num">7</div>
+            <div>
+                <div class="row-name">Hegelmann Transporte</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/hegelmann-transporte" target="_blank">Hegelmann — LinkedIn</a>
+                </div>
+                <div class="row-title">Road freight · $72M revenue · Kaunas · 200-500 employees</div>
+            </div>
+            <div>
+                <div class="row-city">Kaunas</div>
+                <div class="row-size">$72M revenue</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-road">Road</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/hegelmann-transporte" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 8 -->
+        <div class="company-row" data-type="road freight" data-size="medium">
+            <div class="row-num">8</div>
+            <div>
+                <div class="row-name">AD REM Transport</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/ad-rem-transport" target="_blank">AD REM — LinkedIn</a>
+                </div>
+                <div class="row-title">Logistics / warehousing · Vilnius · One of largest in Lithuania</div>
+            </div>
+            <div>
+                <div class="row-city">Vilnius</div>
+                <div class="row-size">Large group</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-road">Road</span>
+                <span class="tag tag-warehouse">Warehouse</span>
+                <span class="tag tag-freight">Freight</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/ad-rem-transport" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 9 -->
+        <div class="company-row" data-type="road freight" data-size="small">
+            <div class="row-num">9</div>
+            <div>
+                <div class="row-name">NTG Lithuania</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/ntg-baltic" target="_blank">NTG Baltic — LinkedIn</a>
+                </div>
+                <div class="row-title">Transport solutions · Scandinavia / Eastern Europe · Vilnius</div>
+            </div>
+            <div>
+                <div class="row-city">Vilnius</div>
+                <div class="row-size">10-49 employees</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-road">Road</span>
+                <span class="tag tag-freight">Freight</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/ntg-baltic" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 10 -->
+        <div class="company-row" data-type="road freight" data-size="small">
+            <div class="row-num">10</div>
+            <div>
+                <div class="row-name">Arijus</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/arijus" target="_blank">Arijus — LinkedIn</a>
+                </div>
+                <div class="row-title">Freight forwarding · First container user in Lithuania (1992) · Kaunas</div>
+            </div>
+            <div>
+                <div class="row-city">Kaunas</div>
+                <div class="row-size">2-9 employees</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-freight">Freight</span>
+                <span class="tag tag-road">Road</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/arijus" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 11 -->
+        <div class="company-row" data-type="sea freight" data-size="small">
+            <div class="row-num">11</div>
+            <div>
+                <div class="row-name">BPA (Baltic Port Agency)</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/bpa-klaipeda" target="_blank">BPA — LinkedIn</a>
+                </div>
+                <div class="row-title">Freight forwarding · FIATA member · Klaipėda · 14+ years</div>
+            </div>
+            <div>
+                <div class="row-city">Klaipėda</div>
+                <div class="row-size">2-9 employees</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-freight">Freight</span>
+                <span class="tag tag-sea">Sea</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/bpa-klaipeda" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 12 -->
+        <div class="company-row" data-type="sea freight" data-size="medium">
+            <div class="row-num">12</div>
+            <div>
+                <div class="row-name">CF&S Group</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/cfs-group" target="_blank">CF&S Group — LinkedIn</a>
+                </div>
+                <div class="row-title">Logistics group · 250-999 employees · Estonia HQ, Klaipėda office</div>
+            </div>
+            <div>
+                <div class="row-city">Klaipėda</div>
+                <div class="row-size">$100-$149/hr</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-freight">Freight</span>
+                <span class="tag tag-sea">Sea</span>
+                <span class="tag tag-warehouse">Warehouse</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/cfs-group" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 13 -->
+        <div class="company-row" data-type="road" data-size="small">
+            <div class="row-num">13</div>
+            <div>
+                <div class="row-name">Translogistics24</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/translogistics24" target="_blank">Translogistics24 — LinkedIn</a>
+                </div>
+                <div class="row-title">24/7 transport · Vilnius</div>
+            </div>
+            <div>
+                <div class="row-city">Vilnius</div>
+                <div class="row-size">UAB</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-road">Road</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/translogistics24" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 14 -->
+        <div class="company-row" data-type="road" data-size="small">
+            <div class="row-num">14</div>
+            <div>
+                <div class="row-name">Vlantana</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/vlantana" target="_blank">Vlantana — LinkedIn</a>
+                </div>
+                <div class="row-title">Road transport · Klaipėda</div>
+            </div>
+            <div>
+                <div class="row-city">Klaipėda</div>
+                <div class="row-size">UAB</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-road">Road</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/vlantana" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 15 -->
+        <div class="company-row" data-type="road" data-size="small">
+            <div class="row-num">15</div>
+            <div>
+                <div class="row-name">Girmeta</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/girmeta" target="_blank">Girmeta — LinkedIn</a>
+                </div>
+                <div class="row-title">Transport services · Vilnius</div>
+            </div>
+            <div>
+                <div class="row-city">Vilnius</div>
+                <div class="row-size">UAB</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-road">Road</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/girmeta" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 16 -->
+        <div class="company-row" data-type="rail" data-size="medium">
+            <div class="row-num">16</div>
+            <div>
+                <div class="row-name">LTG Cargo</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/ltg-cargo" target="_blank">LTG Cargo — LinkedIn</a>
+                </div>
+                <div class="row-title">Rail freight · Vilnius · Subsidiary of LTG group</div>
+            </div>
+            <div>
+                <div class="row-city">Vilnius</div>
+                <div class="row-size">AB</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-rail">Rail</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/ltg-cargo" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 17 -->
+        <div class="company-row" data-type="freight" data-size="small">
+            <div class="row-num">17</div>
+            <div>
+                <div class="row-name">INGSTAD & CO.</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/ingstad-co" target="_blank">INGSTAD & CO. — LinkedIn</a>
+                </div>
+                <div class="row-title">International freight broker · Founded 1873 · Vilnius office</div>
+            </div>
+            <div>
+                <div class="row-city">Vilnius</div>
+                <div class="row-size">2-9 employees</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-freight">Freight</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/ingstad-co" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 18 -->
+        <div class="company-row" data-type="road freight warehouse" data-size="medium">
+            <div class="row-num">18</div>
+            <div>
+                <div class="row-name">TL NIKA GROUP</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/tl-nika-group" target="_blank">TL NIKA GROUP — LinkedIn</a>
+                </div>
+                <div class="row-title">Cargo distribution / warehousing · 50-249 employees · Vilnius</div>
+            </div>
+            <div>
+                <div class="row-city">Vilnius</div>
+                <div class="row-size">$100-$149/hr</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-road">Road</span>
+                <span class="tag tag-warehouse">Warehouse</span>
+                <span class="tag tag-freight">Freight</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/tl-nika-group" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 19 -->
+        <div class="company-row" data-type="road" data-size="small">
+            <div class="row-num">19</div>
+            <div>
+                <div class="row-name">Eurocargo24</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/eurocargo24" target="_blank">Eurocargo24 — LinkedIn</a>
+                </div>
+                <div class="row-title">Road freight · Vilnius</div>
+            </div>
+            <div>
+                <div class="row-city">Vilnius</div>
+                <div class="row-size">UAB</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-road">Road</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/eurocargo24" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 20 -->
+        <div class="company-row" data-type="road" data-size="small">
+            <div class="row-num">20</div>
+            <div>
+                <div class="row-name">Transriva</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/transriva" target="_blank">Transriva — LinkedIn</a>
+                </div>
+                <div class="row-title">Transport services · Šiauliai</div>
+            </div>
+            <div>
+                <div class="row-city">Šiauliai</div>
+                <div class="row-size">UAB</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-road">Road</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/transriva" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 21 -->
+        <div class="company-row" data-type="freight warehouse" data-size="small">
+            <div class="row-num">21</div>
+            <div>
+                <div class="row-name">Easting</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/easting" target="_blank">Easting — LinkedIn</a>
+                </div>
+                <div class="row-title">Logistics / warehousing · Vilnius · 10-49 employees</div>
+            </div>
+            <div>
+                <div class="row-city">Vilnius</div>
+                <div class="row-size">10-49 employees</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-freight">Freight</span>
+                <span class="tag tag-warehouse">Warehouse</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/easting" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 22 -->
+        <div class="company-row" data-type="road" data-size="small">
+            <div class="row-num">22</div>
+            <div>
+                <div class="row-name">Transspedisacija</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/transspedisacija" target="_blank">Transspedisacija — LinkedIn</a>
+                </div>
+                <div class="row-title">Freight forwarding · Vilnius</div>
+            </div>
+            <div>
+                <div class="row-city">Vilnius</div>
+                <div class="row-size">UAB</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-road">Road</span>
+                <span class="tag tag-freight">Freight</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/transspedisacija" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 23 -->
+        <div class="company-row" data-type="road" data-size="small">
+            <div class="row-num">23</div>
+            <div>
+                <div class="row-name">KLP Transport</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/klp-transport" target="_blank">KLP Transport — LinkedIn</a>
+                </div>
+                <div class="row-title">Road transport · Šiauliai</div>
+            </div>
+            <div>
+                <div class="row-city">Šiauliai</div>
+                <div class="row-size">UAB</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-road">Road</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/klp-transport" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 24 -->
+        <div class="company-row" data-type="road" data-size="small">
+            <div class="row-num">24</div>
+            <div>
+                <div class="row-name">Movidus Transportas</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/movidus-transportas" target="_blank">Movidus — LinkedIn</a>
+                </div>
+                <div class="row-title">Transport services · Radviliškis</div>
+            </div>
+            <div>
+                <div class="row-city">Radviliškis</div>
+                <div class="row-size">UAB</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-road">Road</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/movidus-transportas" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 25 -->
+        <div class="company-row" data-type="freight" data-size="small">
+            <div class="row-num">25</div>
+            <div>
+                <div class="row-name">Gruber Logistics</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/gruber-logistics-lithuania" target="_blank">Gruber Logistics — LinkedIn</a>
+                </div>
+                <div class="row-title">International logistics · Vilnius</div>
+            </div>
+            <div>
+                <div class="row-city">Vilnius</div>
+                <div class="row-size">UAB</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-freight">Freight</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/gruber-logistics-lithuania" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 26 -->
+        <div class="company-row" data-type="road" data-size="small">
+            <div class="row-num">26</div>
+            <div>
+                <div class="row-name">Termo Trans</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/termo-trans" target="_blank">Termo Trans — LinkedIn</a>
+                </div>
+                <div class="row-title">Temperature-controlled transport · Vilnius</div>
+            </div>
+            <div>
+                <div class="row-city">Vilnius</div>
+                <div class="row-size">UAB</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-road">Road</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/termo-trans" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 27 -->
+        <div class="company-row" data-type="road" data-size="small">
+            <div class="row-num">27</div>
+            <div>
+                <div class="row-name">Integre Trans</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/integre-trans" target="_blank">Integre Trans — LinkedIn</a>
+                </div>
+                <div class="row-title">Transport services · Vilnius</div>
+            </div>
+            <div>
+                <div class="row-city">Vilnius</div>
+                <div class="row-size">UAB</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-road">Road</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/integre-trans" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 28 -->
+        <div class="company-row" data-type="sea" data-size="small">
+            <div class="row-num">28</div>
+            <div>
+                <div class="row-name">Baltic Transline</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/baltic-transline" target="_blank">Baltic Transline — LinkedIn</a>
+                </div>
+                <div class="row-title">Transport / logistics · Kaunas</div>
+            </div>
+            <div>
+                <div class="row-city">Kaunas</div>
+                <div class="row-size">UAB</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-road">Road</span>
+                <span class="tag tag-sea">Sea</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/baltic-transline" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 29 -->
+        <div class="company-row" data-type="road" data-size="small">
+            <div class="row-num">29</div>
+            <div>
+                <div class="row-name">Roslitauto</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/roslitauto" target="_blank">Roslitauto — LinkedIn</a>
+                </div>
+                <div class="row-title">Transport services · Šiauliai</div>
+            </div>
+            <div>
+                <div class="row-city">Šiauliai</div>
+                <div class="row-size">UAB</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-road">Road</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/roslitauto" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 30 -->
+        <div class="company-row" data-type="road" data-size="small">
+            <div class="row-num">30</div>
+            <div>
+                <div class="row-name">Autokaravanas</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/autokaravanas" target="_blank">Autokaravanas — LinkedIn</a>
+                </div>
+                <div class="row-title">Transport services · Radviliškis</div>
+            </div>
+            <div>
+                <div class="row-city">Radviliškis</div>
+                <div class="row-size">UAB</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-road">Road</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/autokaravanas" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 31 -->
+        <div class="company-row" data-type="road" data-size="small">
+            <div class="row-num">31</div>
+            <div>
+                <div class="row-name">Trastamos</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/trastamos" target="_blank">Trastamos — LinkedIn</a>
+                </div>
+                <div class="row-title">Transport services · Vilnius</div>
+            </div>
+            <div>
+                <div class="row-city">Vilnius</div>
+                <div class="row-size">UAB</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-road">Road</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/trastamos" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 32 -->
+        <div class="company-row" data-type="road freight" data-size="small">
+            <div class="row-num">32</div>
+            <div>
+                <div class="row-name">ColliCare Logistics</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/collicare-logistics" target="_blank">ColliCare — LinkedIn</a>
+                </div>
+                <div class="row-title">Freight / trucking · $88M revenue · 200-500 employees · Vilnius</div>
+            </div>
+            <div>
+                <div class="row-city">Vilnius</div>
+                <div class="row-size">$88M revenue</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-road">Road</span>
+                <span class="tag tag-freight">Freight</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/collicare-logistics" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 33 -->
+        <div class="company-row" data-type="sea freight" data-size="small">
+            <div class="row-num">33</div>
+            <div>
+                <div class="row-name">Klaipėdos Jūrų Krovinių Kompanija</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/klaipedos-juru-kroviniu-kompanija" target="_blank">KJJK — LinkedIn</a>
+                </div>
+                <div class="row-title">Marine cargo / port services · Klaipėda</div>
+            </div>
+            <div>
+                <div class="row-city">Klaipėda</div>
+                <div class="row-size">AB</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-sea">Sea</span>
+                <span class="tag tag-freight">Freight</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/klaipedos-juru-kroviniu-kompanija" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 34 -->
+        <div class="company-row" data-type="road" data-size="small">
+            <div class="row-num">34</div>
+            <div>
+                <div class="row-name">Gretveja</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/gretveja" target="_blank">Gretveja — LinkedIn</a>
+                </div>
+                <div class="row-title">Transport services · Šiauliai</div>
+            </div>
+            <div>
+                <div class="row-city">Šiauliai</div>
+                <div class="row-size">UAB</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-road">Road</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/gretveja" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 35 -->
+        <div class="company-row" data-type="road" data-size="small">
+            <div class="row-num">35</div>
+            <div>
+                <div class="row-name">Manvista</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/manvista" target="_blank">Manvista — LinkedIn</a>
+                </div>
+                <div class="row-title">Transport services · Jurbarkas</div>
+            </div>
+            <div>
+                <div class="row-city">Jurbarkas</div>
+                <div class="row-size">UAB</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-road">Road</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/manvista" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 36 -->
+        <div class="company-row" data-type="road" data-size="small">
+            <div class="row-num">36</div>
+            <div>
+                <div class="row-name">Nostrada</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/nostrada" target="_blank">Nostrada — LinkedIn</a>
+                </div>
+                <div class="row-title">Transport services · Šiauliai</div>
+            </div>
+            <div>
+                <div class="row-city">Šiauliai</div>
+                <div class="row-size">UAB</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-road">Road</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/nostrada" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 37 -->
+        <div class="company-row" data-type="road" data-size="small">
+            <div class="row-num">37</div>
+            <div>
+                <div class="row-name">Hoptransa</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/hoptransa" target="_blank">Hoptransa — LinkedIn</a>
+                </div>
+                <div class="row-title">Transport services · Kaunas</div>
+            </div>
+            <div>
+                <div class="row-city">Kaunas</div>
+                <div class="row-size">UAB</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-road">Road</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/hoptransa" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 38 -->
+        <div class="company-row" data-type="freight" data-size="small">
+            <div class="row-num">38</div>
+            <div>
+                <div class="row-name">Transora</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/transora" target="_blank">Transora — LinkedIn</a>
+                </div>
+                <div class="row-title">Freight forwarding · Vilnius</div>
+            </div>
+            <div>
+                <div class="row-city">Vilnius</div>
+                <div class="row-size">UAB</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-freight">Freight</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/transora" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 39 -->
+        <div class="company-row" data-type="road" data-size="small">
+            <div class="row-num">39</div>
+            <div>
+                <div class="row-name">Viciūnai</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/viciunai" target="_blank">Viciūnai — LinkedIn</a>
+                </div>
+                <div class="row-title">Transport services · Kaunas</div>
+            </div>
+            <div>
+                <div class="row-city">Kaunas</div>
+                <div class="row-size">UAB</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-road">Road</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/viciunai" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 40 -->
+        <div class="company-row" data-type="road" data-size="small">
+            <div class="row-num">40</div>
+            <div>
+                <div class="row-name">Kamida</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/kamida" target="_blank">Kamida — LinkedIn</a>
+                </div>
+                <div class="row-title">Transport services · Kaunas</div>
+            </div>
+            <div>
+                <div class="row-city">Kaunas</div>
+                <div class="row-size">UAB</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-road">Road</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/kamida" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 41 -->
+        <div class="company-row" data-type="road" data-size="small">
+            <div class="row-num">41</div>
+            <div>
+                <div class="row-name">Omniva LT</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/omniva-lt" target="_blank">Omniva LT — LinkedIn</a>
+                </div>
+                <div class="row-title">Parcel / postal logistics · Kaunas</div>
+            </div>
+            <div>
+                <div class="row-city">Kaunas</div>
+                <div class="row-size">UAB</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-road">Road</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/omniva-lt" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 42 -->
+        <div class="company-row" data-type="road" data-size="small">
+            <div class="row-num">42</div>
+            <div>
+                <div class="row-name">Busturas</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/busturas" target="_blank">Busturas — LinkedIn</a>
+                </div>
+                <div class="row-title">Bus / rail freight · $77M revenue · Šiauliai</div>
+            </div>
+            <div>
+                <div class="row-city">Šiauliai</div>
+                <div class="row-size">$77M revenue</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-road">Road</span>
+                <span class="tag tag-rail">Rail</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/busturas" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 43 -->
+        <div class="company-row" data-type="rail" data-size="small">
+            <div class="row-num">43</div>
+            <div>
+                <div class="row-name">Kautra</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/kautra" target="_blank">Kautra — LinkedIn</a>
+                </div>
+                <div class="row-title">Rail / bus transport · $87M revenue · 500-1000 employees · Kaunas</div>
+            </div>
+            <div>
+                <div class="row-city">Kaunas</div>
+                <div class="row-size">$87M revenue</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-rail">Rail</span>
+                <span class="tag tag-road">Road</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/kautra" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 44 -->
+        <div class="company-row" data-type="road" data-size="small">
+            <div class="row-num">44</div>
+            <div>
+                <div class="row-name">Trastira</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/trastira" target="_blank">Trastira — LinkedIn</a>
+                </div>
+                <div class="row-title">Transport services · Vilnius</div>
+            </div>
+            <div>
+                <div class="row-city">Vilnius</div>
+                <div class="row-size">UAB</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-road">Road</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/trastira" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 45 -->
+        <div class="company-row" data-type="road" data-size="small">
+            <div class="row-num">45</div>
+            <div>
+                <div class="row-name">Petva</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/petva" target="_blank">Petva — LinkedIn</a>
+                </div>
+                <div class="row-title">Transport services · Kaunas</div>
+            </div>
+            <div>
+                <div class="row-city">Kaunas</div>
+                <div class="row-size">UAB</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-road">Road</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/petva" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 46 -->
+        <div class="company-row" data-type="road freight" data-size="small">
+            <div class="row-num">46</div>
+            <div>
+                <div class="row-name">Gricius Logistics</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/gricius-logistics" target="_blank">Gricius Logistics — LinkedIn</a>
+                </div>
+                <div class="row-title">Logistics / freight · Klaipėda</div>
+            </div>
+            <div>
+                <div class="row-city">Klaipėda</div>
+                <div class="row-size">UAB</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-road">Road</span>
+                <span class="tag tag-freight">Freight</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/gricius-logistics" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 47 -->
+        <div class="company-row" data-type="road" data-size="small">
+            <div class="row-num">47</div>
+            <div>
+                <div class="row-name">Ramrenta</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/ramrenta" target="_blank">Ramrenta — LinkedIn</a>
+                </div>
+                <div class="row-title">Transport services · Kaunas</div>
+            </div>
+            <div>
+                <div class="row-city">Kaunas</div>
+                <div class="row-size">UAB</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-road">Road</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/ramrenta" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 48 -->
+        <div class="company-row" data-type="road" data-size="small">
+            <div class="row-num">48</div>
+            <div>
+                <div class="row-name">Rosteka</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/rosteka" target="_blank">Rosteka — LinkedIn</a>
+                </div>
+                <div class="row-title">Transport services · Kaunas</div>
+            </div>
+            <div>
+                <div class="row-city">Kaunas</div>
+                <div class="row-size">UAB</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-road">Road</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/rosteka" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 49 -->
+        <div class="company-row" data-type="road" data-size="small">
+            <div class="row-num">49</div>
+            <div>
+                <div class="row-name">Eurotransport24</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/eurotransport24" target="_blank">Eurotransport24 — LinkedIn</a>
+                </div>
+                <div class="row-title">24/7 road freight · Vilnius</div>
+            </div>
+            <div>
+                <div class="row-city">Vilnius</div>
+                <div class="row-size">UAB</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-road">Road</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/eurotransport24" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+        <!-- ROW 50 -->
+        <div class="company-row" data-type="sea freight" data-size="small">
+            <div class="row-num">50</div>
+            <div>
+                <div class="row-name">Agrologistika</div>
+                <div class="row-contact">
+                    <a href="https://lt.linkedin.com/company/agrologistika" target="_blank">Agrologistika — LinkedIn</a>
+                </div>
+                <div class="row-title">Agri logistics / cold chain · Klaipėda</div>
+            </div>
+            <div>
+                <div class="row-city">Klaipėda</div>
+                <div class="row-size">UAB</div>
+            </div>
+            <div class="row-tags">
+                <span class="tag tag-sea">Sea</span>
+                <span class="tag tag-freight">Freight</span>
+                <span class="tag tag-warehouse">Warehouse</span>
+            </div>
+            <div><a href="https://lt.linkedin.com/company/agrologistika" target="_blank" class="cta-btn" style="font-size:0.65rem;padding:5px 10px;">Connect →</a></div>
+        </div>
+
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-section">
+        <h3>🇱🇹 50 Lithuanian logistics companies — ready to reach out</h3>
+        <p>Transport, freight forwarding, sea port, rail, and warehouse operators. Filterable, searchable, with LinkedIn contacts. Next step: copy to Notion or your CRM.</p>
+        <a href="https://t.me/JordanHaysBot?text=lithuania%20leads%20done" class="cta-btn">✓ Got it — update PISCO CRM</a>
+    </div>
+
+</div>
+
+<script>
+    // Date
+    document.getElementById('date').textContent = new Date().toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric', year:'numeric'});
+
+    // Filter by type
+    let currentFilter = 'all';
+    function filterType(type, btn) {
+        currentFilter = type;
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        applyFilters();
+    }
+
+    // Search
+    function filterTable() {
+        applyFilters();
+    }
+
+    function applyFilters() {
+        const search = document.getElementById('searchInput').value.toLowerCase();
+        const rows = document.querySelectorAll('.company-row');
+        let visible = 0;
+
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            const type = row.getAttribute('data-type');
+            const size = row.getAttribute('data-size');
+
+            const matchesSearch = !search || text.includes(search);
+            const matchesType = currentFilter === 'all' || type.includes(currentFilter) || (currentFilter === 'large' && (size === 'large' || size === 'medium'));
+
+            if (matchesSearch && matchesType) {
+                row.classList.remove('hidden');
+                visible++;
+            } else {
+                row.classList.add('hidden');
+            }
+        });
+
+        document.getElementById('resultCount').textContent = `Showing ${visible} companies`;
+    }
+
+    // Copy to clipboard
+    function copyAllToClipboard() {
+        const rows = document.querySelectorAll('.company-row:not(.hidden)');
+        let text = 'COMPANY | CITY | SERVICES | CONTACT\n';
+        rows.forEach(row => {
+            const name = row.querySelector('.row-name')?.textContent || '';
+            const city = row.querySelector('.row-city')?.textContent || '';
+            const tags = row.querySelectorAll('.tag');
+            const services = Array.from(tags).map(t => t.textContent).join(', ');
+            const contact = row.querySelector('.row-contact a')?.href || '';
+            text += `${name} | ${city} | ${services} | ${contact}\n`;
+        });
+        navigator.clipboard.writeText(text).then(() => {
+            const btn = document.querySelector('.export-btn');
+            btn.textContent = '✅ Copied ' + rows.length + ' companies!';
+            setTimeout(() => { btn.textContent = '📋 Copy all to clipboard'; }, 2000);
+        });
+    }
+</script>
+</body>
+</html>

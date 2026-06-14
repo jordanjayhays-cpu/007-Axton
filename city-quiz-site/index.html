@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jordan's City Match Quiz — Adaptive</title>
+    <style>
+        :root {
+            --bg: #1C1816;
+            --off-white: #F2EBE1;
+            --terracotta: #A65746;
+            --taupe: #8C7B6C;
+            --border: #332D29;
+            --muted: #64748b;
+            --green: #22c55e;
+            --amber: #f59e0b;
+            --red: #ef4444;
+            --card: rgba(51,45,41,0.5);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background: var(--bg); color: var(--off-white); font-family: -apple-system, BlinkMacSystemFont, sans-serif; line-height: 1.6; min-height: 100vh; padding: 20px; }
+        .container { max-width: 640px; margin: 0 auto; }
+
+        h1 { font-size: 1.6rem; font-weight: 700; margin-bottom: 6px; }
+        .subtitle { color: var(--taupe); font-size: 0.8rem; margin-bottom: 24px; }
+
+        /* Progress */
+        .progress-wrap { margin-bottom: 28px; }
+        .progress-meta { display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--muted); margin-bottom: 6px; }
+        .progress-track { background: var(--border); border-radius: 99px; height: 5px; }
+        .progress-fill { background: var(--terracotta); height: 100%; border-radius: 99px; transition: width 0.5s cubic-bezier(0.4,0,0.2,1); }
+
+        /* Question */
+        .q-block { display: none; animation: fadeIn 0.3s ease; }
+        .q-block.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+        .q-category { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--terracotta); font-weight: 700; margin-bottom: 4px; }
+        .q-label { font-size: 0.7rem; color: var(--muted); margin-bottom: 14px; }
+        .q-text { font-size: 1.05rem; font-weight: 600; margin-bottom: 18px; line-height: 1.4; }
+
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .opt { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; cursor: pointer; transition: all 0.18s ease; display: flex; align-items: flex-start; gap: 12px; }
+        .opt:hover { border-color: var(--terracotta); background: rgba(166,87,70,0.08); transform: translateY(-1px); }
+        .opt.selected { border-color: var(--terracotta); background: rgba(166,87,70,0.15); }
+        .opt-letter { background: var(--border); color: var(--taupe); min-width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem; flex-shrink: 0; }
+        .opt.selected .opt-letter { background: var(--terracotta); color: var(--off-white); }
+        .opt-text { font-size: 0.88rem; line-height: 1.5; padding-top: 4px; }
+        .opt-sub { font-size: 0.72rem; color: var(--muted); margin-top: 3px; }
+
+        /* Nav */
+        .nav { display: flex; gap: 10px; margin-top: 22px; }
+        .btn { padding: 11px 22px; border-radius: 10px; font-weight: 600; font-size: 0.88rem; cursor: pointer; border: none; transition: all 0.18s; font-family: inherit; }
+        .btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--taupe); }
+        .btn-ghost:hover { border-color: var(--terracotta); color: var(--off-white); }
+        .btn-primary { background: var(--terracotta); color: var(--off-white); }
+        .btn-primary:hover { opacity: 0.88; }
+        .btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+        /* Branch indicator */
+        .branch-hint { font-size: 0.72rem; color: var(--muted); margin-bottom: 14px; font-style: italic; }
+
+        /* Results */
+        #results { display: none; }
+        .results-header { text-align: center; margin-bottom: 32px; }
+        .results-header h2 { font-size: 1.3rem; margin-bottom: 4px; }
+        .results-sub { color: var(--muted); font-size: 0.8rem; margin-bottom: 24px; }
+
+        /* Top 3 cards */
+        .top3 { display: flex; flex-direction: column; gap: 16px; margin-bottom: 32px; }
+        .city-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 22px; }
+        .city-card.top-1 { border-color: rgba(166,87,70,0.5); background: rgba(166,87,70,0.07); }
+        .city-card.top-2 { border-color: rgba(166,87,70,0.25); }
+        .city-card.top-3 { border-color: rgba(166,87,70,0.15); }
+
+        .card-header { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+        .card-rank { font-size: 1.8rem; font-weight: 800; color: var(--terracotta); min-width: 40px; }
+        .top-2 .card-rank, .top-3 .card-rank { color: var(--border); }
+        .card-title-block {}
+        .card-name { font-size: 1.3rem; font-weight: 700; }
+        .card-meta { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+        .card-score-badge { margin-left: auto; text-align: right; }
+        .card-score { font-size: 1.6rem; font-weight: 800; color: var(--terracotta); }
+        .card-score-label { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+
+        /* Scorecard table */
+        .scorecard { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
+        .scorecard th { text-align: left; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); padding: 6px 8px; border-bottom: 1px solid var(--border); }
+        .scorecard th:last-child, .scorecard td:last-child { text-align: right; }
+        .scorecard td { padding: 8px 8px; font-size: 0.8rem; border-bottom: 1px solid rgba(51,45,41,0.5); vertical-align: middle; }
+        .score-row-name { font-weight: 600; }
+        .score-val { font-weight: 700; color: var(--terracotta); }
+        .score-bar-wrap { background: var(--border); border-radius: 4px; height: 5px; width: 80px; display: inline-block; margin-left: 8px; vertical-align: middle; }
+        .score-bar-fill { background: var(--terracotta); height: 100%; border-radius: 4px; }
+        .score-high { color: var(--green); }
+        .score-mid { color: var(--amber); }
+        .score-low { color: var(--red); }
+
+        .pros-cons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+        .pros-list, .cons-list { font-size: 0.72rem; }
+        .pros-list li, .cons-list li { margin-bottom: 3px; padding-left: 14px; position: relative; }
+        .pros-list li::before { content: '+'; position: absolute; left: 0; color: var(--green); font-weight: 700; }
+        .cons-list li::before { content: '−'; position: absolute; left: 0; color: var(--red); font-weight: 700; }
+        .pros-list { color: var(--green); }
+        .cons-list { color: var(--red); }
+
+        /* Dimension breakdown */
+        .dim-section { margin-bottom: 32px; }
+        .dim-section h3 { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--terracotta); margin-bottom: 12px; font-weight: 700; }
+        .dim-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .dim-chip { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; font-size: 0.75rem; }
+        .dim-chip-name { color: var(--muted); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 3px; }
+        .dim-chip-val { font-weight: 700; font-size: 0.88rem; }
+        .dim-chip-reason { font-size: 0.68rem; color: var(--taupe); margin-top: 2px; }
+
+        /* Comparison table */
+        .compare-section { margin-bottom: 32px; }
+        .compare-section h3 { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--terracotta); margin-bottom: 12px; font-weight: 700; }
+        .compare-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+        .compare-table th { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); color: var(--muted); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
+        .compare-table th:not(:first-child) { text-align: center; }
+        .compare-table td { padding: 9px 10px; border-bottom: 1px solid rgba(51,45,41,0.5); vertical-align: middle; }
+        .compare-table td:not(:first-child) { text-align: center; }
+        .compare-table tr.top-row td { font-weight: 700; color: var(--terracotta); }
+        .winner-badge { display: inline-block; background: rgba(166,87,70,0.2); color: var(--terracotta); font-size: 0.6rem; padding: 1px 5px; border-radius: 4px; margin-left: 4px; font-weight: 700; }
+
+        /* Text input */
+        textarea.text-input { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px; font-size: 0.88rem; color: var(--off-white); width: 100%; resize: vertical; min-height: 90px; font-family: inherit; line-height: 1.6; }
+        textarea.text-input:focus { outline: none; border-color: var(--terracotta); }
+        textarea.text-input::placeholder { color: var(--muted); }
+
+        /* Match explanation */
+        .match-reason { background: rgba(166,87,70,0.08); border: 1px solid rgba(166,87,70,0.2); border-radius: 10px; padding: 14px; font-size: 0.82rem; color: var(--taupe); margin-bottom: 16px; line-height: 1.6; }
+
+        /* Tags */
+        .city-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+        .city-tag { background: rgba(51,45,41,0.6); color: var(--taupe); padding: 3px 10px; border-radius: 6px; font-size: 0.65rem; }
+        .city-tag.hot { background: rgba(166,87,70,0.2); color: var(--terracotta); }
+
+        /* Restart */
+        .restart-area { text-align: center; padding: 24px 0; }
+        .restart-area button { background: transparent; border: 1px solid var(--border); color: var(--taupe); padding: 10px 22px; border-radius: 8px; cursor: pointer; font-size: 0.82rem; font-family: inherit; }
+        .restart-area button:hover { border-color: var(--terracotta); color: var(--off-white); }
+
+        /* Hidden */
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <!-- Header -->
+    <h1>🌍 Jordan's City Match Quiz</h1>
+    <p class="subtitle">Adaptive quiz · Real research · Deep scorecard · Built for your rotation lifestyle</p>
+
+    <!-- Progress -->
+    <div class="progress-wrap" id="progress-wrap">
+        <div class="progress-meta">
+            <span id="progress-dim">Finding your type</span>
+            <span id="progress-pct">0%</span>
+        </div>
+        <div class="progress-track">
+            <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+        </div>
+    </div>
+
+    <!-- PATH A: Cost First -->
+    <div class="q-block" id="path-cost" data-path="cost">
+        <div class="q-category">PATH A — Cost Priority</div>
+        <div class="q-label">Follow-up · Based on your previous answer</div>
+        <div class="q-text">You're saying cost is your top filter. How far do you want to stretch your money?</div>
+        <div class="options">
+            <div class="opt" onclick="branchAnswer('cost_level','extreme')">
+                <div class="opt-letter">A</div>
+                <div><div class="opt-text">Maximize savings above all — $500-800/month, I want to bank real money</div><div class="opt-sub">Manila, Chiang Mai, HCMC, Tbilisi range</div></div>
+            </div>
+            <div class="opt" onclick="branchAnswer('cost_level','moderate')">
+                <div class="opt-letter">B</div>
+                <div><div class="opt-text">Good value — $800-1200/month, I live well without being frugal</div><div class="opt-sub">Medellín, Buenos Aires, Belgrade, KL range</div></div>
+            </div>
+            <div class="opt" onclick="branchAnswer('cost_level','balanced')">
+                <div class="opt-letter">C</div>
+                <div><div class="opt-text">Cost matters but experience matters too — $1100-1500/month</div><div class="opt-sub">Valencia, Mexico City, Guadalajara, Budapest range</div></div>
+            </div>
+        </div>
+        <div class="nav">
+            <button class="btn btn-ghost" onclick="goBack()">← Back</button>
+        </div>
+    </div>
+
+    <!-- PATH A2: English constraint (cost path) -->
+    <div class="q-block" id="path-cost-english" data-path="cost-english">
+        <div class="q-category">PATH A — English Constraint</div>
+        <div class="q-label">Follow-up</div>
+        <div class="q-text">You've said cost matters most. But how critical is English in your ideal city?</div>
+        <div class="options">
+            <div class="opt" onclick="branchAnswer('cost_english_critical', true)">
+                <div class="opt-letter">A</div>
+                <div><div class="opt-text">Must have English — I need to navigate, network, and operate without local language</div><div class="opt-sub">Narrows to: Manila, KL, Cape Town, Panama City, Lisbon</div></div>
+            </div>
+            <div class="opt" onclick="branchAnswer('cost_english_critical', false)">
+                <div class="opt-letter">B</div>
+                <div><div class="opt-text">I can adapt — apps, gestures, I learned enough Spanish before</div><div class="opt-sub">Opens: Medellín, Buenos Aires, HCMC, Belgrade, Tbilisi</div></div>
+            </div>
+        </div>
+        <div class="nav">
+            <button class="btn btn-ghost" onclick="goBack()">← Back</button>
+        </div>
+    </div>
+
+    <!-- PATH B: Startup ecosystem -->
+    <div class="q-block" id="path-startup" data-path="startup">
+        <div class="q-category">PATH B — Startup Ecosystem</div>
+        <div class="q-label">Follow-up</div>
+        <div class="q-text">You want the startup ecosystem. What's your actual goal in the next 3 months?</div>
+        <div class="options">
+            <div class="opt" onclick="branchAnswer('startup_goal','network')">
+                <div class="opt-letter">A</div>
+                <div><div class="opt-text">Meet people, make connections, find my next co-founder or deal</div><div class="opt-sub">Barcelona, Lisbon, Mexico City, Istanbul</div></div>
+            </div>
+            <div class="opt" onclick="branchAnswer('startup_goal','community')">
+                <div class="opt-letter">B</div>
+                <div><div class="opt-text">Find my community — people like me, startup vibe, not just tourists</div><div class="opt-sub">Barcelona, Lisbon, Mexico City, Medellín</div></div>
+            </div>
+            <div class="opt" onclick="branchAnswer('startup_goal','explore')">
+                <div class="opt-letter">C</div>
+                <div><div class="opt-text">Explore the scene casually — I'm curious but not actively fundraising</div><div class="opt-sub">Valencia, Buenos Aires, Istanbul, Belgrade</div></div>
+            </div>
+        </div>
+        <div class="nav">
+            <button class="btn btn-ghost" onclick="goBack()">← Back</button>
+        </div>
+    </div>
+
+    <!-- PATH C: Climate -->
+    <div class="q-block" id="path-climate" data-path="climate">
+        <div class="q-category">PATH C — Climate Priority</div>
+        <div class="q-label">Follow-up</div>
+        <div class="q-text">You said climate matters most. Which climate exactly?</div>
+        <div class="options">
+            <div class="opt" onclick="branchAnswer('climate_type','mild')">
+                <div class="opt-letter">A</div>
+                <div><div class="opt-text">Mild year-round — I hate being cold. 15-25°C always, no winter coat needed</div><div class="opt-sub">Medellín (22°C always), Manila, KL, coastal LatAm</div></div>
+            </div>
+            <div class="opt" onclick="branchAnswer('climate_type','seasonal')">
+                <div class="opt-letter">B</div>
+                <div><div class="opt-text">Real seasons — I want a proper winter, spring, summer, fall. I embrace it</div><div class="opt-sub">Prague, Budapest, Belgrade, Buenos Aires, Istanbul</div></div>
+            </div>
+            <div class="opt" onclick="branchAnswer('climate_type','mediterranean')">
+                <div class="opt-letter">C</div>
+                <div><div class="opt-text">Mediterranean — mild winters, warm summers, 300+ sun days, beach accessible</div><div class="opt-sub">Valencia, Barcelona, Cape Town, parts of Mexico</div></div>
+            </div>
+        </div>
+        <div class="nav">
+            <button class="btn btn-ghost" onclick="goBack()">← Back</button>
+        </div>
+    </div>
+
+    <!-- PATH D: English -->
+    <div class="q-block" id="path-english" data-path="english">
+        <div class="q-category">PATH D — English Priority</div>
+        <div class="q-label">Follow-up</div>
+        <div class="q-text">You said English is a priority. What's driving that — professional need or daily comfort?</div>
+        <div class="options">
+            <div class="opt" onclick="branchAnswer('english_driver','professional')">
+                <div class="opt-letter">A</div>
+                <div><div class="opt-text">Professional — I need English for startup networking, investor calls, business development</div><div class="opt-sub">Lisbon, Barcelona, Cape Town, Panama City, Manila</div></div>
+            </div>
+            <div class="opt" onclick="branchAnswer('english_driver','comfort')">
+                <div class="opt-letter">B</div>
+                <div><div class="opt-text">Daily comfort — I want to read signs, order food, have real conversations, feel at home</div><div class="opt-sub">Lisbon, KL, Manila, Cape Town, Panama City</div></div>
+            </div>
+            <div class="opt" onclick="branchAnswer('english_driver','both')">
+                <div class="opt-letter">C</div>
+                <div><div class="opt-text">Both — I want to fully operate in English AND build a professional network</div><div class="opt-sub">Lisbon, Barcelona, Manila, Panama City</div></div>
+            </div>
+        </div>
+        <div class="nav">
+            <button class="btn btn-ghost" onclick="goBack()">← Back</button>
+        </div>
+    </div>
+
+    <!-- Dealbreakers (shared) -->
+    <div class="q-block" id="q-dealbreakers" data-path="dealbreakers">
+        <div class="q-category">Dealbreakers</div>
+        <div class="q-label">Follow-up</div>
+        <div class="q-text">Hard no's — which would make you leave after 2 weeks?</div>
+        <div class="branch-hint">Select all that apply (or skip if none)</div>
+        <div class="options">
+            <div class="opt" onclick="toggleMulti(this, 'deal_A')">
+                <div class="opt-letter" style="background:var(--red);color:white;">A</div>
+                <div><div class="opt-text">Extreme heat — Manila, HCMC, KL above 33°C with humidity constantly</div></div>
+            </div>
+            <div class="opt" onclick="toggleMulti(this, 'deal_B')">
+                <div class="opt-letter" style="background:var(--amber);color:var(--bg);">B</div>
+                <div><div class="opt-text">Real winter — Prague, Budapest, Belgrade below 0°C with snow regularly</div></div>
+            </div>
+            <div class="opt" onclick="toggleMulti(this, 'deal_C')">
+                <div class="opt-letter">C</div>
+                <div><div class="opt-text">Bad espresso — I need proper coffee, not instant or terrible coffee culture</div></div>
+            </div>
+            <div class="opt" onclick="toggleMulti(this, 'deal_D')">
+                <div class="opt-letter">D</div>
+                <div><div class="opt-text">Slow wifi — I need reliable fast wifi for work</div></div>
+            </div>
+            <div class="opt" onclick="toggleMulti(this, 'deal_E')">
+                <div class="opt-letter">E</div>
+                <div><div class="opt-text">Unsafe neighborhood — crime, I don't feel safe walking at night</div></div>
+            </div>
+            <div class="opt" onclick="toggleMulti(this, 'deal_F')">
+                <div class="opt-letter">F</div>
+                <div><div class="opt-text">Not walkable — I need to walk places, cobblestones, cafes on corners</div></div>
+            </div>
+        </div>
+        <div class="nav">
+            <button class="btn btn-ghost" onclick="goBack()">← Back</button>
+            <button class="btn btn-primary" id="deal-next" onclick="goQuestion('q-timezone')">Next →</button>
+        </div>
+    </div>
+
+    <!-- Timezone -->
+    <div class="q-block" id="q-timezone" data-path="timezone">
+        <div class="q-category">Practical Constraints</div>
+        <div class="q-label">Question 3 of 4</div>
+        <div class="q-text">You need to take a US call at 9am NY time (EST). How bad is it if local time is...?</div>
+        <div class="options">
+            <div class="opt" onclick="singleSelect('tz', 'A', this); goQuestion('rotation_goal')">
+                <div class="opt-letter">A</div>
+                <div><div class="opt-text">Midnight to 6am — Dealbreaker. I need real overlap.</div><div class="opt-sub">Points toward: Americas (same TZ) or Europe (5-6hr overlap workable)</div></div>
+            </div>
+            <div class="opt" onclick="singleSelect('tz', 'B', this); goQuestion('rotation_goal')">
+                <div class="opt-letter">B</div>
+                <div><div class="opt-text">6am to 8am — Tough but I can do it a few times a week</div><div class="opt-sub">Europe TZ (5-6hr) or US-friendly LatAm</div></div>
+            </div>
+            <div class="opt" onclick="singleSelect('tz', 'C', this); goQuestion('rotation_goal')">
+                <div class="opt-letter">C</div>
+                <div><div class="opt-text">8am to 10am — Totally fine, I barely take US calls anyway</div><div class="opt-sub">TZ basically doesn't matter — opens Asia, Middle East</div></div>
+            </div>
+        </div>
+        <div class="nav">
+            <button class="btn btn-ghost" onclick="goBack()">← Back</button>
+        </div>
+    </div>
+
+    <!-- Rotation goal -->
+    <div class="q-block" id="q-rotation-goal" data-path="rotation_goal">
+        <div class="q-category">Practical Constraints</div>
+        <div class="q-label">Question 4 of 4</div>
+        <div class="q-text">What's the actual point of your next 3-month rotation?</div>
+        <div class="options">
+            <div class="opt" onclick="singleSelect('goal', 'A', this); setTimeout(() => goQuestion('final_open'), 200)">
+                <div class="opt-letter">A</div>
+                <div><div class="opt-text">Maximize savings — bank money, live cheaply, stretch every dollar</div></div>
+            </div>
+            <div class="opt" onclick="singleSelect('goal', 'B', this); setTimeout(() => goQuestion('final_open'), 200)">
+                <div class="opt-letter">B</div>
+                <div><div class="opt-text">Find my community — startup people, real scene, my people</div></div>
+            </div>
+            <div class="opt" onclick="singleSelect('goal', 'C', this); setTimeout(() => goQuestion('final_open'), 200)">
+                <div class="opt-letter">C</div>
+                <div><div class="opt-text">Experience a new city — explore, eat well, feel alive</div></div>
+            </div>
+            <div class="opt" onclick="singleSelect('goal', 'D', this); setTimeout(() => goQuestion('final_open'), 200)">
+                <div class="opt-letter">D</div>
+                <div><div class="opt-text">Figure out where I want to live long-term — this is a test run</div></div>
+            </div>
+        </div>
+        <div class="nav">
+            <button class="btn btn-ghost" onclick="goBack()">← Back</button>
+        </div>
+    </div>
+
+    <!-- Open ended -->
+    <div class="q-block" id="q-final-open" data-path="final_open">
+        <div class="q-category">Final Question</div>
+        <div class="q-label">Describe your ideal next 3 months in 2-3 sentences</div>
+        <div class="q-text">The more specific, the better the recommendations. What does a perfect Tuesday look like?</div>
+        <div class="options">
+            <textarea class="text-input" id="open-text" placeholder="Example: I wake up in a walkable neighborhood, walk to a coffee shop, work until 2pm, then explore on foot. I want incredible food without spending a fortune. Startup people a couple times a week would be great. I'm not trying to save aggressively but I don't want to overspend either."></textarea>
+        </div>
+        <div class="nav">
+            <button class="btn btn-ghost" onclick="goBack()">← Back</button>
+            <button class="btn btn-primary" onclick="calculateAndShow()">Get My Top 3 →</button>
+        </div>
+    </div>
+
+    <!-- ROOT: Primary motivation -->
+    <div class="q-block active" id="q-root" data-path="root">
+        <div class="q-category">Start Here</div>
+        <div class="q-label">Question 1 of 4</div>
+        <div class="q-text">What matters most to you in your next city?</div>
+        <div class="options">
+            <div class="opt" onclick="branchAnswer('primary', 'cost')">
+                <div class="opt-letter">A</div>
+                <div><div class="opt-text">How far my money goes — cost is my primary filter</div><div class="opt-sub">You mentioned money stretching matters. This path optimizes for cost.</div></div>
+            </div>
+            <div class="opt" onclick="branchAnswer('primary', 'startup')">
+                <div class="opt-letter">B</div>
+                <div><div class="opt-text">The startup ecosystem — I want to be around my people</div><div class="opt-sub">You mentioned wanting startup vibes. This path goes deep on ecosystem.</div></div>
+            </div>
+            <div class="opt" onclick="branchAnswer('primary', 'english')">
+                <div class="opt-letter">C</div>
+                <div><div class="opt-text">English environment — I need to operate fully without the language barrier</div><div class="opt-sub">You said you prefer English. This path prioritizes that.</div></div>
+            </div>
+            <div class="opt" onclick="branchAnswer('primary', 'climate')">
+                <div class="opt-letter">D</div>
+                <div><div class="opt-text">Weather & comfort — I want to be happy where I live</div><div class="opt-sub">You mentioned seasonal preference. This path goes deep on climate.</div></div>
+            </div>
+            <div class="opt" onclick="branchAnswer('primary', 'experience')">
+                <div class="opt-letter">E</div>
+                <div><div class="opt-text">The experience — explore, food, culture, energy, feel alive</div><div class="opt-sub">Mexico City and Manila both pulled you this way.</div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- RESULTS -->
+    <div id="results">
+        <div class="results-header">
+            <h2>🏆 Your Top 3 Cities</h2>
+            <p class="results-sub">Based on your path through the quiz + real city research data</p>
+        </div>
+
+        <div class="top3" id="top3-cards">
+            <!-- Populated by JS -->
+        </div>
+
+        <div class="compare-section">
+            <h3>📊 Dimension Comparison — All 3 Cities</h3>
+            <table class="compare-table" id="compare-table">
+                <!-- Populated by JS -->
+            </table>
+        </div>
+
+        <div class="dim-section">
+            <h3>🎯 Why Each City Scored High on Your Priorities</h3>
+            <div class="dim-grid" id="why-scores">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+
+        <div class="restart-area">
+            <button onclick="restartQuiz()">← Take Quiz Again</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+// ============================================================
+// CITY RESEARCH DATA (17 cities, real Numbeo/EF EPI/SG data)
+// ============================================================
+const CITIES = {
+    "Mexico City": {
+        country: "Mexico", flag: "🇲🇽", region: "Latin America",
+        cost_tier: 3, cost_usd: "$900-1,400/mo",
+        english_tier: 5, english_note: "Decent in Roma/Condesa",
+        startup_tier: 7, startup_note: "Top LatAm hub, VC active",
+        tz_tier: 9, tz_note: "Same as US EST",
+        climate_tier: 7, climate_note: "Mild, altitude, 4 seasons",
+        walkability_tier: 10, walkability_note: "Roma/Condesa extremely walkable",
+        food_tier: 10, food_note: "Best food city in the world",
+        safety_tier: 5, safety_note: "Some areas sketchy, most ok",
+        wifi_tier: 9, wifi_note: "Excellent in central areas",
+        visa_tier: 8, visa_note: "180-day tourist visa",
+        expat_tier: 8, coworking_tier: 10,
+        monthly: "$900-1,400/mo",
+        cost_index: 48.57, // Numbeo vs NYC=100
+        pros: ["You already know the vibe", "Same TZ as US", "Walkable + incredible food", "180-day visa", "Growing startup scene"],
+        cons: ["Air quality", "Crime in some zones", "Spanish needed for depth"],
+        tags: ["Walkable", "Foodie", "Same TZ", "Startup Growing"],
+        winner_for: ["experience", "cost_moderate"],
+        match_reason: "You already know CDMX — Roma/Condesa match your taste exactly. Walkable, food incredible, same TZ, 180-day visa, growing startup scene."
+    },
+    "Valencia": {
+        country: "Spain", flag: "🇪🇸", region: "Europe",
+        cost_tier: 4, cost_usd: "$1,100-1,600/mo",
+        english_tier: 5, english_note: "Good in center",
+        startup_tier: 6, startup_note: "Solid, smaller than Barcelona",
+        tz_tier: 6, tz_note: "6hr ahead of EST",
+        climate_tier: 9, climate_note: "300+ sun days/year, mild winters",
+        walkability_tier: 10, walkability_note: "Extremely walkable + beach + bike",
+        food_tier: 10, food_note: "Paella birthplace, excellent food",
+        safety_tier: 9, safety_note: "Very safe",
+        wifi_tier: 9, wifi_note: "Excellent",
+        visa_tier: 6, visa_note: "90-day Schengen",
+        expat_tier: 7, coworking_tier: 8,
+        monthly: "$1,100-1,600/mo",
+        cost_index: 51.47,
+        pros: ["Best climate in Spain", "Walkable + beach", "Cheaper than Barcelona", "Incredible food", "Great wifi", "Same TZ as Madrid"],
+        cons: ["Not cheap by global standards", "Startup scene smaller than Barcelona"],
+        tags: ["Best Climate", "Walkable", "Foodie", "EU"],
+        winner_for: ["climate_mediterranean", "experience"],
+        match_reason: "Your seasonal preference + walkability + food = Valencia. Best climate in Spain, walkable, beach, incredible food, good TZ, cheaper than Barcelona."
+    },
+    "Barcelona": {
+        country: "Spain", flag: "🇪🇸", region: "Europe",
+        cost_tier: 5, cost_usd: "$1,300-2,000/mo",
+        english_tier: 6, english_note: "English widely spoken",
+        startup_tier: 9, startup_note: "Europe #4, global top 15, strong VC",
+        tz_tier: 6, tz_note: "6hr ahead of EST",
+        climate_tier: 8, climate_note: "Mild winters, beach, Mediterranean",
+        walkability_tier: 10, walkability_note: "Extremely walkable + beach",
+        food_tier: 9, food_note: "Excellent tapas + Catalan cuisine",
+        safety_tier: 8, safety_note: "Safe, pickpocketing in tourist zones",
+        wifi_tier: 10, wifi_note: "Excellent",
+        visa_tier: 6, visa_note: "90-day Schengen",
+        expat_tier: 9, coworking_tier: 10,
+        monthly: "$1,300-2,000/mo",
+        cost_index: 58.0,
+        pros: ["Best weather + startup combo in Europe", "English widely spoken", "Strong expat + startup community", "Beach + work lifestyle", "Best startup scene in Spain"],
+        cons: ["Expensive for Spain", "Tourist crowds", "Pickpocketing"],
+        tags: ["Best Startup", "Beach", "Walkable", "EU Hub"],
+        winner_for: ["startup_network", "startup_community"],
+        match_reason: "Best startup ecosystem + Mediterranean weather + beach + English. If you want to network and find your people in a European hub, Barcelona is the play."
+    },
+    "Lisbon": {
+        country: "Portugal", flag: "🇵🇹", region: "Europe",
+        cost_tier: 5, cost_usd: "$1,300-2,000/mo",
+        english_tier: 8, english_note: "Top 10 globally, English-first",
+        startup_tier: 8, startup_note: "Web Summit host, major EU hub",
+        tz_tier: 6, tz_note: "5hr ahead of EST",
+        climate_tier: 7, climate_note: "Mild winters, warm summers",
+        walkability_tier: 8, walkability_note: "Very walkable, trams",
+        food_tier: 8, food_note: "Excellent seafood + Portuguese cuisine",
+        safety_tier: 9, safety_note: "Very safe",
+        wifi_tier: 9, wifi_note: "Excellent",
+        visa_tier: 8, visa_note: "D7/NHR visa, residency easy",
+        expat_tier: 10, coworking_tier: 10,
+        monthly: "$1,300-2,000/mo",
+        cost_index: 55.0,
+        pros: ["English-first (EF EPI Top 10)", "Major startup hub", "D7 visa for residency", "Safe + walkable", "Strong expat community"],
+        cons: ["Getting expensive", "Housing crisis", "Tourist crowds in summer"],
+        tags: ["English", "Startup Hub", "EU Residency", "Safe"],
+        winner_for: ["english_professional", "english_both", "startup_network", "startup_community"],
+        match_reason: "English-first + top-tier startup ecosystem + good TZ. If English is a professional need and you want European startup culture, Lisbon is your city."
+    },
+    "Medellín": {
+        country: "Colombia", flag: "🇨🇴", region: "Latin America",
+        cost_tier: 2, cost_usd: "$600-1,100/mo",
+        english_tier: 4, english_note: "Limited, El Poblado has some",
+        startup_tier: 5, startup_note: "Growing, emerging tech hub",
+        tz_tier: 8, tz_note: "Same or -1hr from EST",
+        climate_tier: 10, climate_note: "22°C year-round 'eternal spring'",
+        walkability_tier: 7, walkability_note: "Walkable in El Poblado, hilly",
+        food_tier: 8, food_note: "Great Colombian food, cheap",
+        safety_tier: 4, safety_note: "Improving but some zones unsafe",
+        wifi_tier: 8, wifi_note: "Good",
+        visa_tier: 7, visa_note: "90-day, digital nomad visa available",
+        expat_tier: 8, coworking_tier: 9,
+        monthly: "$600-1,100/mo",
+        cost_index: 30.0,
+        pros: ["Perfect climate year-round", "Very cheap", "Good TZ for US", "Digital nomad visa", "Strong expat/nomad community"],
+        cons: ["English limited", "Safety concerns", "Hilly terrain"],
+        tags: ["Perfect Climate", "Cheap", "Nomad Hub", "Same TZ"],
+        winner_for: ["climate_mild", "cost_moderate"],
+        match_reason: "22°C every single day + very cheap + good TZ. If climate is your priority and you can handle some Spanish, Medellín is unmatched."
+    },
+    "Manila": {
+        country: "Philippines", flag: "🇵🇭", region: "SE Asia",
+        cost_tier: 1, cost_usd: "$500-900/mo",
+        english_tier: 10, english_note: "English official, full fluency",
+        startup_tier: 3, startup_note: "Emerging, small scene",
+        tz_tier: 1, tz_note: "12-13hr ahead of EST — very tough for US",
+        climate_tier: 2, climate_note: "Hot + humid + typhoons May-Nov",
+        walkability_tier: 3, walkability_note: "Traffic brutal, not walkable",
+        food_tier: 9, food_note: "Incredible food, cheap, diverse",
+        safety_tier: 4, safety_note: "Some areas unsafe, traffic dangerous",
+        wifi_tier: 8, wifi_note: "Good",
+        visa_tier: 4, visa_note: "30 days, extendable",
+        expat_tier: 9, coworking_tier: 8,
+        monthly: "$500-900/mo",
+        cost_index: 33.25,
+        pros: ["Money stretches furthest", "English everywhere", "Full English immersion", "Incredible food cheap", "Expat community strong"],
+        cons: ["Hot + humid + typhoons", "Traffic dangerous", "Not walkable", "12-13hr TZ from EST"],
+        tags: ["Cheapest", "English", "Foodie", "Hot Climate"],
+        winner_for: ["cost_extreme", "english_comfort", "english_professional"],
+        match_reason: "Your money goes further here than anywhere else with full English. You felt rich there. Climate and walkability are the trade-offs."
+    },
+    "Buenos Aires": {
+        country: "Argentina", flag: "🇦🇷", region: "Latin America",
+        cost_tier: 2, cost_usd: "$600-1,100/mo",
+        english_tier: 4, english_note: "Limited, tech scene has some",
+        startup_tier: 6, startup_note: "Strong tech, Mercado Libre origins",
+        tz_tier: 7, tz_note: "1-2hr ahead of EST",
+        climate_tier: 7, climate_note: "4 seasons, mild winters",
+        walkability_tier: 8, walkability_note: "Walkable in Palermo/Belgrano",
+        food_tier: 10, food_note: "Best in LatAm, asado + wine culture",
+        safety_tier: 4, safety_note: "Some areas unsafe",
+        wifi_tier: 8, wifi_note: "Good",
+        visa_tier: 6, visa_note: "90-day, easy extend",
+        expat_tier: 6, coworking_tier: 8,
+        monthly: "$600-1,100/mo",
+        cost_index: 35.0,
+        pros: ["Incredible value for USD right now", "Strong tech scene", "4 seasons", "Best food in LatAm", "Wine + tango culture"],
+        cons: ["Spanish needed", "Limited English", "Economic volatility"],
+        tags: ["Cheap", "Foodie", "Tech Scene", "Wildcard"],
+        winner_for: ["cost_moderate", "experience", "cost_balanced"],
+        match_reason: "Peso collapse = incredible USD buying power. Strong tech scene, 4 seasons, best food in Latin America. Wild card that rewards the adventurous."
+    },
+    "Chiang Mai": {
+        country: "Thailand", flag: "🇹🇭", region: "SE Asia",
+        cost_tier: 1, cost_usd: "$400-800/mo",
+        english_tier: 4, english_note: "Tourist areas ok",
+        startup_tier: 3, startup_note: "Digital nomad hub, not startup",
+        tz_tier: 1, tz_note: "12-13hr ahead — very tough for US",
+        climate_tier: 3, climate_note: "Hot Mar-May, smoky Feb-Apr, cool Nov-Jan",
+        walkability_tier: 8, walkability_note: "Very walkable Old City",
+        food_tier: 10, food_note: "World's best street food",
+        safety_tier: 8, safety_note: "Very safe",
+        wifi_tier: 9, wifi_note: "Excellent",
+        visa_tier: 3, visa_note: "30-60 days tourist, ED visa",
+        expat_tier: 10, coworking_tier: 10,
+        monthly: "$400-800/mo",
+        cost_index: 25.0,
+        pros: ["World's best street food", "Most popular nomad hub", "Ultra cheap", "Strong nomad community", "Great coworking"],
+        cons: ["Smoke season Feb-Apr", "TZ very tough for US", "English limited", "Visa short"],
+        tags: ["Cheapest", "Foodie", "Nomad Hub", "Wildcard"],
+        winner_for: ["cost_extreme"],
+        match_reason: "If you want to maximize savings above everything, Chiang Mai is the cheapest way to live well. World's best street food, strong community."
+    },
+    "Ho Chi Minh City": {
+        country: "Vietnam", flag: "🇻🇳", region: "SE Asia",
+        cost_tier: 1, cost_usd: "$500-900/mo",
+        english_tier: 3, english_note: "Limited outside District 1",
+        startup_tier: 6, startup_note: "Fastest growing VC hub in SEA",
+        tz_tier: 1, tz_note: "12-13hr ahead of EST",
+        climate_tier: 1, climate_note: "Hot year-round + monsoon",
+        walkability_tier: 2, walkability_note: "Traffic dangerous for pedestrians",
+        food_tier: 10, food_note: "Incredible — pho, banh mi, everywhere",
+        safety_tier: 6, safety_note: "Generally safe, traffic is the danger",
+        wifi_tier: 8, wifi_note: "Good",
+        visa_tier: 4, visa_note: "45 days, e-visa",
+        expat_tier: 7, coworking_tier: 9,
+        monthly: "$500-900/mo",
+        cost_index: 28.0,
+        pros: ["Pho + banh mi incredible + cheap", "Fastest growing startup scene in SEA", "VC money flowing", "Ultra cheap"],
+        cons: ["Hot year-round + monsoon", "Traffic dangerous", "English limited", "12-13hr TZ"],
+        tags: ["Cheapest", "Foodie", "Startup Growing"],
+        winner_for: ["cost_extreme"],
+        match_reason: "Ultra cheap + fastest growing startup scene in SE Asia. If you want to explore the Asian market while banking money, HCMC is the play."
+    },
+    "Kuala Lumpur": {
+        country: "Malaysia", flag: "🇲🇾", region: "SE Asia",
+        cost_tier: 2, cost_usd: "$600-1,000/mo",
+        english_tier: 9, english_note: "English is official language",
+        startup_tier: 5, startup_note: "Growing SE Asia hub",
+        tz_tier: 1, tz_note: "Same as SG/HK, 12-13hr ahead of EST",
+        climate_tier: 2, climate_note: "Hot + humid year-round",
+        walkability_tier: 3, walkability_note: "Car-centric, not walkable",
+        food_tier: 10, food_note: "Incredible hawker stalls, cheap, diverse",
+        safety_tier: 6, safety_note: "Generally safe",
+        wifi_tier: 9, wifi_note: "Excellent",
+        visa_tier: 4, visa_note: "90-day, MM2H visa",
+        expat_tier: 8, coworking_tier: 9,
+        monthly: "$600-1,000/mo",
+        cost_index: 35.0,
+        pros: ["English official language", "Incredible cheap food", "Cheapest true big city in Asia with English", "MM2H visa program"],
+        cons: ["Not walkable", "Hot + humid year-round", "TZ tough for US"],
+        tags: ["English", "Cheap", "Foodie"],
+        winner_for: ["english_comfort", "english_professional", "cost_moderate"],
+        match_reason: "English is official here — you can fully operate without Malay. Incredible food, USD stretches far. Trade-off is heat and car-centric layout."
+    },
+    "Budapest": {
+        country: "Hungary", flag: "🇭🇺", region: "Europe",
+        cost_tier: 3, cost_usd: "$800-1,300/mo",
+        english_tier: 5, english_note: "Tourist areas good",
+        startup_tier: 6, startup_note: "Prezi/LogMeIn origins, decent",
+        tz_tier: 6, tz_note: "6hr ahead of EST",
+        climate_tier: 5, climate_note: "4 seasons, cold winters",
+        walkability_tier: 8, walkability_note: "Very walkable, ruin bar culture",
+        food_tier: 7, food_note: "Good food, cheap wine",
+        safety_tier: 7, safety_note: "Safe in center",
+        wifi_tier: 9, wifi_note: "Excellent",
+        visa_tier: 6, visa_note: "90-day Schengen",
+        expat_tier: 7, coworking_tier: 8,
+        monthly: "$800-1,300/mo",
+        cost_index: 45.0,
+        pros: ["Cheapest proper EU capital", "Good TZ overlap", "Ruin bar social scene incredible", "Very walkable", "Excellent wifi"],
+        cons: ["Real winter (below 0°C)", "Cold winters — not your preference", "Limited English outside center"],
+        tags: ["Cheap EU", "Startup", "Good TZ", "Social Scene"],
+        winner_for: ["cost_balanced", "startup_explore"],
+        match_reason: "Cheapest proper EU capital. Good TZ, decent startup scene, incredible social/ruin bar culture. Winter is the issue for your seasonal preference."
+    },
+    "Tbilisi": {
+        country: "Georgia", flag: "🇬🇪", region: "Europe/Asia",
+        cost_tier: 1, cost_usd: "$400-800/mo",
+        english_tier: 3, english_note: "Limited outside center",
+        startup_tier: 3, startup_note: "Small but emerging",
+        tz_tier: 5, tz_note: "4hr ahead of EST",
+        climate_tier: 5, climate_note: "4 seasons",
+        walkability_tier: 6, walkability_note: "Walkable Old Town, hilly",
+        food_tier: 6, food_note: "Solid food, natural wine culture",
+        safety_tier: 8, safety_note: "Very safe country",
+        wifi_tier: 8, wifi_note: "Good",
+        visa_tier: 10, visa_note: "1 YEAR visa-free for US!",
+        expat_tier: 6, coworking_tier: 6,
+        monthly: "$400-800/mo",
+        cost_index: 28.0,
+        pros: ["No visa for US — 1 year!", "Extremely cheap", "Easy residency", "Safe country", "Wine culture"],
+        cons: ["Limited English", "Small startup scene", "Emerging, not established"],
+        tags: ["No Visa", "Cheapest", "Wildcard"],
+        winner_for: ["cost_extreme", "cost_moderate"],
+        match_reason: "1-year visa-free for US citizens. Extremely cheap. If you want to stay somewhere long-term without visa stress, Tbilisi is the hidden gem."
+    },
+    "Belgrade": {
+        country: "Serbia", flag: "🇷🇸", region: "Europe",
+        cost_tier: 2, cost_usd: "$500-900/mo",
+        english_tier: 4, english_note: "Limited English",
+        startup_tier: 4, startup_note: "Growing tech scene",
+        tz_tier: 6, tz_note: "6hr ahead of EST",
+        climate_tier: 5, climate_note: "4 seasons, continental",
+        walkability_tier: 7, walkability_note: "Walkable city center",
+        food_tier: 8, food_note: "Great food, meat culture, cheap",
+        safety_tier: 5, safety_note: "Generally safe",
+        wifi_tier: 8, wifi_note: "Good",
+        visa_tier: 7, visa_note: "90 days, easy residency",
+        expat_tier: 6, coworking_tier: 7,
+        monthly: "$500-900/mo",
+        cost_index: 32.0,
+        pros: ["Extremely cheap", "Good TZ overlap with US", "Food excellent + cheap", "EU candidate country"],
+        cons: ["Limited English", "Real winter", "Startup tiny"],
+        tags: ["Cheap EU", "Good TZ", "Foodie"],
+        winner_for: ["cost_extreme", "cost_moderate"],
+        match_reason: "Extremely cheap + good TZ + EU candidate. Food scene is underrated. English is limited but the price-to-TZ ratio is hard to beat."
+    },
+    "Cape Town": {
+        country: "South Africa", flag: "🇿🇦", region: "Africa",
+        cost_tier: 3, cost_usd: "$800-1,400/mo",
+        english_tier: 10, english_note: "English is official language",
+        startup_tier: 4, startup_note: "Silicon Cape movement growing",
+        tz_tier: 2, tz_note: "7-8hr ahead of EST — tough for US",
+        climate_tier: 8, climate_note: "Mediterranean, mild winters",
+        walkability_tier: 7, walkability_note: "Walkable in Sea Point/Gardens",
+        food_tier: 9, food_note: "Excellent food + wine region",
+        safety_tier: 3, safety_note: "Safety concerns in some areas",
+        wifi_tier: 8, wifi_note: "Good",
+        visa_tier: 4, visa_note: "90-day visa-free",
+        expat_tier: 7, coworking_tier: 8,
+        monthly: "$800-1,400/mo",
+        cost_index: 40.0,
+        pros: ["English-first", "Beautiful city + nature", "Mediterranean climate", "Wine region", "Lifestyle elite"],
+        cons: ["7-8hr TZ from EST — very tough", "Safety concerns", "Crime in some areas"],
+        tags: ["English", "Beautiful", "Mediterranean"],
+        winner_for: ["english_comfort", "english_professional", "english_both"],
+        match_reason: "English is official — full fluency everywhere. Mediterranean climate, beautiful city, wine region. Trade-off is the tough timezone for US calls."
+    },
+    "Guadalajara": {
+        country: "Mexico", flag: "🇲🇽", region: "Latin America",
+        cost_tier: 3, cost_usd: "$700-1,100/mo",
+        english_tier: 5, english_note: "Some English, business community",
+        startup_tier: 5, startup_note: "Growing tech ecosystem",
+        tz_tier: 9, tz_note: "Same as US EST (Central Mexico)",
+        climate_tier: 7, climate_note: "Mild year-round, dry",
+        walkability_tier: 7, walkability_note: "Walkable historic center",
+        food_tier: 8, food_note: "Great food, tapatio culture",
+        safety_tier: 5, safety_note: "Generally safe in center",
+        wifi_tier: 8, wifi_note: "Good",
+        visa_tier: 8, visa_note: "180-day tourist visa",
+        expat_tier: 6, coworking_tier: 7,
+        monthly: "$700-1,100/mo",
+        cost_index: 42.0,
+        pros: ["Like CDMX but cheaper + less touristy", "Same TZ as US", "180-day visa", "Growing tech scene", "More authentic"],
+        cons: ["Spanish needed", "Limited English", "Hotter than CDMX"],
+        tags: ["Same TZ", "Authentic MX", "Cheaper MX"],
+        winner_for: ["cost_balanced", "experience"],
+        match_reason: "Mexico City's little sister — cheaper, less touristy, growing tech scene, same US timezone. Good option if you want MX vibes without the CDMX premium."
+    },
+    "Panama City": {
+        country: "Panama", flag: "🇵🇦", region: "Latin America",
+        cost_tier: 4, cost_usd: "$1,100-1,700/mo",
+        english_tier: 9, english_note: "English widely spoken, business hub",
+        startup_tier: 4, startup_note: "Growing hub for LatAm ops",
+        tz_tier: 9, tz_note: "Same as US EST",
+        climate_tier: 3, climate_note: "Hot + humid year-round",
+        walkability_tier: 5, walkability_note: "Walkable Casco Viejo, car-centric overall",
+        food_tier: 7, food_note: "Good food, cultural mix",
+        safety_tier: 6, safety_note: "Generally safe in central areas",
+        wifi_tier: 8, wifi_note: "Good",
+        visa_tier: 8, visa_note: "180-day visa, friendly terms",
+        expat_tier: 8, coworking_tier: 8,
+        monthly: "$1,100-1,700/mo",
+        cost_index: 50.0,
+        pros: ["English widely spoken", "USD currency", "Same TZ as US", "180-day visa", "Regional hub for LatAm"],
+        cons: ["Hot + humid year-round", "Expensive for region", "Not walkable"],
+        tags: ["English", "Business Hub", "Same TZ"],
+        winner_for: ["english_professional", "english_both"],
+        match_reason: "English-first + same US timezone + USD currency. Business hub for LatAm operations. If you need English for professional reasons AND US TZ, Panama City is the play."
+    },
+    "Istanbul": {
+        country: "Turkey", flag: "🇹🇷", region: "Europe/Asia",
+        cost_tier: 2, cost_usd: "$600-1,000/mo",
+        english_tier: 4, english_note: "Limited English outside center",
+        startup_tier: 7, startup_note: "Rising European hub, VC increasing",
+        tz_tier: 2, tz_note: "7-8hr ahead of EST",
+        climate_tier: 6, climate_note: "4 seasons, mild winters",
+        walkability_tier: 9, walkability_note: "Incredibly walkable, historic",
+        food_tier: 9, food_note: "Incredible food, East meets West",
+        safety_tier: 5, safety_note: "Generally safe, some areas careful",
+        wifi_tier: 8, wifi_note: "Good",
+        visa_tier: 6, visa_note: "90-day",
+        expat_tier: 7, coworking_tier: 8,
+        monthly: "$600-1,000/mo",
+        cost_index: 35.0,
+        pros: ["Incredible city — East meets West", "Rising startup hub", "Walkable + historical", "Food incredible", "Cheap for USD earner", "Bridge between Europe/Asia"],
+        cons: ["7-8hr TZ from EST", "Limited English", "Political instability"],
+        tags: ["Wildcard", "Startup Rising", "Walkable", "History"],
+        winner_for: ["experience", "startup_explore"],
+        match_reason: "Wild card that rewards the adventurous. Rising startup hub, incredibly walkable, history everywhere, food unreal, cheap for USD. TZ is the main trade-off."
+    }
+};
+
+// ============================================================
+// QUIZ STATE
+// ============================================================
+let state = {
+    history: [],       // stack of question IDs visited
+    answers: {},       // all answers keyed by question ID
+    multi: {},         // multi-select answers
+    path: null,        // primary path taken
+    branch_answers: {} // branch-specific answers
+};
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function show(id) {
+    document.querySelectorAll('.q-block').forEach(el => el.classList.remove('active'));
+    const target = document.getElementById(id);
+    if (target) {
+        target.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    updateProgress();
+}
+
+function goQuestion(id) {
+    state.history.push(id);
+    show(id);
+}
+
+function goBack() {
+    if (state.history.length > 1) {
+        state.history.pop(); // remove current
+        const prev = state.history[state.history.length - 1];
+        show(prev);
+    } else {
+        show('q-root');
+    }
+}
+
+function updateProgress() {
+    const totalSteps = 4;
+    const currentStep = state.history.length;
+    const pct = Math.min(Math.round((currentStep / totalSteps) * 100), 95);
+    document.getElementById('progress-fill').style.width = pct + '%';
+    document.getElementById('progress-pct').textContent = pct + '%';
+
+    // Update dimension label based on path
+    const dimLabels = {
+        'cost': 'Cost Priority Path',
+        'startup': 'Startup Ecosystem Path',
+        'climate': 'Climate Priority Path',
+        'english': 'English Environment Path',
+        'experience': 'Experience Path'
+    };
+    if (dimLabels[state.path]) {
+        document.getElementById('progress-dim').textContent = dimLabels[state.path];
+    }
+}
+
+// ============================================================
+// ANSWER HANDLING
+// ============================================================
+function singleSelect(questionId, value, el) {
+    state.answers[questionId] = value;
+    // visually select
+    if (el) {
+        el.closest('.options').querySelectorAll('.opt').forEach(o => o.classList.remove('selected'));
+        el.classList.add('selected');
+    }
+}
+
+function branchAnswer(key, value) {
+    state.branch_answers[key] = value;
+    state.path = state.history[0] ? state.history[0].replace('q-','') : key;
+
+    // Follow-up questions based on branch
+    if (key === 'primary') {
+        if (value === 'cost') {
+            goQuestion('path-cost');
+        } else if (value === 'startup') {
+            goQuestion('path-startup');
+        } else if (value === 'english') {
+            goQuestion('path-english');
+        } else if (value === 'climate') {
+            goQuestion('path-climate');
+        } else if (value === 'experience') {
+            // Experience path skips to dealbreakers
+            goQuestion('q-dealbreakers');
+        }
+    } else if (key === 'cost_level') {
+        goQuestion('path-cost-english');
+    } else if (key === 'cost_english_critical') {
+        goQuestion('q-dealbreakers');
+    } else if (key === 'startup_goal') {
+        goQuestion('q-dealbreakers');
+    } else if (key === 'climate_type') {
+        goQuestion('q-dealbreakers');
+    } else if (key === 'english_driver') {
+        goQuestion('q-dealbreakers');
+    }
+}
+
+function toggleMulti(el, key) {
+    if (!state.multi[key]) state.multi[key] = [];
+    const idx = state.multi[key].indexOf(key);
+    if (idx > -1) {
+        state.multi[key].splice(idx, 1);
+        el.classList.remove('selected');
+    } else {
+        state.multi[key].push(key);
+        el.classList.add('selected');
+    }
+    // Enable next button if any selected
+    const hasAny = Object.values(state.multi).some(v => v.length > 0);
+    document.getElementById('deal-next').disabled = !hasAny;
+}
+
+// ============================================================
+// SCORING ENGINE
+// ============================================================
+function scoreCities() {
+    const primary = state.branch_answers.primary;
+    const costLevel = state.branch_answers.cost_level;
+    const costEnglish = state.branch_answers.cost_english_critical;
+    const startupGoal = state.branch_answers.startup_goal;
+    const climateType = state.branch_answers.climate_type;
+    const englishDriver = state.branch_answers.english_driver;
+    const tz = state.answers.tz;
+    const goal = state.answers.goal;
+    const deals = Object.values(state.multi).flat();
+    const openText = (document.getElementById('open-text') || {}).value || '';
+
+    // Build weights
+    let weights = {
+        cost: 2, english: 2, startup: 2, tz: 2, climate: 2, walkability: 2, food: 2, safety: 1, wifi: 1, visa: 1
+    };
+
+    // Adjust weights based on path
+    if (primary === 'cost' || costLevel) weights.cost = 5;
+    if (primary === 'startup' || startupGoal) weights.startup = 5;
+    if (primary === 'climate' || climateType) weights.climate = 5;
+    if (primary === 'english' || englishDriver || costEnglish === true) weights.english = 5;
+    if (primary === 'experience') { weights.walkability = 4; weights.food = 4; }
+
+    // Timezone weight
+    if (tz === 'A') weights.tz = 5;
+    else if (tz === 'B') weights.tz = 3;
+    else weights.tz = 1;
+
+    // Goal weight
+    if (goal === 'A') weights.cost = Math.max(weights.cost, 5);
+    if (goal === 'B') weights.startup = Math.max(weights.startup, 5);
+    if (goal === 'C') { weights.walkability = 4; weights.food = 4; }
+
+    // Dealbreaker exclusions
+    let excluded = new Set();
+    if (deals.includes('deal_A')) { // heat
+        Object.entries(CITIES).forEach(([name, c]) => { if (c.climate_tier <= 3) excluded.add(name); });
+    }
+    if (deals.includes('deal_B')) { // real winter
+        Object.entries(CITIES).forEach(([name, c]) => { if (c.climate_tier <= 5 && c.climate_tier >= 1) excluded.add(name); });
+    }
+    if (deals.includes('deal_D')) { // bad wifi
+        Object.entries(CITIES).forEach(([name, c]) => { if (c.wifi_tier <= 4) excluded.add(name); });
+    }
+    if (deals.includes('deal_E')) { // unsafe
+        Object.entries(CITIES).forEach(([name, c]) => { if (c.safety_tier <= 4) excluded.add(name); });
+    }
+    if (deals.includes('deal_F')) { // not walkable
+        Object.entries(CITIES).forEach(([name, c]) => { if (c.walkability_tier <= 4) excluded.add(name); });
+    }
+
+    // Score each city
+    let scored = Object.entries(CITIES).map(([name, c]) => {
+        if (excluded.has(name)) return { name, city: c, score: -1 };
+
+        let score = 0;
+        score += c.cost_tier * weights.cost;
+        score += c.english_tier * weights.english;
+        score += c.startup_tier * weights.startup;
+        score += c.tz_tier * weights.tz;
+        score += c.climate_tier * weights.climate;
+        score += c.walkability_tier * weights.walkability;
+        score += c.food_tier * weights.food;
+        score += c.safety_tier * weights.safety;
+        score += c.wifi_tier * weights.wifi;
+        score += c.visa_tier * weights.visa;
+        score += c.expat_tier * 1;
+        score += c.coworking_tier * 1;
+
+        // Path-specific bonuses
+        if (primary === 'experience' && c.walkability_tier >= 8 && c.food_tier >= 8) score += 10;
+        if (costLevel === 'extreme' && c.cost_tier <= 2) score += 8;
+        if (costLevel === 'moderate' && c.cost_tier <= 3) score += 5;
+        if (costEnglish === true && c.english_tier >= 8) score += 8;
+        if (climateType === 'mild' && c.climate_tier >= 9) score += 8;
+        if (climateType === 'mediterranean' && c.climate_tier >= 8) score += 8;
+        if (startupGoal === 'network' && c.startup_tier >= 8) score += 8;
+        if (startupGoal === 'community' && c.expat_tier >= 8) score += 8;
+        if (englishDriver === 'professional' && c.english_tier >= 8 && c.startup_tier >= 7) score += 10;
+        if (englishDriver === 'both' && c.english_tier >= 8 && c.startup_tier >= 7) score += 10;
+        if (tz === 'A' && c.tz_tier >= 8) score += 8;
+        if (tz === 'C') { /* TZ doesn't matter */ }
+
+        return { name, city: c, score };
+    });
+
+    scored = scored.filter(s => s.score > 0);
+    scored.sort((a, b) => b.score - a.score);
+
+    return scored;
+}
+
+function tierLabel(tier) {
+    if (tier >= 8) return { label: 'Excellent', cls: 'score-high' };
+    if (tier >= 5) return { label: 'Good', cls: 'score-mid' };
+    return { label: 'Weak', cls: 'score-low' };
+}
+
+// ============================================================
+// RESULTS RENDERING
+// ============================================================
+function calculateAndShow() {
+    const scored = scoreCities();
+    const top3 = scored.slice(0, 3);
+
+    // Hide quiz, show results
+    document.querySelectorAll('.q-block').forEach(el => el.classList.remove('active'));
+    document.getElementById('progress-wrap').style.display = 'none';
+    document.getElementById('results').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Render top 3 cards
+    const top3Html = top3.map((item, i) => {
+        const c = item.city;
+        const tier = tierLabel(Math.round(item.score / 12)); // rough normalize
+        const maxScore = scored[0].score;
+        const pct = Math.round((item.score / maxScore) * 100);
+
+        const prosHtml = c.pros.slice(0,3).map(p => `<li>${p}</li>`).join('');
+        const consHtml = c.cons.slice(0,2).map(c => `<li>${c}</li>`).join('');
+        const tagsHtml = c.tags.map(t => `<span class="city-tag ${i===0?'hot':''}">${t}</span>`).join('');
+
+        return `
+        <div class="city-card top-${i+1}">
+            <div class="card-header">
+                <div class="card-rank">#${i+1}</div>
+                <div class="card-title-block">
+                    <div class="card-name">${c.flag} ${item.name}</div>
+                    <div class="card-meta">${c.country} · ${c.region} · ${c.monthly}</div>
+                    <div class="city-tags">${tagsHtml}</div>
+                </div>
+                <div class="card-score-badge">
+                    <div class="card-score">${pct}</div>
+                    <div class="card-score-label">match %</div>
+                </div>
+            </div>
+
+            <div class="match-reason">"${c.match_reason}"</div>
+
+            <table class="scorecard">
+                <tr>
+                    <th>Dimension</th>
+                    <th>Score</th>
+                    <th>Context</th>
+                </tr>
+                <tr>
+                    <td class="score-row-name">Cost of Living</td>
+                    <td class="score-val">${c.cost_tier}/10</td>
+                    <td><span class="score-bar-wrap"><span class="score-bar-fill" style="width:${c.cost_tier*10}%"></span></span> ${c.cost_usd}</td>
+                </tr>
+                <tr>
+                    <td class="score-row-name">English Level</td>
+                    <td class="score-val">${c.english_tier}/10</td>
+                    <td>${c.english_note}</td>
+                </tr>
+                <tr>
+                    <td class="score-row-name">Startup Ecosystem</td>
+                    <td class="score-val">${c.startup_tier}/10</td>
+                    <td>${c.startup_note}</td>
+                </tr>
+                <tr>
+                    <td class="score-row-name">Timezone (vs US EST)</td>
+                    <td class="score-val">${c.tz_tier}/10</td>
+                    <td>${c.tz_note}</td>
+                </tr>
+                <tr>
+                    <td class="score-row-name">Climate</td>
+                    <td class="score-val">${c.climate_tier}/10</td>
+                    <td>${c.climate_note}</td>
+                </tr>
+                <tr>
+                    <td class="score-row-name">Walkability</td>
+                    <td class="score-val">${c.walkability_tier}/10</td>
+                    <td>${c.walkability_note}</td>
+                </tr>
+                <tr>
+                    <td class="score-row-name">Food</td>
+                    <td class="score-val">${c.food_tier}/10</td>
+                    <td>${c.food_note}</td>
+                </tr>
+                <tr>
+                    <td class="score-row-name">Safety</td>
+                    <td class="score-val">${c.safety_tier}/10</td>
+                    <td>${c.safety_note}</td>
+                </tr>
+                <tr>
+                    <td class="score-row-name">Visa</td>
+                    <td class="score-val">${c.visa_tier}/10</td>
+                    <td>${c.visa_note}</td>
+                </tr>
+                <tr>
+                    <td class="score-row-name">Wifi</td>
+                    <td class="score-val">${c.wifi_tier}/10</td>
+                    <td>${c.wifi_note}</td>
+                </tr>
+            </table>
+
+            <div class="pros-cons">
+                <div>
+                    <div style="font-size:0.65rem;color:var(--green);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;font-weight:700;">Pros</div>
+                    <ul class="pros-list">${prosHtml}</ul>
+                </div>
+                <div>
+                    <div style="font-size:0.65rem;color:var(--red);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;font-weight:700;">Cons</div>
+                    <ul class="cons-list">${consHtml}</ul>
+                </div>
+            </div>
+        </div>`;
+    }).join('');
+
+    document.getElementById('top3-cards').innerHTML = top3Html;
+
+    // Render comparison table
+    const dims = ['cost', 'english', 'startup', 'tz', 'climate', 'walkability', 'food', 'safety', 'visa'];
+    const dimNames = ['Cost', 'English', 'Startup', 'TZ', 'Climate', 'Walkable', 'Food', 'Safety', 'Visa'];
+
+    let compHeader = `<thead><tr><th>Dimension</th>`;
+    top3.forEach((item, i) => {
+        compHeader += `<th>${item.city.flag} ${item.name}${i===0?' <span class="winner-badge">BEST</span>':''}</th>`;
+    });
+    compHeader += `</tr></thead>`;
+
+    let compBody = `<tbody>`;
+    dims.forEach((dim, di) => {
+        const tierProp = dim + '_tier';
+        const bestVal = Math.max(...top3.map(t => t.city[tierProp]));
+        compBody += `<tr>
+            <td>${dimNames[di]}</td>
+            ${top3.map((item, i) => {
+                const val = item.city[tierProp];
+                const isBest = val === bestVal && bestVal > 0;
+                return `<td class="${isBest?'score-high':'score-muted'}" style="${isBest?'font-weight:700;color:var(--terracotta)':''}">${val}/10${isBest?' ✓':''}</td>`;
+            })}
+        </tr>`;
+    });
+    compBody += `</tbody>`;
+
+    document.getElementById('compare-table').innerHTML = compHeader + compBody;
+
+    // Render why scores
+    const primary = state.branch_answers.primary;
+    const whyHtml = top3.map((item, i) => {
+        const c = item.city;
+        let topDims = [];
+        if (primary === 'cost' || costLevel) topDims.push({ name: 'Cost', val: c.cost_tier, reason: c.cost_usd });
+        if (primary === 'startup' || startupGoal) topDims.push({ name: 'Startup', val: c.startup_tier, reason: c.startup_note });
+        if (primary === 'climate' || climateType) topDims.push({ name: 'Climate', val: c.climate_tier, reason: c.climate_note });
+        if (primary === 'english' || englishDriver) topDims.push({ name: 'English', val: c.english_tier, reason: c.english_note });
+        if (primary === 'experience') topDims.push({ name: 'Walkability', val: c.walkability_tier, reason: c.walkability_note });
+
+        // Always show TZ and Food as secondary
+        topDims.push({ name: 'Timezone', val: c.tz_tier, reason: c.tz_note });
+        topDims.push({ name: 'Food', val: c.food_tier, reason: c.food_note });
+
+        const whyItems = topDims.slice(0, 4).map(d => `
+            <div class="dim-chip">
+                <div class="dim-chip-name">${d.name}</div>
+                <div class="dim-chip-val" style="color:var(--terracotta)">${d.val}/10</div>
+                <div class="dim-chip-reason">${d.reason}</div>
+            </div>`).join('');
+
+        return `
+        <div>
+            <div style="font-size:0.7rem;color:var(--taupe);margin-bottom:6px;font-weight:700;">#${i+1} ${c.flag} ${item.name} — Key Dimensions</div>
+            <div class="dim-grid" style="grid-template-columns:1fr 1fr;">${whyItems}</div>
+        </div>`;
+    }).join('');
+
+    document.getElementById('why-scores').innerHTML = whyHtml;
+
+    // Save to localStorage so we remember
+    localStorage.setItem('jordan_city_quiz_state', JSON.stringify(state));
+}
+
+// ============================================================
+// RESTART
+// ============================================================
+function restartQuiz() {
+    state = { history: [], answers: {}, multi: {}, path: null, branch_answers: {} };
+    localStorage.removeItem('jordan_city_quiz_state');
+    document.getElementById('results').style.display = 'none';
+    document.getElementById('progress-wrap').style.display = 'block';
+    document.getElementById('progress-fill').style.width = '0%';
+    document.getElementById('progress-dim').textContent = 'Finding your type';
+    document.getElementById('progress-pct').textContent = '0%';
+    document.querySelectorAll('.opt').forEach(o => o.classList.remove('selected'));
+    Object.values(state.multi).forEach(v => v.length = 0);
+    show('q-root');
+    state.history.push('q-root');
+}
+
+// Init
+state.history = ['q-root'];
+</script>
+</body>
+</html>

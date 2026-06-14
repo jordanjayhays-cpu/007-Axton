@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "company": "NeuroTech Labs",
+    "contact": "Sarah Chen",
+    "email": "sarah.chen@neurotechlabs.com",
+    "personalization": "recent breakthrough in BCIs for stroke recovery",
+    "notes": "Series B, 50 employees"
+  },
+  {
+    "id": 2,
+    "company": "Cortex Dynamics",
+    "contact": "Marcus Johnson",
+    "email": "mjohnson@cortexdynamics.io",
+    "personalization": "pioneering work in neural implants",
+    "notes": "Series A, 25 employees"
+  },
+  {
+    "id": 3,
+    "company": "Synapse AI",
+    "contact": "Emily Rodriguez",
+    "email": "emily.r@synapseai.co",
+    "personalization": "focus on machine learning for early Alzheimer detection",
+    "notes": "Seed stage, 12 employees"
+  },
+  {
+    "id": 4,
+    "company": "Neuralink Partners",
+    "contact": "David Park",
+    "email": "dpark@neuralinkpartners.com",
+    "personalization": "brain-computer interface research",
+    "notes": "Series C, 200 employees"
+  },
+  {
+    "id": 5,
+    "company": "Cognito Therapeutics",
+    "contact": "Rachel Kim",
+    "email": "rachel.kim@cognitotherapeutics.com",
+    "personalization": "novel treatments for dementia",
+    "notes": "Series B, 80 employees"
+  },
+  {
+    "id": 6,
+    "company": "Axon Neuroscience",
+    "contact": "Thomas Weber",
+    "email": "tweber@axon-neuro.com",
+    "personalization": "tau protein research for Alzheimer's",
+    "notes": "Series A, 40 employees"
+  },
+  {
+    "id": 7,
+    "company": "NeuroSense Inc",
+    "contact": "Amanda Foster",
+    "email": "afoster@neurosense.tech",
+    "personalization": "non-invasive brain monitoring devices",
+    "notes": "Seed, 15 employees"
+  },
+  {
+    "id": 8,
+    "company": "Synaptic Health",
+    "contact": "James Liu",
+    "email": "jliu@synaptichealth.ai",
+    "personalization": "AI-powered neurological diagnosis",
+    "notes": "Series B, 60 employees"
+  },
+  {
+    "id": 9,
+    "company": "BrainPath Technologies",
+    "contact": "Maria Santos",
+    "email": "msantos@brainpathtech.com",
+    "personalization": "minimally invasive neurosurgery tools",
+    "notes": "Series A, 35 employees"
+  },
+  {
+    "id": 10,
+    "company": "NeuroPeak Solutions",
+    "contact": "Robert Taylor",
+    "email": "rtaylor@neuropeak.com",
+    "personalization": "cognitive enhancement supplements",
+    "notes": "Bootstrapped, 20 employees"
+  }
+]

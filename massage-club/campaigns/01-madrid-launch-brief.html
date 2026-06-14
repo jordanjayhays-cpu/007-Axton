@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Massage Pass — Madrid Launch Brief</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root { --bg: #0a0a0f; --card: #141420; --border: #1e1e2e; --text: #e2e8f0; --muted: #64748b; --green: #22c55e; --yellow: #f59e0b; --red: #ef4444; --cyan: #06b6d4; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 24px; max-width: 800px; margin: 0 auto; }
+        .header { margin-bottom: 28px; }
+        h1 { font-size: 1.8rem; font-weight: 800; background: linear-gradient(135deg, #6366f1, #22c55e); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 6px; }
+        .meta { font-size: 0.8rem; color: var(--muted); }
+        .badge { display: inline-block; background: rgba(6,182,212,0.15); color: var(--cyan); padding: 3px 10px; border-radius: 20px; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; margin-right: 6px; }
+        .badge-red { background: rgba(239,68,68,0.15); color: var(--red); }
+        .badge-yellow { background: rgba(245,158,11,0.15); color: var(--yellow); }
+        .section { background: var(--card); border-radius: 12px; padding: 16px; border: 1px solid var(--border); margin-bottom: 14px; }
+        .section h2 { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 10px; }
+        .section p, .section li { font-size: 0.85rem; line-height: 1.7; color: #ccc; }
+        .section ul { padding-left: 20px; }
+        .section li { margin-bottom: 6px; }
+        .highlight { background: rgba(6,182,212,0.08); border: 1px solid rgba(6,182,212,0.2); border-radius: 10px; padding: 12px; margin-bottom: 14px; }
+        .highlight h3 { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--cyan); margin-bottom: 8px; }
+        .blocker { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2); border-radius: 8px; padding: 10px; margin-bottom: 6px; font-size: 0.8rem; }
+        .blocker strong { color: var(--red); }
+        code { background: rgba(255,255,255,0.08); padding: 1px 5px; border-radius: 3px; font-size: 0.8em; }
+        .week { background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.2); border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+        .week h3 { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--yellow); margin-bottom: 8px; }
+        .week li { font-size: 0.82rem; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.78rem; margin-top: 8px; }
+        th { text-align: left; padding: 6px 8px; color: var(--muted); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.06em; border-bottom: 1px solid var(--border); }
+        td { padding: 6px 8px; border-bottom: 1px solid rgba(30,41,59,0.5); vertical-align: top; }
+        .tag { display: inline-block; font-size: 0.55rem; padding: 1px 5px; border-radius: 4px; }
+        .tag-safe { background: rgba(34,197,94,0.2); color: #86efac; }
+        .tag-risk { background: rgba(239,68,68,0.2); color: #fca5a5; }
+        .footer { text-align: center; color: var(--muted); font-size: 0.65rem; margin-top: 28px; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>Massage Pass — Madrid Launch Brief</h1>
+    <div class="meta">Version 1.0 · May 11, 2026 · Pre-launch · First neighborhood: Chamberí</div>
+</div>
+
+<!-- WHAT THIS IS -->
+<div class="section">
+    <h2>What This Actually Is</h2>
+    <p>Massage Pass is a two-sided marketplace:</p>
+    <ul>
+        <li><strong>Supply side:</strong> Independent massage therapists who need more clients</li>
+        <li><strong>Demand side:</strong> People who want massages but don't want to commit to a subscription</li>
+    </ul>
+    <p style="margin-top:10px;">The problem for therapists: Booksy charges €29–99/month whether you get 1 client or 50. Most solo therapists have 4+ empty slots per week and can't afford to stay on Booksy for a listing they barely appear in.</p>
+    <p>The problem for clients: Google Maps shows you where massage places are — not who's available now. Walking in is a gamble.</p>
+    <p style="margin-top:10px;"><strong>The fix:</strong> One neighborhood at a time. 5 therapists, tight radius. We match availability with demand, take 15% only when a booking actually happens.</p>
+</div>
+
+<!-- THE MICRO-LAUNCH MODEL -->
+<div class="highlight">
+    <h3>The Model — Micro-Launch (Weeks 1–3)</h3>
+    <p><strong>Goal:</strong> 5 studios + 10 clients in Chamberí. One neighborhood, tight radius.</p>
+    <ul style="margin-top:8px;">
+        <li><strong>Offer to studios:</strong> Free first month + 0% commission on first 5 bookings</li>
+        <li><strong>Offer to clients:</strong> [X]% off first session or "4 sessions for price of 3" intro offer</li>
+        <li><strong>Take rate:</strong> 15% per confirmed booking after free month</li>
+        <li><strong>After Chamberí works:</strong> Expand to Salamanca, then Malasaña</li>
+    </ul>
+</div>
+
+<!-- BLOCKERS -->
+<div class="section">
+    <h2>⚠ Fix Before Launch</h2>
+    <div class="blocker"><strong>1.</strong> Vercel 404 on sub-pages — <code>vercel.json</code> missing SPA rewrite rules</div>
+    <div class="blocker"><strong>2.</strong> Domain <code>massageclub.io</code> DNS not pointed to Vercel</div>
+    <div class="blocker"><strong>3.</strong> Supabase service_role key not in Hermes env (booking monitor can't run)</div>
+</div>
+
+<!-- WEEK-BY-WEEK -->
+<div class="section">
+    <h2>Week-by-Week Plan</h2>
+
+    <div class="week">
+        <h3>Week 1 — Infrastructure + First Studios</h3>
+        <ul>
+            <li>Fix <code>vercel.json</code> SPA rewrite rules</li>
+            <li>DM 10 therapists from FB group scrapes with Spanish outreach templates</li>
+            <li>Post landing page waitlist in 3 Madrid FB groups</li>
+            <li>Onboard 3 studios manually — fill in Supabase profiles</li>
+            <li>First booking target: by end of Week 1</li>
+        </ul>
+    </div>
+
+    <div class="week">
+        <h3>Week 2 — First Bookings + Client Seeding</h3>
+        <ul>
+            <li>Be the concierge — manually match first 3 bookings yourself</li>
+            <li>Post "busco masajista" in 3 more FB groups</li>
+            <li>Collect first client feedback</li>
+            <li>Onboard 2 more studios (target: 5 total)</li>
+            <li>Target: 5 bookings this week</li>
+        </ul>
+    </div>
+
+    <div class="week">
+        <h3>Week 3 — Retention + Expansion Signal</h3>
+        <ul>
+            <li>Ask first clients for reviews / referrals</li>
+            <li>Track repeat booking rate — this is the real metric</li>
+            <li>Document what's working for Week 4 expansion plan</li>
+            <li>Target: 3+ repeat clients</li>
+        </ul>
+    </div>
+</div>
+
+<!-- CHAMBERÍ WHY -->
+<div class="section">
+    <h2>Why Chamberí First</h2>
+    <table>
+        <tr><td><strong>Demographics</strong></td><td>Young professionals, 25–40, high disposable income. Many English speakers (good for testing English version too).</td></tr>
+        <tr><td><strong>Independent culture</strong></td><td>Independent shops, cafes, small businesses — not chains. Credibility match.</td></tr>
+        <tr><td><strong>Metro coverage</strong></td><td>Line 1 (Bilbao, Tribunal, Gran Vía) + Line 7 — 10-min walk coverage means good client radius.</td></tr>
+        <tr><td><strong>Session price</strong></td><td>€50–70 expected — sustainable for therapists, not so cheap it's a commodity.</td></tr>
+        <tr><td><strong>Risk</strong></td><td>Gentrifying area — rents rising. Therapists may not be able to stay long-term.</td></tr>
+    </table>
+</div>
+
+<!-- PRICING -->
+<div class="section">
+    <h2>Pricing</h2>
+    <table>
+        <tr><th>Model</th><th>Cost to Therapist</th><th>Who It's For</th></tr>
+        <tr><td>Booksy</td><td>€29–99/month flat</td><td>Studios with 5+ therapists, full calendars</td></tr>
+        <tr><td>Treatwell</td><td>10–15% commission + subscription</td><td>Spas and wellness centers</td></tr>
+        <tr><td>Massage Pass</td><td>15% only on confirmed bookings</td><td>Solo therapists building their client base</td></tr>
+    </table>
+    <p style="margin-top:10px;">The key message: "You only pay when you actually earn. Free the first month."</p>
+</div>
+
+<!-- NEXT STEPS -->
+<div class="section">
+    <h2>What to Do Today</h2>
+    <ol style="padding-left:20px;">
+        <li>Fix the <code>vercel.json</code> SPA rewrite rules</li>
+        <li>DM 5 therapists from the FB scrape with the Spanish outreach template</li>
+        <li>Post the waitlist link in one Madrid FB group</li>
+        <li>Fill in Supabase profiles for 2 studios you can physically visit</li>
+    </ol>
+</div>
+
+<div class="footer">
+    Massage Pass · Madrid Launch Brief v1.0 · May 11, 2026<br>
+    Workspace: /Users/jordan/workspace/007-Axton/massage-club/
+</div>
+</body>
+</html>

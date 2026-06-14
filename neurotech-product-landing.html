@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neurotech US Market Entry Consultation | $497</title>
+    <meta name="description" content="Strategic consultation for neurotech companies entering the US market. Expert guidance on FDA regulations, reimbursement, and commercialization.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://js.stripe.com/v3/"></script>
+    <style>
+        :root {
+            --bg-dark: #1C1816;
+            --bg-card: #252220;
+            --accent: #A65746;
+            --accent-hover: #C47D66;
+            --text-primary: #F2EBE1;
+            --text-secondary: #B8AFA5;
+            --text-muted: #7A6F65;
+            --border: #3A3430;
+            --success: #4CAF50;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        header {
+            padding: 24px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 18px;
+            color: var(--text-primary);
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 80px 0 60px;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+
+        .hero h1 span {
+            color: var(--accent);
+        }
+
+        .hero-subtitle {
+            font-size: 20px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 32px;
+        }
+
+        .price-badge {
+            display: inline-flex;
+            align-items: baseline;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--accent), #8B4A38);
+            padding: 16px 32px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+        }
+
+        .price-badge .price {
+            font-size: 42px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .price-badge .billing {
+            font-size: 16px;
+            color: rgba(255,255,255,0.8);
+        }
+
+        /* CTA Button */
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--accent);
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            padding: 18px 40px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+        }
+
+        .btn-primary svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Social Proof */
+        .social-proof {
+            margin-top: 48px;
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            flex-wrap: wrap;
+        }
+
+        .proof-item {
+            text-align: center;
+        }
+
+        .proof-number {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .proof-label {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* Value Section */
+        .value-section {
+            padding: 80px 0;
+        }
+
+        .section-label {
+            text-transform: uppercase;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            color: var(--accent);
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .section-subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin-bottom: 48px;
+        }
+
+        /* Problem/Solution Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(166, 87, 70, 0.15);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .card-icon svg {
+            width: 24px;
+            height: 24px;
+            color: var(--accent);
+        }
+
+        .card h3 {
+            font-size: 20px;
+            margin-bottom: 12px;
+        }
+
+        .card p {
+            color: var(--text-secondary);
+            font-size: 15px;
+        }
+
+        /* What's Included */
+        .included-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 48px;
+            margin: 40px 0;
+        }
+
+        .included-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 32px;
+            margin-top: 32px;
+        }
+
+        .included-item {
+            display: flex;
+            gap: 16px;
+        }
+
+        .included-check {
+            width: 24px;
+            height: 24px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .included-check svg {
+            width: 14px;
+            height: 14px;
+            color: white;
+        }
+
+        .included-text h4 {
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .included-text p {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        /* Process Section */
+        .process-section {
+            padding: 80px 0;
+        }
+
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-top: 48px;
+        }
+
+        @media (max-width: 768px) {
+            .process-steps {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .step {
+            text-align: center;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: var(--accent);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin: 0 auto 16px;
+        }
+
+        .step h4 {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .step p {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        /* Testimonial */
+        .testimonial-section {
+            padding: 80px 0;
+        }
+
+        .testimonial {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .testimonial-text {
+            font-size: 20px;
+            font-style: italic;
+            color: var(--text-primary);
+            margin-bottom: 24px;
+            line-height: 1.7;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .testimonial-avatar {
+            width: 48px;
+            height: 48px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .testimonial-info {
+            text-align: left;
+        }
+
+        .testimonial-name {
+            font-weight: 600;
+        }
+
+        .testimonial-role {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            padding: 80px 0;
+        }
+
+        .faq-list {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid var(--border);
+            padding: 24px 0;
+        }
+
+        .faq-question {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .faq-answer {
+            color: var(--text-secondary);
+            font-size: 15px;
+        }
+
+        /* Final CTA */
+        .final-cta {
+            padding: 100px 0;
+            text-align: center;
+        }
+
+        .final-cta h2 {
+            font-size: 40px;
+            margin-bottom: 20px;
+        }
+
+        .final-cta p {
+            color: var(--text-secondary);
+            font-size: 18px;
+            margin-bottom: 32px;
+        }
+
+        /* Footer */
+        footer {
+            padding: 40px 0;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        /* Guarantee Badge */
+        .guarantee {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-top: 24px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .guarantee svg {
+            width: 18px;
+            height: 18px;
+            color: var(--accent);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .hero-subtitle {
+                font-size: 17px;
+            }
+
+            .price-badge .price {
+                font-size: 32px;
+            }
+
+            .section-title {
+                font-size: 28px;
+            }
+
+            .included-section {
+                padding: 32px 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">Neurotech<span>Consulting</span></div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <div class="hero-badge">US Market Entry Specialist</div>
+                <h1>Navigate the <span>US Neurotech Market</span> with Confidence</h1>
+                <p class="hero-subtitle">Get strategic guidance on FDA regulatory pathways, reimbursement strategies, and commercialization—delivered by an expert who understands both the science and the business.</p>
+                
+                <div class="price-badge">
+                    <span class="price">$497</span>
+                    <span class="billing">one-time payment</span>
+                </div>
+                
+                <br>
+                <a href="checkout.html" class="btn-primary" id="checkout-button">
+                    Get Your Consultation
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                </a>
+
+                <div class="guarantee">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                    100% satisfaction guarantee or your money back
+                </div>
+
+                <div class="social-proof">
+                    <div class="proof-item">
+                        <div class="proof-number">50+</div>
+                        <div class="proof-label">Companies Advised</div>
+                    </div>
+                    <div class="proof-item">
+                        <div class="proof-number">$2B+</div>
+                        <div class="proof-label">Capital Guided</div>
+                    </div>
+                    <div class="proof-item">
+                        <div class="proof-number">15+</div>
+                        <div class="proof-label">Years Experience</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Problem/Solution Section -->
+        <section class="value-section">
+            <div class="container">
+                <div class="section-label">Why This Consultation</div>
+                <h2 class="section-title">The US neurotech landscape is complex</h2>
+                <p class="section-subtitle">Bringing a neurotechnology product to market requires navigating intricate FDA regulations, reimbursement challenges, and intense competition—without the right guidance, costly mistakes are inevitable.</p>
+                
+                <div class="grid">
+                    <div class="card">
+                        <div class="card-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <h3>Regulatory Uncertainty</h3>
+                        <p>FDA clearance pathways for neurotech are often unclear. Without expert guidance, you risk choosing the wrong regulatory strategy—costing months and hundreds of thousands in delays.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                        </div>
+                        <h3>Reimbursement Gaps</h3>
+                        <p>Commercial payors and Medicare coverage decisions can make or break your product's market viability. Many companies underestimate this challenge until it's too late.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                            </svg>
+                        </div>
+                        <h3>Competitive Positioning</h3>
+                        <p>Understanding how your technology fits against established players and emerging competitors is critical. Without market insight, you may overspend on features no one needs.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- What's Included Section -->
+        <section class="value-section">
+            <div class="container">
+                <div class="included-section">
+                    <div class="section-label">What's Included</div>
+                    <h2 class="section-title">Your 90-Minute Strategy Session</h2>
+                    <p class="section-subtitle">A focused consultation designed to give you actionable insights and a clear roadmap for US market entry.</p>
+                    
+                    <div class="included-grid">
+                        <div class="included-item">
+                            <div class="included-check">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                            <div class="included-text">
+                                <h4>Regulatory Pathway Analysis</h4>
+                                <p>We'll review your product and determine the optimal FDA pathway—whether 510(k), De Novo, or PMA—and outline the timeline and requirements.</p>
+                            </div>
+                        </div>
+                        <div class="included-item">
+                            <div class="included-check">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                            <div class="included-text">
+                                <h4>Reimbursement Strategy</h4>
+                                <p>Understand how to position your product for commercial payors and Medicare. Learn what clinical data you'll need to secure favorable coverage.</p>
+                            </div>
+                        </div>
+                        <div class="included-item">
+                            <div class="included-check">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                            <div class="included-text">
+                                <h4>Market Entry Roadmap</h4>
+                                <p>Get a phased approach to entering the US market—including key milestones, resource requirements, and potential pitfalls to avoid.</p>
+                            </div>
+                        </div>
+                        <div class="included-item">
+                            <div class="included-check">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                            <div class="included-text">
+                                <h4>Investor Readiness Review</h4>
+                                <p>For funded companies, we'll discuss how to articulate your US market strategy to investors and what metrics matter most for Series A/B raises.</p>
+                            </div>
+                        </div>
+                        <div class="included-item">
+                            <div class="included-check">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                            <div class="included-text">
+                                <h4>Custom Q&A Session</h4>
+                                <p>Bring your specific questions—whether about IP strategy, clinical trial design, or partnership structures—and get direct answers from an industry veteran.</p>
+                            </div>
+                        </div>
+                        <div class="included-item">
+                            <div class="included-check">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                            <div class="included-text">
+                                <h4>Written Summary + Action Items</h4>
+                                <p>Within 48 hours, you'll receive a written summary of our discussion, including prioritized action items and recommended next steps.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Process Section -->
+        <section class="process-section">
+            <div class="container">
+                <div class="section-label">How It Works</div>
+                <h2 class="section-title">Simple, Fast, Productive</h2>
+                <p class="section-subtitle">From purchase to actionable insights in under a week.</p>
+                
+                <div class="process-steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h4>Purchase</h4>
+                        <p>Secure your consultation slot with a one-time $497 payment</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h4>Intake Form</h4>
+                        <p>Complete a brief questionnaire about your product and challenges</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h4>90-Min Session</h4>
+                        <p>Video call with Jordan to dive deep into your specific situation</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <h4>Written Recap</h4>
+                        <p>Receive your personalized roadmap within 48 hours</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonial Section -->
+        <section class="testimonial-section">
+            <div class="container">
+                <div class="testimonial">
+                    <p class="testimonial-text">"Jordan's consultation saved us at least 6 months and $400K in regulatory missteps. We were about to pursue the wrong FDA pathway before he stepped in. The $497 was the best investment we made."</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">MK</div>
+                        <div class="testimonial-info">
+                            <div class="testimonial-name">Marcus K.</div>
+                            <div class="testimonial-role">CEO, Neural Therapeutics (Series A)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="faq-section">
+            <div class="container">
+                <div class="section-label">Common Questions</div>
+                <h2 class="section-title">FAQ</h2>
+                
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-question">Who is this consultation for?</div>
+                        <div class="faq-answer">This is ideal for neurotech founders, CEOs, and product leaders who are planning US market entry or currently navigating FDA regulatory processes. Both early-stage and growth-phase companies have benefited.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">What if I need to cancel or reschedule?</div>
+                        <div class="faq-answer">We offer flexible scheduling. Once you purchase, you'll receive a scheduling link where you can choose any available time slot. Rescheduling is free up to 24 hours before your session.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">Is the intake form confidential?</div>
+                        <div class="faq-answer">Absolutely. Any information you share is kept strictly confidential and covered by a mutual NDA. We take privacy seriously—especially for proprietary technology details.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">How is the consultation delivered?</div>
+                        <div class="faq-answer">We use video conferencing (Zoom or Google Meet—your choice). The session is 90 minutes, and you'll receive a written summary within 48 hours of our call.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">What if I'm not satisfied?</div>
+                        <div class="faq-answer">We offer a 100% satisfaction guarantee. If you feel the consultation didn't provide value, email us within 7 days and we'll refund your $497—no questions asked.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final CTA Section -->
+        <section class="final-cta">
+            <div class="container">
+                <h2>Ready to Navigate US Market Entry?</h2>
+                <p>Stop guessing. Get the clarity you need to move forward with confidence.</p>
+                
+                <div class="price-badge">
+                    <span class="price">$497</span>
+                    <span class="billing">one-time payment</span>
+                </div>
+                
+                <br>
+                <a href="checkout.html" class="btn-primary" id="checkout-button-bottom">
+                    Get Your Consultation Now
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                </a>
+
+                <div class="guarantee">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                    100% satisfaction guarantee
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Neurotech Consulting. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

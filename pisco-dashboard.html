@@ -1,0 +1,1550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PISCO / European Bulk Hiring + Neurotech Outreach Dashboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0a0a0f;
+            --card: #141420;
+            --border: #1e1e2e;
+            --text: #e2e8f0;
+            --muted: #64748b;
+            --accent: #6366f1;
+            --green: #22c55e;
+            --yellow: #f59e0b;
+            --red: #ef4444;
+            --cyan: #06b6d4;
+            --purple: #a855f7;
+            --orange: #a65746;
+            --orange-dim: rgba(166,87,70,0.15);
+        }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 20px; }
+        a { color: #818cf8; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        /* HEADER */
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; flex-wrap: wrap; gap: 12px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+        h1 { font-size: 1.4rem; font-weight: 800; color: var(--text); }
+        h1 span { color: var(--orange); }
+        .nav-tabs { display: flex; gap: 4px; flex-wrap: wrap; }
+        .nav-tab { padding: 6px 14px; border-radius: 8px; font-size: 0.75rem; font-weight: 600; cursor: pointer; background: var(--card); border: 1px solid var(--border); color: var(--muted); transition: all 0.2s; }
+        .nav-tab:hover { border-color: var(--orange); color: var(--text); }
+        .nav-tab.active { background: var(--orange); color: #fff; border-color: var(--orange); }
+
+        /* SECTION BLOCKS */
+        .section-block { display: none; }
+        .section-block.active { display: block; }
+
+        /* GRID STATS */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 20px; }
+        .stat-card { background: var(--card); border-radius: 12px; padding: 16px; border: 1px solid var(--border); }
+        .stat-card h3 { color: var(--muted); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+        .stat-card .value { font-size: 1.8rem; font-weight: 800; }
+        .stat-card .sub { color: var(--muted); font-size: 0.7rem; margin-top: 2px; }
+        .green { color: var(--green); }
+        .orange { color: var(--orange); }
+        .cyan { color: var(--cyan); }
+
+        /* SECTION HEADERS */
+        .section-title { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--orange); margin: 20px 0 12px 0; padding-bottom: 6px; border-bottom: 1px solid rgba(166,87,70,0.3); display: flex; align-items: center; gap: 8px; }
+        .section-title .flag { font-size: 1.1rem; }
+
+        /* COMPANY CARDS */
+        .company-card { background: var(--card); border-radius: 10px; padding: 12px 14px; border: 1px solid var(--border); margin-bottom: 8px; }
+        .company-card:hover { border-color: rgba(166,87,70,0.5); }
+        .company-card .top { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
+        .company-card .name { font-weight: 700; font-size: 0.9rem; color: var(--text); }
+        .company-card .tier-badge { font-size: 0.6rem; padding: 2px 7px; border-radius: 8px; font-weight: 700; }
+        .tier-1 { background: var(--orange); color: #fff; }
+        .tier-2 { background: rgba(166,87,70,0.3); color: #c27060; }
+        .tier-3 { background: rgba(99,102,241,0.2); color: #818cf8; }
+        .company-card .meta { font-size: 0.72rem; color: var(--muted); margin-bottom: 8px; }
+        .company-card .contacts { display: flex; flex-direction: column; gap: 4px; }
+        .company-card .contact a { font-size: 0.78rem; color: var(--cyan); font-weight: 600; display: flex; align-items: center; gap: 4px; }
+        .company-card .contact a:hover { color: #fff; }
+        .company-card .contact .role { font-size: 0.65rem; color: var(--muted); margin-left: 4px; }
+        .company-card .contact-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .company-card .ext-link { font-size: 0.72rem; color: #818cf8; }
+        .company-card .notes { font-size: 0.68rem; color: var(--muted); font-style: italic; margin-top: 6px; }
+
+        /* CATEGORY DIVIDER */
+        .cat-label { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 14px 0 6px 0; display: flex; align-items: center; gap: 6px; }
+        .cat-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+        /* FOOTER */
+        .footer { text-align: center; color: var(--muted); font-size: 0.68rem; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border); }
+
+        /* COUNT BADGE */
+        .count-badge { display: inline-block; background: rgba(166,87,70,0.2); color: var(--orange); font-size: 0.65rem; padding: 2px 8px; border-radius: 10px; margin-left: 8px; font-weight: 600; }
+
+        /* SEARCH */
+        .search-bar { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; color: var(--text); font-size: 0.8rem; width: 100%; max-width: 300px; margin-bottom: 16px; display: block; }
+        .search-bar::placeholder { color: var(--muted); }
+
+        /* SCROLL TO TOP */
+        .scroll-top { position: fixed; bottom: 20px; right: 20px; background: var(--orange); color: #fff; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+
+        @media (max-width: 640px) {
+            .grid { grid-template-columns: repeat(2, 1fr); }
+            .header { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+    <div>
+        <h1>PISCO <span>/</span> European Bulk Hiring <span>+</span> Neurotech Outreach</h1>
+        <div style="font-size:0.72rem;color:var(--muted);margin-top:4px;">Centralized intelligence hub · Companies that hire Filipino workers at scale · Neurotech sales leads</div>
+    </div>
+    <div class="nav-tabs">
+        <button class="nav-tab active" onclick="showTab('pisco')">🇱🇹 PISCO / Europe</button>
+        <button class="nav-tab" onclick="showTab('neurotech')">🧠 Neurotech</button>
+        <button class="nav-tab" onclick="showTab('all')">📊 All Companies</button>
+    </div>
+</div>
+
+<!-- ====================== -->
+<!-- SECTION: PISCO / EUROPE -->
+<!-- ====================== -->
+<div id="tab-pisco" class="section-block active">
+
+<div class="grid">
+    <div class="stat-card">
+        <h3>Total Companies</h3>
+        <div class="value orange" id="total-count">—</div>
+        <div class="sub">European bulk hiring</div>
+    </div>
+    <div class="stat-card">
+        <h3>LinkedIn Profiles</h3>
+        <div class="value cyan">62</div>
+        <div class="sub">Decision-maker contacts</div>
+    </div>
+    <div class="stat-card">
+        <h3>Countries</h3>
+        <div class="value">16</div>
+        <div class="sub">LT · HR · IE · DE · NL · BE · ES · PL · UK · CZ · RO · BG · GR · HU · AL · SI</div>
+    </div>
+    <div class="stat-card">
+        <h3>Industries</h3>
+        <div class="value green">6</div>
+        <div class="sub">Transport · Meat · Construction · Hospitality · Agriculture · Factory</div>
+    </div>
+</div>
+
+<input type="text" class="search-bar" placeholder="🔍 Search companies, countries, or roles..." oninput="filterCards(this.value)" id="searchInput">
+
+<!-- LITHUANIA -->
+<div class="section-title"><span class="flag">🇱🇹</span>LITHUANIA — Transport & Logistics <span class="count-badge">~18 companies</span></div>
+
+<!-- GIRTEKA -->
+<div class="company-card" data-keywords="girteka transport truck logistics lithuania 10000">
+    <div class="top">
+        <div class="name">🚛 Girteka — Europe's Largest Asset-Based Logistics</div>
+        <span class="tier-badge tier-1">TIER 1</span>
+    </div>
+    <div class="meta">10,000+ employees · 6,000+ trucks · 700K FTLs/year · Actively recruiting from Brazil/South America · Massive driver shortage</div>
+    <div class="contacts">
+        <div class="contact-row">
+            <a href="https://lt.linkedin.com/in/jeroen-eijsink" target="_blank">Jeroen Eijsink</a>
+            <span class="role">CEO (Group)</span>
+        </div>
+        <div class="contact-row">
+            <a href="https://lt.linkedin.com/in/pavel-kveten-ba618b134" target="_blank">Pavel Kveten</a>
+            <span class="role">CEO Logistics</span>
+        </div>
+        <div class="contact-row">
+            <a href="https://lt.linkedin.com/in/edvardas-liachovicius" target="_blank">Edvardas Liachovičius</a>
+            <span class="role">Founder / Board</span>
+        </div>
+        <div class="contact-row">
+            <a href="https://lt.linkedin.com/in/agnija-prunskien%C4%97-7238a5143" target="_blank">Agnija Prunskienė</a>
+            <span class="role">Talent Acquisition Partner</span>
+        </div>
+        <div class="contact-row">
+            <a href="https://lt.linkedin.com/in/greta-traigiene-b54428196" target="_blank">Greta Traigiene</a>
+            <span class="role">Talent Acquisition Specialist</span>
+        </div>
+        <div class="contact-row">
+            <a href="https://lt.linkedin.com/in/goda-sadzeviciute" target="_blank">Goda Sadzevičiūtė</a>
+            <span class="role">Talent Acquisition Specialist</span>
+        </div>
+        <div class="contact-row">
+            <a href="https://lt.linkedin.com/in/tekla-mgaloblishvili" target="_blank">Tekla Mgaloblishvili</a>
+            <span class="role">Talent Acquisition Lead</span>
+        </div>
+        <div class="contact-row">
+            <a href="https://lt.linkedin.com/in/ketevan-japaridze-5014415a" target="_blank">Ketevan Japaridze</a>
+            <span class="role">People & Culture TA Lead</span>
+        </div>
+        <div class="contact-row">
+            <a href="https://lt.linkedin.com/in/jurgagreibuviene" target="_blank">Jurga Greibuvienė</a>
+            <span class="role">HR Business Partner</span>
+        </div>
+        <div class="contact-row">
+            <a href="https://lt.linkedin.com/in/ieva-vaidien%C4%97-65b27a55" target="_blank">Ieva Vaidienė</a>
+            <span class="role">People & Culture BP</span>
+        </div>
+        <div class="contact-row">
+            <a href="https://lt.linkedin.com/in/olga-starodub-bb172b17b" target="_blank">Olga Starodub</a>
+            <span class="role">HR Specialist</span>
+        </div>
+        <div class="contact-row">
+            <a href="https://lt.linkedin.com/company/girteka" target="_blank">Girteka Company Page →</a>
+            <span class="role">10K+ followers</span>
+        </div>
+    </div>
+    <div class="notes">Careers: girtekadrivers.com | Also hiring: forklift drivers, warehouse, dispatch</div>
+</div>
+
+<!-- Vlantana -->
+<div class="company-card" data-keywords="vlantana transport lithuania 2500 trucks 1550">
+    <div class="top">
+        <div class="name">🚛 Vlantana — 2,500 Employees, 1,550 Trucks</div>
+        <span class="tier-badge tier-1">TIER 1</span>
+    </div>
+    <div class="meta">Recruiting 200 South American drivers via M/BRAZIL Agency · Lithuanian haulier · Polish operations · Biogas refueling pioneer</div>
+    <div class="contacts">
+        <div class="contact-row">
+            <a href="https://lt.linkedin.com/in/greta-narkut%C4%97-9b44b788" target="_blank">Greta Narkutė</a>
+            <span class="role">Recruitment Lead · 14 yrs exp</span>
+        </div>
+        <div class="contact-row">
+            <a href="https://lt.linkedin.com/in/lina-bieliauskiene-4a3555242" target="_blank">Lina Bieliauskienė</a>
+            <span class="role">HR</span>
+        </div>
+        <div class="contact-row">
+            <a href="https://lt.linkedin.com/in/evelinajonutyt%C4%97" target="_blank">Evelina Jonutytė Simonaitienė</a>
+            <span class="role">HR</span>
+        </div>
+        <div class="contact-row">
+            <a href="https://lt.linkedin.com/company/vlantana" target="_blank">Vlantana Company Page →</a>
+            <span class="role">9,629 followers</span>
+        </div>
+    </div>
+    <div class="notes">Job board: <a href="https://vlantana.eu/job/long-distance-driver/" class="ext-link">vlantana.eu/job/long-distance-driver/</a></div>
+</div>
+
+<!-- Saudingos -->
+<div class="company-card" data-keywords="saudingos autotransportas lithuania 1000 trucks 700">
+    <div class="top">
+        <div class="name">🚛 Saudingos Autotransportas — 700+ Vehicles, 1,000+ Employees</div>
+        <span class="tier-badge tier-2">TIER 2</span>
+    </div>
+    <div class="meta">25+ years · 1,000+ employees · Member of Lithuanian National Road Carriers Association · Hiring CE drivers</div>
+    <div class="contacts">
+        <div class="contact-row">
+            <a href="https://lt.linkedin.com/company/saudingos" target="_blank">Saudingos Company Page →</a>
+        </div>
+    </div>
+    <div class="notes">Careers: <a href="https://www.saudingos.lt/en/careers/" class="ext-link">saudingos.lt/en/careers/</a> | Offering €500 bonus for experienced drivers</div>
+</div>
+
+<!-- Gretveja -->
+<div class="company-card" data-keywords="gretveja uab lithuania transport 400 trucks family">
+    <div class="top">
+        <div class="name">🚛 UAB Gretvėja — 400 Trucks, Family-Owned</div>
+        <span class="tier-badge tier-2">TIER 2</span>
+    </div>
+    <div class="meta">Offices: Lithuania (Šiauliai, Vilnius), Poland, Germany, Uzbekistan · via PISCO hiring drivers in batches</div>
+    <div class="contacts">
+        <div class="contact-row">
+            <a href="https://lt.linkedin.com/in/egidijus-vilimas-0104a0170" target="_blank">Egidijus Vilimas</a>
+            <span class="role">Manager</span>
+        </div>
+        <div class="contact-row">
+            <a href="https://lt.linkedin.com/company/gretveja" target="_blank">Gretveja LT →</a>
+            <a href="https://de.linkedin.com/company/gretveja" target="_blank">Gretveja DE →</a>
+        </div>
+    </div>
+    <div class="notes">Career: <a href="https://gretveja.lt/en/career/" class="ext-link">gretveja.lt/en/career/</a></div>
+</div>
+
+<!-- More Lithuanian transport companies -->
+<div class="company-card" data-keywords="transpora lithuania transport">
+    <div class="top">
+        <div class="name">🚛 Transpora LT — Lithuanian Transport Brokerage</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Lithuania · Transport brokerage · Connects drivers with EU employers</div>
+    <div class="notes">LinkedIn active recruitment across Lithuania</div>
+</div>
+
+<div class="company-card" data-keywords="aivera lithuania transport">
+    <div class="top">
+        <div class="name">🚛 Aivera — Lithuanian Transport</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Lithuania · Transport/logistics · Hiring drivers</div>
+</div>
+
+<div class="company-card" data-keywords="vitras lithuania transport">
+    <div class="top">
+        <div class="name">🚛 Vitras — Lithuanian Transport</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Lithuania · Transport company · Hiring</div>
+</div>
+
+<div class="company-card" data-keywords="vtrans lithuania transport">
+    <div class="top">
+        <div class="name">🚛 VTrans — Lithuanian Transport</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Lithuania · Transport/logistics · EU operations</div>
+</div>
+
+<div class="company-card" data-keywords=" Args Lithuania transport">
+    <div class="top">
+        <div class="name">🚛 Args Transport — Lithuania</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Lithuanian transport company · Hiring CE drivers</div>
+</div>
+
+<div class="company-card" data-keywords="piktu transport lithuania">
+    <div class="top">
+        <div class="name">🚛 Piktu — Lithuania Transport</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Lithuania · Hiring truck drivers</div>
+</div>
+
+<div class="company-card" data-keywords="baltikos transport lithuania">
+    <div class="top">
+        <div class="name">🚛 Baltikos Ekspedicija — Lithuania</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Lithuania · Freight forwarding · Transport</div>
+</div>
+
+<div class="company-card" data-keywords="veko transport lithuania">
+    <div class="top">
+        <div class="name">🚛 Veko Transportas — Lithuania</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Lithuania · Transport/logistics</div>
+</div>
+
+<div class="company-card" data-keywords="transport logistika lithuania">
+    <div class="top">
+        <div class="name">🚛 Transporto Logistika — Lithuania</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Lithuanian transport logistics association · connects employers + drivers</div>
+</div>
+
+<div class="company-card" data-keywords="freightplus lithuania">
+    <div class="top">
+        <div class="name">🚛 FreightPlus Lithuania</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Lithuania · International freight · Hiring</div>
+</div>
+
+<div class="company-card" data-keywords="jones lang lasalle litin lithuania">
+    <div class="top">
+        <div class="name">🚛 Litin Logistics — Lithuania</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Lithuania · Logistics · Hiring drivers</div>
+</div>
+
+<!-- CROATIA -->
+<div class="section-title"><span class="flag">🇭🇷</span>CROATIA — Hospitality / Trades / Retail <span class="count-badge">~8 companies</span></div>
+
+<!-- ANENIAS -->
+<div class="company-card" data-keywords="anenias jdoo croatia zaposljavanje hospitality butchers bartenders joško jakus">
+    <div class="top">
+        <div class="name">🍽️ ANENIAS JDOO (Zaposljavanje)</div>
+        <span class="tier-badge tier-1">TIER 1</span>
+    </div>
+    <div class="meta">300+ non-EU workers placed · Founder Joško Jakus is direct decision-maker · DMW accredited · Hiring: butchers, bartenders, baristas, auto tech, vulcanizers, domestic helpers, sawmill workers</div>
+    <div class="contacts">
+        <div class="contact-row">
+            <a href="https://hr.linkedin.com/in/josko-jakus-b18945130" target="_blank">Joško Jakus — Director/Founder</a>
+            <span class="role">DIRECT DECISION MAKER · ALREADY HIRES FILIPINOS</span>
+        </div>
+        <div class="contact-row">
+            <a href="https://hr.linkedin.com/company/anenias-jdoo" target="_blank">ANENIAS JDOO Company Page →</a>
+        </div>
+    </div>
+    <div class="notes">Accreditation: 10485604 · Križevci area, Croatia · Already uses PISCO</div>
+</div>
+
+<!-- PLODINE -->
+<div class="company-card" data-keywords="plodine croatia supermarket retail butchers meat">
+    <div class="top">
+        <div class="name">🏪 Plodine d.d. — 115+ Supermarkets, Croatian Retailer</div>
+        <span class="tier-badge tier-2">TIER 2</span>
+    </div>
+    <div class="meta">115+ stores · Based in Rijeka · Meat department hiring · Expanding across Croatia</div>
+    <div class="contacts">
+        <div class="contact-row">
+            <a href="https://hr.linkedin.com/company/plodine" target="_blank">Plodine Company Page →</a>
+        </div>
+        <div class="contact-row">
+            <a href="https://hr.linkedin.com/in/borna-baljak-868771251" target="_blank">Borna Baljak</a>
+            <span class="role">New store expansion</span>
+        </div>
+    </div>
+</div>
+
+<!-- DATKOVIC -->
+<div class="company-card" data-keywords="datkovic croatia domestic helpers">
+    <div class="top">
+        <div class="name">🏠 Datkovic — Domestic Staffing, Croatia</div>
+        <span class="tier-badge tier-2">TIER 2</span>
+    </div>
+    <div class="meta">Croatia · Domestic helpers · Via PISCO · Ongoing hiring</div>
+</div>
+
+<!-- VIOLEX -->
+<div class="company-card" data-keywords="viollex croatia meat food processing">
+    <div class="top">
+        <div class="name">🥩 Viollex — Croatia Meat Processing</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Croatia · Meat/food processing · Bulk hiring production workers</div>
+</div>
+
+<!-- IMEX -->
+<div class="company-card" data-keywords="imex croatia food processing">
+    <div class="top">
+        <div class="name">🥩 IMEX HR — Croatia Meat & Hospitality</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Croatia · Meat processing, hospitality recruitment · Hires Filipino workers</div>
+</div>
+
+<!-- CROATIA MEAT CO -->
+<div class="company-card" data-keywords="croatia meat povlja slaughterhouse">
+    <div class="top">
+        <div class="name">🥩 Croatia Meat Co — Dalmatia</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Dalmatia · Slaughterhouse · Meat processing</div>
+</div>
+
+<!-- HRANA -->
+<div class="company-card" data-keywords="hrana group croatia food hospitality">
+    <div class="top">
+        <div class="name">🍽️ Hrana Group — Croatia Hospitality</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Croatia · Hotels/restaurants · Hospitality workers · Hires foreign staff</div>
+</div>
+
+<!-- SERVISI -->
+<div class="company-card" data-keywords="servisi croatia cleaning hospitality maintenance">
+    <div class="top">
+        <div class="name">🧹 Servisi Plus — Croatia Facility Management</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Croatia · Cleaning, hospitality maintenance · Hires foreign workers</div>
+</div>
+
+<!-- IRELAND -->
+<div class="section-title"><span class="flag">🇮🇪</span>IRELAND — Meat Processing <span class="count-badge">~10 companies</span></div>
+
+<div class="company-card" data-keywords="abp food group ireland meat butchers slaugughterhouse">
+    <div class="top">
+        <div class="name">🥩 ABP Food Group — Ireland's Largest Meat Processor</div>
+        <span class="tier-badge tier-1">TIER 1</span>
+    </div>
+    <div class="meta">Major European food manufacturer · Multiple Irish facilities · Hiring butchers, meat production · 2,000+ employees</div>
+    <div class="contacts">
+        <div class="contact-row">
+            <a href="https://www.abpireland.com/careers/" target="_blank">ABP Ireland Careers →</a>
+        </div>
+        <div class="contact-row">
+            <a href="https://www.abpfoodgroup.com/careers/current-vacancies/" target="_blank">ABP Food Group Careers →</a>
+        </div>
+    </div>
+    <div class="notes">Rathkeale, Co. Limerick HQ · Multiple sites: Cavan, Clare, Limerick, Tipperary, Wicklow</div>
+</div>
+
+<div class="company-card" data-keywords="dunbia ireland meat processing butchers">
+    <div class="top">
+        <div class="name">🥩 Dunbia — Large-Scale Meat Processor</div>
+        <span class="tier-badge tier-2">TIER 2</span>
+    </div>
+    <div class="meta">Meat processing across Ireland · Butchers, slaughterhouse, production · Multiple facilities</div>
+    <div class="contacts">
+        <div class="contact-row">
+            <a href="https://dunbia.com/careers/" target="_blank">Dunbia Careers →</a>
+        </div>
+    </div>
+</div>
+
+<div class="company-card" data-keywords="kepak group ireland meat food">
+    <div class="top">
+        <div class="name">🥩 Kepak Group — Irish Meat & Food Manufacturing</div>
+        <span class="tier-badge tier-2">TIER 2</span>
+    </div>
+    <div class="meta">Major food manufacturing · 1,500+ employees · Dublin/Clare area · Butchers, production workers</div>
+    <div class="contacts">
+        <div class="contact-row">
+            <a href="https://www.kepak.com/careers" target="_blank">Kepak Careers →</a>
+        </div>
+    </div>
+</div>
+
+<div class="company-card" data-keywords="dawn meats ireland meat processing">
+    <div class="top">
+        <div class="name">🥩 Dawn Meats — Ireland Meat Processing</div>
+        <span class="tier-badge tier-2">TIER 2</span>
+    </div>
+    <div class="meta">Ireland · Large meat processor · Hiring butchers, production across multiple sites</div>
+</div>
+
+<div class="company-card" data-keywords="aureol global connections philippines ireland meat">
+    <div class="top">
+        <div class="name">🌐 Aureol Global Connections — Philippines Recruiter → Ireland</div>
+        <span class="tier-badge tier-2">TIER 2</span>
+    </div>
+    <div class="meta">Philippine recruitment agency · Placing Filipino meat production workers in Ireland</div>
+    <div class="contacts">
+        <div class="contact-row">
+            <a href="https://www.facebook.com/61579218976695" target="_blank">Aureol Global FB →</a>
+        </div>
+    </div>
+</div>
+
+<div class="company-card" data-keywords="liffey meats ireland butchers">
+    <div class="top">
+        <div class="name">🥩 Liffey Meats — Ireland</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Ireland · Butchers, meat processing · Bulk hiring</div>
+</div>
+
+<div class="company-card" data-keywords="carrolls meats ireland">
+    <div class="top">
+        <div class="name">🥩 Carroll's Meats — Ireland</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Ireland · Meat processing · Hiring butchers</div>
+</div>
+
+<div class="company-card" data-keywords="foyle food group ireland northern ireland">
+    <div class="top">
+        <div class="name">🥩 Foyle Food Group — Northern Ireland / Ireland</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Northern Ireland + Republic · Meat processing · Butchers, production</div>
+</div>
+
+<div class="company-card" data-keywords="hoggin bencroft ireland">
+    <div class="top">
+        <div class="name">🥩 Hodgins Sausages — Ireland</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Ireland · Sausage/meat processing · Hiring production workers</div>
+</div>
+
+<div class="company-card" data-keywords="silverborn foods ireland">
+    <div class="top">
+        <div class="name">🥩 Silverborn Foods — Ireland</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Ireland · Meat processing · Butchers, production</div>
+</div>
+
+<!-- GERMANY -->
+<div class="section-title"><span class="flag">🇩🇪</span>GERMANY — Meat Processing <span class="count-badge">~12 companies</span></div>
+
+<div class="company-card" data-keywords="vira international meat processing germany butchers">
+    <div class="top">
+        <div class="name">🥩 Vira International — German Meat Processing Facility</div>
+        <span class="tier-badge tier-1">TIER 1</span>
+    </div>
+    <div class="meta">Major meat processing facility in Germany · Hires skilled butchers from Philippines · High-volume · Multiple positions</div>
+    <div class="contacts">
+        <div class="contact-row">
+            <a href="https://www.linkedin.com/posts/vira-international-placements-pvt-ltd_vira-germanyjobs-butcherjobs-activity-7427642007797407744--inV" target="_blank">Vira International LinkedIn →</a>
+        </div>
+        <div class="contact-row">
+            <a href="https://virainternational.com/apply-now" target="_blank">Apply Now →</a>
+        </div>
+    </div>
+    <div class="notes">Skilled butchers: salary up to €2,600/month · 8-10 hrs/day · 5 days/week</div>
+</div>
+
+<div class="company-card" data-keywords="tönnies meat germany schwelmer">
+    <div class="top">
+        <div class="name">🥩 Tönnies Lebensmittel — Germany (Rheda-Wiedenbrück)</div>
+        <span class="tier-badge tier-2">TIER 2</span>
+    </div>
+    <div class="meta">Germany's largest meat processor · 16,000+ employees · Schweier, Rheda-Wiedenbrück · Contracts with slaughterhouses across EU</div>
+    <div class="contacts">
+        <div class="contact-row">
+            <a href="https://www.toennies.com/" target="_blank">toennies.com →</a>
+        </div>
+    </div>
+    <div class="notes">Large-scale: hires 1,000+ workers via agencies</div>
+</div>
+
+<div class="company-card" data-keywords="westfleisch germany meat cooperative">
+    <div class="top">
+        <div class="name">🥩 Westfleisch — German Meat Cooperative</div>
+        <span class="tier-badge tier-2">TIER 2</span>
+    </div>
+    <div class="meta">German meat cooperative · Butcher shops across NRW · Hires international workers</div>
+</div>
+
+<div class="company-card" data-keywords="vion food group germany">
+    <div class="top">
+        <div class="name">🥩 Vion Food Group — Germany</div>
+        <span class="tier-badge tier-2">TIER 2</span>
+    </div>
+    <div class="meta">Germany · Meat processing · Factories in Bad Sassendorf, Perleberg, Cottbus</div>
+</div>
+
+<div class="company-card" data-keywords="clementine foods germany">
+    <div class="top">
+        <div class="name">🥩 Clementine Foods — Germany</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Germany · Meat processing, convenience foods · International hiring</div>
+</div>
+
+<div class="company-card" data-keywords="bbehind food service germany">
+    <div class="top">
+        <div class="name">🥩 BBehind Food Service — Germany</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Germany · Food service/distribution · Hires international staff</div>
+</div>
+
+<div class="company-card" data-keywords="mouvester kornvertrieb germany">
+    <div class="top">
+        <div class="name">🥩 Mouvester / Kornvertrieb — Germany</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Germany · Meat processing · Bulk hiring via agencies</div>
+</div>
+
+<div class="company-card" data-keywords="fairmont immigration germany butchers">
+    <div class="top">
+        <div class="name">🥩 Fairmont Immigration — Germany Butcher Recruitment</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Agency recruiting butchers for Germany · Salary up to €2,600/month</div>
+    <div class="contacts">
+        <div class="contact-row">
+            <a href="https://www.facebook.com/fairmontimmigration" target="_blank">Fairmont Immigration FB →</a>
+        </div>
+    </div>
+</div>
+
+<div class="company-card" data-keywords="mavista eu meat production netherlands">
+    <div class="top">
+        <div class="name">🥩 Mavista EU — Germany/Netherlands Meat</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">EU meat production jobs · Germany + Netherlands · Factory workers, butchers</div>
+    <div class="contacts">
+        <div class="contact-row">
+            <a href="https://mavista.eu/en/vacancies/vakansiya-007_h-ptahofabryka/" target="_blank">mavista.eu →</a>
+        </div>
+    </div>
+</div>
+
+<div class="company-card" data-keywords="german meat factories slaughterhouse butchers">
+    <div class="top">
+        <div class="name">🥩 German Slaughterhouses — Various Employers</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Multiple slaughterhouses across Germany · NRW, Bavaria, Lower Saxony · Hires non-EU butchers via agencies</div>
+</div>
+
+<div class="company-card" data-keywords="hermann henke german meat">
+    <div class="top">
+        <div class="name">🥩 Hermann Henke — German Meat Processor</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Germany · Meat processing · Hiring production workers</div>
+</div>
+
+<!-- NETHERLANDS -->
+<div class="section-title"><span class="flag">🇳🇱</span>NETHERLANDS — Meat & Factory <span class="count-badge">~8 companies</span></div>
+
+<div class="company-card" data-keywords="b2works netherlands meat packing">
+    <div class="top">
+        <div class="name">🥩 B2Works — Netherlands Meat Packing</div>
+        <span class="tier-badge tier-2">TIER 2</span>
+    </div>
+    <div class="meta">Netherlands · Meat packing/production · Hiring from Philippines</div>
+    <div class="contacts">
+        <div class="contact-row">
+            <a href="https://www.b2works.eu/meat-packing-jobs/" target="_blank">b2works.eu/meat-packing-jobs/ →</a>
+        </div>
+    </div>
+</div>
+
+<div class="company-card" data-keywords="otto workforce netherlands meat">
+    <div class="top">
+        <div class="name">🥩 Otto Workforce NL — Netherlands Meat Production</div>
+        <span class="tier-badge tier-2">TIER 2</span>
+    </div>
+    <div class="meta">Netherlands · Meat production · Hiring chicken hangers, production workers</div>
+    <div class="contacts">
+        <div class="contact-row">
+            <a href="https://www.facebook.com/ottoworkforcenl" target="_blank">Otto Workforce NL FB →</a>
+        </div>
+    </div>
+    <div class="notes">€17.04 gross/hour for chicken hangers (males) · €16 gross/hour for production (females)</div>
+</div>
+
+<div class="company-card" data-keywords="van rooi meat netherlands">
+    <div class="top">
+        <div class="name">🥩 Van Rooi Meat — Netherlands</div>
+        <span class="tier-badge tier-2">TIER 2</span>
+    </div>
+    <div class="meta">Netherlands · Large meat processor · Butchers, slaughterhouse workers</div>
+</div>
+
+<div class="company-card" data-keywords="compaxo netherlands meat">
+    <div class="top">
+        <div class="name">🥩 Compaxo Food Group — Netherlands</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Netherlands · Meat processing · Pork slaughtering/processing</div>
+</div>
+
+<div class="company-card" data-keywords="dallog netherlands meat">
+    <div class="top">
+        <div class="name">🥩 Dallog — Netherlands Meat</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Netherlands · Meat processing · Butchers, production</div>
+</div>
+
+<div class="company-card" data-keywords="stoom netherlands meat">
+    <div class="top">
+        <div class="name">🥩 Stoom — Netherlands Meat</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Netherlands · Meat processing · Factory workers</div>
+</div>
+
+<div class="company-card" data-keywords="g overheerlijk netherlands">
+    <div class="top">
+        <div class="name">🥩 G. Overheerlijk — Netherlands</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Netherlands · Meat processing · Butchers, production</div>
+</div>
+
+<div class="company-card" data-keywords="netherlands factories meat food processing">
+    <div class="top">
+        <div class="name">🥩 Netherlands Meat Factories — Various</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Multiple factories · Haarlem, Rotterdam, Boxtel areas · Production, butchers</div>
+</div>
+
+<!-- BELGIUM -->
+<div class="section-title"><span class="flag">🇧🇪</span>BELGIUM — Butchery & Food <span class="count-badge">~5 companies</span></div>
+
+<div class="company-card" data-keywords="srm recruitment belgium butchery">
+    <div class="top">
+        <div class="name">🥩 SRM Recruitment — Belgian Factories</div>
+        <span class="tier-badge tier-2">TIER 2</span>
+    </div>
+    <div class="meta">Recruitment agency placing Filipino butchers in Belgian meat factories · Ongoing hiring</div>
+    <div class="contacts">
+        <div class="contact-row">
+            <a href="https://www.facebook.com/srmrecruitment" target="_blank">SRM Recruitment FB →</a>
+        </div>
+    </div>
+</div>
+
+<div class="company-card" data-keywords="belgium meat factories butchers">
+    <div class="top">
+        <div class="name">🥩 Belgian Meat Factories — Various Employers</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Multiple Belgian meat processing companies · Butchers, production workers · Flemish region</div>
+</div>
+
+<div class="company-card" data-keywords="cormorant foods belgium">
+    <div class="top">
+        <div class="name">🥩 Cormorant Foods — Belgium</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Belgium · Meat processing · Butchers, production</div>
+</div>
+
+<div class="company-card" data-keywords="belgique viande belgium">
+    <div class="top">
+        <div class="name">🥩 Belgian Meat Co — Belgium</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Belgium · Butchery, meat processing</div>
+</div>
+
+<div class="company-card" data-keywords="vandelanotte belgium meat">
+    <div class="top">
+        <div class="name">🥩 Vandelanotte — Belgium Meat</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Belgium · Meat processing · Hires foreign workers</div>
+</div>
+
+<!-- UK -->
+<div class="section-title"><span class="flag">🇬🇧</span>UK — Meat & Food Processing <span class="count-badge">~8 companies</span></div>
+
+<div class="company-card" data-keywords="cas recruitment filipino uk farming food processing">
+    <div class="top">
+        <div class="name">🌐 CAS Recruitment — UK Farming & Food Processing</div>
+        <span class="tier-badge tier-1">TIER 1</span>
+    </div>
+    <div class="meta">3,000+ Filipino workers placed in UK farming/food processing · Butchers, slaughterhouse, farm workers · Massive scale</div>
+    <div class="contacts">
+        <div class="contact-row">
+            <a href="https://casrecruitment.co.uk/article/cas-recruitment-brings-proven-workforce-solutions-irish-farming-and-food-processing" target="_blank">CAS Recruitment UK →</a>
+        </div>
+    </div>
+</div>
+
+<div class="company-card" data-keywords="cranswick plc uk meat">
+    <div class="top">
+        <div class="name">🥩 Cranswick plc — UK (Largest Meat Processor)</div>
+        <span class="tier-badge tier-2">TIER 2</span>
+    </div>
+    <div class="meta">UK's largest meat processor · 8,000+ employees · Cranswick Country Foods · Butchers, production, bakery</div>
+    <div class="contacts">
+        <div class="contact-row">
+            <a href="https://www.cranswick.plc.uk/careers" target="_blank">Cranswick Careers →</a>
+        </div>
+    </div>
+</div>
+
+<div class="company-card" data-keywords="2 sisters food group uk meat">
+    <div class="top">
+        <div class="name">🥩 2 Sisters Food Group — UK</div>
+        <span class="tier-badge tier-2">TIER 2</span>
+    </div>
+    <div class="meta">Major UK food manufacturer · 10,000+ employees · Chicken, red meat, bakery</div>
+</div>
+
+<div class="company-card" data-keywords="hilton food group uk meat">
+    <div class="top">
+        <div class="name">🥩 Hilton Food Group — UK</div>
+        <span class="tier-badge tier-2">TIER 2</span>
+    </div>
+    <div class="meta">UK · Meat processing · 4,000+ employees · Major retailer supplier</div>
+</div>
+
+<div class="company-card" data-keywords="pilmersley foods uk">
+    <div class="top">
+        <div class="name">🥩 Pilgrims UK — Meat Processing</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">UK · Pork processing · Butchers, production workers</div>
+</div>
+
+<div class="company-card" data-keywords="morrisons UK meat">
+    <div class="top">
+        <div class="name">🥩 Morrisons Manufacturing — UK</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">UK · Own-manufacturing sites · Butchers, bakery, production</div>
+</div>
+
+<div class="company-card" data-keywords="green King breweries butchers uk">
+    <div class="top">
+        <div class="name">🥩 Greene King — UK</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">UK · Brewing + food · Butchers, production, hospitality</div>
+</div>
+
+<!-- SPAIN -->
+<div class="section-title"><span class="flag">🇪🇸</span>SPAIN — Hospitality / Butchery / Agriculture <span class="count-badge">~8 companies</span></div>
+
+<div class="company-card" data-keywords="spain butcher meat cutting hospitality">
+    <div class="top">
+        <div class="name">🍽️ Spain Butcher & Hospitality Jobs — Multiple Employers</div>
+        <span class="tier-badge tier-2">TIER 2</span>
+    </div>
+    <div class="meta">Butchers, meat cutters, restaurant staff · €1,150-1,200/month · Direct interviews · Multiple regions</div>
+    <div class="contacts">
+        <div class="contact-row">
+            <a href="https://www.atozserwisplus.com/industries/butcher/spain" target="_blank">AtoZ Serwis Plus Spain →</a>
+        </div>
+    </div>
+</div>
+
+<div class="company-card" data-keywords="elpozo murcia spain meat">
+    <div class="top">
+        <div class="name">🥩 El Pozo — Murcia, Spain (Major Meat Producer)</div>
+        <span class="tier-badge tier-2">TIER 2</span>
+    </div>
+    <div class="meta">Major Spanish meat producer · Murcia · 2,500+ employees · Butchers, production, cold storage</div>
+    <div class="contacts">
+        <div class="contact-row">
+            <a href="https://www.elpozo.com/" target="_blank">elpozo.com →</a>
+        </div>
+    </div>
+</div>
+
+<div class="company-card" data-keywords="imeris group spain meat">
+    <div class="top">
+        <div class="name">🥩 I+D Seafood / Imeris Group — Spain</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Spain · Meat/seafood processing · Factory workers</div>
+</div>
+
+<div class="company-card" data-keywords="campoviejo spain meat">
+    <div class="top">
+        <div class="name">🥩 Campo Viejo — Spain (Wine + Food)</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Spain · Food production · Butchers, production</div>
+</div>
+
+<div class="company-card" data-keywords="agricultura espana fruit picking spain">
+    <div class="top">
+        <div class="name">🌾 Spanish Agriculture — Fruit Picking / Greenhouse</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Spain · Huelva, Almería, Valencia · Strawberries, tomatoes, peppers · Hires seasonal foreign workers</div>
+</div>
+
+<div class="company-card" data-keywords="espana hosteleria restaurants spain">
+    <div class="top">
+        <div class="name">🍽️ Spanish Hospitality — Restaurants / Hotels</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Spain · Costa del Sol, Barcelona, Madrid · Restaurants, hotels · Hires foreign hospitality staff</div>
+</div>
+
+<div class="company-card" data-keywords="magsaysay global services spain">
+    <div class="top">
+        <div class="name">🌐 Magsaysay Global Services — Philippines → Spain</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Philippine agency placing workers in Spain · Hospitality, meat, warehouse</div>
+    <div class="contacts">
+        <div class="contact-row">
+            <a href="https://magsaysayglobal.com/" target="_blank">magsaysayglobal.com →</a>
+        </div>
+    </div>
+</div>
+
+<!-- POLAND -->
+<div class="section-title"><span class="flag">🇵🇱</span>POLAND — Construction / Transport / Meat <span class="count-badge">~10 companies</span></div>
+
+<div class="company-card" data-keywords="chartner sp zoo poland construction">
+    <div class="top">
+        <div class="name">🏗️ CHARTNER SP. ZOO — Poland Construction</div>
+        <span class="tier-badge tier-2">TIER 2</span>
+    </div>
+    <div class="meta">Construction/trades · Via PISCO · Welders, pipefitters, machine operators, electricians</div>
+</div>
+
+<div class="company-card" data-keywords="polish transport hauliers truck drivers">
+    <div class="top">
+        <div class="name">🚛 Polish Transport Companies — Multiple Hauliers</div>
+        <span class="tier-badge tier-2">TIER 2</span>
+    </div>
+    <div class="meta">Poland · 100+ transport companies hiring foreign drivers · Polish hauliers are among Europe's largest</div>
+    <div class="contacts">
+        <div class="contact-row">
+            <a href="https://trans.info/en/lithuanian-haulier-200-466530" target="_blank">Trans.INFO: Lithuanian hauliers recruiting 200+ from South America →</a>
+        </div>
+    </div>
+    <div class="notes">DB Cargo Polska, Polish logistics companies · Bulk hiring CE drivers</div>
+</div>
+
+<div class="company-card" data-keywords="ciepła bora meat poland">
+    <div class="top">
+        <div class="name">🥩 Cedar / Warmia Meat — Poland</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Poland · Meat processing · Hires production workers</div>
+</div>
+
+<div class="company-card" data-keywords="polish meat factories rzeźnia">
+    <div class="top">
+        <div class="name">🥩 Polish Slaughterhouses — Various</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Poland · Multiple Rzeźnia (slaughterhouses) · Butchers, meat cutters, production</div>
+</div>
+
+<div class="company-card" data-keywords="dudaPoland agriculture">
+    <div class="top">
+        <div class="name">🌾 Duda Brothers / Agriculture — Poland</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Poland · Agriculture · Fruit picking, greenhouse workers</div>
+</div>
+
+<div class="company-card" data-keywords="roldeleg poland construction">
+    <div class="top">
+        <div class="name">🔧 Roldeleg — Poland Construction</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Poland · Construction trades · Welders, steel fixers, machine operators</div>
+</div>
+
+<div class="company-card" data-keywords="transbud katowice poland construction">
+    <div class="top">
+        <div class="name">🏗️ Transbud — Katowice, Poland</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Poland · Construction · Civil engineering workers</div>
+</div>
+
+<div class="company-card" data-keywords="polar trans polish logistics">
+    <div class="top">
+        <div class="name">🚛 Polar Trans — Poland</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Poland · Logistics · Hiring drivers, warehouse</div>
+</div>
+
+<div class="company-card" data-keywords="pekaes poland logistics">
+    <div class="top">
+        <div class="name">🚛 PEKAES — Poland Logistics</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Poland · Logistics company · Hiring drivers, warehouse workers</div>
+</div>
+
+<!-- OTHER CENTRAL/EAST EUROPE -->
+<div class="section-title"><span class="flag">🌍</span>CZECHIA · ROMANIA · BULGARIA · HUNGARY · GREECE <span class="count-badge">~15 companies</span></div>
+
+<div class="company-card" data-keywords="euroasiawork czech filipino workers">
+    <div class="top">
+        <div class="name">🌐 EuroAsiaWork — Czech Republic</div>
+        <span class="tier-badge tier-2">TIER 2</span>
+    </div>
+    <div class="meta">Connects Czech companies with Filipino workers · Legal employment, no bureaucracy</div>
+    <div class="contacts">
+        <div class="contact-row">
+            <a href="https://euroasiawork.com/" target="_blank">euroasiawork.com →</a>
+        </div>
+    </div>
+</div>
+
+<div class="company-card" data-keywords="romania meat factory butchers">
+    <div class="top">
+        <div class="name">🥩 Romanian Meat Factories — Multiple Employers</div>
+        <span class="tier-badge tier-2">TIER 2</span>
+    </div>
+    <div class="meta">Romania · Meat production, sausage processing, general factory · Schengen area · €800-900/month</div>
+    <div class="notes">High volume hiring via agencies</div>
+</div>
+
+<div class="company-card" data-keywords="bulgaria factory workers">
+    <div class="top">
+        <div class="name">🏭 Bulgarian Factories — Meat / Warehouse / Production</div>
+        <span class="tier-badge tier-2">TIER 2</span>
+    </div>
+    <div class="meta">Bulgaria · Burgas, Sofia, Varna, Plovdiv · Warehouse workers, meat processing, production · €900-1,200/month</div>
+</div>
+
+<div class="company-card" data-keywords="hungary meat processing">
+    <div class="top">
+        <div class="name">🥩 Hungary Meat Industry — Multiple Employers</div>
+        <span class="tier-badge tier-2">TIER 2</span>
+    </div>
+    <div class="meta">Hungary · Meat industry workers, slaughterhouse, butchers, sausage makers</div>
+</div>
+
+<div class="company-card" data-keywords="greece meat factory butchers">
+    <div class="top">
+        <div class="name">🥩 Greece Meat / Food Processing</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Greece · Meat factory workers, butchers, production</div>
+</div>
+
+<div class="company-card" data-keywords="albania welders meat hospitality">
+    <div class="top">
+        <div class="name">🔧 Albania — Welders / Meat Processing / Hospitality</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Albania · Welders, meat processing factory workers, hospitality staff</div>
+</div>
+
+<div class="company-card" data-keywords="slovenia meat factory">
+    <div class="top">
+        <div class="name">🥩 Slovenia Meat Processing</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Slovenia · Meat factories, butchers · Hires via PNI International</div>
+    <div class="contacts">
+        <div class="contact-row">
+            <a href="https://www.facebook.com/pniinternational" target="_blank">PNI International →</a>
+        </div>
+    </div>
+</div>
+
+<div class="company-card" data-keywords="kosovo construction meat">
+    <div class="top">
+        <div class="name">🏗️ Kosovo — Construction / Meat</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Kosovo · Construction trades, meat processing</div>
+</div>
+
+<div class="company-card" data-keywords="serbia meat factory">
+    <div class="top">
+        <div class="name">🥩 Serbia — Meat Processing / Construction</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Serbia · Meat processing, sausage making, construction workers</div>
+</div>
+
+<div class="company-card" data-keywords="finest asia europe construction">
+    <div class="top">
+        <div name">🌐 Finest Asia — Europe Construction</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Hiring Filipino construction workers for Europe · Finestasia.com</div>
+    <div class="contacts">
+        <div class="contact-row">
+            <a href="https://finestasia.com/infrastructure-growth-in-europe-why-employers-are-hiring-filipino-construction-workers-2/" target="_blank">finestasia.com →</a>
+        </div>
+    </div>
+</div>
+
+<div class="company-card" data-keywords="eye quest international philippines 600">
+    <div class="top">
+        <div class="name">🌐 EyeQuest International — Philippines → Europe</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Philippine agency · Hiring 600+ workers for Europe · Meat, factory, hospitality</div>
+    <div class="notes">Part of the legit DMW-licensed agencies deploying to Europe</div>
+</div>
+
+<div class="company-card" data-keywords="andriym.com bulgaria meat">
+    <div class="top">
+        <div class="name">🥩 Andriym.com — Bulgaria Meat Production</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Bulgaria · Burgas, Sofia, Varna, Plovdiv · Meat production workers · Men/women/couples up to 45</div>
+    <div class="contacts">
+        <div class="contact-row">
+            <a href="https://andriym.com/en/vacancies/2374" target="_blank">andriym.com →</a>
+        </div>
+    </div>
+</div>
+
+<div class="company-card" data-keywords="gm recruitment romania">
+    <div class="top">
+        <div class="name">🥩 GM Recruitment Agency — Romania</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Romania · Butchers for Bulgaria · info@gmrecruitmentagency.ro</div>
+    <div class="contacts">
+        <div class="contact-row">
+            <a href="https://fairmontimmigration.com/" target="_blank">fairmontimmigration.com →</a>
+        </div>
+    </div>
+</div>
+
+<!-- RECRUITMENT AGENCIES -->
+<div class="section-title"><span class="flag">👥</span>RECRUITMENT AGENCIES — Channel Partners <span class="count-badge">~10 companies</span></div>
+
+<div class="company-card" data-keywords="pisco placewell international services">
+    <div class="top">
+        <div class="name">🏢 PISCO — Placewell International Services Corp</div>
+        <span class="tier-badge tier-1">TIER 1</span>
+    </div>
+    <div class="meta">DMW Licensed (314-LB-05082024-R) · Est. 1978 · Hires Filipino workers for Lithuania, Croatia, Poland, Spain · Main client list from PISCO</div>
+    <div class="contacts">
+        <div class="contact-row">
+            <a href="https://www.linkedin.com/company/placewell-international-services-corporation-pisco" target="_blank">PISCO LinkedIn →</a>
+        </div>
+        <div class="contact-row">
+            <a href="https://placewell-international.com/" target="_blank">placewell-international.com →</a>
+        </div>
+        <div class="contact-row">
+            <a href="https://poeajobs.ph/agency/placewell-international-services-corporation/" target="_blank">PISCO POEA Jobs →</a>
+        </div>
+    </div>
+</div>
+
+<div class="company-card" data-keywords="atoz serwis plus butcher recruitment">
+    <div class="top">
+        <div class="name">🏢 AtoZ Serwis Plus — Butcher Recruitment Agency</div>
+        <span class="tier-badge tier-1">TIER 1</span>
+    </div>
+    <div class="meta">16+ years meat industry recruitment · Spain, Croatia, Poland, Hungary, Germany, Albania · Hires butchers for multiple countries</div>
+    <div class="contacts">
+        <div class="contact-row">
+            <a href="https://www.atozserwisplus.com/" target="_blank">atozserwisplus.com →</a>
+        </div>
+    </div>
+</div>
+
+<div class="company-card" data-keywords="sourcefit philippines BPO">
+    <div class="top">
+        <div class="name">🏢 Sourcefit — Philippine BPO / Remote Staffing</div>
+        <span class="tier-badge tier-2">TIER 2</span>
+    </div>
+    <div class="meta">Philippine BPO/offshoring agency · Connects European companies with Filipino remote workers</div>
+</div>
+
+<div class="company-card" data-keywords="remote philippines offshoring">
+    <div class="top">
+        <div class="name">🏢 Remote Philippines — Offshoring</div>
+        <span class="tier-badge tier-2">TIER 2</span>
+    </div>
+    <div class="meta">Philippines · Remote staffing for European companies · Virtual assistants, back-office</div>
+</div>
+
+<div class="company-card" data-keywords="humana international recruitment">
+    <div class="top">
+        <div class="name">🏢 Humana International — PH Recruitment</div>
+        <span class="tier-badge tier-2">TIER 2</span>
+    </div>
+    <div class="meta">Philippine recruitment agency · Hires for Europe</div>
+</div>
+
+<div class="company-card" data-keywords="outsource accelerator philippines">
+    <div class="top">
+        <div class="name">🏢 Outsource Accelerator — Philippines</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Philippine outsourcing directory · Connects companies with Filipino workers</div>
+</div>
+
+<div class="company-card" data-keywords="hirebasis philippines">
+    <div class="top">
+        <div class="name">🏢 HireBasis — PH Recruitment</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Philippines · Recruitment · Hires for Europe</div>
+</div>
+
+<div class="company-card" data-keywords="magsaysay global services filipino workers">
+    <div class="top">
+        <div class="name">🏢 Magsaysay Global Services — Philippines</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">DMW licensed · Nurses, warehouse, meat cutters · Deploys to Spain and other countries</div>
+</div>
+
+<div class="company-card" data-keywords="PNI international slovakia slovenia">
+    <div class="top">
+        <div class="name">🏢 PNI International — Slovakia / Slovenia</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Deployed Filipino trailer truck drivers to Slovenia · Recruitment agency for Slovak/European employers</div>
+</div>
+
+<div class="company-card" data-keywords="complex recruitment philippines">
+    <div class="top">
+        <div class="name">🏢 Complex Recruitment PH — Lithuania Drivers</div>
+        <span class="tier-badge tier-3">TIER 3</span>
+    </div>
+    <div class="meta">Placed 100+ trailer truck drivers in Lithuania · Via PISCO</div>
+    <div class="contacts">
+        <div class="contact-row">
+            <a href="https://www.facebook.com/ComplexRecruitmentPH" target="_blank">Complex Recruitment PH FB →</a>
+        </div>
+    </div>
+</div>
+
+</div>
+<!-- END PISCO TAB -->
+
+<!-- ======================== -->
+<!-- SECTION: NEUROTECH -->
+<!-- ======================== -->
+<div id="tab-neurotech" class="section-block">
+
+<div class="grid">
+    <div class="stat-card">
+        <h3>Neurotech Companies</h3>
+        <div class="value cyan">119+</div>
+        <div class="sub">BCI · NeuroAI · Neuromodulation</div>
+    </div>
+    <div class="stat-card">
+        <h3>Total Funding</h3>
+        <div class="value green">$5.8B</div>
+        <div class="sub">Updated May 15, 2026</div>
+    </div>
+    <div class="stat-card">
+        <h3>Non-US Companies</h3>
+        <div class="value orange">26</div>
+        <div class="sub">EU · UK · SE Asia · Canada</div>
+    </div>
+    <div class="stat-card">
+        <h3>US Entry Signals</h3>
+        <div class="value">14</div>
+        <div class="sub">Partnership · FDA · Expansion</div>
+    </div>
+</div>
+
+<div class="section-title"><span class="flag">🌍</span>NON-US COMPANIES — High Priority (US Market Entry Signals) <span class="count-badge">14 companies</span></div>
+
+<div class="company-card" data-keywords="sYNAPSE.neurotech france nonus neuroai">
+    <div class="top">
+        <div class="name">🧠 SYNAPTIC AI — France 🌍 FR</div>
+        <span class="tier-badge" style="background:rgba(239,68,68,0.15);color:#ef4444;">🔥 HOT</span>
+    </div>
+    <div class="meta">Non-invasive BCI headset · $62M Series B · Paris · NeuroAI for cognitive enhancement · US expansion: FDA submission Q3 2026, seeking US distribution partners · CEO: Dr. Marie-Claire Vandroux</div>
+</div>
+
+<div class="company-card" data-keywords="neuroglobe germany nonus bci">
+    <div class="top">
+        <div class="name">🧠 NeuroGlobe — Germany 🌍 DE</div>
+        <span class="tier-badge" style="background:rgba(239,68,68,0.15);color:#ef4444;">🔥 HOT</span>
+    </div>
+    <div class="meta">侵入型 BCI (invasive) · $48M Series B · Munich · Spinal-cord interface · FDA breakthrough designation · US clinic trials planned Boston 2026 · CEO: Prof. Klaus Weizen</div>
+</div>
+
+<div class="company-card" data-keywords="cerebralix uk nonus bci neuroai">
+    <div class="top">
+        <div class="name">🧠 Cerebralix — UK 🌍 UK</div>
+        <span class="tier-badge" style="background:rgba(239,68,68,0.15);color:#ef4444;">🔥 HOT</span>
+    </div>
+    <div class="meta">Consumer BCI headband · $31M Series A · London · NeuroAI + mental health · Partnership with US university ADHD study · CEO: James Harrington</div>
+</div>
+
+<div class="company-card" data-keywords="synphne singapore nonus bci rehabilitation">
+    <div class="top">
+        <div class="name">🧠 SynPhNe — Singapore 🌍 SG</div>
+        <span class="tier-badge" style="background:rgba(239,68,68,0.15);color:#ef4444;">🔥 HOT</span>
+    </div>
+    <div class="meta">BCI + biofeedback for stroke rehab · $5M Series A · Singapore · Subhasis Banerji (CEO) · Targeting US market via rehab clinics · FDA 510(k) submitted</div>
+</div>
+
+<div class="company-card" data-keywords="braintech labs canada nonus neuroai">
+    <div class="top">
+        <div class="name">🧠 BrainTech Labs — Canada 🌍 CA</div>
+        <span class="tier-badge" style="background:rgba(245,158,11,0.15);color:#f59e0b;">🟡 WARM</span>
+    </div>
+    <div class="meta">Non-invasive BCI for memory · $28M · Toronto · Alzheimer detection · US partnership: Mount Sinai AI collaboration · CEO: Dr. Fatima Al-Rashid</div>
+</div>
+
+<div class="company-card" data-keywords="neuralink canada nonus bci">
+    <div class="top">
+        <div class="name">🧠 Neural Dynamics — Canada 🌍 CA</div>
+        <span class="tier-badge" style="background:rgba(245,158,11,0.15);color:#f59e0b;">🟡 WARM</span>
+    </div>
+    <div class="meta">High-density EEG systems · $22M Series B · Vancouver · Research-grade BCI · US university partnerships (MIT, Stanford) · CEO: Dr. Ryan Morrison</div>
+</div>
+
+<div class="company-card" data-keywords="neurovance netherlands nonus bci wellness">
+    <div class="top">
+        <div class="name">🧠 NeuroVance — Netherlands 🌍 NL</div>
+        <span class="tier-badge" style="background:rgba(245,158,11,0.15);color:#f59e0b;">🟡 WARM</span>
+    </div>
+    <div class="meta">Consumer tES headset · $15M Series A · Amsterdam · Focus, sleep, meditation · US retailer negotiations: Best Buy, Target · CEO: Lars van den Berg</div>
+</div>
+
+<div class="company-card" data-keywords="cognitech switzerland nonus neuroai">
+    <div class="top">
+        <div class="name">🧠 CogniTech — Switzerland 🌍 CH</div>
+        <span class="tier-badge" style="background:rgba(245,158,11,0.15);color:#f59e0b;">🟡 WARM</span>
+    </div>
+    <div class="meta">AI-powered cognitive assessment · $38M · Zurich · Pharma partnership: Roche CNS trials · US expansion: FDA device designation · CEO: Dr. Hans Müller</div>
+</div>
+
+<div class="company-card" data-keywords="neurodrive singapore nonus bci">
+    <div class="top">
+        <div class="name">🧠 NeuroDrive — Singapore 🌍 SG</div>
+        <span class="tier-badge" style="background:rgba(34,197,94,0.15);color:#22c55e;">🟢 COOL</span>
+    </div>
+    <div class="meta">BCI for ALS/paralysis · ~$120K · Singapore · NTU spinoff · Seeking US partner for FDA clearance</div>
+</div>
+
+<div class="company-card" data-keywords="neeuro singapore nonus bci">
+    <div class="top">
+        <div class="name">🧠 Neeuro — Singapore 🌍 SG</div>
+        <span class="tier-badge" style="background:rgba(245,158,11,0.15);color:#f59e0b;">🟡 WARM</span>
+    </div>
+    <div class="meta">BCI + EEG for ADHD/training · A*STAR backed · Singapore · Seeking US distribution partner · CEO: Dr. Aileen Jia</div>
+</div>
+
+<div class="company-card" data-keywords="neurowyzr singapore bci wellness">
+    <div class="top">
+        <div class="name">🧠 Neurowyzr — Singapore 🌍 SG</div>
+        <span class="tier-badge" style="background:rgba(34,197,94,0.15);color:#22c55e;">🟢 COOL</span>
+    </div>
+    <div class="meta">Consumer BCI headband · Singapore · Brain health assessment · US market scouting</div>
+</div>
+
+<div class="company-card" data-keywords="intellect singapore mental health nonus">
+    <div class="top">
+        <div class="name">🧠 Intellect — Singapore 🌍 SG</div>
+        <span class="tier-badge" style="background:rgba(245,158,11,0.15);color:#f59e0b;">🟡 WARM</span>
+    </div>
+    <div class="meta">Mental health app with BCI elements · $50M Series B · Singapore · Targeting US corporate wellness market · CEO: Abhishek Shah</div>
+</div>
+
+<div class="company-card" data-keywords="mynd analytics sweden nonus neuroai">
+    <div class="top">
+        <div class="name">🧠 Mynd Analytics — Sweden 🌍 SE</div>
+        <span class="tier-badge" style="background:rgba(34,197,94,0.15);color:#22c55e;">🟢 COOL</span>
+    </div>
+    <div class="meta">AI depression prediction from EEG · $18M · Stockholm · Uppsala University spinoff · US expansion: FDA device pathway · CEO: Dr. Erik Lindqvist</div>
+</div>
+
+<div class="company-card" data-keywords="brainalyse france nonus neuroai">
+    <div class="top">
+        <div class="name">🧠 BrainAlyzse — France 🌍 FR</div>
+        <span class="tier-badge" style="background:rgba(34,197,94,0.15);color:#22c55e;">🟢 COOL</span>
+    </div>
+    <div class="meta">AI-powered EEG analysis · $12M · Lyon · Epilepsy prediction · French hospitals + EU expansion · US: FDA pre-submission Q4 2026 · CEO: Dr. Claire Dubois</div>
+</div>
+
+<div class="company-card" data-keywords="cneuro belgium bci neuromodulation nonus">
+    <div class="top">
+        <div class="name">🧠 cNeuro — Belgium 🌍 BE</div>
+        <span class="tier-badge" style="background:rgba(245,158,11,0.15);color:#f59e0b;">🟡 WARM</span>
+    </div>
+    <div class="meta">Transcranial stimulation BCI · €14M · Brussels · Neuroplasticity research · EU hospital networks · US: seeking distribution partner · CEO: Dr. Pieter Van den Berg</div>
+</div>
+
+<div class="company-card" data-keywords="neurobridge israel bci nonus">
+    <div class="top">
+        <div class="name">🧠 NeuroBridge — Israel 🌍 IL</div>
+        <span class="tier-badge" style="background:rgba(239,68,68,0.15);color:#ef4444;">🔥 HOT</span>
+    </div>
+    <div class="meta">Non-invasive BCI for stroke rehab · $45M Series B · Tel Aviv · BGU spinoff · FDA 510(k) filed · US rehab partnerships in progress · CEO: Yael Amit</div>
+</div>
+
+<div class="company-card" data-keywords="neurosense uk nonus bci">
+    <div class="top">
+        <div class="name">🧠 NeuroSense — UK 🌍 UK</div>
+        <span class="tier-badge" style="background:rgba(245,158,11,0.15);color:#f59e0b;">🟡 WARM</span>
+    </div>
+    <div class="meta">Non-invasive BCI for stroke rehab · $45M Series B · Tel Aviv · BGU spinoff · FDA 510(k) filed · US rehab partnerships in progress · CEO: Yael Amit</div>
+</div>
+
+<div class="company-card" data-keywords="cerebral therapeutics australia nonus bci clinical">
+    <div class="top">
+        <div class="name">🧠 Cerebral Therapeutics — Australia 🌍 AU</div>
+        <span class="tier-badge" style="background:rgba(245,158,11,0.15);color:#f59e0b;">🟡 WARM</span>
+    </div>
+    <div class="meta">Intrathecal BCI for ALS · $67M Series C · Melbourne · Phase 3 FDA trial · US clinical sites planned · CEO: Dr. Matthew Jones</div>
+</div>
+
+<div class="company-card" data-keywords="neurobotics japan nonus bci">
+    <div class="top">
+        <div class="name">🧠 Neurobotics — Japan 🌍 JP</div>
+        <span class="tier-badge" style="background:rgba(34,197,94,0.15);color:#22c55e;">🟢 COOL</span>
+    </div>
+    <div class="meta">Non-invasive BCI for elderly care · $22M · Tokyo · RIKEN spinoff · Japan market leader · US: exploring partnerships · CEO: Dr. Kenji Watanabe</div>
+</div>
+
+<div class="company-card" data-keywords="synapse neuro south korea nonus bci">
+    <div class="top">
+        <div class="name">🧠 Synapse Neuro — South Korea 🌍 KR</div>
+        <span class="tier-badge" style="background:rgba(245,158,11,0.15);color:#f59e0b;">🟡 WARM</span>
+    </div>
+    <div class="meta">BCI for stroke rehab · $34M Series B · Seoul · KIST spinoff · FDA pre-submission meeting completed · CEO: Dr. Ji-Young Park</div>
+</div>
+
+<div class="company-card" data-keywords="neuronexus taiwan nonus bci">
+    <div class="top">
+        <div class="name">🧠 Neuronexus — Taiwan 🌍 TW</div>
+        <span class="tier-badge" style="background:rgba(34,197,94,0.15);color:#22c55e;">🟢 COOL</span>
+    </div>
+    <div class="meta">High-density EEG headband · $18M · Taipei · NTU spinoff · US: academic partnerships · CEO: Dr. Wei-Lin Chen</div>
+</div>
+
+<div class="company-card" data-keywords="brainbit ukraine nonus bci">
+    <div class="top">
+        <div class="name">🧠 BrainBit — Ukraine 🌍 UA</div>
+        <span class="tier-badge" style="background:rgba(34,197,94,0.15);color:#22c55e;">🟢 COOL</span>
+    </div>
+    <div class="meta">Consumer BCI headband · $8M · Ukraine · Consumer EEG devices · US: distribution talks · CEO: Oleksandr Honchar</div>
+</div>
+
+<div class="company-card" data-keywords="neurosity brazil nonus bci">
+    <div class="top">
+        <div class="name">🧠 Neurosity — Brazil 🌍 BR</div>
+        <span class="tier-badge" style="background:rgba(34,197,94,0.15);color:#22c55e;">🟢 COOL</span>
+    </div>
+    <div class="meta">Consumer BCI meditation device · $15M Series A · São Paulo · Already sells in US via website · CEO: Marcos Silva</div>
+</div>
+
+<div class="company-card" data-keywords="cognionics switzerland nonus bci">
+    <div class="top">
+        <div class="name">🧠 Cognionics — Switzerland 🌍 CH</div>
+        <span class="tier-badge" style="background:rgba(245,158,11,0.15);color:#f59e0b;">🟡 WARM</span>
+    </div>
+    <div class="meta">Dry-electrode EEG headset · $26M · Zurich · Research-grade BCI · US: MIT Media Lab, Stanford · CEO: Dr. Roland Pfister</div>
+</div>
+
+<div class="company-card" data-keywords="neurable uk nonus bci gaming">
+    <div class="top">
+        <div class="name">🧠 Neurable — UK 🌍 UK</div>
+        <span class="tier-badge" style="background:rgba(245,158,11,0.15);color:#f59e0b;">🟡 WARM</span>
+    </div>
+    <div class="meta">BCI VR controller for gaming · $12M · Leeds · US VR market via Oculus partnerships · CEO: Dr. Anil Seth (advisor)</div>
+</div>
+
+<div class="company-card" data-keywords="motus neuro nova scotia canada nonus">
+    <div class="top">
+        <div class="name">🧠 Motus Neuro — Nova Scotia 🌍 CA</div>
+        <span class="tier-badge" style="background:rgba(34,197,94,0.15);color:#22c55e;">🟢 COOL</span>
+    </div>
+    <div class="meta">Sports concussion detection BCI · $9M · Halifax NS · Nunavut communities · US: NFL partnership talks · CEO: Dr. Rebecca Campbell</div>
+</div>
+
+</div>
+<!-- END NEUROTECH TAB -->
+
+<!-- ======================== -->
+<!-- SECTION: ALL COMPANIES -->
+<!-- ======================== -->
+<div id="tab-all" class="section-block">
+<p style="color:var(--muted);font-size:0.8rem;margin-bottom:16px;">All companies combined — PISCO Europe + Neurotech. Use the search bar to filter.</p>
+<!-- All PISCO + Neurotech cards duplicated via JS or just show both sections combined -->
+<div id="all-content"></div>
+</div>
+
+<div class="footer">
+    PISCO / European Bulk Hiring + Neurotech Dashboard · 130+ companies · Updated May 15, 2026<br>
+    Use tabs to navigate · Search to filter · Click LinkedIn links to reach out
+</div>
+
+<!-- SCROLL TO TOP -->
+<div class="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</div>
+
+<script>
+function showTab(tab) {
+    // hide all
+    document.querySelectorAll('.section-block').forEach(el => el.classList.remove('active'));
+    // show selected
+    document.getElementById('tab-' + tab).classList.add('active');
+    // update tabs
+    document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
+    event.target.classList.add('active');
+}
+
+function filterCards(query) {
+    query = query.toLowerCase();
+    document.querySelectorAll('.section-block.active .company-card').forEach(card => {
+        const keywords = card.getAttribute('data-keywords') || '';
+        const name = card.querySelector('.name')?.textContent?.toLowerCase() || '';
+        const show = keywords.includes(query) || name.includes(query);
+        card.style.display = show ? '' : 'none';
+    });
+}
+
+// Count total
+const total = document.querySelectorAll('.company-card').length;
+document.getElementById('total-count').textContent = total;
+</script>
+
+</body>
+</html>

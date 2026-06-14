@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hermes Improvements — Research</title>
+  <style>
+    :root { --bg: #0f1117; --card: #1a1d27; --border: #2a2d3a; --text: #e8e9ed; --muted: #8b8fa3; --accent: #5b8def; --green: #3ecf8e; --yellow: #f4b942; }
+    body { font-family: -apple-system, system-ui, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; }
+    h1 { color: var(--accent); font-size: 1.5rem; margin-bottom: 5px; }
+    h2 { font-size: 1rem; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 6px; margin: 24px 0 12px; }
+    .meta { color: var(--muted); font-size: 0.8rem; margin-bottom: 20px; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 12px; }
+    .card h3 { margin: 0 0 8px; font-size: 0.95rem; }
+    .card p { margin: 0 0 8px; color: var(--muted); font-size: 0.85rem; line-height: 1.5; }
+    .tag { display: inline-block; background: var(--accent); color: #fff; font-size: 0.7rem; padding: 2px 8px; border-radius: 4px; margin-right: 4px; }
+    .tag.green { background: var(--green); }
+    .tag.yellow { background: var(--yellow); color: #000; }
+    ul { margin: 8px 0; padding-left: 20px; }
+    li { margin: 4px 0; font-size: 0.85rem; color: var(--muted); }
+    code { background: var(--border); padding: 2px 6px; border-radius: 4px; font-size: 0.8rem; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media(max-width: 700px) { .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <h1>🔧 Hermes Agent — Improvements Research</h1>
+  <p class="meta">Scraped: Felo Search + official docs • May 17, 2026</p>
+
+  <h2>🎯 Top Priority Actions</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>1. Skill Auto-Authoring</h3>
+      <p>Just say: "Save what you just did as a skill called [name]" and Hermes writes the SKILL.md automatically via skill_manage.</p>
+      <span class="tag green">No effort</span>
+    </div>
+    <div class="card">
+      <h3>2. Run Gateway in tmux</h3>
+      <p>24/7 availability. Current session dies when terminal closes. <code>tmux new -s hermes && hermes gateway</code></p>
+      <span class="tag">Easy</span>
+    </div>
+    <div class="card">
+      <h3>3. [SILENT] in Cron Jobs</h3>
+      <p>Suppress notification spam. Add <code>[SILENT]</code> to prompt end for jobs that only collect data.</p>
+      <span class="tag green">Quick win</span>
+    </div>
+    <div class="card">
+      <h3>4. Defuddle Before Scraping</h3>
+      <p>5–10x token savings on web content. Use before sending scraped content to LLM.</p>
+      <span class="tag yellow">Medium effort</span>
+    </div>
+  </div>
+
+  <h2>⚙️ Config & Setup</h2>
+  <div class="card">
+    <h3>CLI Flags to Enable</h3>
+    <ul>
+      <li><code>hermes gateway -c</code> — resume last session on startup</li>
+      <li><code>hermes gateway --tui</code> — full terminal UI</li>
+      <li><code>hermes gateway -p profile</code> — switch personas (work/personal)</li>
+      <li><code>hermes config view</code> — see current settings</li>
+      <li><code>hermes doctor</code> — diagnose issues, auto-fix</li>
+    </ul>
+  </div>
+
+  <h2>📝 Skill Authoring — Key Rules</h2>
+  <div class="card">
+    <p><code>description</code> in YAML frontmatter is the SEMANTIC TRIGGER — write it like a command, not a summary. Model reads it and decides whether to load the skill.</p>
+    <p>Progressive disclosure: model sees only description at startup. Full content loads on-demand.</p>
+    <p>Keep skill body under 5,000 tokens. Use <code>HERMES_SKILL_DIR</code> and <code>HERMES_SESSION_ID</code> variables.</p>
+  </div>
+
+  <h2>🧠 Memory Hierarchy (Know What Loads When)</h2>
+  <div class="card">
+    <ul>
+      <li><strong>SOUL.md</strong> — Identity (~3K tokens, always loaded)</li>
+      <li><strong>MEMORY.md</strong> — Facts (~3K tokens, always loaded)</li>
+      <li><strong>USER.md</strong> — Preferences (~1K tokens, always loaded)</li>
+      <li><strong>Skills</strong> — Zero cost until invoked</li>
+      <li><strong>state.db FTS5</strong> — History, zero until session_search</li>
+    </ul>
+  </div>
+
+  <h2>🔗 Top Skills to Explore</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>obra/superpowers</h3>
+      <p>TDD operating discipline — enforces RED-GREEN-REFACTOR before writing any code.</p>
+    </div>
+    <div class="card">
+      <h3>Composio</h3>
+      <p>1,000+ tool integrations without custom OAuth. One skill to unlock everything.</p>
+    </div>
+    <div class="card">
+      <h3>Defuddle</h3>
+      <p>5–10x token savings on scraped web content before LLM processing.</p>
+    </div>
+    <div class="card">
+      <h3>Humanizer</h3>
+      <p>Remove AI tells from generated text — make output sound human.</p>
+    </div>
+    <div class="card">
+      <h3>Reflexion</h3>
+      <p>Self-critique loop — agent evaluates its own output and refines.</p>
+    </div>
+    <div class="card">
+      <h3>obsidian-skills</h3>
+      <p>Direct access to Obsidian vault — read/write notes from workflows.</p>
+    </div>
+  </div>
+
+  <h2>📡 Multi-Agent: Current Limits</h2>
+  <div class="card">
+    <p>delegate_task has constraints: isolated children, no state sharing, flat dispatch, MAX_DEPTH=2, no crash recovery. A Workflow DAG (dependency-aware task graphs) is planned (Issue #344).</p>
+    <p>You can already use <code>delegate_task(goal, context, backend='docker')</code> to sandbox untrusted code safely.</p>
+  </div>
+
+  <h2>🔒 Security Quick Wins</h2>
+  <div class="card">
+    <ul>
+      <li>Never set <code>GATEWAY_ALLOW_ALL_USERS=true</code> — use explicit allowed_users lists</li>
+      <li>Tirith scans for injection attacks automatically</li>
+      <li>Smart Approvals LLM risk-rates commands before execution</li>
+      <li>Command Approvals can require session-level or always-approve for specific commands</li>
+    </ul>
+  </div>
+
+  <h2>💰 Cost Optimization</h2>
+  <div class="card">
+    <ul>
+      <li><code>/usage</code> — monitor spend in real time</li>
+      <li><code>/compress</code> — summarize history to free context</li>
+      <li>Keep context stable — more cache hits</li>
+      <li>Avoid changing models mid-session</li>
+      <li>Config: <code>auxiliary.compression</code> provider/model/threshold</li>
+    </ul>
+  </div>
+
+  <p class="meta" style="margin-top:30px;">Full research saved to: /tmp/hermes-research/improvements.md</p>
+</body>
+</html>

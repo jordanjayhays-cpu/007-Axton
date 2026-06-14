@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neurotech Lead Intelligence — May 16, 2026</title>
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --card: #141420;
+            --border: #1e1e2e;
+            --text: #e2e8f0;
+            --muted: #64748b;
+            --accent: #6366f1;
+            --green: #22c55e;
+            --yellow: #f59e0b;
+            --red: #ef4444;
+            --cyan: #06b6d4;
+            --purple: #a855f7;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        header {
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+        .subtitle {
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .metric {
+            background: var(--card);
+            border: 2px solid var(--border);
+            padding: 1.25rem;
+            text-align: center;
+        }
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--cyan);
+        }
+        .metric-label {
+            color: var(--muted);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+        }
+        th, td {
+            text-align: left;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+        th {
+            background: var(--card);
+            color: var(--muted);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+        tr:hover {
+            background: rgba(99, 102, 241, 0.05);
+        }
+        .company-cell {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .flag {
+            font-size: 1.25rem;
+        }
+        .company-name {
+            font-weight: 600;
+            color: var(--text);
+        }
+        .country {
+            color: var(--muted);
+            font-size: 0.8rem;
+        }
+        .tag {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .tag-hot { background: rgba(239, 68, 68, 0.2); color: var(--red); }
+        .tag-warm { background: rgba(245, 158, 11, 0.2); color: var(--yellow); }
+        .tag-bci { background: rgba(6, 182, 212, 0.2); color: var(--cyan); }
+        .tag-neuro { background: rgba(168, 85, 247, 0.2); color: var(--purple); }
+        .tag-clinical { background: rgba(239, 68, 68, 0.2); color: var(--red); }
+        .funding {
+            font-weight: 600;
+            color: var(--green);
+        }
+        .signal {
+            font-size: 0.85rem;
+        }
+        .buyer {
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+        .jordan-fit {
+            font-size: 0.85rem;
+            color: var(--accent);
+        }
+        footer {
+            border-top: 2px solid var(--border);
+            padding-top: 1.5rem;
+            margin-top: 2rem;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        .legend {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧠 Neurotech Lead Intelligence</h1>
+            <p class="subtitle">Non-US Companies Entering the US Market — May 16, 2026</p>
+        </header>
+
+        <div class="metrics">
+            <div class="metric">
+                <div class="metric-value">7</div>
+                <div class="metric-label">Companies Tracked</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value">$237M+</div>
+                <div class="metric-label">Total Funding</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value">6</div>
+                <div class="metric-label">Countries</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value">3</div>
+                <div class="metric-label">FDA Clearances</div>
+            </div>
+        </div>
+
+        <div class="legend">
+            <div class="legend-item"><span class="tag tag-hot">HOT</span> Actively raising / Hot signal</div>
+            <div class="legend-item"><span class="tag tag-warm">WARM</span> US entry mode</div>
+            <div class="legend-item"><span class="tag tag-bci">BCI</span> Brain-computer interface</div>
+            <div class="legend-item"><span class="tag tag-neuro">NEURO</span> Neuromodulation</div>
+            <div class="legend-item"><span class="tag tag-clinical">CLINICAL</span> FDA/regulatory</div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Company</th>
+                    <th>Product / Technology</th>
+                    <th>Funding</th>
+                    <th>US Signal</th>
+                    <th>Buyer Persona</th>
+                    <th>Jordan Fit</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <div class="company-cell">
+                            <span class="flag">🇸🇬</span>
+                            <div>
+                                <div class="company-name">SynPhNe</div>
+                                <div class="country">Singapore</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="tag tag-bci">BCI</span> Wearable neuro-rehab for stroke/TBI patients. Real-time neural feedback + gamified therapy.
+                    </td>
+                    <td>
+                        <div class="funding">$5M Series A (Part 1)</div>
+                        <div style="color: var(--muted); font-size: 0.75rem;">Actively raising Part 2</div>
+                    </td>
+                    <td>
+                        <span class="tag tag-hot">HOT</span> CEO on record: "Raising Part 2 of Series A, focused on scaling in the US." Partnership with Indegene (US medtech distributor). Target $2M first US revenue.
+                    </td>
+                    <td>
+                        <div class="buyer">Hospital rehab departments, VA medical centers, physical therapy chains, stroke rehab clinics</div>
+                    </td>
+                    <td>
+                        <div class="jordan-fit">#1 target — CEO Subhasis Banerji explicitly seeking US sales/channel partner. Jordan's BD skills = perfect fit.</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="company-cell">
+                            <span class="flag">🇳🇱🇩🇪</span>
+                            <div>
+                                <div class="company-name">Zander Labs</div>
+                                <div class="country">Netherlands / Germany</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="tag tag-bci">BCI</span> Passive BCI (pBCI) for human-machine interaction. Neuroadaptive AI technology.
+                    </td>
+                    <td>
+                        <div class="funding">Undisclosed</div>
+                        <div style="color: var(--muted); font-size: 0.75rem;">DeepTech</div>
+                    </td>
+                    <td>
+                        <span class="tag tag-hot">HOT</span> Entered US market March 2026. San Francisco office opened. Actively seeking US partners for integration partnerships.
+                    </td>
+                    <td>
+                        <div class="buyer">Tech companies (AR/VR, gaming, automotive), defense contractors, research institutions</div>
+                    </td>
+                    <td>
+                        <div class="jordan-fit">HIGH — CEO on record seeking Bay Area partners NOW. Consumer neuro + enterprise B2B channels.</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="company-cell">
+                            <span class="flag">🇪🇸</span>
+                            <div>
+                                <div class="company-name">INBRAIN Neuroelectronics</div>
+                                <div class="country">Spain (Barcelona)</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="tag tag-bci">BCI</span> Graphene-based BCI-Tx platform. Ultra-precise neural signal decoding and modulation.
+                    </td>
+                    <td>
+                        <div class="funding">$50M Series B</div>
+                        <div style="color: var(--muted); font-size: 0.75rem;">+ €4M government grant</div>
+                    </td>
+                    <td>
+                        <span class="tag tag-warm">WARM</span> Opening Boston office. Mayo Clinic partnership for clinical development. First-in-human study completed.
+                    </td>
+                    <td>
+                        <div class="buyer">Academic medical centers, neurosurgery departments, pharma companies (CNS drug trials)</div>
+                    </td>
+                    <td>
+                        <div class="jordan-fit">MEDIUM-HIGH — medical BCI, $50M war chest for US market entry. Graphene tech differentiation.</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="company-cell">
+                            <span class="flag">🇸🇪</span>
+                            <div>
+                                <div class="company-name">Flow Neuroscience</div>
+                                <div class="country">Sweden (Malmö)</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="tag tag-neuro">NEURO</span> <span class="tag tag-clinical">CLINICAL</span> At-home tDCS device for major depressive disorder. First FDA-approved prescription tDCS.
+                    </td>
+                    <td>
+                        <div class="funding">Series A (undisclosed)</div>
+                        <div style="color: var(--muted); font-size: 0.75rem;">Backed by Kirin Holdings</div>
+                    </td>
+                    <td>
+                        <span class="tag tag-hot">HOT</span> FDA approved Dec 2025. US launch Q2 2026. First at-home brain stimulation for depression.
+                    </td>
+                    <td>
+                        <div class="buyer">Psychiatrists, psychiatric NPs, telehealth platforms, health insurers</div>
+                    </td>
+                    <td>
+                        <div class="jordan-fit">MEDIUM — established in EU (NHS partnership), now building US commercial team. Could need channel partners.</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="company-cell">
+                            <span class="flag">🇬🇧🇳🇮</span>
+                            <div>
+                                <div class="company-name">Neurovalens</div>
+                                <div class="country">Northern Ireland (Belfast)</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="tag tag-neuro">NEURO</span> <span class="tag tag-clinical">CLINICAL</span> Non-invasive vagus nerve stimulation for insomnia (Modius Sleep) and anxiety (Modius Calm).
+                    </td>
+                    <td>
+                        <div class="funding">£20M+ raised</div>
+                        <div style="color: var(--muted); font-size: 0.75rem;">£6M (Aug 2025)</div>
+                    </td>
+                    <td>
+                        <span class="tag tag-warm">WARM</span> FDA cleared. Available by prescription in US ($2,265). VA partnership for veterans. Funding specifically for US commercial expansion.
+                    </td>
+                    <td>
+                        <div class="buyer">Sleep clinics, psychiatrists, VA hospitals, consumer health retailers</div>
+                    </td>
+                    <td>
+                        <div class="jordan-fit">MEDIUM — already in US market, scaling commercial presence. Could use BD support for health system partnerships.</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="company-cell">
+                            <span class="flag">🇪🇸</span>
+                            <div>
+                                <div class="company-name">Bitbrain</div>
+                                <div class="country">Spain (Zaragoza)</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="tag tag-bci">BCI</span> EEG headsets (BRAINSTORM for research, SLEEP for consumer) + software. Consumer neuro + research platforms.
+                    </td>
+                    <td>
+                        <div class="funding">$18.8M raised</div>
+                        <div style="color: var(--muted); font-size: 0.75rem;">Institutional backing</div>
+                    </td>
+                    <td>
+                        <span class="tag tag-warm">WARM</span> Actively showing US expansion positioning. English-speaking company. CES 2026 booth. Consumer sleep tech angle.
+                    </td>
+                    <td>
+                        <div class="buyer">Research universities, sleep centers, consumer electronics retailers, healthcare systems</div>
+                    </td>
+                    <td>
+                        <div class="jordan-fit">MEDIUM-HIGH — consumer sleep + neuro crossover. US market entry mode. Jordan's BD skills valuable for channel.</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="company-cell">
+                            <span class="flag">🇨🇳</span>
+                            <div>
+                                <div class="company-name">LumiMind</div>
+                                <div class="country">China (Pudong/Shanghai)</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="tag tag-bci">BCI</span> EEG sleep headband with real-time neural feedback. LumiSleep system with adaptive acoustic guidance.
+                    </td>
+                    <td>
+                        <div class="funding">Undisclosed</div>
+                        <div style="color: var(--muted); font-size: 0.75rem;">CES 2026 SPEED Award winner</div>
+                    </td>
+                    <td>
+                        <span class="tag tag-warm">WARM</span> Won CES 2026 SPEED Award. Launching LumiSleep H1 2026. First consumer millisecond real-time EEG sleep modulation.
+                    </td>
+                    <td>
+                        <div class="buyer">Consumer electronics retailers, sleep clinics, wellness platforms, corporate wellness</div>
+                    </td>
+                    <td>
+                        <div class="jordan-fit">MEDIUM — Chinese neurotech entering global market. Could need US distribution partner. Consumer neuro wellness space.</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <section style="margin-top: 2rem;">
+            <h2 class="section-title">🔑 Key Takeaways</h2>
+            <ul style="color: var(--muted); font-size: 0.9rem; margin-left: 1.5rem;">
+                <li><strong style="color: var(--red);">SynPhNe is the #1 priority</strong> — CEO explicitly seeking US channel partner to scale Part 2 of Series A</li>
+                <li><strong style="color: var(--yellow);">Zander Labs just entered</strong> — March 2026 US market entry, actively building partnerships in SF</li>
+                <li><strong style="color: var(--green);">3 companies have FDA clearance/approval</strong> — Flow (tDCS), Neurovalens (Modius), Neurovalens Calm</li>
+                <li><strong style="color: var(--cyan);">$237M+ in tracked funding</strong> — significant capital backing these US expansion plays</li>
+                <li><strong>SE Asia is active</strong> — SynPhNe leading, but also NeuroDrive (SG), Intellect (SG) in mental health neurotech</li>
+            </ul>
+        </section>
+
+        <footer>
+            <p>Jordan Hays | <strong>Niah</strong> | <a href="mailto:jordan@niah.io">jordan@niah.io</a></p>
+            <p style="margin-top: 0.5rem; font-size: 0.75rem;">Sources: Neurotech Futures, Yahoo Finance, Crunchbase, company announcements, Neurotech Notables #48-53</p>
+        </footer>
+    </div>
+</body>
+</html>

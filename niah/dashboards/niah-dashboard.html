@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Niah — South Summit Dashboard</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #1C1816;
+    --off-white: #F2EBE1;
+    --terracotta: #A65746;
+    --taupe: #8C7B6C;
+    --border: #332D29;
+    --pending: #E8C547;
+    --confirmed: #4CAF50;
+    --notified: #FF8C00;
+    --survey-sent: #9C27B0;
+    --completed: #2196F3;
+  }
+  body { background: var(--bg); color: var(--off-white); font-family: 'Segoe UI', sans-serif; min-height: 100vh; }
+  a { color: var(--terracotta); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* HEADER */
+  header { background: var(--border); padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--taupe); }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand-icon { width: 32px; height: 32px; background: var(--terracotta); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+  .brand-name { font-size: 20px; font-weight: 700; color: var(--off-white); letter-spacing: 2px; }
+  .event-badge { background: var(--terracotta); color: var(--off-white); padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; }
+  .header-right { display: flex; align-items: center; gap: 16px; font-size: 13px; color: var(--taupe); }
+
+  /* MAIN */
+  main { max-width: 1400px; margin: 0 auto; padding: 24px; }
+
+  /* STATS BAR */
+  .stats-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin-bottom: 32px; }
+  .stat-card { background: var(--border); border-radius: 12px; padding: 20px; border: 1px solid var(--taupe); }
+  .stat-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--taupe); margin-bottom: 8px; }
+  .stat-value { font-size: 36px; font-weight: 700; color: var(--off-white); }
+  .stat-sub { font-size: 11px; color: var(--taupe); margin-top: 4px; }
+  .stat-card.highlight { border-color: var(--terracotta); }
+  .stat-card.highlight .stat-value { color: var(--terracotta); }
+
+  /* KPI STATUS */
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 32px; }
+  .kpi-item { display: flex; justify-content: space-between; align-items: center; background: var(--border); padding: 12px 16px; border-radius: 8px; border: 1px solid var(--border); }
+  .kpi-name { font-size: 13px; color: var(--off-white); }
+  .kpi-value { font-size: 14px; font-weight: 700; }
+  .kpi-good { color: var(--confirmed); }
+  .kpi-warn { color: var(--pending); }
+  .kpi-bad { color: #e74c3c; }
+
+  /* SECTION HEADERS */
+  h2 { font-size: 14px; text-transform: uppercase; letter-spacing: 2px; color: var(--taupe); margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+
+  /* TOOL FLOW */
+  .tool-flow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 32px; padding: 20px; background: var(--border); border-radius: 12px; border: 1px solid var(--border); }
+  .tool-node { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .tool-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; color: var(--off-white); }
+  .tool-name { font-size: 10px; color: var(--taupe); text-align: center; }
+  .tool-arrow { color: var(--taupe); font-size: 18px; }
+
+  /* OPERATIONAL FLOW */
+  .op-flow { display: grid; grid-template-columns: 1fr 2fr; gap: 24px; margin-bottom: 32px; }
+  @media (max-width: 900px) { .op-flow { grid-template-columns: 1fr; } }
+
+  .flow-steps { display: flex; flex-direction: column; gap: 8px; }
+  .flow-step { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: var(--border); border-radius: 8px; border-left: 3px solid var(--taupe); }
+  .flow-step.purple { border-left-color: #9C27B0; }
+  .flow-step.green { border-left-color: #4CAF50; }
+  .flow-step.blue { border-left-color: #2196F3; }
+  .flow-step.orange { border-left-color: #FF8C00; }
+  .flow-step.dark { border-left-color: #7C4DFF; }
+  .step-num { width: 28px; height: 28px; border-radius: 50%; background: var(--taupe); color: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+  .step-text { font-size: 13px; color: var(--off-white); }
+  .step-sub { font-size: 11px; color: var(--taupe); }
+
+  /* CENTRAL FLOWCHART */
+  .flowchart { background: var(--border); border-radius: 12px; padding: 24px; border: 1px solid var(--border); }
+  .flowchart h3 { font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--taupe); margin-bottom: 16px; }
+  .chart-row { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 8px; }
+  .chart-node { background: var(--bg); border: 2px solid var(--border); border-radius: 8px; padding: 10px 16px; font-size: 12px; text-align: center; min-width: 120px; }
+  .chart-node.trigger { border-color: var(--terracotta); color: var(--terracotta); }
+  .chart-node.action { border-color: var(--taupe); }
+  .chart-node.decision { border-color: var(--pending); border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; font-size: 10px; color: var(--pending); }
+  .chart-node.success { border-color: var(--confirmed); color: var(--confirmed); }
+  .chart-node.warning { border-color: var(--notified); color: var(--notified); }
+  .chart-node.purple { border-color: #9C27B0; color: #9C27B0; }
+  .chart-node.blue { border-color: #2196F3; color: #2196F3; }
+  .chart-arrow { color: var(--taupe); font-size: 16px; }
+  .chart-arrow-down { display: block; text-align: center; color: var(--taupe); font-size: 18px; margin: 4px 0; }
+  .chart-branch { display: flex; gap: 32px; justify-content: center; margin-top: 12px; }
+  .chart-branch-item { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .chart-label { font-size: 10px; color: var(--taupe); text-transform: uppercase; }
+
+  /* STATUS LEGEND */
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 32px; }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--taupe); }
+  .legend-dot { width: 12px; height: 12px; border-radius: 3px; }
+  .legend-dot.pending { background: var(--pending); }
+  .legend-dot.confirmed { background: var(--confirmed); }
+  .legend-dot.notified { background: var(--notified); }
+  .legend-dot.survey-sent { background: var(--survey-sent); }
+  .legend-dot.completed { background: var(--completed); }
+
+  /* CONTACTS TABLE */
+  .table-wrap { background: var(--border); border-radius: 12px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 32px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { background: var(--bg); padding: 12px 16px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--taupe); border-bottom: 1px solid var(--border); }
+  td { padding: 12px 16px; border-bottom: 1px solid var(--border); color: var(--off-white); }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.03); }
+  .status-badge { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+  .status-pending { background: rgba(232,197,71,0.2); color: var(--pending); }
+  .status-confirmed { background: rgba(76,175,80,0.2); color: var(--confirmed); }
+  .status-matched { background: rgba(33,150,243,0.2); color: var(--completed); }
+  .status-notified { background: rgba(255,140,0,0.2); color: var(--notified); }
+  .status-survey { background: rgba(156,39,176,0.2); color: var(--survey-sent); }
+  .role-tag { display: inline-block; padding: 2px 8px; background: var(--bg); border-radius: 4px; font-size: 11px; color: var(--taupe); margin-right: 4px; }
+
+  /* EMAIL SEQUENCE */
+  .email-seq { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 32px; }
+  .email-card { background: var(--border); border-radius: 12px; padding: 20px; border: 1px solid var(--border); }
+  .email-day { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--taupe); margin-bottom: 8px; }
+  .email-subject { font-size: 14px; font-weight: 600; color: var(--off-white); margin-bottom: 8px; }
+  .email-preview { font-size: 12px; color: var(--taupe); line-height: 1.5; }
+  .email-status { margin-top: 12px; font-size: 11px; font-weight: 600; }
+  .email-status.ready { color: var(--confirmed); }
+  .email-status.todo { color: var(--pending); }
+
+  /* TOOLS GRID */
+  .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 32px; }
+  .tool-card { background: var(--border); border-radius: 10px; padding: 16px; border: 1px solid var(--border); text-align: center; }
+  .tool-card-name { font-size: 12px; font-weight: 600; color: var(--off-white); margin-top: 8px; }
+  .tool-card-status { font-size: 11px; margin-top: 4px; }
+  .tool-ready { color: var(--confirmed); }
+  .tool-todo { color: var(--pending); }
+  .tool-wip { color: var(--notified); }
+
+  /* COST CARD */
+  .cost-card { background: var(--border); border-radius: 12px; padding: 24px; border: 1px solid var(--terracotta); margin-bottom: 32px; max-width: 500px; }
+  .cost-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .cost-row:last-child { border-bottom: none; }
+  .cost-total { font-weight: 700; font-size: 16px; color: var(--off-white); padding-top: 12px; margin-top: 8px; border-top: 2px solid var(--terracotta); }
+  .cost-amount { color: var(--terracotta); font-weight: 700; }
+
+  /* FOOTER */
+  footer { text-align: center; padding: 32px; font-size: 12px; color: var(--taupe); border-top: 1px solid var(--border); margin-top: 48px; }
+
+  /* LIVE INDICATOR */
+  .live-dot { width: 8px; height: 8px; background: var(--confirmed); border-radius: 50%; animation: pulse 2s infinite; display: inline-block; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+  /* TALLY SURVEY PREVIEW */
+  .survey-preview { background: var(--border); border-radius: 12px; padding: 24px; border: 1px solid var(--border); margin-bottom: 32px; }
+  .survey-field { padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .survey-field:last-child { border-bottom: none; }
+  .survey-field-label { font-size: 13px; color: var(--off-white); margin-bottom: 4px; }
+  .survey-field-type { font-size: 11px; color: var(--taupe); }
+  .survey-field.req .survey-field-label::after { content: ' *'; color: var(--terracotta); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="brand-icon">N</div>
+    <span class="brand-name">NIAH</span>
+  </div>
+  <div class="event-badge">South Summit Afterparty · June 4, 2026</div>
+  <div class="header-right">
+    <span><span class="live-dot"></span> Live</span>
+    <span>La Nave, Madrid</span>
+    <span>50–150 people</span>
+  </div>
+</header>
+
+<main>
+
+  <!-- STATS -->
+  <div class="stats-bar">
+    <div class="stat-card">
+      <div class="stat-label">RSVPs</div>
+      <div class="stat-value">0</div>
+      <div class="stat-sub">Target: 150</div>
+    </div>
+    <div class="stat-card highlight">
+      <div class="stat-label">Matches Made</div>
+      <div class="stat-value">0</div>
+      <div class="stat-sub">Target: 80%+</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Notified</div>
+      <div class="stat-value">0</div>
+      <div class="stat-sub">WhatsApp + Email</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Survey Responses</div>
+      <div class="stat-value">0</div>
+      <div class="stat-sub">Target: 40%+</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Satisfaction</div>
+      <div class="stat-value">—</div>
+      <div class="stat-sub">Post-event</div>
+    </div>
+  </div>
+
+  <!-- KPI STATUS -->
+  <div class="kpi-grid">
+    <div class="kpi-item">
+      <span class="kpi-name">Survey Completion Rate</span>
+      <span class="kpi-value kpi-warn">— / 40%</span>
+    </div>
+    <div class="kpi-item">
+      <span class="kpi-name">Match Rate</span>
+      <span class="kpi-value kpi-warn">— / 80%</span>
+    </div>
+    <div class="kpi-item">
+      <span class="kpi-name">WhatsApp Notification Rate</span>
+      <span class="kpi-value kpi-good">— / 60%</span>
+    </div>
+    <div class="kpi-item">
+      <span class="kpi-name">Email Open Rate</span>
+      <span class="kpi-value kpi-warn">— / 50%</span>
+    </div>
+  </div>
+
+  <!-- TOOL FLOW -->
+  <h2>Tool Chain</h2>
+  <div class="tool-flow">
+    <div class="tool-node">
+      <div class="tool-icon" style="background:#4A154B;">T</div>
+      <span class="tool-name">Tally</span>
+    </div>
+    <span class="tool-arrow">→</span>
+    <div class="tool-node">
+      <div class="tool-icon" style="background:#FF4D4D;">n8</div>
+      <span class="tool-name">n8n</span>
+    </div>
+    <span class="tool-arrow">→</span>
+    <div class="tool-node">
+      <div class="tool-icon" style="background:#FFD300;">M</div>
+      <span class="tool-name">Mailchimp</span>
+    </div>
+    <span class="tool-arrow">→</span>
+    <div class="tool-node">
+      <div class="tool-icon" style="background:#4285F4;">S</div>
+      <span class="tool-name">Sheets</span>
+    </div>
+    <span class="tool-arrow">→</span>
+    <div class="tool-node">
+      <div class="tool-icon" style="background:#25D366;">WA</div>
+      <span class="tool-name">WhatsApp</span>
+    </div>
+  </div>
+
+  <!-- STATUS LEGEND -->
+  <h2>Status Legend</h2>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot pending"></div>Pending Match = Yellow</div>
+    <div class="legend-item"><div class="legend-dot confirmed"></div>Confirmed = Green</div>
+    <div class="legend-item"><div class="legend-dot notified"></div>Notified = Orange</div>
+    <div class="legend-item"><div class="legend-dot survey-sent"></div>Survey Sent = Purple</div>
+    <div class="legend-item"><div class="legend-dot completed"></div>Completed = Blue</div>
+  </div>
+
+  <!-- OPERATIONAL FLOW -->
+  <h2>Operational Flow</h2>
+  <div class="op-flow">
+    <div class="flow-steps">
+      <div class="flow-step purple">
+        <div class="step-num">1</div>
+        <div>
+          <div class="step-text">RSVP Submission</div>
+          <div class="step-sub">Attendee submits form via Tally</div>
+        </div>
+      </div>
+      <div class="flow-step green">
+        <div class="step-num">2</div>
+        <div>
+          <div class="step-text">Automation Trigger</div>
+          <div class="step-sub">n8n receives webhook → processes data</div>
+        </div>
+      </div>
+      <div class="flow-step blue">
+        <div class="step-num">3</div>
+        <div>
+          <div class="step-text">Match Confirmed</div>
+          <div class="step-sub">Matching team updates Google Sheets</div>
+        </div>
+      </div>
+      <div class="flow-step orange">
+        <div class="step-num">4</div>
+        <div>
+          <div class="step-text">Send Matches</div>
+          <div class="step-sub">WhatsApp (FREE) or Mailchimp email</div>
+        </div>
+      </div>
+      <div class="flow-step dark">
+        <div class="step-num">5</div>
+        <div>
+          <div class="step-text">Post-Event</div>
+          <div class="step-sub">Satisfaction survey + dashboard metrics</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flowchart">
+      <h3>n8n Workflow — Node Map</h3>
+      <div class="chart-row">
+        <div class="chart-node trigger">Tally Trigger</div>
+        <span class="chart-arrow">→</span>
+        <div class="chart-node action">Parse Data</div>
+        <span class="chart-arrow">→</span>
+        <div class="chart-node action">+Sheets</div>
+        <span class="chart-arrow">→</span>
+        <div class="chart-node action">+Mailchimp</div>
+        <span class="chart-arrow">→</span>
+        <div class="chart-node success">WA Confirm</div>
+      </div>
+      <div class="chart-arrow-down">↓ Daily 9am (June 1–4)</div>
+      <div class="chart-row">
+        <div class="chart-node action">Get Pending</div>
+        <span class="chart-arrow">→</span>
+        <div class="chart-node decision">?</div>
+        <span class="chart-arrow">→</span>
+        <div class="chart-node warning">Reminder Email</div>
+      </div>
+      <div class="chart-arrow-down">↓ Matched in Sheets</div>
+      <div class="chart-row">
+        <div class="chart-node decision">24h?</div>
+        <span class="chart-arrow">→</span>
+        <div class="chart-node success">WA Match (FREE)</div>
+        <span class="chart-arrow">→</span>
+        <div class="chart-node warning">Email Match</div>
+      </div>
+      <div class="chart-arrow-down">→ Update Status: Notified</div>
+      <div class="chart-arrow-down">↓ June 5, 10am</div>
+      <div class="chart-row">
+        <div class="chart-node purple">Post-Event Survey</div>
+        <span class="chart-arrow">→</span>
+        <div class="chart-node blue">Airtable Update</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOOLS STATUS -->
+  <h2>Tool Setup Status</h2>
+  <div class="tools-grid">
+    <div class="tool-card">
+      <div class="tool-icon" style="background:#4A154B; margin:auto;">T</div>
+      <div class="tool-card-name">Tally Survey</div>
+      <div class="tool-card-status tool-todo">❓ Needs setup</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon" style="background:#FF4D4D; margin:auto;">n8</div>
+      <div class="tool-card-name">n8n Workflow</div>
+      <div class="tool-card-status tool-ready">✅ JSON ready to import</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon" style="background:#4285F4; margin:auto;">S</div>
+      <div class="tool-card-name">Google Sheets</div>
+      <div class="tool-card-status tool-todo">❓ Needs credentials</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon" style="background:#FFD300; margin:auto;">M</div>
+      <div class="tool-card-name">Mailchimp</div>
+      <div class="tool-card-status tool-todo">❓ Needs API key</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon" style="background:#25D366; margin:auto;">WA</div>
+      <div class="tool-card-name">WhatsApp API</div>
+      <div class="tool-card-status tool-wip">⚠ Needs Meta credentials</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon" style="background:#9C27B0; margin:auto;">A</div>
+      <div class="tool-card-name">Airtable</div>
+      <div class="tool-card-status tool-todo">❓ Needs API key + Base ID</div>
+    </div>
+  </div>
+
+  <!-- EMAIL SEQUENCE -->
+  <h2>Email Sequence (June 1–5)</h2>
+  <div class="email-seq">
+    <div class="email-card">
+      <div class="email-day">June 1 · 9:00 AM</div>
+      <div class="email-subject">"Before the Social Summit — 60 seconds to get matched"</div>
+      <div class="email-preview">Hi [Name], South Summit is in 3 days. Take 60 seconds to tell us who you want to meet — we'll send your match before you walk in.</div>
+      <div class="email-status todo">⏳ Mailchimp template — needs to be created</div>
+    </div>
+    <div class="email-card">
+      <div class="email-day">June 2 · 9:00 AM</div>
+      <div class="email-subject">"Still time to get matched at South Summit"</div>
+      <div class="email-preview">Friendly nudge — your profile is half-done. Complete it today and we'll have your introduction ready by June 4.</div>
+      <div class="email-status todo">⏳ Mailchimp template — needs to be created</div>
+    </div>
+    <div class="email-card">
+      <div class="email-day">June 3 · 9:00 AM</div>
+      <div class="email-subject">"Final reminder — Social Summit is tomorrow"</div>
+      <div class="email-preview">Tomorrow is the day. If you want a guaranteed match tonight, fill in the form in the next 24 hours.</div>
+      <div class="email-status todo">⏳ Mailchimp template — needs to be created</div>
+    </div>
+    <div class="email-card">
+      <div class="email-day">June 4 · 10:00 AM</div>
+      <div class="email-subject">"Your South Summit Match is ready — Find them at La Nave"</div>
+      <div class="email-preview">You're matched with [Match Name] at [Company]. Why: [Reason]. Find them at the Niah Bar, La Nave, 8 PM tonight.</div>
+      <div class="email-status todo">⏳ Mailchimp template — needs to be created</div>
+    </div>
+    <div class="email-card">
+      <div class="email-day">June 5 · 10:00 AM</div>
+      <div class="email-subject">"How was your connection? Tell us in 30 seconds"</div>
+      <div class="email-preview">Hi [Name], how was your Niah experience at South Summit? Take 30 seconds to rate your connection — your feedback shapes the next event.</div>
+      <div class="email-status todo">⏳ Tally satisfaction survey — needs to be created</div>
+    </div>
+  </div>
+
+  <!-- TALLY SURVEY PREVIEW -->
+  <h2>Tally Survey — 9 Fields</h2>
+  <div class="survey-preview">
+    <div class="survey-field req">
+      <div class="survey-field-label">What's your name?</div>
+      <div class="survey-field-type">Short text · Required</div>
+    </div>
+    <div class="survey-field req">
+      <div class="survey-field-label">What's your email?</div>
+      <div class="survey-field-type">Email · Required</div>
+    </div>
+    <div class="survey-field">
+      <div class="survey-field-label">What's your WhatsApp number?</div>
+      <div class="survey-field-type">Phone (ES) · Optional — enables FREE notifications</div>
+    </div>
+    <div class="survey-field req">
+      <div class="survey-field-label">What's your role?</div>
+      <div class="survey-field-type">Multiple choice · Required · Investor / Founder / Corporate / Startup / Media / Other</div>
+    </div>
+    <div class="survey-field req">
+      <div class="survey-field-label">Company / Fund name</div>
+      <div class="survey-field-type">Short text · Required</div>
+    </div>
+    <div class="survey-field">
+      <div class="survey-field-label">What brings you to South Summit?</div>
+      <div class="survey-field-type">Short text · Optional</div>
+    </div>
+    <div class="survey-field req">
+      <div class="survey-field-label">Who do you most want to meet?</div>
+      <div class="survey-field-type">Long text · Required · e.g. VCs on fintech, founders building AI tools</div>
+    </div>
+    <div class="survey-field">
+      <div class="survey-field-label">What can you help others with?</div>
+      <div class="survey-field-type">Long text · Optional · e.g. B2B SaaS GTM, fundraising, Spain regulatory</div>
+    </div>
+    <div class="survey-field">
+      <div class="survey-field-label">Any preferences or things to avoid?</div>
+      <div class="survey-field-type">Long text · Optional</div>
+    </div>
+  </div>
+
+  <!-- GOOGLE SHEETS HEADERS -->
+  <h2>Google Sheets — Required Columns</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>name</th>
+          <th>email</th>
+          <th>phone</th>
+          <th>role</th>
+          <th>company</th>
+          <th>what_brings_you</th>
+          <th>who_to_meet</th>
+          <th>what_can_you_help</th>
+          <th>preferences</th>
+          <th>status</th>
+          <th>submitted_at</th>
+          <th>match_name</th>
+          <th>match_email</th>
+          <th>match_reason</th>
+          <th>match_link</th>
+          <th>notified_at</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td colspan="16" style="text-align:center; color: var(--taupe); padding: 32px; font-size: 13px;">
+            No RSVPs yet — connect Tally → n8n → Google Sheets to start receiving data
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- COST -->
+  <h2>Cost Breakdown</h2>
+  <div class="cost-card">
+    <div class="cost-row">
+      <span>Tally Survey</span>
+      <span class="cost-amount">$0</span>
+    </div>
+    <div class="cost-row">
+      <span>n8n Cloud Pro (1 month)</span>
+      <span class="cost-amount">$59</span>
+    </div>
+    <div class="cost-row">
+      <span>Mailchimp Standard (1 month)</span>
+      <span class="cost-amount">$59</span>
+    </div>
+    <div class="cost-row">
+      <span>WhatsApp Business API</span>
+      <span class="cost-amount">$0</span>
+    </div>
+    <div class="cost-row">
+      <span>Google Sheets</span>
+      <span class="cost-amount">$0</span>
+    </div>
+    <div class="cost-row cost-total">
+      <span>Total</span>
+      <span class="cost-amount">~$59–$118</span>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <p>Niah · South Summit Social Summit After Party · June 4, 2026 · La Nave, Madrid</p>
+  <p style="margin-top: 8px;">n8n workflow: <a href="https://github.com/jordanjayhays-cpu/mission-control">GitHub</a> · Dashboard built May 10, 2026</p>
+</footer>
+
+</body>
+</html>

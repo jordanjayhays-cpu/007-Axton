@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jordan's City Match Quiz</title>
+    <style>
+        :root {
+            --bg: #1C1816;
+            --off-white: #F2EBE1;
+            --terracotta: #A65746;
+            --taupe: #8C7B6C;
+            --border: #332D29;
+            --muted: #64748b;
+            --green: #22c55e;
+            --amber: #f59e0b;
+            --red: #ef4444;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: var(--bg);
+            color: var(--off-white);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--off-white);
+        }
+
+        .subtitle {
+            color: var(--taupe);
+            font-size: 0.85rem;
+            margin-bottom: 30px;
+        }
+
+        .progress-bar {
+            background: var(--border);
+            border-radius: 10px;
+            height: 6px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: var(--terracotta);
+            height: 100%;
+            transition: width 0.4s ease;
+            border-radius: 10px;
+        }
+
+        .question-block {
+            background: rgba(51, 45, 41, 0.5);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 24px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .question-block.active {
+            display: block;
+        }
+
+        .question-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--terracotta);
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .question-text {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--off-white);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            background: rgba(51, 45, 41, 0.6);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 14px 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .option:hover {
+            border-color: var(--terracotta);
+            background: rgba(166, 87, 70, 0.1);
+        }
+
+        .option.selected {
+            border-color: var(--terracotta);
+            background: rgba(166, 87, 70, 0.2);
+        }
+
+        .option-letter {
+            background: var(--border);
+            color: var(--taupe);
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        .option.selected .option-letter {
+            background: var(--terracotta);
+            color: var(--off-white);
+        }
+
+        .option-text {
+            flex: 1;
+        }
+
+        .option.selected .option-text {
+            color: var(--off-white);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-secondary {
+            background: var(--border);
+            color: var(--taupe);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(51, 45, 41, 0.8);
+            color: var(--off-white);
+        }
+
+        .btn-primary {
+            background: var(--terracotta);
+            color: var(--off-white);
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        /* Results */
+        #results {
+            display: none;
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .your-match {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--terracotta);
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .top-city {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .top-country {
+            color: var(--taupe);
+            font-size: 1rem;
+            margin-bottom: 16px;
+        }
+
+        .top-score {
+            display: inline-block;
+            background: rgba(166, 87, 70, 0.2);
+            color: var(--terracotta);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .top-reason {
+            color: var(--muted);
+            font-size: 0.85rem;
+            margin-top: 12px;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .ranked-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .rank-card {
+            background: rgba(51, 45, 41, 0.5);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: all 0.2s ease;
+        }
+
+        .rank-card:hover {
+            border-color: var(--terracotta);
+        }
+
+        .rank-card.top-rank {
+            border-color: rgba(166, 87, 70, 0.4);
+            background: rgba(166, 87, 70, 0.08);
+        }
+
+        .rank-number {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--border);
+            width: 36px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .rank-card.top-rank .rank-number {
+            color: var(--terracotta);
+        }
+
+        .rank-info {
+            flex: 1;
+        }
+
+        .rank-name {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 2px;
+        }
+
+        .rank-details {
+            font-size: 0.75rem;
+            color: var(--muted);
+        }
+
+        .rank-score {
+            text-align: right;
+        }
+
+        .rank-score-pct {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--terracotta);
+        }
+
+        .rank-score-label {
+            font-size: 0.65rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .rank-breakdown {
+            font-size: 0.7rem;
+            color: var(--taupe);
+            margin-top: 4px;
+        }
+
+        .city-tags {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 6px;
+        }
+
+        .city-tag {
+            background: rgba(51, 45, 41, 0.6);
+            color: var(--taupe);
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 0.65rem;
+        }
+
+        .city-tag.hot {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--red);
+        }
+
+        /* Multi-select */
+        .multi-note {
+            font-size: 0.75rem;
+            color: var(--muted);
+            margin-bottom: 12px;
+        }
+
+        /* Restart */
+        .restart-btn {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .restart-btn button {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--taupe);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .restart-btn button:hover {
+            border-color: var(--terracotta);
+            color: var(--off-white);
+        }
+
+        /* Input question */
+        .text-input {
+            background: rgba(51, 45, 41, 0.6);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 14px 16px;
+            font-size: 0.9rem;
+            color: var(--off-white);
+            width: 100%;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .text-input:focus {
+            outline: none;
+            border-color: var(--terracotta);
+        }
+
+        .text-input::placeholder {
+            color: var(--muted);
+        }
+
+        /* Slider */
+        .slider-container {
+            padding: 10px 0;
+        }
+
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--muted);
+            margin-bottom: 8px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--border);
+            appearance: none;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--terracotta);
+            cursor: pointer;
+        }
+
+        .slider-value {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--terracotta);
+            font-weight: 600;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧠 Jordan's City Match Quiz</h1>
+        <p class="subtitle">Built from real data: Numbeo, EF EPI, Startup Genome, climate records</p>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress" style="width: 0%"></div>
+        </div>
+
+        <!-- Q1 -->
+        <div class="question-block active" data-q="1">
+            <div class="question-label">Question 1 of 11</div>
+            <div class="question-text">You have a $1,500/month budget. Your perfect city is:</div>
+            <div class="options">
+                <div class="option" onclick="selectOption(1, 'A')">
+                    <div class="option-letter">A</div>
+                    <div class="option-text">Super cheap — Manila, Medellín, Budapest. I save money and live well on less.</div>
+                </div>
+                <div class="option" onclick="selectOption(1, 'B')">
+                    <div class="option-letter">B</div>
+                    <div class="option-text">Somewhere in the middle — Mexico City, Valencia, Buenos Aires. Decent cost, good life.</div>
+                </div>
+                <div class="option" onclick="selectOption(1, 'C')">
+                    <div class="option-letter">C</div>
+                    <div class="option-text">Worth the cost — Lisbon or Barcelona, even if I'm spending more for the experience.</div>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button class="btn btn-primary" onclick="nextQuestion(1)" disabled id="next1">Next →</button>
+            </div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="question-block" data-q="2">
+            <div class="question-label">Question 2 of 11</div>
+            <div class="question-text">The city is incredible — food, walkability, vibe — but you can't read signs or have real conversations in English:</div>
+            <div class="options">
+                <div class="option" onclick="selectOption(2, 'A')">
+                    <div class="option-letter">A</div>
+                    <div class="option-text">Dealbreaker — I need English to navigate and connect properly.</div>
+                </div>
+                <div class="option" onclick="selectOption(2, 'B')">
+                    <div class="option-letter">B</div>
+                    <div class="option-text">It's fine for 3 months — I adapt, use apps, figure it out.</div>
+                </div>
+                <div class="option" onclick="selectOption(2, 'C')">
+                    <div class="option-letter">C</div>
+                    <div class="option-text">Actually this is fine long-term — I learn the language anyway.</div>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="prevQuestion(2)">← Back</button>
+                <button class="btn btn-primary" onclick="nextQuestion(2)" disabled id="next2">Next →</button>
+            </div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="question-block" data-q="3">
+            <div class="question-label">Question 3 of 11</div>
+            <div class="question-text">Your ideal weeknight:</div>
+            <div class="options">
+                <div class="option" onclick="selectOption(3, 'A')">
+                    <div class="option-letter">A</div>
+                    <div class="option-text">Co-working dinner with startup people — pitching, networking, deal talk.</div>
+                </div>
+                <div class="option" onclick="selectOption(3, 'B')">
+                    <div class="option-letter">B</div>
+                    <div class="option-text">Grab drinks with whoever's around — expats, nomads, interesting strangers.</div>
+                </div>
+                <div class="option" onclick="selectOption(3, 'C')">
+                    <div class="option-letter">C</div>
+                    <div class="option-text">Explore a new neighborhood — street life, murals, markets, local发现.</div>
+                </div>
+                <div class="option" onclick="selectOption(3, 'D')">
+                    <div class="option-letter">D</div>
+                    <div class="option-text">Small dinner with 1-2 close friends I've made here.</div>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="prevQuestion(3)">← Back</button>
+                <button class="btn btn-primary" onclick="nextQuestion(3)" disabled id="next3">Next →</button>
+            </div>
+        </div>
+
+        <!-- Q4 -->
+        <div class="question-block" data-q="4">
+            <div class="question-label">Question 4 of 11</div>
+            <div class="question-text">Pick one — walkability vs practicality:</div>
+            <div class="options">
+                <div class="option" onclick="selectOption(4, 'A')">
+                    <div class="option-letter">A</div>
+                    <div class="option-text">Incredible walkable neighborhood — I walk everywhere, cobblestones, cafes on corners, streets alive.</div>
+                </div>
+                <div class="option" onclick="selectOption(4, 'B')">
+                    <div class="option-letter">B</div>
+                    <div class="option-text">Car-friendly or spread out — getting around is easier with wheels, distances don't bother me.</div>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="prevQuestion(4)">← Back</button>
+                <button class="btn btn-primary" onclick="nextQuestion(4)" disabled id="next4">Next →</button>
+            </div>
+        </div>
+
+        <!-- Q5 -->
+        <div class="question-block" data-q="5">
+            <div class="question-label">Question 5 of 11</div>
+            <div class="question-text">Weather preference:</div>
+            <div class="options">
+                <div class="option" onclick="selectOption(5, 'A')">
+                    <div class="option-letter">A</div>
+                    <div class="option-text">4 real seasons — I embrace winter, cold, snow, layers. I like having a proper winter.</div>
+                </div>
+                <div class="option" onclick="selectOption(5, 'B')">
+                    <div class="option-letter">B</div>
+                    <div class="option-text">Mild year-round — I hate being cold, 15-25°C always, I don't own a winter coat.</div>
+                </div>
+                <div class="option" onclick="selectOption(5, 'C')">
+                    <div class="option-letter">C</div>
+                    <div class="option-text">Hot is fine if it's cheap — Manila, HCMC hot and humid but my money goes far.</div>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="prevQuestion(5)">← Back</button>
+                <button class="btn btn-primary" onclick="nextQuestion(5)" disabled id="next5">Next →</button>
+            </div>
+        </div>
+
+        <!-- Q6 -->
+        <div class="question-block" data-q="6">
+            <div class="question-label">Question 6 of 11</div>
+            <div class="question-text">Your ideal food situation:</div>
+            <div class="options">
+                <div class="option" onclick="selectOption(6, 'A')">
+                    <div class="option-letter">A</div>
+                    <div class="option-text">Incredible street food everywhere — cheap, amazing, on every corner, I eat out every meal.</div>
+                </div>
+                <div class="option" onclick="selectOption(6, 'B')">
+                    <div class="option-letter">B</div>
+                    <div class="option-text">Great restaurants + decent street food mix — I want fine dining AND casual spots.</div>
+                </div>
+                <div class="option" onclick="selectOption(6, 'C')">
+                    <div class="option-letter">C</div>
+                    <div class="option-text">Good grocery stores + cooking at home — I'm disciplined, I meal prep, I save money.</div>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="prevQuestion(6)">← Back</button>
+                <button class="btn btn-primary" onclick="nextQuestion(6)" disabled id="next6">Next →</button>
+            </div>
+        </div>
+
+        <!-- Q7 -->
+        <div class="question-block" data-q="7">
+            <div class="question-label">Question 7 of 11</div>
+            <div class="question-text">US calls — how important is timezone overlap with New York (EST)?</div>
+            <div class="options">
+                <div class="option" onclick="selectOption(7, 'A')">
+                    <div class="option-letter">A</div>
+                    <div class="option-text">I need 4+ hours overlap — I'm running US hours, calls are regular.</div>
+                </div>
+                <div class="option" onclick="selectOption(7, 'B')">
+                    <div class="option-letter">B</div>
+                    <div class="option-text">2-3 hours overlap is fine — occasional early morning or late evening calls, I can manage.</div>
+                </div>
+                <div class="option" onclick="selectOption(7, 'C')">
+                    <div class="option-letter">C</div>
+                    <div class="option-text">Async only — I basically never take US calls, timezone doesn't matter.</div>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="prevQuestion(7)">← Back</button>
+                <button class="btn btn-primary" onclick="nextQuestion(7)" disabled id="next7">Next →</button>
+            </div>
+        </div>
+
+        <!-- Q8 -->
+        <div class="question-block" data-q="8">
+            <div class="question-label">Question 8 of 11</div>
+            <div class="question-text">What's the actual point of your next 3-month rotation?</div>
+            <div class="options">
+                <div class="option" onclick="selectOption(8, 'A')">
+                    <div class="option-letter">A</div>
+                    <div class="option-text">Maximize savings — I want to bank money, live cheaply, stretch every dollar.</div>
+                </div>
+                <div class="option" onclick="selectOption(8, 'B')">
+                    <div class="option-letter">B</div>
+                    <div class="option-text">Find my community — I want startup people, a real scene, my people.</div>
+                </div>
+                <div class="option" onclick="selectOption(8, 'C')">
+                    <div class="option-letter">C</div>
+                    <div class="option-text">Experience a new city — explore, eat well, feel alive, build memories.</div>
+                </div>
+                <div class="option" onclick="selectOption(8, 'D')">
+                    <div class="option-letter">D</div>
+                    <div class="option-text">Figure out where I actually want to live long-term.</div>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="prevQuestion(8)">← Back</button>
+                <button class="btn btn-primary" onclick="nextQuestion(8)" disabled id="next8">Next →</button>
+            </div>
+        </div>
+
+        <!-- Q9 -->
+        <div class="question-block" data-q="9">
+            <div class="question-label">Question 9 of 11</div>
+            <div class="question-text">Hard no's — select all that apply:</div>
+            <div class="multi-note">(Click all that apply)</div>
+            <div class="options">
+                <div class="option" onclick="toggleMultiOption(9, 'A', this)">
+                    <div class="option-letter" style="background: var(--red); color: white;">A</div>
+                    <div class="option-text">Extreme heat — Manila, HCMC, Bangkok above 35°C regularly with humidity</div>
+                </div>
+                <div class="option" onclick="toggleMultiOption(9, 'B', this)">
+                    <div class="option-letter" style="background: var(--amber); color: var(--bg);">B</div>
+                    <div class="option-text">Real winter — Prague, Budapest, Belgrade below 0°C regularly with snow</div>
+                </div>
+                <div class="option" onclick="toggleMultiOption(9, 'C', this)">
+                    <div class="option-letter" style="background: var(--border); color: var(--taupe);">C</div>
+                    <div class="option-text">Can't get a decent espresso — I need proper coffee, not instant.</div>
+                </div>
+                <div class="option" onclick="toggleMultiOption(9, 'D', this)">
+                    <div class="option-letter" style="background: var(--border); color: var(--taupe);">D</div>
+                    <div class="option-text">Unsafe or too chaotic — crime, bad areas, transport hell.</div>
+                </div>
+                <div class="option" onclick="toggleMultiOption(9, 'E', this)">
+                    <div class="option-letter" style="background: var(--border); color: var(--taupe);">E</div>
+                    <div class="option-text">Internet is slow or unreliable — I need good wifi to work.</div>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="prevQuestion(9)">← Back</button>
+                <button class="btn btn-primary" onclick="nextQuestion(9)" disabled id="next9">Continue →</button>
+            </div>
+        </div>
+
+        <!-- Q10 -->
+        <div class="question-block" data-q="10">
+            <div class="question-label">Question 10 of 11</div>
+            <div class="question-text">Which city pulls you most? What made you like it?</div>
+            <div class="options">
+                <div class="option" onclick="selectOption(10, 'A')">
+                    <div class="option-letter">A</div>
+                    <div class="option-text">Manila — money stretched, English everywhere, I felt rich there.</div>
+                </div>
+                <div class="option" onclick="selectOption(10, 'B')">
+                    <div class="option-letter">B</div>
+                    <div class="option-text">Mexico City — walkability, food, energy, lived well on less.</div>
+                </div>
+                <div class="option" onclick="selectOption(10, 'C')">
+                    <div class="option-letter">C</div>
+                    <div class="option-text">Madrid — European lifestyle, startup scene, timezone was easy.</div>
+                </div>
+                <div class="option" onclick="selectOption(10, 'D')">
+                    <div class="option-letter">D</div>
+                    <div class="option-text">Haven't found it yet — I keep looking for something specific.</div>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="prevQuestion(10)">← Back</button>
+                <button class="btn btn-primary" onclick="nextQuestion(10)" disabled id="next10">Next →</button>
+            </div>
+        </div>
+
+        <!-- Q11 -->
+        <div class="question-block" data-q="11">
+            <div class="question-label">Question 11 of 11</div>
+            <div class="question-text">Describe your ideal next 3 months — the vibe, the daily life:</div>
+            <div class="options">
+                <textarea class="text-input" id="q11-input" placeholder="Example: I wake up, walk to a coffee shop in a walkable neighborhood, work until 2pm, then explore the city on foot. I want to eat well without spending a fortune. Maybe meet startup people a couple times a week. Cool weather, not hot. I'm not trying to save aggressively but I don't want to overspend either..." oninput="updateSliderFromText()"></textarea>
+            </div>
+            <div class="slider-container" style="margin-top: 16px;">
+                <div class="slider-labels">
+                    <span>Budget mode — save every $</span>
+                    <span>Balanced</span>
+                    <span>Experience mode — worth it</span>
+                </div>
+                <input type="range" id="cost-slider" min="0" max="100" value="50" oninput="updateSliderLabel()">
+                <div class="slider-value" id="slider-label">Balanced — cost and experience both matter</div>
+            </div>
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="prevQuestion(11)">← Back</button>
+                <button class="btn btn-primary" onclick="calculateResults()">Get My Rankings →</button>
+            </div>
+        </div>
+
+        <!-- Results -->
+        <div id="results">
+            <div class="results-header">
+                <div class="your-match">Your #1 Match</div>
+                <div class="top-city" id="top-city-name">—</div>
+                <div class="top-country" id="top-city-country">—</div>
+                <span class="top-score" id="top-score">—/100</span>
+                <p class="top-reason" id="top-reason">—</p>
+            </div>
+
+            <div class="ranked-list" id="ranked-list">
+                <!-- populated by JS -->
+            </div>
+
+            <div class="restart-btn">
+                <button onclick="restartQuiz()">← Take Quiz Again</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State
+        let answers = {};
+        let multiAnswers = {};
+
+        // City data with real research values (1-10 scale, 10 = best for Jordan)
+        const cities = [
+            {
+                name: "Mexico City",
+                country: "🇲🇽 Mexico",
+                cost: 8,         // 60-70% cheaper than US
+                english: 5,      // decent in biz districts
+                startup: 7,      // growing scene, VC active
+                visa: 5,         // 180-day tourist
+                timezone: 6,     // 1-2hr diff from EST
+                climate: 7,     // mild year-round, altitude
+                walkability: 10, // Roma, Condesa extremely walkable
+                food: 10,        // best food city
+                wifi: 9,         // good in central areas
+                tags: ["Walkable", "Foodie", "Startup Growing"],
+                reason: "You already know the vibe — Roma/Condesa match your style perfectly."
+            },
+            {
+                name: "Manila",
+                country: "🇵🇭 Philippines",
+                cost: 10,        // extremely cheap for USD
+                english: 10,      // English is official
+                startup: 3,      // emerging, small
+                visa: 4,         // 30 days, easy extend
+                timezone: 2,     // 12-13hr ahead of EST
+                climate: 2,       // hot + humid + typhoons
+                walkability: 4,  // traffic brutal
+                food: 9,          // incredible cheap
+                wifi: 8,         // good
+                tags: ["Cheap", "English", "Hot Climate"],
+                reason: "Money stretches furthest here. English-first. Climate is the trade-off."
+            },
+            {
+                name: "Valencia",
+                country: "🇪🇸 Spain",
+                cost: 5,         // moderate for EU
+                english: 5,      // good in center
+                startup: 6,      // solid ecosystem
+                visa: 6,         // Schengen 90/180
+                timezone: 6,     // 6hr ahead of EST
+                climate: 9,      // mild winters, warm summers, 300 sun days
+                walkability: 10, // extremely walkable, bike lanes, beach
+                food: 10,         // paella birthplace, amazing food
+                wifi: 9,         // excellent
+                tags: ["Best Climate", "Walkable", "Foodie", "EU"],
+                reason: "Best climate in Spain + great food + walkable + cheaper than Barcelona + same TZ. Perfect seasonal preference."
+            },
+            {
+                name: "Barcelona",
+                country: "🇪🇸 Spain",
+                cost: 3,         // expensive for Spain
+                english: 6,      // English widely spoken
+                startup: 9,      // major European hub
+                visa: 6,         // Schengen 90/180
+                timezone: 6,     // 6hr ahead of EST
+                climate: 8,      // mild winters, beach, warm summers
+                walkability: 10, // extremely walkable, beach life
+                food: 8,          // excellent food, tapas
+                wifi: 9,         // excellent
+                tags: ["Best Startup", "Beach", "Walkable", "EU"],
+                reason: "Best weather + startup scene combo in Europe. Expensive but you're used to Madrid costs."
+            },
+            {
+                name: "Lisbon",
+                country: "🇵🇹 Portugal",
+                cost: 4,         // getting expensive, $1500-2000/mo
+                english: 8,      // English widely spoken
+                startup: 9,      // major European hub, Web Summit
+                visa: 8,         // D7/NHR visa easy
+                timezone: 6,     // 5hr ahead of EST
+                climate: 6,      // mild winters, warm summers
+                walkability: 8,  // very walkable, trams
+                food: 8,          // excellent food, seafood
+                wifi: 9,         // excellent
+                tags: ["English", "Startup Hub", "EU Residency"],
+                reason: "Top-tier startup ecosystem + English-first + great TZ. Getting pricey but still doable."
+            },
+            {
+                name: "Medellín",
+                country: "🇨🇴 Colombia",
+                cost: 9,         // very cheap, $800-1200/mo
+                english: 4,      // some English in El Poblado
+                startup: 5,      // growing, emerging tech hub
+                visa: 6,         // 90-day, easy extend, digital nomad visa
+                timezone: 5,     // same as EST (-1hr or same)
+                climate: 10,     // "eternal spring" 70°F year-round
+                walkability: 7,  // walkable in tourist zones, hilly
+                food: 8,          // excellent Colombian food, cheap
+                wifi: 8,         // good
+                tags: ["Cheap", "Perfect Climate", "Rising Hub"],
+                reason: "Perfect climate + very cheap + good TZ. English lower. Rising choice for digital nomads."
+            },
+            {
+                name: "Buenos Aires",
+                country: "🇦🇷 Argentina",
+                cost: 9,         // very cheap for USD, peso collapse
+                english: 4,      // limited outside tourist areas
+                startup: 6,      // strong tech scene, Mercado Libre origins
+                visa: 6,         // 90-day tourist, easy extend
+                timezone: 5,     // 1-2hr ahead of EST
+                climate: 7,      // 4 seasons, mild winters
+                walkability: 8,  // walkable in Palermo/Belgrano
+                food: 10,         // excellent food, wine, asado
+                wifi: 8,         // good
+                tags: ["Cheap", "Foodie", "Tech Scene", "Wildcard"],
+                reason: "Incredible value for USD earner. Strong tech scene. Spanish needed. Wild card for rotation."
+            },
+            {
+                name: "Kuala Lumpur",
+                country: "🇲🇾 Malaysia",
+                cost: 9,         // very cheap, $800-1200/mo
+                english: 10,      // English official language
+                startup: 5,      // developing, SE Asia hub growing
+                visa: 4,         // 30-90 days, MM2H visa
+                timezone: 2,     // same as SG/HK (12-13hr ahead of EST)
+                climate: 2,      // hot + humid year-round, monsoon
+                walkability: 4,  // car-centric, not walkable
+                food: 10,         // incredible street food, cheap, diverse
+                wifi: 9,         // excellent
+                tags: ["Cheap", "English", "Foodie"],
+                reason: "Cheapest true big city in Asia with English. Food is insane. Climate is the trade-off."
+            },
+            {
+                name: "Chiang Mai",
+                country: "🇹🇭 Thailand",
+                cost: 10,        // extremely cheap, $600-1000/mo
+                english: 5,      // tourist areas English
+                startup: 3,      // small scene, digital nomad hub
+                visa: 3,         // 30-60 days tourist, ED visa for longer
+                timezone: 2,     // 12-13hr ahead of EST
+                climate: 4,      // hot season Mar-May, smoky Feb-Apr, cool Nov-Jan
+                walkability: 8,  // very walkable in old city
+                food: 10,         // world's best street food
+                wifi: 9,         // excellent
+                tags: ["Cheapest", "Foodie", "Nomad Hub"],
+                reason: "Most popular digital nomad hub. Food is unreal. Community strong. Climate has bad season."
+            },
+            {
+                name: "Ho Chi Minh City",
+                country: "🇻🇳 Vietnam",
+                cost: 10,        // extremely cheap, $700-1100/mo
+                english: 3,       // limited outside District 1
+                startup: 6,      // fast-growing, VC money flowing
+                visa: 4,         // 30-90 days, e-visa
+                timezone: 2,     // 12-13hr ahead of EST
+                climate: 2,       // hot year-round, monsoon
+                walkability: 3,  // chaotic traffic, not walkable
+                food: 10,         // incredible food, cheap, pho, banh mi
+                wifi: 8,         // good
+                tags: ["Cheapest", "Foodie", "Fast Growing"],
+                reason: "Super cheap, fast-growing, food insane. Low English, bad climate, traffic dangerous."
+            },
+            {
+                name: "Budapest",
+                country: "🇭🇺 Hungary",
+                cost: 7,         // cheap for EU, $900-1400/mo
+                english: 5,      // some English, tourist areas fine
+                startup: 6,      // solid scene, Prezi, LogMeIn origins
+                visa: 4,         // 90 Schengen, startup visa available
+                timezone: 6,     // 6hr ahead of EST
+                climate: 5,      // 4 seasons, hot summers, cold winters
+                walkability: 8,  // very walkable, ruin bar culture
+                food: 7,          // good food, cheap wine
+                wifi: 9,         // excellent
+                tags: ["Cheap EU", "Startup", "Good TZ", "Ruin Bars"],
+                reason: "Cheapest proper EU capital. Startup scene decent. Good TZ. Real winter. Great social scene."
+            },
+            {
+                name: "Prague",
+                country: "🇨🇿 Czech Republic",
+                cost: 6,         // moderate, $1200-1800/mo
+                english: 6,      // English widely spoken in center
+                startup: 7,     // solid scene, Central Europe hub
+                visa: 4,         // 90 Schengen, startup visa
+                timezone: 6,    // 6hr ahead of EST
+                climate: 4,      // cold winters (-5°C), hot summers
+                walkability: 9,  // very walkable, beautiful city
+                food: 7,          // good food, cheap beer
+                wifi: 9,         // excellent
+                tags: ["Walkable", "Startup", "Good TZ", "Real Winter"],
+                reason: "Great walkable city, English decent, startup solid. You said seasonal not cold — winter is brutal here."
+            },
+            {
+                name: "Guadalajara",
+                country: "🇲🇽 Mexico",
+                cost: 7,         // cheaper than Mexico City, growing
+                english: 5,      // some English, business community
+                startup: 5,      // growing tech ecosystem
+                visa: 5,         // 180-day tourist visa
+                timezone: 6,    // same as EST (Central Mexico)
+                climate: 7,      // mild year-round, dry, altitude
+                walkability: 8,  // walkable historic center
+                food: 8,          // great food, tapatio culture
+                wifi: 8,         // good
+                tags: ["Walkable", "Cheap MX", "Same TZ"],
+                reason: "Like Mexico City but smaller, cheaper, less touristy. Growing tech scene. Same TZ."
+            },
+            {
+                name: "Tbilisi",
+                country: "🇬🇪 Georgia",
+                cost: 9,         // extremely cheap, $500-900/mo
+                english: 3,      // limited outside center
+                startup: 3,      // small but growing
+                visa: 9,         // 1-year visa-free for US, easy resid
+                timezone: 5,     // 4hr ahead of EST
+                climate: 5,      // 4 seasons, hot summers, cold winters
+                walkability: 5,  // walkable Old Town, hilly
+                food: 5,          // solid food, wine culture
+                wifi: 8,         // good
+                tags: ["Cheapest", "No Visa", "Wildcard"],
+                reason: "Extremely cheap, no visa for US, 1-year resid option. Emerging scene, not much English."
+            },
+            {
+                name: "Belgrade",
+                country: "🇷🇸 Serbia",
+                cost: 8,         // very cheap, $600-1000/mo
+                english: 3,      // limited English
+                startup: 4,      // growing tech scene
+                visa: 7,         // 90 days, easy resid, no visa for US
+                timezone: 6,     // 6hr ahead of EST
+                climate: 5,      // 4 seasons, continental
+                walkability: 7,  // walkable city center
+                food: 7,          // great food, meat culture, cheap
+                wifi: 8,         // good
+                tags: ["Cheap", "Good TZ", "Wildcard"],
+                reason: "Extremely cheap, decent TZ, EU candidate. English limited. Startup tiny but active."
+            },
+            {
+                name: "Cape Town",
+                country: "🇿🇦 South Africa",
+                cost: 7,         // cheap for USD, $900-1400/mo
+                english: 10,      // English official, great
+                startup: 4,      // growing, Silicon Cape
+                visa: 4,         // 90-day visa-free, easy extend
+                timezone: 3,     // 7-8hr ahead of EST — tough for US
+                climate: 8,     // Mediterranean, mild winters, warm summers
+                walkability: 7,  // walkable in Sea Point/Gardens
+                food: 8,          // excellent food, wine region
+                wifi: 8,         // good
+                tags: ["English", "Beautiful", "Tough TZ"],
+                reason: "English-first, cheap, beautiful, great weather. Timezone rough for US. Lifestyle elite."
+            },
+            {
+                name: "Panama City",
+                country: "🇵🇦 Panama",
+                cost: 5,         // moderate, $1200-1800/mo
+                english: 8,      // English widely spoken, business hub
+                startup: 4,      // growing hub for LatAm ops
+                visa: 7,         // friendly visa terms
+                timezone: 5,     // same as EST (Eastern Panama)
+                climate: 3,      // hot + humid year-round
+                walkability: 5,  // walkable Casco Viejo, car-centric
+                food: 7,          // good food, mix of cultures
+                wifi: 8,         // good
+                tags: ["English", "Business Hub", "Same TZ"],
+                reason: "English-first, USD currency, business hub. Expensive for what you get. Climate hot."
+            }
+        ];
+
+        function selectOption(question, option) {
+            answers[question] = option;
+            const block = document.querySelector(`[data-q="${question}"]`);
+            block.querySelectorAll('.option').forEach(el => el.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+            document.getElementById(`next${question}`).disabled = false;
+        }
+
+        function toggleMultiOption(question, option, el) {
+            if (!multiAnswers[question]) multiAnswers[question] = [];
+            const idx = multiAnswers[question].indexOf(option);
+            if (idx > -1) {
+                multiAnswers[question].splice(idx, 1);
+                el.classList.remove('selected');
+            } else {
+                multiAnswers[question].push(option);
+                el.classList.add('selected');
+            }
+            document.getElementById(`next${question}`).disabled = multiAnswers[question].length === 0;
+        }
+
+        function nextQuestion(current) {
+            document.querySelector(`[data-q="${current}"]`).classList.remove('active');
+            document.querySelector(`[data-q="${current + 1}"]`).classList.add('active');
+            updateProgress();
+        }
+
+        function prevQuestion(current) {
+            document.querySelector(`[data-q="${current}"]`).classList.remove('active');
+            document.querySelector(`[data-q="${current - 1}"]`).classList.add('active');
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const total = 11;
+            const answered = Object.keys(answers).length + Object.keys(multiAnswers).filter(k => multiAnswers[k].length > 0).length;
+            const pct = Math.round((answered / total) * 100);
+            document.getElementById('progress').style.width = pct + '%';
+        }
+
+        function updateSliderLabel() {
+            const val = parseInt(document.getElementById('cost-slider').value);
+            const label = document.getElementById('slider-label');
+            if (val < 30) {
+                label.textContent = "Budget mode — maximize savings";
+            } else if (val < 70) {
+                label.textContent = "Balanced — cost and experience both matter";
+            } else {
+                label.textContent = "Experience mode — worth the cost";
+            }
+        }
+
+        function updateSliderFromText() {
+            // Auto-enable next button when text is entered
+            const text = document.getElementById('q11-input').value;
+            answers[11] = text.length > 20 ? 'done' : '';
+        }
+
+        function calculateResults() {
+            const q1 = answers[1]; // cost priority
+            const q2 = answers[2]; // english
+            const q3 = answers[3]; // community
+            const q4 = answers[4]; // walkability
+            const q5 = answers[5]; // climate
+            const q7 = answers[7]; // timezone
+            const q8 = answers[8]; // primary goal
+            const q9 = multiAnswers[9] || []; // dealbreakers
+            const q10 = answers[10]; // what pulls
+
+            // Calculate weights based on answers
+            let weights = {
+                cost: q1 === 'A' ? 5 : q1 === 'B' ? 3 : 2,
+                english: q2 === 'A' ? 5 : q2 === 'B' ? 3 : 1,
+                startup: (q3 === 'A' || q8 === 'B') ? 5 : q3 === 'B' ? 3 : 2,
+                visa: 2,
+                timezone: q7 === 'A' ? 5 : q7 === 'B' ? 3 : 1,
+                climate: q5 === 'B' ? 5 : q5 === 'A' ? 3 : 2,
+                walkability: q4 === 'A' ? 5 : 2,
+                food: 3
+            };
+
+            // Adjust for dealbreakers
+            const excludeCities = [];
+            if (q9.includes('A')) { // hot climate no
+                excludeCities.push('Manila', 'Kuala Lumpur', 'Ho Chi Minh City', 'Chiang Mai');
+            }
+            if (q9.includes('B')) { // real winter no
+                excludeCities.push('Prague', 'Budapest', 'Belgrade', 'Tbilisi');
+            }
+
+            // Adjust for what pulls
+            if (q10 === 'A') { // Manila
+                weights.english += 2;
+                weights.cost += 1;
+            } else if (q10 === 'B') { // Mexico City
+                weights.walkability += 2;
+                weights.food += 2;
+                weights.cost += 1;
+            } else if (q10 === 'C') { // Madrid
+                weights.timezone += 2;
+                weights.startup += 1;
+            }
+
+            // Cost slider from Q11
+            const sliderVal = parseInt(document.getElementById('cost-slider').value);
+            if (sliderVal < 40) {
+                weights.cost = Math.max(weights.cost, 5);
+            }
+
+            // Score cities
+            let scored = cities.map(city => {
+                let score = 0;
+                let breakdown = [];
+
+                if (!excludeCities.includes(city.name)) {
+                    score += city.cost * weights.cost;
+                    breakdown.push(`Cost: ${city.cost}×${weights.cost}=${city.cost * weights.cost}`);
+
+                    score += city.english * weights.english;
+                    score += city.startup * weights.startup;
+                    score += city.visa * weights.visa;
+                    score += city.timezone * weights.timezone;
+                    score += city.climate * weights.climate;
+                    score += city.walkability * weights.walkability;
+                    score += city.food * weights.food;
+                    score += city.wifi * 1; // wifi always matters
+                } else {
+                    score = -999; // excluded
+                }
+
+                return { ...city, totalScore: score, breakdown };
+            });
+
+            scored = scored.filter(c => c.totalScore > -999);
+            scored.sort((a, b) => b.totalScore - a.totalScore);
+
+            // Find max possible score for normalization
+            const maxPossible = 10 * (weights.cost + weights.english + weights.startup + weights.visa + weights.timezone + weights.climate + weights.walkability + weights.food + 1);
+
+            // Render results
+            const top = scored[0];
+            const topPct = Math.round((top.totalScore / maxPossible) * 100);
+
+            document.getElementById('top-city-name').textContent = top.name;
+            document.getElementById('top-city-country').textContent = top.country;
+            document.getElementById('top-score').textContent = topPct + '/100';
+            document.getElementById('top-reason').textContent = top.reason;
+
+            const list = document.getElementById('ranked-list');
+            list.innerHTML = '';
+
+            scored.slice(0, 10).forEach((city, i) => {
+                const pct = Math.round((city.totalScore / maxPossible) * 100);
+                const isTop = i === 0;
+
+                const tagsHtml = city.tags.slice(0, 3).map(tag =>
+                    `<span class="city-tag ${isTop && i === 0 ? 'hot' : ''}">${tag}</span>`
+                ).join('');
+
+                list.innerHTML += `
+                    <div class="rank-card ${isTop ? 'top-rank' : ''}">
+                        <div class="rank-number">${i + 1}</div>
+                        <div class="rank-info">
+                            <div class="rank-name">${city.name} ${city.country}</div>
+                            <div class="rank-details">${city.tags.slice(0, 2).join(' · ')}</div>
+                            <div class="city-tags">${tagsHtml}</div>
+                        </div>
+                        <div class="rank-score">
+                            <div class="rank-score-pct">${pct}</div>
+                            <div class="rank-score-label">match</div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Hide questions, show results
+            document.querySelectorAll('.question-block').forEach(el => el.classList.remove('active'));
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('progress').style.width = '100%';
+        }
+
+        function restartQuiz() {
+            answers = {};
+            multiAnswers = {};
+            document.getElementById('results').style.display = 'none';
+            document.querySelectorAll('.question-block').forEach(el => el.classList.remove('active'));
+            document.querySelector('[data-q="1"]').classList.add('active');
+            document.getElementById('progress').style.width = '0%';
+            document.querySelectorAll('.option').forEach(el => el.classList.remove('selected'));
+            document.querySelectorAll('.nav-buttons button').forEach(el => {
+                if (el.id && el.id.startsWith('next')) el.disabled = true;
+            });
+            document.getElementById('q11-input').value = '';
+            document.getElementById('cost-slider').value = 50;
+            updateSliderLabel();
+        }
+    </script>
+</body>
+</html>

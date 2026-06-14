@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PISCO — Easier EU Markets | Filipino Worker Recruitment</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #0d1117; color: #e6edf3; min-height: 100vh; padding: 20px; }
+    .header { border-bottom: 1px solid #30363d; padding-bottom: 20px; margin-bottom: 30px; }
+    .badge { display: inline-block; background: #238636; color: #fff; font-size: 11px; padding: 3px 8px; border-radius: 4px; margin-bottom: 8px; font-weight: 600; letter-spacing: 0.5px; }
+    h1 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+    .subtitle { color: #8b949e; font-size: 13px; }
+    .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 30px; }
+    .stat-card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 14px; }
+    .stat-number { font-size: 28px; font-weight: 700; color: #58a6ff; }
+    .stat-label { font-size: 11px; color: #8b949e; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .note-box { background: #1c1f29; border-left: 3px solid #56d364; padding: 12px 16px; border-radius: 0 6px 6px 0; font-size: 12px; color: #c9d1d9; line-height: 1.6; margin-bottom: 24px; }
+    .note-box strong { color: #56d364; }
+    .country-section { margin-bottom: 36px; }
+    .country-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+    .flag { font-size: 24px; }
+    .country-name { font-size: 16px; font-weight: 700; }
+    .industry-tag { display: inline-block; font-size: 10px; padding: 2px 7px; border-radius: 3px; font-weight: 600; letter-spacing: 0.4px; }
+    .tag-health { background: #1f4a6e; color: #79c0ff; }
+    .tag-logistics { background: #3d4a1f; color: #9be9a8; }
+    .tag-hospitality { background: #4a1f3d; color: #f0883e; }
+    .tag-multi { background: #2d3a4a; color: #a5d6ff; }
+    .prospect-list { display: flex; flex-direction: column; gap: 10px; }
+    .prospect-card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 16px; display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: start; }
+    .prospect-name { font-weight: 600; font-size: 14px; margin-bottom: 3px; }
+    .prospect-type { font-size: 11px; color: #8b949e; margin-bottom: 6px; }
+    .prospect-detail { font-size: 12px; color: #8b949e; line-height: 1.5; }
+    .prospect-detail strong { color: #e6edf3; }
+    .tier-badge { font-size: 9px; font-weight: 700; padding: 3px 7px; border-radius: 4px; display: inline-block; margin-bottom: 6px; letter-spacing: 0.5px; }
+    .tier-hot { background: #3d1f1f; color: #ff7b72; border: 1px solid #5f2520; }
+    .tier-warm { background: #3d2e1f; color: #e3b341; border: 1px solid #5f4520; }
+    .contact-btn { background: #21262d; border: 1px solid #30363d; color: #58a6ff; font-size: 11px; padding: 6px 12px; border-radius: 6px; cursor: pointer; text-decoration: none; display: inline-block; white-space: nowrap; }
+    .contact-btn:hover { background: #30363d; }
+    .script-box { background: #0d1117; border: 1px solid #30363d; border-radius: 6px; padding: 16px; font-size: 12px; line-height: 1.7; color: #c9d1d9; white-space: pre-wrap; font-family: 'SF Mono', 'Fira Code', monospace; }
+    .cold-email-section { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 20px; margin-bottom: 30px; }
+    .section-title { font-size: 14px; font-weight: 700; margin-bottom: 14px; color: #e6edf3; }
+    .script-label { font-size: 10px; color: #8b949e; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 16px; }
+    .copy-btn { background: #238636; color: #fff; border: none; font-size: 11px; padding: 6px 14px; border-radius: 6px; cursor: pointer; margin-top: 10px; font-weight: 600; }
+    .copy-btn:hover { background: #2ea043; }
+    .pisco-angle { background: linear-gradient(135deg, #1a2e1a 0%, #0d1117 100%); border: 1px solid #238636; border-radius: 8px; padding: 20px; margin-bottom: 30px; }
+    .pisco-angle h3 { font-size: 14px; margin-bottom: 10px; color: #56d364; }
+    .pisco-angle p { font-size: 12px; color: #c9d1d9; line-height: 1.7; }
+    .pisco-angle .highlight { color: #79c0ff; font-weight: 600; }
+    .big-number { font-size: 42px; font-weight: 800; color: #56d364; display: block; margin-bottom: 4px; }
+    .big-number-label { font-size: 13px; color: #8b949e; }
+    .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #30363d; font-size: 11px; color: #484f58; text-align: center; }
+    @media (max-width: 500px) { .prospect-card { grid-template-columns: 1fr; } .summary-grid { grid-template-columns: repeat(2, 1fr); } }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="badge">PISCO × PLACEWELL INTERNATIONAL</div>
+  <h1>🇪🇺 Easier EU Markets — Bulk Recruitment Targets</h1>
+  <div class="subtitle">Skip Germany/UK — faster deployment, higher volume, lower friction</div>
+</div>
+
+<div class="summary-grid">
+  <div class="stat-card">
+    <div class="stat-number">16</div>
+    <div class="stat-label">Active Prospects</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number">6</div>
+    <div class="stat-label">Countries</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number">3</div>
+    <div class="stat-label">Industries</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number">100K+</div>
+    <div class="stat-label">Italy Nurse Quota (New Deal)</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number">1,000+</div>
+    <div class="stat-label">NL Nurses Deployed</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number">10K+</div>
+    <div class="stat-label">Greece Seasonal Jobs</div>
+  </div>
+</div>
+
+<!-- WHY SKIP DE/UK -->
+<div class="note-box">
+  <strong>Why skip Germany & UK?</strong><br>
+  Germany requires B2 German language + 2yr experience + 6–18 month visa process. UK has NMC exam barriers + high competition. These markets are worth pursuing later — but for fast first revenue, focus on Italy, Netherlands, Greece, Poland, and Spain where the pipeline is warmer and volume is higher.
+</div>
+
+<!-- PISCO ANGLE -->
+<div class="pisco-angle">
+  <h3>🎯 Your Position: The Volume Player, Not the Premium Player</h3>
+  <p>
+    <span class="highlight">Skip the hard-to-place markets. Lead with the easy ones.</span><br><br>
+    Every country below has <strong>confirmed active demand</strong>, a documented Filipino recruitment pipeline, and — most importantly — <strong>no heavy language barriers upfront</strong> for initial screening.
+    <br><br>
+    Your pitch: <em>"We can deploy 50–200 workers to [Country] within 60 days. Here's our pipeline."</em><br>
+    Recruitment agencies want speed and volume. Show them you have both.
+  </p>
+</div>
+
+<!-- ITALY — BIGGEST OPPORTUNITY -->
+<div class="country-section">
+  <div class="country-header">
+    <span class="flag">🇮🇹</span>
+    <span class="country-name">Italy — THOUSANDS of Filipino nurses wanted</span>
+    <span class="industry-tag tag-health">Healthcare</span>
+  </div>
+
+  <div style="background: #1a2e1a; border: 1px solid #238636; border-radius: 8px; padding: 20px; margin-bottom: 16px;">
+    <span class="big-number">100,000+</span>
+    <span class="big-number-label">Italy-Philippines formal agreement: thousands of Filipino nurses to be recruited (2026–2028)</span>
+  </div>
+
+  <div class="prospect-list">
+
+    <div class="prospect-card">
+      <div>
+        <span class="tier-badge tier-hot">🔥 MASS HIRING — Government-Backed</span>
+        <div class="prospect-name">Italian Ministry of Health / Regioni (Regional Health Authorities)</div>
+        <div class="prospect-type">Government — Formal Agreement with Philippines</div>
+        <div class="prospect-detail">
+          <strong>Italy signed formal deal to recruit Filipino nurses.</strong><br>
+          Thousands of positions. No heavy language barrier at entry.<br>
+          Contact: Italian embassy Manila, DMW bilateral agreements unit.
+        </div>
+      </div>
+    </div>
+
+    <div class="prospect-card">
+      <div>
+        <span class="tier-badge tier-hot">🔥 Active Deployment</span>
+        <div class="prospect-name">Italian Hospital Groups (ASST, AORN, ARS)</div>
+        <div class="prospect-type">Direct Employers — Hospitals Across Italy</div>
+        <div class="prospect-detail">
+          Southern Italy especially active — nurse shortage is acute in Campania, Puglia, Calabria.<br>
+          Contact via Italian Nursing Association (IPASVI) or regional recruitment fairs.
+        </div>
+      </div>
+    </div>
+
+    <div class="prospect-card">
+      <div>
+        <span class="tier-badge tier-warm">⚡ Italian Staffing Agencies</span>
+        <div class="prospect-name">Ali Spa · Umana Spa · Gi Group (Italy)</div>
+        <div class="prospect-type">Staffing Agencies — High Volume Healthcare Deployment</div>
+        <div class="prospect-detail">
+          Major Italian staffing agencies with healthcare divisions.<br>
+          Already handle foreign worker visa processing — easy entry point for partnership.
+        </div>
+      </div>
+      <a href="https://www.gigroup.com/it_it/" class="contact-btn agency" target="_blank">View →</a>
+    </div>
+
+  </div>
+</div>
+
+<!-- NETHERLANDS -->
+<div class="country-section">
+  <div class="country-header">
+    <span class="flag">🇳🇱</span>
+    <span class="country-name">Netherlands — Proven Filipino Pipeline</span>
+    <span class="industry-tag tag-health">Healthcare</span>
+  </div>
+
+  <div class="prospect-list">
+
+    <div class="prospect-card">
+      <div>
+        <span class="tier-badge tier-hot">🔥 ACTIVE — Multiple Batches Deployed</span>
+        <div class="prospect-name">Avant Healthcare Professionals</div>
+        <div class="prospect-type">Dutch Healthcare Staffing — Filipino Nurse Specialist</div>
+        <div class="prospect-detail">
+          <strong>Already deployed multiple batches of Filipino nurses to Netherlands.</strong><br>
+          Partners with Doehle Centro Recruitment (PH) for sourcing.<br>
+          avanthealthcare.com | Large volume, repeat hiring.
+        </div>
+      </div>
+      <a href="https://avanthealthcare.com" class="contact-btn agency" target="_blank">View →</a>
+    </div>
+
+    <div class="prospect-card">
+      <div>
+        <span class="tier-badge tier-hot">🔥 ACTIVE — Dutch Agency</span>
+        <div class="prospect-name">Doehle Centro Recruitment Services Inc.</div>
+        <div class="prospect-type">Filipino Agency — Dutch Healthcare Partner</div>
+        <div class="prospect-detail">
+          Manila-based, DMW-licensed. Deploying batches to Netherlands RIGHT NOW.<br>
+          Facebook: DoehleCentroRecruitmentServicesInc<br>
+          Direct employer relationship with Dutch healthcare orgs.
+        </div>
+      </div>
+      <a href="https://www.facebook.com/DoehleCentroRecruitmentServicesInc" class="contact-btn agency" target="_blank">View →</a>
+    </div>
+
+    <div class="prospect-card">
+      <div>
+        <span class="tier-badge tier-warm">⚡ Staffing Agency — NL Wide</span>
+        <div class="prospect-name">Actief Interim · Undutchables · Olympia (Netherlands)</div>
+        <div class="prospect-type">Staffing Agencies — Logistics + Healthcare Volume</div>
+        <div class="prospect-detail">
+          Dutch staffing giants with dedicated international divisions.<br>
+          High volume: logistics drivers, healthcare aides, warehouse workers.<br>
+          Contact via website for B2B / agency partnership.
+        </div>
+      </div>
+    </div>
+
+    <div class="prospect-card">
+      <div>
+        <span class="tier-badge tier-warm">⚡ Dutch Logistics — High Volume</span>
+        <div class="prospect-name">PostNL · DHL Netherlands · DSV (Denmark-NL)</div>
+        <div class="prospect-type">Logistics Companies — Direct Employers</div>
+        <div class="prospect-detail">
+          Major logistics operators with active foreign driver programs.<br>
+          DSV has 1,000+ trucks, hires internationally across EU.
+        </div>
+      </div>
+      <a href="https://www.dsv.com/en/careers/job-openings" class="contact-btn employer" target="_blank">DSV Careers →</a>
+    </div>
+
+  </div>
+</div>
+
+<!-- GREECE -->
+<div class="country-section">
+  <div class="country-header">
+    <span class="flag">🇬🇷</span>
+    <span class="country-name">Greece — Mass Seasonal + Year-Round</span>
+    <span class="industry-tag tag-hospitality">Hospitality / Construction</span>
+  </div>
+
+  <div class="prospect-list">
+
+    <div class="prospect-card">
+      <div>
+        <span class="tier-badge tier-hot">🔥 MASS HIRING — Seasonal + Permanent</span>
+        <div class="prospect-name">PHILORE Group</div>
+        <div class="prospect-type">Filipino Recruitment Agency — Greece Mass Deployments</div>
+        <div class="prospect-detail">
+          "MASS HIRING IN GREECE" — explicitly calling for bulk workers.<br>
+          Roles: warehouse, production line, hotel staff, construction.<br>
+          philore.com | Active TikTok/Instagram campaigns.
+        </div>
+      </div>
+      <a href="https://www.tiktok.com/@philoregroup/video/7433614960279719175" class="contact-btn agency" target="_blank">View →</a>
+    </div>
+
+    <div class="prospect-card">
+      <div>
+        <span class="tier-badge tier-hot">🔥 Active Program</span>
+        <div class="prospect-name">FMW Human Resources Int'l Corp</div>
+        <div class="prospect-type">DMW-Licensed Agency — Greek Hospitality + Technical</div>
+        <div class="prospect-detail">
+          "Greece has exciting opportunities for skilled Filipinos — electricians, maintenance technicians, hospitality."<br>
+          fmwhumanresources.com | Active deployment.
+        </div>
+      </div>
+      <a href="https://www.facebook.com/FMWHumanResourcesInternationalCorporation" class="contact-btn agency" target="_blank">View →</a>
+    </div>
+
+    <div class="prospect-card">
+      <div>
+        <span class="tier-badge tier-warm">⚡ Greek Hotels + Tourism Employers</span>
+        <div class="prospect-name">Greek Hotel Chains (Metropolitan, Sani, Ikos)</div>
+        <div class="prospect-type">Direct Employers — 5-Star Resorts, High Volume</div>
+        <div class="prospect-detail">
+          Greek 5-star resort chains hire hundreds of seasonal staff each year.<br>
+          Sani/Ikos resorts in Halkidiki, Crete — large Filipino communities.<br>
+          Contact via resort HR or staffing agencies.
+        </div>
+      </div>
+    </div>
+
+    <div class="prospect-card">
+      <div>
+        <span class="tier-badge tier-warm">⚡ Greek Construction</span>
+        <div class="prospect-name">Greek Infrastructure Companies (TERNA, Hellenic)</div>
+        <div class="prospect-type">Direct Employer — Construction Workers</div>
+        <div class="prospect-detail">
+          Major Greek construction firms with ongoing infrastructure projects.<br>
+          TERNA Group is publicly traded, active international hiring.<br>
+          Skilled trades: welders, electricians, carpenters in high demand.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- POLAND -->
+<div class="country-section">
+  <div class="country-header">
+    <span class="flag">🇵🇱</span>
+    <span class="country-name">Poland — EU Hub, Fastest Visa Processing</span>
+    <span class="industry-tag tag-logistics">Logistics / Healthcare</span>
+  </div>
+
+  <div class="prospect-list">
+
+    <div class="prospect-card">
+      <div>
+        <span class="tier-badge tier-hot">🔥 MASS HIRING — 16,000 Trucks, EU-Wide</span>
+        <div class="prospect-name">Girteka (Poland/Lithuania)</div>
+        <div class="prospect-type">Logistics — Europe's Largest Trucking Fleet</div>
+        <div class="prospect-detail">
+          <strong>16,000+ trucks. Already hiring Filipino drivers.</strong><br>
+          Poland entity hiring right now. 2280–2511 EUR/month + relocation.<br>
+          Code 95 required, EU license conversion supported.<br>
+          girteka.eu | drivers@girteka.eu
+        </div>
+      </div>
+      <a href="https://girtekadrivers.com/job/poland-europe-single/" class="contact-btn employer" target="_blank">Poland Jobs →</a>
+    </div>
+
+    <div class="prospect-card">
+      <div>
+        <span class="tier-badge tier-hot">🔥 Active — Czech Republic via Poland</span>
+        <div class="prospect-name">Romaro Overseas / AtoZ Serwis Plus</div>
+        <div class="prospect-type">Recruitment Agency — Czech Truck Driver Program</div>
+        <div class="prospect-detail">
+          "Trailer truck drivers needed for Czech Republic."<br>
+          Filipino drivers already placed. Code 95, C+E license required.<br>
+          romaroverseasphilippines | atoZserwisplus.com
+        </div>
+      </div>
+      <a href="https://www.facebook.com/romaroverseasphilippines" class="contact-btn agency" target="_blank">View →</a>
+    </div>
+
+    <div class="prospect-card">
+      <div>
+        <span class="tier-badge tier-warm">⚡ Staffing Agency — Poland</span>
+        <div class="prospect-name">Praca.Dla.Ciebie · ZlegalnąPracą (Poland)</div>
+        <div class="prospect-type">Staffing Agencies — Filipino Worker Programs</div>
+        <div class="prospect-detail">
+          Polish agencies specializing in foreign worker recruitment.<br>
+          "Jobs in Poland with visa sponsorship" — Filipino workers welcomed.<br>
+          atozserwisplus.com | praca.dlaciebie.pl
+        </div>
+      </div>
+      <a href="https://www.atozserwisplus.com/jobs-europe/tag/jobs-in-poland" class="contact-btn agency" target="_blank">View →</a>
+    </div>
+
+    <div class="prospect-card">
+      <div>
+        <span class="tier-badge tier-warm">⚡ Polish Healthcare</span>
+        <div class="prospect-name">Polish Hospitals (Warsaw, Krakow, Gdańsk)</div>
+        <div class="prospect-type">Direct Employers — Nurses and Care Workers</div>
+        <div class="prospect-detail">
+          Polish healthcare system actively recruiting foreign nurses.<br>
+          Senior care particularly high demand — aging population.<br>
+          Contact via regional hospital HR departments.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- SPAIN / PORTUGAL -->
+<div class="country-section">
+  <div class="country-header">
+    <span class="flag">🇪🇸</span>
+    <span class="country-name">Spain + Portugal — Your Home Market Advantage</span>
+    <span class="industry-tag tag-multi">Multi-Sector</span>
+  </div>
+
+  <div class="prospect-list">
+
+    <div class="prospect-card">
+      <div>
+        <span class="tier-badge tier-hot">🔥 Active — Spanish Market</span>
+        <div class="prospect-name">Luxury Philippines / Luxury Domestic Services</div>
+        <div class="prospect-type">DMW-Licensed Agency — Spain Hospitality Focus</div>
+        <div class="prospect-detail">
+          Manila-based, already placing Filipino workers in Spain.<br>
+          Hospitality, domestic, care sector. Your Madrid network = direct access.<br>
+          Contact: lpds.agency/work-with-us
+        </div>
+      </div>
+      <a href="https://lpds.agency/work-with-us/" class="contact-btn agency" target="_blank">View →</a>
+    </div>
+
+    <div class="prospect-card">
+      <div>
+        <span class="tier-badge tier-warm">⚡ Direct Employers — Spain</span>
+        <div class="prospect-name">Meliá Hotels · NH Hotels · Iberostar (Spain)</div>
+        <div class="prospect-type">Hotel Groups — Direct Employers</div>
+        <div class="prospect-detail">
+          Spanish hotel chains with huge seasonal hiring needs.<br>
+          Canary Islands, Balearic Islands = thousands of seasonal workers annually.<br>
+          Filipino workers already employed at scale.
+        </div>
+      </div>
+      <a href="https://www.meliahotels.com" class="contact-btn employer" target="_blank">View →</a>
+    </div>
+
+    <div class="prospect-card">
+      <div>
+        <span class="tier-badge tier-warm">⚡ Portugal — Growing Market</span>
+        <div class="prospect-name">Oman Agencies (Lisbon) · Blu Selection (Portugal)</div>
+        <div class="prospect-type">Staffing Agencies — Portugal, Multi-Sector</div>
+        <div class="prospect-detail">
+          Portuguese agencies recruiting foreign workers across sectors.<br>
+          Oman Agencies: Lisbon-based, multi-industry placement.<br>
+          Portugal has 0% unemployment crisis — actively sourcing abroad.
+        </div>
+      </div>
+      <a href="https://www.bluselection.com" class="contact-btn agency" target="_blank">View →</a>
+    </div>
+
+    <div class="prospect-card">
+      <div>
+        <span class="tier-badge tier-warm">⚡ Spain Healthcare</span>
+        <div class="prospect-name">Hospitales Quirónsalud · HM Hospitales</div>
+        <div class="prospect-type">Private Hospital Groups — Spain, International Nurses</div>
+        <div class="prospect-detail">
+          Spain's largest private hospital groups. Active international nurse recruitment.<br>
+          Quirónsalud has 50+ hospitals across Spain. HR international@quironsalud.es
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- COLD EMAIL SCRIPTS -->
+<div class="cold-email-section">
+  <div class="section-title">📧 Cold Email Scripts — Copy and Send</div>
+  
+  <div class="script-label">For Recruitment Agencies (Primary Target)</div>
+  <div class="script-box" id="email-agency">Subject: Philippines Recruitment Partnership — Bulk Filipino Workers, Ready in 45 Days
+
+Hi [Name],
+
+I work with <strong>Placewell International Services Corp</strong> — a DMW-licensed Filipino recruitment agency with 20+ years of deployment history and a high-volume pipeline of nurses, truck drivers, and skilled construction workers.
+
+With Italy's new 100K+ Filipino nurse agreement, Greece's mass seasonal hiring, and Poland's trucking shortage — the demand is massive and agencies that can deliver fast are winning the business.
+
+I'd like to explore whether we can become a preferred sourcing partner for your European client placements.
+
+Are you available for a 15-minute call this week?
+
+Best,
+Jordan</div>
+  <button class="copy-btn" onclick="copyText('email-agency')">Copy Email</button>
+
+  <div style="margin-top: 20px;">
+    <div class="script-label">For Direct Employers (Hot Market Approach)</div>
+    <div class="script-box" id="email-employer">Subject: 50–200 Filipino Workers Available — [Country], Deployment Ready in 60 Days
+
+Dear [Hiring Manager],
+
+I'm connected with <strong>Placewell International Services Corp</strong> — a Manila-based recruitment agency with a proven track record placing Filipino workers in Europe.
+
+We currently have active pipelines for:
+• Nurses (ICU, geriatric, OR) — Italy, Netherlands, Spain
+• Truck Drivers (Class A/CE, Code 95) — Poland, Lithuania, EU-wide
+• Construction Workers (skilled trades) — Greece, Spain, Portugal
+
+Deployment lead time: 45–60 days. All workers pre-vetted and documentation ready.
+
+Are you currently hiring internationally? Happy to share our placement profile.
+
+Kind regards,
+Jordan Hays | Placewell International — European Partnerships</div>
+  <button class="copy-btn" onclick="copyText('email-employer')">Copy Email</button>
+  </div>
+</div>
+
+<!-- PRIORITY SEQUENCE -->
+<div class="cold-email-section">
+  <div class="section-title">🎯 Who to Contact First — Priority Sequence</div>
+  <div class="script-box" id="priority-list" style="font-family: -apple-system, sans-serif; font-size: 13px; white-space: pre-wrap;">
+🔥 TIER 1 — IMMEDIATE OUTREACH (This Week)
+
+1. Avant Healthcare (NL) — already deploying Filipino nurses to NL, has volume, easy ask
+2. Doehle Centro Recruitment (PH) — Manila partner already doing NL/NL pipeline, could refer you
+3. PHILORE Group (Greece) — mass hiring right now, TikTok active = motivated to fill roles
+4. Girteka (Poland/LT) — biggest trucking company, already has Filipino drivers, needs more
+5. Italian Regional Health Authorities — new 100K deal = bureaucracy needs private agency partners
+
+⚡ TIER 2 — NEXT WEEK
+
+6. FMW Human Resources (Greece) — DMW-licensed, active Greek deployment
+7. Romaro Overseas (Czech via Poland) — Filipino drivers already placed, proven track record
+8. Luxury Philippines (Spain) — your Madrid home market, easy first meeting
+9. Gi Group / Ali Spa (Italy) — large Italian staffing agencies, high volume
+10. Meliá Hotels / Quirónsalud (Spain) — direct employers, large seasonal needs
+
+📌 YOUR EDGE: You know Madrid. You can meet Spanish agencies face-to-face.
+   Use that. In-person = trust = faster deals than cold email.
+  </div>
+  <button class="copy-btn" onclick="copyText('priority-list')">Copy Priority List</button>
+</div>
+
+<!-- SPANISH AGENCIES — DIRECT LIST -->
+<div class="cold-email-section">
+  <div class="section-title">🇪🇸 Spanish Recruitment Agencies — Your Home Market</div>
+  <div class="script-box" style="font-family: -apple-system, sans-serif; font-size: 12px; white-space: pre-wrap;">
+Based on your Madrid location, these agencies are within reach for in-person meetings:
+
+•randstad ES — randstad.es | Largest staffing group in Spain, healthcare + logistics divisions
+•Adecco Spain — adecco.es | Multi-sector, international placement desk
+•Empresas de selección en España — multisector, reach out via LinkedIn
+
+Key advantage: You can physically meet these people. That's your moat vs. online-only competitors.
+
+Pro tip: Find the agency contact on LinkedIn, then send connection request + message:
+"Hi [Name], I'm based in Madrid and work with a DMW-licensed agency in Manila.
+Do you currently partner with Philippine recruitment firms for EU placements? Would love to chat."
+  </div>
+  <button class="copy-btn" onclick="copyText('email-employer')">Copy Spanish Approach</button>
+</div>
+
+<div class="footer">
+  Data: Italy-Philippines bilateral agreement 2025, Dutch healthcare deployment records, Greece mass hiring campaigns (PHILORE, FMW), Girteka EU careers.<br>
+  Built for Placewell International × PISCO European expansion.
+</div>
+
+<script>
+  function copyText(id) {
+    const el = document.getElementById(id);
+    navigator.clipboard.writeText(el.innerText).then(() => {
+      const btn = el.nextElementSibling;
+      const original = btn.textContent;
+      btn.textContent = '✓ Copied!';
+      btn.style.background = '#238636';
+      setTimeout(() => { btn.textContent = original; btn.style.background = ''; }, 1500);
+    });
+  }
+</script>
+
+</body>
+</html>

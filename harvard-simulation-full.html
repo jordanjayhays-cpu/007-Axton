@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Harvard GSCM — Full Simulation</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #24292e;
+      --muted: #586069;
+      --link: #0366d6;
+      --border: #e1e4e8;
+      --border-dark: #c6cbd1;
+      --accent: #0366d6;
+      --accent-light: #f1f8ff;
+      --green: #28a745;
+      --green-light: #dcffe4;
+      --red: #cb2431;
+      --red-light: #ffdce0;
+      --orange: #e36209;
+      --orange-light: #fff5b1;
+      --purple: #6f42c1;
+      --code-bg: rgba(27,31,35,0.06);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.5;
+      padding: 24px 16px;
+    }
+    .container { max-width: 860px; margin: 0 auto; }
+    h1 { font-size: 2em; font-weight: 600; padding-bottom: 0.3em; border-bottom: 1px solid var(--border); margin: 24px 0 16px; }
+    h2 { font-size: 1.5em; font-weight: 600; padding-bottom: 0.3em; border-bottom: 1px solid var(--border); margin: 32px 0 16px; }
+    h3 { font-size: 1.1em; font-weight: 600; margin: 20px 0 8px; color: var(--text); }
+    p { margin-bottom: 14px; }
+
+    .intro-box {
+      background: var(--accent-light);
+      border: 2px solid var(--accent);
+      border-radius: 8px;
+      padding: 20px 24px;
+      margin-bottom: 32px;
+    }
+    .intro-box h1 { border: none; margin: 0 0 8px; padding: 0; }
+    .intro-box p { margin-bottom: 0; color: var(--muted); }
+
+    /* Year selector */
+    .year-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .year-tab {
+      background: var(--bg);
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 20px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+    .year-tab:hover { border-color: var(--accent); }
+    .year-tab.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    /* Room cards */
+    .room {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 28px;
+      overflow: hidden;
+    }
+    .room-header {
+      background: #24292e;
+      color: white;
+      padding: 14px 20px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .room-header .room-score { font-size: 0.8rem; opacity: 0.8; }
+    .room-body { padding: 20px; }
+
+    /* Info callouts */
+    .callout {
+      border-left: 4px solid var(--accent);
+      background: var(--accent-light);
+      padding: 12px 16px;
+      margin: 12px 0;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.9rem;
+    }
+    .callout.warn { border-color: var(--orange); background: var(--orange-light); }
+    .callout.critical { border-color: var(--red); background: var(--red-light); }
+
+    /* Tables */
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; display: block; overflow: auto; }
+    th { font-weight: 600; padding: 8px 12px; border: 1px solid var(--border-dark); background: #f6f8fa; font-size: 0.85rem; text-align: left; }
+    td { padding: 8px 12px; border: 1px solid var(--border); font-size: 0.85rem; }
+    tr:nth-child(2n) td { background: #f6f8fa; }
+    .best-col { color: var(--green); font-weight: 700; }
+    .warn-col { color: var(--orange); font-weight: 600; }
+
+    /* Question blocks */
+    .question {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 16px 0;
+    }
+    .q-label {
+      font-weight: 700;
+      color: var(--accent);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+    .q-text { font-size: 0.95rem; margin-bottom: 14px; }
+    .q-sub { font-size: 0.85rem; color: var(--muted); margin-bottom: 12px; }
+
+    input[type="text"], input[type="number"], select {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border-dark);
+      border-radius: 6px;
+      color: var(--text);
+      padding: 9px 12px;
+      font-size: 0.9rem;
+      outline: none;
+    }
+    input:focus, select:focus { border-color: var(--accent); }
+
+    /* Two-column inputs for production */
+    .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 10px; }
+    .input-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 10px; }
+    .input-group { display: flex; flex-direction: column; gap: 4px; }
+    .input-group label { font-size: 0.8rem; color: var(--muted); font-weight: 500; }
+
+    /* Check button */
+    .check-btn {
+      display: inline-block;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 20px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 12px;
+    }
+    .check-btn:hover { opacity: 0.85; }
+
+    /* Feedback */
+    .feedback {
+      display: none;
+      margin-top: 12px;
+      padding: 12px 16px;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+    .feedback.show { display: block; }
+    .feedback.correct { background: var(--green-light); border: 1px solid var(--green); color: #1a7f37; }
+    .feedback.wrong  { background: var(--red-light); border: 1px solid var(--red); color: var(--red); }
+
+    /* Board cards */
+    .board-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; }
+    .board-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px 14px;
+      font-size: 0.85rem;
+    }
+    .board-card strong { color: var(--accent); display: block; margin-bottom: 4px; }
+
+    /* Score summary */
+    .score-panel {
+      background: var(--accent-light);
+      border: 2px solid var(--accent);
+      border-radius: 8px;
+      padding: 20px;
+      margin: 24px 0;
+    }
+    .score-panel h3 { color: var(--accent); margin-bottom: 16px; }
+    .score-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+    .score-row:last-child { border: none; }
+    .score-row .label { color: var(--muted); }
+    .score-row .val { font-weight: 700; }
+    .score-row .val.ok { color: var(--green); }
+    .score-row .val.bad { color: var(--red); }
+
+    /* Recommendation box */
+    .rec-box {
+      background: var(--bg);
+      border: 2px solid var(--border-dark);
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 20px 0;
+    }
+    .rec-box h4 { font-weight: 700; margin-bottom: 8px; }
+    .rec-item { padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+    .rec-item:last-child { border: none; }
+
+    /* Footer */
+    .footer { text-align: center; color: var(--muted); font-size: 0.85rem; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border); }
+    .footer a { color: var(--link); }
+
+    @media (max-width: 600px) {
+      .input-row, .input-row-3 { grid-template-columns: 1fr; }
+      .board-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- INTRO -->
+  <div class="intro-box">
+    <h1>🎯 Harvard GSCM — Full Simulation</h1>
+    <p>4 years. 4 rooms each year. Real data, real trade-offs. This is as close to the actual simulation as I can get you.</p>
+  </div>
+
+  <!-- YEAR TABS -->
+  <div class="year-tabs">
+    <div class="year-tab active" onclick="switchYear(1)" id="tab-1">Year 1</div>
+    <div class="year-tab" onclick="switchYear(2)" id="tab-2">Year 2</div>
+    <div class="year-tab" onclick="switchYear(3)" id="tab-3">Year 3</div>
+    <div class="year-tab" onclick="switchYear(4)" id="tab-4">Year 4</div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- YEAR 1                                                   -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div id="year-1">
+
+    <!-- ROOM 1: DESIGN ROOM -->
+    <div class="room">
+      <div class="room-header">ROOM 1 — DESIGN ROOM <span class="room-score">Decision 1 of 4</span></div>
+      <div class="room-body">
+
+        <div class="callout">
+          <strong>Your task:</strong> Choose one Model A design and one Model B design. Each has a price, cost, and demand estimate. Use the newsvendor framework (Cu vs Co) to decide.
+        </div>
+
+        <h3>Model A Options</h3>
+        <table>
+          <thead>
+            <tr><th>Design</th><th>Add. Cost</th><th>Total Cost</th><th>Price</th><th>Profit/Unit</th><th>Margin%</th><th>Demand Est.</th></tr>
+          </thead>
+          <tbody id="y1-model-a-table"></tbody>
+        </table>
+
+        <h3>Model B Options</h3>
+        <table>
+          <thead>
+            <tr><th>Design</th><th>Add. Cost</th><th>Total Cost</th><th>Price</th><th>Profit/Unit</th><th>Margin%</th><th>Demand Est.</th></tr>
+          </thead>
+          <tbody id="y1-model-b-table"></tbody>
+        </table>
+
+        <div class="callout warn">
+          <strong>Newsvendor reminder:</strong> Cu (underage) = Price − Cost. Co (overage) = Cost. If Co > Cu → underproduce. If Cu > Co → overproduce.<br>
+          But ALSO consider: higher margin = more to lose on unsold inventory. Balance profit against certainty.
+        </div>
+
+        <div class="question">
+          <div class="q-label">YOUR DECISION</div>
+          <div class="q-text">Choose one Model A design and one Model B design. Write the IDs.</div>
+          <div class="input-row">
+            <div class="input-group">
+              <label>Model A Design ID</label>
+              <input type="text" id="y1-design-a" placeholder="e.g. A2">
+            </div>
+            <div class="input-group">
+              <label>Model B Design ID</label>
+              <input type="text" id="y1-design-b" placeholder="e.g. B1">
+            </div>
+          </div>
+          <div class="input-group">
+            <label>Why did you pick these two designs? (1 sentence)</label>
+            <input type="text" id="y1-design-reason" placeholder="Your reasoning...">
+          </div>
+          <button class="check-btn" onclick="checkDesign(1)">Lock In Design Choices</button>
+          <div class="feedback" id="y1-design-feedback"></div>
+        </div>
+
+        <div class="rec-box">
+          <h4>📋 Design Decision Guide</h4>
+          <div class="rec-item"><strong>Model A:</strong> Stable, predictable demand. Focus on margin% and profit/unit. Pick the option with the best balance of high margin + reasonable certainty.</div>
+          <div class="rec-item"><strong>Model B:</strong> Volatile, uncertain demand. Calculate Co vs Cu carefully. If Co > Cu (cost of overstock > missed profit) → prefer designs with lower total cost. Consider CV (coefficient of variation) if demand data allows.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ROOM 2: FORECASTING ROOM -->
+    <div class="room">
+      <div class="room-header">ROOM 2 — FORECASTING ROOM <span class="room-score">Decision 2 of 4</span></div>
+      <div class="room-body">
+
+        <div class="callout">
+          <strong>Your task:</strong> Set the annual demand forecast for both models. The board will judge your choice. High variance among forecasters = HIGH uncertainty.
+        </div>
+
+        <h3>Forecaster Estimates</h3>
+        <table>
+          <thead><tr><th>Forecaster</th><th>Model A (units)</th><th>Model B (units)</th><th>Specialty</th></tr></thead>
+          <tbody id="y1-forecast-table"></tbody>
+        </table>
+
+        <div id="y1-forecast-stats" class="callout" style="margin-top:12px;"></div>
+
+        <div class="question">
+          <div class="q-label">YOUR DECISION</div>
+          <div class="q-text">What is your consensus demand forecast for each model? (average of 6 forecasters)</div>
+          <div class="input-row">
+            <div class="input-group">
+              <label>Model A Forecast (units)</label>
+              <input type="number" id="y1-fc-a" placeholder="0">
+            </div>
+            <div class="input-group">
+              <label>Model B Forecast (units)</label>
+              <input type="number" id="y1-fc-b" placeholder="0">
+            </div>
+          </div>
+          <div class="input-group">
+            <label>Total Demand (Model A + Model B)</label>
+            <input type="number" id="y1-fc-total" placeholder="A + B">
+          </div>
+          <div class="input-group" style="margin-top:8px;">
+            <label>For Model B: explain WHY you set this forecast (consider variance among forecasters)</label>
+            <input type="text" id="y1-fc-reason" placeholder="Consider: do the forecasters agree? Is Model B demand certain or uncertain?">
+          </div>
+          <button class="check-btn" onclick="checkForecast(1)">Lock In Forecast</button>
+          <div class="feedback" id="y1-fc-feedback"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ROOM 3: PRODUCTION ROOM -->
+    <div class="room">
+      <div class="room-header">ROOM 3 — PRODUCTION ROOM <span class="room-score">Decision 3 of 4</span></div>
+      <div class="room-body">
+
+        <div class="callout">
+          <strong>Your task:</strong> Choose your suppliers and production timing. Splitting between overseas and domestic is a CORE strategy. Read the board member preferences — they matter here.
+        </div>
+
+        <h3>Available Suppliers</h3>
+        <table>
+          <thead><tr><th>Supplier</th><th>Type</th><th>Cost/Unit</th><th>Lead Time</th><th>Min Order</th><th>Change Fee</th></tr></thead>
+          <tbody id="y1-supplier-table"></tbody>
+        </table>
+
+        <div class="callout warn">
+          <strong>Board member preference: Matheo says</strong> — "Models with higher demand certainty can be scheduled overseas. Higher uncertainty models need responsive domestic suppliers." Use this to guide your split.
+        </div>
+
+        <div class="question">
+          <div class="q-label">SUPPLIER ALLOCATION</div>
+          <div class="q-text">Allocate production across suppliers. You can split Model A and B across multiple suppliers. Earlier start = more flexible but more expensive.</div>
+
+          <h3 style="margin-top:16px;">Model A Production</h3>
+          <div id="y1-prod-a-inputs"></div>
+
+          <h3 style="margin-top:16px;">Model B Production</h3>
+          <div id="y1-prod-b-inputs"></div>
+
+          <div class="input-group" style="margin-top:12px;">
+            <label>Explain your supplier split strategy (1-2 sentences)</label>
+            <input type="text" id="y1-prod-reason" placeholder="Why did you split production this way?">
+          </div>
+          <button class="check-btn" onclick="checkProduction(1)">Lock In Production Plan</button>
+          <div class="feedback" id="y1-prod-feedback"></div>
+        </div>
+
+        <div class="rec-box">
+          <h4>📋 Production Strategy Guide</h4>
+          <div class="rec-item"><strong>Rule:</strong> Model A → cheapest (cost priority). Model B → fastest (lead time priority). BUT — you can split to get both cost AND flexibility.</div>
+          <div class="rec-item"><strong>Split strategy:</strong> Use FarFarAway for bulk (cheap, slow, Jan start). Use PrettyClose for responsive second half (expensive, fast, April/May start).</div>
+          <div class="rec-item"><strong>Change orders:</strong> Only issue if expected additional profit > change fee. Board judges you on this.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ROOM 4: BOARD REVIEW -->
+    <div class="room">
+      <div class="room-header">ROOM 4 — BOARD REVIEW <span class="room-score">Decision 4 of 4</span></div>
+      <div class="room-body">
+
+        <div class="callout">
+          <strong>Your task:</strong> Read the board's feedback on your decisions. Identify what you did well and what needs to change next year. The simulation tests whether you LEARN.
+        </div>
+
+        <h3>Board Member Feedback</h3>
+        <div class="board-grid" id="y1-board-feedback"></div>
+
+        <div class="question">
+          <div class="q-label">YOUR RESPONSE</div>
+          <div class="q-text">Based on the board feedback, what is your KEY takeaway for Year 2 strategy? (What will you DO differently?)</div>
+          <div class="input-group">
+            <label>Year 2 Strategic Priority (1-2 sentences)</label>
+            <input type="text" id="y1-board-response" placeholder="What will you change in Year 2?">
+          </div>
+          <button class="check-btn" onclick="checkBoard(1)">Submit Board Response</button>
+          <div class="feedback" id="y1-board-feedback-r"></div>
+        </div>
+
+        <div class="score-panel" id="y1-score-panel">
+          <h3>Year 1 Summary</h3>
+          <div class="score-row"><span class="label">Design Choices</span><span class="val" id="y1-score-design">—</span></div>
+          <div class="score-row"><span class="label">Forecast Accuracy</span><span class="val" id="y1-score-fc">—</span></div>
+          <div class="score-row"><span class="label">Production Strategy</span><span class="val" id="y1-score-prod">—</span></div>
+          <div class="score-row"><span class="label">Board Learning</span><span class="val" id="y1-score-board">—</span></div>
+          <div class="score-row" style="margin-top:8px;padding-top:8px;border-top:2px solid var(--border);">
+            <span class="label" style="font-weight:700;">Total Score</span><span class="val" id="y1-score-total" style="font-size:1.1rem;">—</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- end year 1 -->
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- YEAR 2                                                   -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div id="year-2" style="display:none;"></div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- YEAR 3                                                   -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div id="year-3" style="display:none;"></div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- YEAR 4                                                   -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div id="year-4" style="display:none;"></div>
+
+  <div class="footer">
+    <a href="harvard-simulation-prep-guide.html">← Back to Prep Guide</a> | 
+    <a href="harvard-simulation-quiz.html">Simple Quiz</a>
+  </div>
+
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+// DATA: Based on real student simulation results
+// ═══════════════════════════════════════════════════════════════════
+
+const SUPPLIERS = [
+  { name:"FarFarAway",   type:"Overseas", cost:10, lead:4,  min:10, changeFee:50000  },
+  { name:"Far Away",     type:"Overseas", cost:15, lead:2,  min:10, changeFee:50000  },
+  { name:"PrettyClose",  type:"Domestic", cost:20, lead:1,  min:5,  changeFee:30000  },
+  { name:"Very Fast",    type:"Domestic", cost:25, lead:0.5,min:5,  changeFee:30000  },
+];
+
+const DESIGNS_A = [
+  { id:"A1", option:"Basic",     cost_add:0,  qual_add:0  },
+  { id:"A2", option:"Standard",  cost_add:25, qual_add:2  },
+  { id:"A3", option:"Premium",   cost_add:50, qual_add:5  },
+  { id:"A4", option:"Deluxe",    cost_add:75, qual_add:8  },
+];
+const DESIGNS_B = [
+  { id:"B1", option:"Basic",     cost_add:0,  qual_add:0  },
+  { id:"B2", option:"Standard",  cost_add:30, qual_add:3  },
+  { id:"B3", option:"Premium",   cost_add:60, qual_add:6  },
+  { id:"B4", option:"Deluxe",    cost_add:90, qual_add:9  },
+];
+
+const FORECASTER_NAMES = ["Andrei","Aya","Claire","Lorenzo","Byron","Ruth"];
+
+// Board preferences (constant across all years)
+const BOARD = {
+  Mia:    "Flexible capacity — keep slack for surprises",
+  Ankit:  "Low variance — prefers steady, predictable orders",
+  Carla:  "Use mathematical average NOT consensus feeling",
+  Matheo: "Cost efficiency — minimize total supply chain cost",
+  Adele:  "Early Model B flexibility — start production early",
+};
+
+// Year-by-year game state
+const YEARS = {};
+
+function randInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+function shuffle(arr){ const a=[...arr]; for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
+// Build year data
+function buildYearData(y) {
+  const baseA = randInt(55,70);
+  const baseB = randInt(22,38);
+  const varianceA = randInt(8,18);
+  const varianceB = randInt(12,28);
+
+  // Add chaos in year 3
+  const spikeB = y === 3 ? randInt(25,40) : 0;
+
+  const estimatesA = FORECASTER_NAMES.map(n => ({
+    name: n,
+    value: Math.max(20, baseA + randInt(-varianceA, varianceA))
+  }));
+  const estimatesB = FORECASTER_NAMES.map(n => ({
+    name: n,
+    value: Math.max(10, baseB + randInt(-varianceB, varianceB) + spikeB)
+  }));
+
+  const consensusA = Math.round(estimatesA.reduce((s,e)=>s+e.value,0)/6);
+  const consensusB = Math.round(estimatesB.reduce((s,e)=>s+e.value,0)/6);
+
+  // Actual realized demand (different from forecast)
+  const forecastErrorA = randInt(-12,12);
+  const forecastErrorB = y===3 ? randInt(5,20) : randInt(-15,15);
+  const actualA = Math.max(20, consensusA + forecastErrorA);
+  const actualB = Math.max(10, consensusB + forecastErrorB);
+
+  // Build design tables with prices/costs
+  const priceA = 245, priceB = 285;
+  const baseCostA = 175, baseCostB = 195;
+
+  const designsA = DESIGNS_A.map(d => ({
+    ...d,
+    totalCost: baseCostA + d.cost_add,
+    profit: priceA - (baseCostA + d.cost_add),
+    margin: (((priceA - (baseCostA + d.cost_add))/priceA)*100).toFixed(1),
+  }));
+  const designsB = DESIGNS_B.map(d => ({
+    ...d,
+    totalCost: baseCostB + d.cost_add,
+    profit: priceB - (baseCostB + d.cost_add),
+    margin: (((priceB - (baseCostB + d.cost_add))/priceB)*100).toFixed(1),
+  }));
+
+  // Board feedback changes by year
+  const boardFeedback = {
+    1: [
+      { name:"Carla", feedback:"Your use of consensus was a good start. But remember — high variance among forecasters signals demand uncertainty. Don't just average." },
+      { name:"Ankit",  feedback:"Watch the spread between forecasters. Large differences indicate demand volatility that your production plan must account for." },
+      { name:"Matheo", feedback:"You didn't differentiate production strategy between the two models. Model A and B have different risk profiles — treat them differently." },
+      { name:"Mia",    feedback:"Consider splitting production between overseas (cheap, slow) and domestic (expensive, fast) to maintain flexibility." },
+      { name:"Adele",  feedback:"For volatile Model B — the cost of overproducing (Co) must be weighed against the cost of underproducing (Cu). Know your ratio." },
+    ],
+    2: [
+      { name:"Ankit",  feedback:"Variance among forecasters is still high for Model B. That means demand uncertainty — adjust your production accordingly." },
+      { name:"Matheo", feedback:"Overseas production worked for Model A. But Model B with uncertain demand should have a domestic responsive component." },
+      { name:"Carla",  feedback:"Consensus is still being overweighted vs. mathematical average. Push the team to look at the distribution of estimates." },
+      { name:"Mia",    feedback:"Good start on flexibility — but the split between overseas and domestic needs fine-tuning based on actual demand signals." },
+      { name:"Adele",  feedback:"Early Model B production matters. If you wait too long to respond to demand shifts, you'll face stockouts or expensive change orders." },
+    ],
+    3: [
+      { name:"Matheo", feedback:"Model B demand spiked unexpectedly. Your production plan didn't have enough domestic capacity to respond quickly." },
+      { name:"Adele",  feedback:"When demand is uncertain and volatile — it is better to have some excess domestic capacity than to risk stockouts." },
+      { name:"Carla",  feedback:"The variance signal was there. High disagreement among forecasters should have triggered a more cautious Model B forecast." },
+      { name:"Ankit",  feedback:"Your production split was too heavily weighted to overseas. When demand shifted, you had no fast-reaction capacity." },
+      { name:"Mia",    feedback:"Flexibility requires planning for surprises. You assumed stable demand but didn't build slack for Model B." },
+    ],
+    4: [
+      { name:"Mia",    feedback:"Excellent improvement. Splitting between overseas (Model A bulk) and domestic (Model B responsive) shows you learned." },
+      { name:"Matheo", feedback:"Using overseas for predictable Model A and domestic for volatile Model B is exactly right. Keep this strategy." },
+      { name:"Adele",  feedback:"Early Model B production with domestic supplier helped capture demand spike. Well executed." },
+      { name:"Ankit",  feedback:"Variance among forecasters dropped this year — your forecast is more stable. Good adjustment." },
+      { name:"Carla",  feedback:"Using mathematical average rather than raw consensus improved forecast accuracy. Continue this approach." },
+    ],
+  };
+
+  // Score calculation
+  const designScore = (y) => {
+    // In year 1, just check that they made choices
+    if (y === 1) return "Correct (design choices locked)";
+    return "Good — keep optimizing";
+  };
+
+  return {
+    estimatesA, estimatesB,
+    consensusA, consensusB,
+    actualA, actualB,
+    designsA, designsB,
+    priceA, priceB,
+    baseCostA, baseCostB,
+    boardFeedback: boardFeedback[y],
+    y,
+  };
+}
+
+// Initialize all years
+YEARS[1] = buildYearData(1);
+YEARS[2] = buildYearData(2);
+YEARS[3] = buildYearData(3);
+YEARS[4] = buildYearData(4);
+
+// Track user answers
+const ANSWERS = {};
+let completedYears = new Set();
+
+// ═══════════════════════════════════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════════════════════════════════
+
+function renderYear(y) {
+  const d = YEARS[y];
+  const el = document.getElementById(`year-${y}`);
+
+  if (y === 2) {
+    el.innerHTML = buildYearHTML(y, "Year 2 — Demand Increasing");
+  } else if (y === 3) {
+    el.innerHTML = buildYearHTML(y, "Year 3 — Model B Demand Shock");
+  } else if (y === 4) {
+    el.innerHTML = buildYearHTML(y, "Year 4 — Optimize & Execute");
+  }
+
+  // Fill tables
+  el.querySelector("#y1-design-a-table") ||
+  document.getElementById("y1-model-a-table"); // just a reference check
+
+  // Build design tables
+  const aTable = el.querySelector("#y1-model-a-table") || el.querySelector(`[id*="model-a-table"]`);
+  const bTable = el.querySelector("#y1-model-b-table") || el.querySelector(`[id*="model-b-table"]`);
+
+  // Use first year tables for year 1
+  const aTbodyId = y === 1 ? "y1-model-a-table" : `y${y}-model-a-table`;
+  const bTbodyId = y === 1 ? "y1-model-b-table" : `y${y}-model-b-table`;
+
+  const aTbody = document.getElementById(aTbodyId);
+  const bTbody = document.getElementById(bTbodyId);
+
+  if (aTbody) {
+    aTbody.innerHTML = d.designsA.map(r =>
+      `<tr><td>${r.id}</td><td>+$${r.cost_add}</td><td>$${r.totalCost}</td><td>$245</td><td>$${r.profit}</td><td>${r.margin}%</td><td>~${d.consensusA}</td></tr>`
+    ).join("");
+  }
+  if (bTbody) {
+    bTbody.innerHTML = d.designsB.map(r =>
+      `<tr><td>${r.id}</td><td>+$${r.cost_add}</td><td>$${r.totalCost}</td><td>$285</td><td>$${r.profit}</td><td>${r.margin}%</td><td>~${d.consensusB}</td></tr>`
+    ).join("");
+  }
+
+  // Forecast table
+  const fcTbodyId = y === 1 ? "y1-forecast-table" : `y${y}-forecast-table`;
+  const fcTbody = document.getElementById(fcTbodyId);
+  if (fcTbody) {
+    const specialties = ["Historical data analyst","Technical analyst","Sales team rep","Market research","Executive judgment","Supply chain expert"];
+    fcTbody.innerHTML = d.estimatesA.map((e, i) =>
+      `<tr><td>${e.name}</td><td>${e.value} units</td><td>${d.estimatesB[i].value} units</td><td>${specialties[i]}</td></tr>`
+    ).join("");
+  }
+
+  // Forecast stats callout
+  const statsId = y === 1 ? "y1-forecast-stats" : `y${y}-forecast-stats`;
+  const statsEl = document.getElementById(statsId);
+  if (statsEl) {
+    const varA = Math.round(Math.sqrt(d.estimatesA.reduce((s,e)=>s+Math.pow(e.value-d.consensusA,2),0)/6));
+    const varB = Math.round(Math.sqrt(d.estimatesB.reduce((s,e)=>s+Math.pow(e.value-d.consensusB,2),0)/6));
+    statsEl.innerHTML = `
+      <strong>Model A:</strong> Consensus ${d.consensusA} | Variance: ±${varA} units | 
+      <strong>Model B:</strong> Consensus ${d.consensusB} | Variance: ±${varB} units<br>
+      ${varB > 18 ? '<span style="color:var(--red)">⚠️ High variance on Model B — demand is UNCERTAIN. Consider using domestic supplier for responsive capacity.</span>' : 'Variance is moderate — monitor closely.'}
+    `;
+  }
+
+  // Supplier table
+  const supTbodyId = y === 1 ? "y1-supplier-table" : `y${y}-supplier-table`;
+  const supTbody = document.getElementById(supTbodyId);
+  if (supTbody) {
+    supTbody.innerHTML = SUPPLIERS.map(s =>
+      `<tr><td>${s.name}</td><td>${s.type}</td><td>$${s.cost}/unit</td><td>${s.lead} weeks</td><td>${s.min} units</td><td>$${s.changeFee.toLocaleString()}</td></tr>`
+    ).join("");
+  }
+
+  // Production inputs
+  const prodAId = y === 1 ? "y1-prod-a-inputs" : `y${y}-prod-a-inputs`;
+  const prodBId = y === 1 ? "y1-prod-b-inputs" : `y${y}-prod-b-inputs`;
+  const prodAEl = document.getElementById(prodAId);
+  const prodBEl = document.getElementById(prodBId);
+  if (prodAEl) {
+    prodAEl.innerHTML = SUPPLIERS.map(s =>
+      `<div class="input-row" style="margin-bottom:8px;">
+        <div class="input-group"><label>${s.name} — Model A units</label><input type="number" id="${prodAId.replace('inputs','')}-sup-${s.name.replace(/ /g,'')}" placeholder="0"></div>
+        <div class="input-group"><label>Start month (1-12)</label><input type="number" id="${prodAId.replace('inputs','')}-start-${s.name.replace(/ /g,'')}" placeholder="1-12" min="1" max="12"></div>
+      </div>`
+    ).join("");
+  }
+  if (prodBEl) {
+    prodBEl.innerHTML = SUPPLIERS.map(s =>
+      `<div class="input-row" style="margin-bottom:8px;">
+        <div class="input-group"><label>${s.name} — Model B units</label><input type="number" id="${prodBId.replace('inputs','')}-supb-${s.name.replace(/ /g,'')}" placeholder="0"></div>
+        <div class="input-group"><label>Start month (1-12)</label><input type="number" id="${prodBId.replace('inputs','')}-startb-${s.name.replace(/ /g,'')}" placeholder="1-12" min="1" max="12"></div>
+      </div>`
+    ).join("");
+  }
+
+  // Board feedback
+  const boardGridId = y === 1 ? "y1-board-feedback" : `y${y}-board-feedback`;
+  const boardGrid = document.getElementById(boardGridId);
+  if (boardGrid) {
+    boardGrid.innerHTML = shuffle(d.boardFeedback).map(b =>
+      `<div class="board-card"><strong>${b.name}</strong>${b.feedback}</div>`
+    ).join("");
+  }
+}
+
+function buildYearHTML(y, title) {
+  return `
+    <div class="room">
+      <div class="room-header">ROOM 1 — DESIGN ROOM <span class="room-score">Decision 1 of 4</span></div>
+      <div class="room-body">
+        <div class="callout"><strong>Your task:</strong> Choose one Model A design and one Model B design. Use the newsvendor framework (Cu vs Co) to decide.</div>
+        <h3>Model A Options</h3>
+        <table><thead><tr><th>Design</th><th>Add. Cost</th><th>Total Cost</th><th>Price</th><th>Profit/Unit</th><th>Margin%</th><th>Demand Est.</th></tr></thead>
+        <tbody id="y${y}-model-a-table"></tbody></table>
+        <h3>Model B Options</h3>
+        <table><thead><tr><th>Design</th><th>Add. Cost</th><th>Total Cost</th><th>Price</th><th>Profit/Unit</th><th>Margin%</th><th>Demand Est.</th></tr></thead>
+        <tbody id="y${y}-model-b-table"></tbody></table>
+        <div class="callout warn"><strong>Newsvendor:</strong> Cu = Price − Cost (missed sale). Co = Cost (overstock). If Co > Cu → underproduce. If Cu > Co → overproduce. Also consider: higher margin = more to lose on excess inventory.</div>
+        <div class="question">
+          <div class="q-label">YOUR DECISION</div>
+          <div class="q-text">Choose one Model A design and one Model B design.</div>
+          <div class="input-row">
+            <div class="input-group"><label>Model A Design ID</label><input type="text" id="y${y}-design-a" placeholder="e.g. A2"></div>
+            <div class="input-group"><label>Model B Design ID</label><input type="text" id="y${y}-design-b" placeholder="e.g. B1"></div>
+          </div>
+          <div class="input-group"><label>Why these designs? (1 sentence)</label><input type="text" id="y${y}-design-reason" placeholder="Your reasoning..."></div>
+          <button class="check-btn" onclick="checkDesign(${y})">Lock In Design Choices</button>
+          <div class="feedback" id="y${y}-design-feedback"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="room">
+      <div class="room-header">ROOM 2 — FORECASTING ROOM <span class="room-score">Decision 2 of 4</span></div>
+      <div class="room-body">
+        <div class="callout"><strong>Your task:</strong> Set annual demand forecast for both models. High variance = HIGH uncertainty. Board judges your reasoning.</div>
+        <h3>Forecaster Estimates</h3>
+        <table><thead><tr><th>Forecaster</th><th>Model A (units)</th><th>Model B (units)</th><th>Specialty</th></tr></thead>
+        <tbody id="y${y}-forecast-table"></tbody></table>
+        <div class="callout" id="y${y}-forecast-stats" style="margin-top:12px;"></div>
+        <div class="question">
+          <div class="q-label">YOUR DECISION</div>
+          <div class="q-text">What is your consensus demand forecast for each model?</div>
+          <div class="input-row">
+            <div class="input-group"><label>Model A Forecast (units)</label><input type="number" id="y${y}-fc-a" placeholder="0"></div>
+            <div class="input-group"><label>Model B Forecast (units)</label><input type="number" id="y${y}-fc-b" placeholder="0"></div>
+          </div>
+          <div class="input-group"><label>Total Demand (A + B)</label><input type="number" id="y${y}-fc-total" placeholder="A + B"></div>
+          <div class="input-group" style="margin-top:8px;"><label>For Model B: why this forecast? (Consider variance among forecasters)</label><input type="text" id="y${y}-fc-reason" placeholder="Consider: do forecasters agree? Is demand certain or uncertain?"></div>
+          <button class="check-btn" onclick="checkForecast(${y})">Lock In Forecast</button>
+          <div class="feedback" id="y${y}-fc-feedback"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="room">
+      <div class="room-header">ROOM 3 — PRODUCTION ROOM <span class="room-score">Decision 3 of 4</span></div>
+      <div class="room-body">
+        <div class="callout"><strong>Your task:</strong> Choose suppliers and production timing. Splitting between overseas (cheap/slow) and domestic (expensive/fast) is the CORE strategic decision.</div>
+        <h3>Available Suppliers</h3>
+        <table><thead><tr><th>Supplier</th><th>Type</th><th>Cost/Unit</th><th>Lead Time</th><th>Min Order</th><th>Change Fee</th></tr></thead>
+        <tbody id="y${y}-supplier-table"></tbody></table>
+        <div class="callout warn"><strong>Matheo's rule:</strong> "Predictable demand → overseas. Uncertain demand → domestic." Use variance from Room 2 to decide your split.</div>
+        <div class="question">
+          <div class="q-label">SUPPLIER ALLOCATION</div>
+          <div class="q-text">Allocate production across suppliers. Earlier start = more flexible but more expensive.</div>
+          <h3 style="margin-top:16px;">Model A Production</h3>
+          <div id="y${y}-prod-a-inputs"></div>
+          <h3 style="margin-top:16px;">Model B Production</h3>
+          <div id="y${y}-prod-b-inputs"></div>
+          <div class="input-group" style="margin-top:12px;"><label>Explain your supplier split strategy (1-2 sentences)</label><input type="text" id="y${y}-prod-reason" placeholder="Why did you split production this way?"></div>
+          <button class="check-btn" onclick="checkProduction(${y})">Lock In Production Plan</button>
+          <div class="feedback" id="y${y}-prod-feedback"></div>
+        </div>
+        <div class="rec-box">
+          <h4>📋 Production Strategy Guide</h4>
+          <div class="rec-item"><strong>Rule:</strong> Model A → cheapest (cost priority). Model B → fastest (lead time priority). BUT — split to get cost AND flexibility.</div>
+          <div class="rec-item"><strong>Split:</strong> FarFarAway bulk (Jan) + PrettyClose responsive (April/May).</div>
+          <div class="rec-item"><strong>Change orders:</strong> Only if expected additional profit > change fee.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="room">
+      <div class="room-header">ROOM 4 — BOARD REVIEW <span class="room-score">Decision 4 of 4</span></div>
+      <div class="room-body">
+        <div class="callout"><strong>Your task:</strong> Read board feedback. Identify what to change next year. The simulation tests whether you LEARN.</div>
+        <h3>Board Member Feedback</h3>
+        <div class="board-grid" id="y${y}-board-feedback"></div>
+        <div class="question">
+          <div class="q-label">YOUR RESPONSE</div>
+          <div class="q-text">Based on board feedback, what is your KEY takeaway? (What will you DO differently?)</div>
+          <div class="input-group"><label>Year ${y+1} Strategic Priority (1-2 sentences)</label><input type="text" id="y${y}-board-response" placeholder="What will you change?"></div>
+          <button class="check-btn" onclick="checkBoard(${y})">Submit Board Response</button>
+          <div class="feedback" id="y${y}-board-feedback-r"></div>
+        </div>
+        <div class="score-panel" id="y${y}-score-panel">
+          <h3>Year ${y} Summary</h3>
+          <div class="score-row"><span class="label">Design Choices</span><span class="val" id="y${y}-score-design">—</span></div>
+          <div class="score-row"><span class="label">Forecast Accuracy</span><span class="val" id="y${y}-score-fc">—</span></div>
+          <div class="score-row"><span class="label">Production Strategy</span><span class="val" id="y${y}-score-prod">—</span></div>
+          <div class="score-row"><span class="label">Board Learning</span><span class="val" id="y${y}-score-board">—</span></div>
+          <div class="score-row" style="margin-top:8px;padding-top:8px;border-top:2px solid var(--border);">
+            <span class="label" style="font-weight:700;">Total Score</span><span class="val" id="y${y}-score-total" style="font-size:1.1rem;">—</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// CHECK FUNCTIONS
+// ═══════════════════════════════════════════════════════════════════
+
+function showFeedback(elId, html, isCorrect) {
+  const el = document.getElementById(elId);
+  el.className = "feedback show " + (isCorrect ? "correct" : "wrong");
+  el.innerHTML = isCorrect ? "✅ " + html : "❌ " + html;
+}
+
+function checkDesign(y) {
+  const d = YEARS[y];
+  const ansA = document.getElementById(`y${y}-design-a`).value.trim().toUpperCase();
+  const ansB = document.getElementById(`y${y}-design-b`).value.trim().toUpperCase();
+  const reason = document.getElementById(`y${y}-design-reason`).value.trim();
+
+  const validA = DESIGNS_A.map(d=>d.id);
+  const validB = DESIGNS_B.map(d=>d.id);
+  const okA = validA.includes(ansA);
+  const okB = validB.includes(ansB);
+  const hasReason = reason.length > 10;
+
+  const isCorrect = okA && okB && hasReason;
+
+  showFeedback(`y${y}-design-feedback`,
+    `Design choices locked: Model A = ${ansA}, Model B = ${ansB}. ` +
+    (hasReason ? "Good — you explained your reasoning." : "Add reasoning next time."),
+    isCorrect
+  );
+
+  if (isCorrect) {
+    document.getElementById(`y${y}-score-design`).textContent = "✅ Good";
+    document.getElementById(`y${y}-score-design`).className = "val ok";
+    ANSWERS[y] = ANSWERS[y] || {};
+    ANSWERS[y].design = true;
+  }
+}
+
+function checkForecast(y) {
+  const d = YEARS[y];
+  const fcA = parseInt(document.getElementById(`y${y}-fc-a`).value);
+  const fcB = parseInt(document.getElementById(`y${y}-fc-b`).value);
+  const total = parseInt(document.getElementById(`y${y}-fc-total`).value);
+  const reason = document.getElementById(`y${y}-fc-reason`).value.trim();
+
+  const correctA = d.consensusA;
+  const correctB = d.consensusB;
+
+  const diffA = Math.abs(fcA - correctA);
+  const diffB = Math.abs(fcB - correctB);
+  const correctTotal = correctA + correctB;
+
+  const closeA = diffA <= 5;
+  const closeB = diffB <= 5;
+  const correctTotalVal = total === correctTotal;
+  const hasReason = reason.length > 15;
+
+  const score = (closeA?1:0) + (closeB?1:0) + (correctTotalVal?1:0) + (hasReason?1:0);
+  const isCorrect = score >= 3;
+
+  let detail = `Model A: ${fcA} (correct: ${correctA}) | Model B: ${fcB} (correct: ${correctB}) | Total: ${total} (correct: ${correctTotal})`;
+
+  showFeedback(`y${y}-fc-feedback`, detail + (isCorrect ? " | Strong forecast reasoning." : " | Keep working on accuracy."), isCorrect);
+
+  if (isCorrect) {
+    document.getElementById(`y${y}-score-fc`).textContent = `✅ Close (A±${diffA}, B±${diffB})`;
+    document.getElementById(`y${y}-score-fc`).className = "val ok";
+    ANSWERS[y] = ANSWERS[y] || {};
+    ANSWERS[y].forecast = true;
+  }
+}
+
+function checkProduction(y) {
+  const reason = document.getElementById(`y${y}-prod-reason`).value.trim();
+  const hasReason = reason.length > 15;
+
+  // For now, just check that they filled something in
+  // A real check would validate the split against the forecast variance
+  const isCorrect = hasReason;
+
+  showFeedback(`y${y}-prod-feedback`,
+    "Production plan locked. " + (hasReason ? "Strategic reasoning noted." : "Add reasoning next time."),
+    isCorrect
+  );
+
+  if (isCorrect) {
+    document.getElementById(`y${y}-score-prod`).textContent = "✅ Good";
+    document.getElementById(`y${y}-score-prod`).className = "val ok";
+    ANSWERS[y] = ANSWERS[y] || {};
+    ANSWERS[y].production = true;
+  }
+}
+
+function checkBoard(y) {
+  const response = document.getElementById(`y${y}-board-response`).value.trim();
+  const hasResponse = response.length > 15;
+
+  const isCorrect = hasResponse;
+
+  showFeedback(`y${y}-board-feedback-r`,
+    "Board response recorded. " + (hasResponse ? "Strategic learning noted." : "Explain your strategic change."),
+    isCorrect
+  );
+
+  if (isCorrect) {
+    document.getElementById(`y${y}-score-board`).textContent = "✅ Good";
+    document.getElementById(`y${y}-score-board`).className = "val ok";
+    ANSWERS[y] = ANSWERS[y] || {};
+    ANSWERS[y].board = true;
+    completedYears.add(y);
+    updateTotalScore(y);
+  }
+}
+
+function updateTotalScore(y) {
+  const a = ANSWERS[y] || {};
+  const count = [a.design, a.forecast, a.production, a.board].filter(Boolean).length;
+  document.getElementById(`y${y}-score-total`).textContent = `${count}/4 rooms completed`;
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// YEAR SWITCHING
+// ═══════════════════════════════════════════════════════════════════
+
+function switchYear(y) {
+  document.querySelectorAll('.year-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(`tab-${y}`).classList.add('active');
+
+  [1,2,3,4].forEach(i => {
+    const el = document.getElementById(`year-${i}`);
+    el.style.display = i === y ? 'block' : 'none';
+  });
+
+  // Render the year if not done
+  if (!document.getElementById(`year-${y}`).innerHTML.trim()) {
+    document.getElementById(`year-${y}`).innerHTML = buildYearHTML(y, `Year ${y}`);
+  }
+  renderYear(y);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════════
+
+// Render year 1 first
+document.getElementById("year-1").innerHTML = buildYearHTML(1, "Year 1 — Establish Baseline");
+renderYear(1);
+</script>
+
+</body>
+</html>

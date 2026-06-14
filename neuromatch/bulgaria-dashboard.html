@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🇧🇬 Bulgaria Bulk Hiring — 262K Worker Shortage</title>
+    <style>
+        :root {
+            --bg: #f5f4f0;
+            --card: #ffffff;
+            --border: #d4d0c8;
+            --text: #1a1a1a;
+            --muted: #6b6560;
+            --accent: #c41e3a;
+            --green: #1a7a3a;
+            --blue: #1a5faa;
+            --orange: #a06800;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; line-height: 1.6; padding: 20px; }
+        .container { max-width: 1100px; margin: 0 auto; }
+        .hero { text-align: center; padding: 40px 20px; border-bottom: 2px solid var(--border); margin-bottom: 30px; }
+        .hero h1 { font-size: 2.2em; margin-bottom: 10px; color: #111; }
+        .hero h1 span { color: var(--accent); }
+        .hero .subtitle { color: var(--muted); font-size: 1.1em; max-width: 600px; margin: 0 auto 20px; line-height: 1.5; }
+        .badge-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
+        .badge { background: var(--card); border: 2px solid var(--border); padding: 8px 16px; border-radius: 20px; font-size: 0.85em; font-weight: 500; }
+        .badge.red { border-color: var(--accent); color: var(--accent); }
+        .badge.green { border-color: var(--green); color: var(--green); }
+        .badge.blue { border-color: var(--blue); color: var(--blue); }
+        .meta-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin: 30px 0; }
+        .meta-card { background: var(--card); border: 2px solid var(--border); border-radius: 12px; padding: 20px; text-align: center; }
+        .meta-card .number { font-size: 2em; font-weight: 700; color: var(--accent); }
+        .meta-card .label { color: var(--muted); font-size: 0.85em; margin-top: 4px; }
+        .search-bar { width: 100%; background: var(--card); border: 2px solid var(--border); border-radius: 10px; padding: 14px 18px; color: var(--text); font-size: 1em; outline: none; margin-bottom: 20px; }
+        .search-bar:focus { border-color: var(--accent); }
+        h2 { font-size: 1em; color: var(--muted); text-transform: uppercase; letter-spacing: 1.5px; margin: 30px 0 15px; border-bottom: 2px solid var(--border); padding-bottom: 8px; }
+        .company-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+        .company-card { background: var(--card); border: 2px solid var(--border); border-radius: 12px; padding: 20px; transition: border-color 0.2s, box-shadow 0.2s; }
+        .company-card:hover { border-color: var(--accent); box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+        .company-card .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+        .company-card .name { font-size: 1.05em; font-weight: 600; margin-bottom: 3px; color: #111; }
+        .company-card .industry { color: var(--muted); font-size: 0.85em; }
+        .company-card .size { color: var(--blue); font-size: 0.88em; font-weight: 500; margin-bottom: 12px; }
+        .company-card .note { background: #f0f7f2; border: 2px solid #b8ddc4; border-radius: 6px; padding: 8px 12px; font-size: 0.88em; color: var(--green); margin-bottom: 12px; line-height: 1.5; }
+        .company-card .tier { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 0.75em; font-weight: 700; }
+        .tier-1 { background: #fde8ec; color: var(--accent); border: 2px solid var(--accent); }
+        .tier-2 { background: #fef6e4; color: var(--orange); border: 2px solid var(--orange); }
+        .tier-3 { background: #e8f0fc; color: var(--blue); border: 2px solid var(--blue); }
+        .link-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+        .link-btn { background: #f0ede8; border: 2px solid var(--border); color: var(--text); padding: 6px 14px; border-radius: 6px; text-decoration: none; font-size: 0.85em; font-weight: 500; transition: all 0.2s; }
+        .link-btn:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+        .section-note { background: var(--card); border: 2px solid var(--border); border-radius: 10px; padding: 20px; margin: 20px 0; font-size: 0.9em; color: var(--muted); line-height: 1.6; }
+        .section-note strong { color: var(--text); }
+        .contact-section { display: grid; gap: 12px; }
+        .contact-card { background: var(--card); border: 2px solid var(--border); border-radius: 10px; padding: 16px; display: flex; justify-content: space-between; align-items: center; }
+        .contact-card .info .name { font-weight: 600; font-size: 0.95em; color: #111; }
+        .contact-card .info .role { color: var(--muted); font-size: 0.85em; }
+        .contact-card .info .company { color: var(--blue); font-size: 0.85em; margin-top: 2px; }
+        footer { text-align: center; color: var(--muted); font-size: 0.8em; margin-top: 60px; padding: 20px; border-top: 2px solid var(--border); }
+        @media (max-width: 600px) { .company-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+<div class="container">
+
+<div class="hero">
+    <h1>🇧🇬 Bulgaria — <span>Next Croatia?</span></h1>
+    <p class="subtitle">Euro adopted Jan 2025. 262,000 job vacancies. 78% of companies can't find staff. 60%+ ready to hire non-EU workers. Mass opportunity.</p>
+    <div class="badge-row">
+        <span class="badge red">🔴 TIER 1 — Mass hiring</span>
+        <span class="badge green">🇪🇺 Euro adopted Jan 2025</span>
+        <span class="badge blue">📈 3.4% GDP growth 2024</span>
+        <span class="badge">💰 262K vacancies</span>
+    </div>
+</div>
+
+<div class="meta-bar">
+    <div class="meta-card"><div class="number">262K</div><div class="label">Open job positions (2024)</div></div>
+    <div class="meta-card"><div class="number">78%</div><div class="label">Companies with staffing gaps</div></div>
+    <div class="meta-card"><div class="number">60%+</div><div class="label">Ready to hire non-EU workers</div></div>
+    <div class="meta-card"><div class="number">3.4%</div><div class="label">GDP growth — boom phase</div></div>
+</div>
+
+<p class="section-note">
+<strong>Why Bulgaria = Croatia 5 years ago:</strong> Euro adoption = stability + investor confidence. Youth exodus = labor shortages. Wage growth = domestic consumption. EU membership = easy Filipino work permits. Construction boom + tourism surge + logistics expansion = massive blue collar demand. This is the window.
+</p>
+
+<input type="text" class="search-bar" placeholder="Search companies, industry, size..." oninput="filterCards(this.value)">
+
+<h2>🔴 TIER 1 — Mass Blue Collar Hiring</h2>
+<div class="company-grid">
+
+<div class="company-card" data-search="mkd mesokombinat dobrudzha meat slaughterhouse">
+    <div class="card-header">
+        <div>
+            <div class="name">MKD — Mesokombinat Dobrudzha</div>
+            <div class="industry">🥩 Meat Processing / Slaughterhouse</div>
+        </div>
+        <span class="tier tier-1">TIER 1</span>
+    </div>
+    <div class="size">Bulgaria's LARGEST slaughterhouse • 3 facilities • own refrigerated fleet</div>
+    <div class="note">💡 Largest meat processor in Bulgaria. Actively hiring production workers. Careers page live.</div>
+    <div class="link-row">
+        <a href="https://mkd.bg/careers/production-worker/" class="link-btn" target="_blank">📄 Careers Page</a>
+        <a href="https://mkd.bg/" class="link-btn" target="_blank">🌐 Website</a>
+    </div>
+</div>
+
+<div class="company-card" data-search="gradus poultry chicken meat">
+    <div class="card-header">
+        <div>
+            <div class="name">Gradus AD</div>
+            <div class="industry">🍗 Poultry Processing</div>
+        </div>
+        <span class="tier tier-1">TIER 1</span>
+    </div>
+    <div class="size">Largest poultry producer in Bulgaria • 7 subsidiaries • ~200 new hires in recent expansion</div>
+    <div class="note">💡 Founded 1992 by Luka & Ivan Angelovi. Installed €8M new JBT Marel line in 2024 — taking on ~200 new employees.</div>
+    <div class="link-row">
+        <a href="https://www.gradus.bg/en/about-company" class="link-btn" target="_blank">🌐 Website</a>
+        <a href="https://bg.linkedin.com/company/gradus-ad" class="link-btn" target="_blank">💼 LinkedIn</a>
+    </div>
+</div>
+
+<div class="company-card" data-search="ajax group pig farming pork">
+    <div class="card-header">
+        <div>
+            <div class="name">Ajax Group</div>
+            <div class="industry">🐷 Pig Farming / Pork Production</div>
+        </div>
+        <span class="tier tier-1">TIER 1</span>
+    </div>
+    <div class="size">400,000+ pigs — ~1/3 of Bulgaria's total pig production • 3 pig complexes + feed mills + slaughterhouse</div>
+    <div class="note">💡 Largest pig producer in Bulgaria. 30+ years experience. Fully integrated farm-to-slaughter. Season: year-round hiring.</div>
+    <div class="link-row">
+        <a href="https://bg.linkedin.com/company/ajaxgroup" class="link-btn" target="_blank">💼 LinkedIn</a>
+        <a href="https://ajaxgroup.bg/en/home/" class="link-btn" target="_blank">🌐 Website</a>
+    </div>
+</div>
+
+<div class="company-card" data-search="transport group plovdiv trucks logistics">
+    <div class="card-header">
+        <div>
+            <div class="name">Transport Group Bulgaria</div>
+            <div class="industry">🚛 Transport / Logistics — Plovdiv</div>
+        </div>
+        <span class="tier tier-1">TIER 1</span>
+    </div>
+    <div class="size">Plovdiv-based fleet company • exclusively international routes • actively recruiting drivers</div>
+    <div class="note">💡 Actively hiring C/E truck drivers for EU routes. G&V Logistics / Transport Group Bulgaria, Plovdiv. Direct hiring.</div>
+    <div class="link-row">
+        <a href="https://bg.linkedin.com/in/gert-bernard-580480a7" class="link-btn" target="_blank">👤 Gert Bernard (Owner)</a>
+    </div>
+</div>
+
+<div class="company-card" data-search="musan slaughterhouse cattle">
+    <div class="card-header">
+        <div>
+            <div class="name">MUSAN-N</div>
+            <div class="industry">🥩 Slaughterhouse — SE Bulgaria</div>
+        </div>
+        <span class="tier tier-1">TIER 1</span>
+    </div>
+    <div class="size">80 cattle/day or 400 small cattle/day • ONLY facility in SE Bulgaria with permit for camel slaughter</div>
+    <div class="note">💡 Only slaughterhouse in southeastern Bulgaria with full export permits. Year-round production hiring.</div>
+    <div class="link-row">
+        <a href="https://musan.bg/en/about-us/" class="link-btn" target="_blank">🌐 Website</a>
+    </div>
+</div>
+
+<div class="company-card" data-search="unimeat meat processing">
+    <div class="card-header">
+        <div>
+            <div class="name">Unitemp (Unimeat)</div>
+            <div class="industry">🥩 Meat Processing — Farm to Client</div>
+        </div>
+        <span class="tier tier-1">TIER 1</span>
+    </div>
+    <div class="size">Integrated farm-to-client operation • FARM FRESH MEAT brand</div>
+    <div class="note">💡 Full vertical integration. Clean meat brand with quality control. Actively hiring production workers.</div>
+    <div class="link-row">
+        <a href="https://unimeat.eu/en/about-us/" class="link-btn" target="_blank">🌐 Website</a>
+    </div>
+</div>
+
+</div>
+
+<h2>🟡 TIER 2 — Large Employers (500+ employees)</h2>
+<div class="company-grid">
+
+<div class="company-card" data-search="eurohold energy insurance">
+    <div class="card-header">
+        <div>
+            <div class="name">Eurohold Bulgaria AD</div>
+            <div class="industry">⚡ Energy / Insurance / Finance</div>
+        </div>
+        <span class="tier tier-2">TIER 2</span>
+    </div>
+    <div class="size">4,509 employees • €3.3B revenue • listed on Sofia Stock Exchange • EBITDA +47% in 2025</div>
+    <div class="note">💡 Bulgaria's largest non-food company by revenue. Energy + insurance conglomerate. Large administrative workforce.</div>
+    <div class="link-row">
+        <a href="https://bg.linkedin.com/in/gergana-dimova-b8780658" class="link-btn" target="_blank">👤 Gergana Dimova (HR Head)</a>
+        <a href="https://bg.linkedin.com/in/deyana-ivanova-3340a32" class="link-btn" target="_blank">👤 Deyana Ivanova (HR Mgr)</a>
+    </div>
+</div>
+
+<div class="company-card" data-search="sopharma pharma pharmaceutical">
+    <div class="card-header">
+        <div>
+            <div class="name">Sopharma AD</div>
+            <div class="industry">💊 Pharmaceuticals</div>
+        </div>
+        <span class="tier tier-2">TIER 2</span>
+    </div>
+    <div class="size">5,932 employees • Leading Bulgarian pharma manufacturer • Export to 100+ countries</div>
+    <div class="note">💡 One of Bulgaria's largest employers. Sopharma Trading (distribution arm) has 404 employees. Active hiring.</div>
+    <div class="link-row">
+        <a href="https://bg.linkedin.com/in/milenaandreeva" class="link-btn" target="_blank">👤 Milena Andreeva (HR Leader)</a>
+        <a href="https://bg.linkedin.com/in/teodora-kirilova-a255b559" class="link-btn" target="_blank">👤 Teodora Kirilova (HR BP)</a>
+        <a href="https://bg.linkedin.com/in/romina-georgieva-725786132" class="link-btn" target="_blank">👤 Romina Georgieva (HR BP)</a>
+    </div>
+</div>
+
+<div class="company-card" data-search="biovet animal health vet pharma">
+    <div class="card-header">
+        <div>
+            <div class="name">Biovet JSCo</div>
+            <div class="industry">🐾 Animal Health / Pharma</div>
+        </div>
+        <span class="tier tier-2">TIER 2</span>
+    </div>
+    <div class="size">1,000+ employees • 4 production sites (3 in Bulgaria, 1 Macedonia) • Global animal health leader</div>
+    <div class="note">💡 Acquired by Bulgarian billionaires for $10.6M — now valued at billions. EU/nationalGMP certified. Year-round hiring.</div>
+    <div class="link-row">
+        <a href="https://bg.linkedin.com/in/atanaska-pavlova-tsigova-3627b435" class="link-btn" target="_blank">👤 Atanaska Pavlova (HR)</a>
+    </div>
+</div>
+
+<div class="company-card" data-search="lidl supermarket retail logistics">
+    <div class="card-header">
+        <div>
+            <div class="name">Lidl Bulgaria</div>
+            <div class="industry">🛒 Retail / Supermarket</div>
+        </div>
+        <span class="tier tier-2">TIER 2</span>
+    </div>
+    <div class="size">130+ stores • 2 logistics centers • 8 new stores planned 2026 • Part of Germany's Schwarz Group</div>
+    <div class="note">💡 CEO Milena Dragijska — expanding aggressively. 500+ warehouse + retail staff. Mass hiring every year.</div>
+    <div class="link-row">
+        <a href="https://bg.linkedin.com/in/katerina-shopova-b3142547" class="link-btn" target="_blank">👤 Katerina Shopova (HR)</a>
+        <a href="https://bg.linkedin.com/jobs/view/head-of-hr-operation-m-f-at-lidl-bulgaria-4232504594" class="link-btn" target="_blank">📄 Head of HR Ops</a>
+    </div>
+</div>
+
+<div class="company-card" data-search="kaufland supermarket retail">
+    <div class="card-header">
+        <div>
+            <div class="name">Kaufland Bulgaria</div>
+            <div class="industry">🛒 Hypermarket / Retail</div>
+        </div>
+        <span class="tier tier-2">TIER 2</span>
+    </div>
+    <div class="size">Part of Germany's Schwarz Group • Major retailer • Multiple locations nationwide</div>
+    <div class="note">💡 Active hiring across all stores. Distribution + retail ops. German-owned, stable, year-round hiring.</div>
+    <div class="link-row">
+        <a href="https://bg.linkedin.com/in/nikoleta-gurkova-a644a74b" class="link-btn" target="_blank">👤 Nikoleta Gurkova (Store Mgr)</a>
+        <a href="https://bg.linkedin.com/in/mariela-baykova-2a2b775a" class="link-btn" target="_blank">👤 Mariela Baykova</a>
+    </div>
+</div>
+
+<div class="company-card" data-search="oliva sunflower oil food">
+    <div class="card-header">
+        <div>
+            <div class="name">Oliva AD</div>
+            <div class="industry">🫒 Sunflower Oil / Food Processing</div>
+        </div>
+        <span class="tier tier-2">TIER 2</span>
+    </div>
+    <div class="size">Bulgaria's #1 food company by revenue • Leading sunflower oil producer • Part of Buildcom</div>
+    <div class="note">💡 Leader in Bulgarian food sector. Large seasonal workforce for harvest + processing periods.</div>
+    <div class="link-row">
+        <a href="https://bg.linkedin.com/in/ludmila-miteva-5b097a70" class="link-btn" target="_blank">👤 Ludmila Miteva (Plant Mgr)</a>
+    </div>
+</div>
+
+<div class="company-card" data-search="dsv road transport logistics sofia">
+    <div class="card-header">
+        <div>
+            <div class="name">DSV Road Ltd — Bulgaria</div>
+            <div class="industry">🚛 Logistics / Transport</div>
+        </div>
+        <span class="tier tier-2">TIER 2</span>
+    </div>
+    <div class="size">Global transport/logistics giant • Sofia operations • Hiring warehouse + transport staff</div>
+    <div class="note">💡 DSV is a top-3 global logistics company. Bulgaria hub is growing with EU expansion. Active hiring.</div>
+    <div class="link-row">
+        <a href="https://bg.linkedin.com/in/yanislav-totev-2689a18" class="link-btn" target="_blank">👤 Yanislav Totev (MD)</a>
+        <a href="https://bg.linkedin.com/jobs/view/senior-hr-specialist-at-dsv-global-transport-and-logistics-4374047234" class="link-btn" target="_blank">📄 Sr HR Specialist</a>
+    </div>
+</div>
+
+<div class="company-card" data-search="db schenker transport logistics sofia">
+    <div class="card-header">
+        <div>
+            <div class="name">DB Schenker — Bulgaria</div>
+            <div class="industry">🚛 Logistics / Freight Forwarding</div>
+        </div>
+        <span class="tier tier-2">TIER 2</span>
+    </div>
+    <div class="size">Part of Deutsche Bahn • Leading freight forwarder in Bulgaria • Active transport + warehouse hiring</div>
+    <div class="note">💡 Schenker is a massive global logistics brand. Bulgaria operations active. Drivers + warehouse workers needed.</div>
+    <div class="link-row">
+        <a href="https://bg.linkedin.com/in/hariton-karadzhov-19a939120" class="link-btn" target="_blank">👤 Hariton Karadzhov</a>
+        <a href="https://bg.linkedin.com/in/rayna-markova-1a41bb63" class="link-btn" target="_blank">👤 Rayna Markova (Head Ops)</a>
+    </div>
+</div>
+
+<div class="company-card" data-search="coca cola helenic beverage soft drink">
+    <div class="card-header">
+        <div>
+            <div class="name">Coca-Cola HBC Bulgaria</div>
+            <div class="industry">🥤 Beverage / Soft Drinks</div>
+        </div>
+        <span class="tier tier-2">TIER 2</span>
+    </div>
+    <div class="size">Part of Coca-Cola Hellenic • Production since 1965 • First socialist block country to produce Coca-Cola</div>
+    <div class="note">💡 Bulgaria's leading soft drink bottler. Large production workforce. Seasonal + permanent hiring.</div>
+    <div class="link-row">
+        <a href="https://bg.coca-colahellenic.com/en/working-with-us" class="link-btn" target="_blank">📄 Careers</a>
+        <a href="https://bg.coca-colahellenic.com/en/about-us/about-coca-cola-hbc-bulgaria" class="link-btn" target="_blank">🌐 Website</a>
+    </div>
+</div>
+
+<div class="company-card" data-search="sopharma trading healthcare distribution">
+    <div class="card-header">
+        <div>
+            <div class="name">Sopharma Trading</div>
+            <div class="industry">💊 Healthcare / Pharma Distribution</div>
+        </div>
+        <span class="tier tier-2">TIER 2</span>
+    </div>
+    <div class="size">404 employees • 15,000 sqm Sofia logistics center • 23% market share in pharma distribution</div>
+    <div class="note">💡 DOMINANT in Bulgarian pharma distribution. 9,000 sqm warehouse. Warehouse workers + drivers + admin hiring.</div>
+    <div class="link-row">
+        <a href="https://bg.linkedin.com/in/pamela-dyukmedzhieva-b7b08117b" class="link-btn" target="_blank">👤 Pamela Dyukmedzhieva (HR)</a>
+        <a href="https://bg.linkedin.com/in/milenaandreeva" class="link-btn" target="_blank">👤 Milena Andreeva (HR Lead)</a>
+    </div>
+</div>
+
+</div>
+
+<h2>⚪ TIER 3 — Growth Sectors</h2>
+<div class="company-grid">
+
+<div class="company-card" data-search="grand hotel bansko sveti vlas hospitality tourism">
+    <div class="card-header">
+        <div>
+            <div class="name">Grand Hotel Resorts (Bansko / Sveti Vlas)</div>
+            <div class="industry">🏨 Tourism / Hospitality</div>
+        </div>
+        <span class="tier tier-3">TIER 3</span>
+    </div>
+    <div class="size">500+ hotel staff being hired across Bulgaria resorts • Summer season + year-round</div>
+    <div class="note">💡 Hiring 500 hotel staff — waiters, housekeepers, kitchen, entertainment. Bulgaria tourism peak season demand massive.</div>
+    <div class="link-row">
+        <a href="https://grandhotel.bg/en/careers/" class="link-btn" target="_blank">📄 Careers Page</a>
+    </div>
+</div>
+
+<div class="company-card" data-search="hvd hotels sunny beach hospitality">
+    <div class="card-header">
+        <div>
+            <div class="name">HVD Hotels</div>
+            <div class="industry">🏨 Tourism / Resorts — Sunny Beach</div>
+        </div>
+        <span class="tier tier-3">TIER 3</span>
+    </div>
+    <div class="size">Multiple resorts in Bulgaria + Germany • Sunny Beach flagship property</div>
+    <div class="note">💡 Year-round + seasonal hospitality hiring. Service staff, housekeeping, F&B. International team hiring.</div>
+    <div class="link-row">
+        <a href="https://hvdhotels.com/careers/" class="link-btn" target="_blank">📄 Careers</a>
+    </div>
+</div>
+
+<div class="company-card" data-search="kempinski hotel bansko ski hospitality">
+    <div class="card-header">
+        <div>
+            <div class="name">Kempinski Hotel Grand Arena — Bansko</div>
+            <div class="industry">🏨 Luxury Hotel / Ski Resort</div>
+        </div>
+        <span class="tier tier-3">TIER 3</span>
+    </div>
+    <div class="size">5-star luxury • 130+ rooms • Bansko's premier ski hotel • Year-round operations</div>
+    <div class="note">💡 International luxury brand. Active hiring for housekeeping, F&B, front desk. Season + permanent roles.</div>
+    <div class="link-row">
+        <a href="https://bg.linkedin.com/jobs/view/housekeeping-manager-at-kempinski-hotels-4159728195" class="link-btn" target="_blank">📄 Housekeeping Mgr</a>
+    </div>
+</div>
+
+<div class="company-card" data-search="club med bansko resort hospitality">
+    <div class="card-header">
+        <div>
+            <div class="name">Club Med — Bansko Resort</div>
+            <div class="industry">🏨 All-Inclusive Resort / Tourism</div>
+        </div>
+        <span class="tier tier-3">TIER 3</span>
+    </div>
+    <div class="size">Premium all-inclusive resort • International staff network • Seasonal + year-round hiring</div>
+    <div class="note">💡 Massive seasonal hiring cycles. Entertainment, F&B, housekeeping, childcare. International team.</div>
+    <div class="link-row">
+        <a href="https://www.clubmedjobs.com/en/employment/bulgaria-hospitality-and-catering-jobs/2619/32115392/732800/2" class="link-btn" target="_blank">📄 Club Med Jobs</a>
+    </div>
+</div>
+
+<div class="company-card" data-search="gradus poultry meat bird">
+    <div class="card-header">
+        <div>
+            <div class="name">Gradus AD — Stara Zagora</div>
+            <div class="industry">🍗 Poultry / Meat Production</div>
+        </div>
+        <span class="tier tier-3">TIER 3</span>
+    </div>
+    <div class="size">Diversified holding • 7 subsidiaries • Meat production + distribution</div>
+    <div class="note">💡 7 companies under holding. Gradus is the biggest poultry brand in BG. Actively expanding workforce.</div>
+    <div class="link-row">
+        <a href="https://bg.linkedin.com/company/gradus-ad" class="link-btn" target="_blank">💼 LinkedIn</a>
+        <a href="https://www.gradus.bg/en/about-company" class="link-btn" target="_blank">🌐 Website</a>
+    </div>
+</div>
+
+<div class="company-card" data-search="bos cluster food processing">
+    <div class="card-header">
+        <div>
+            <div class="name">KLAS Oil AD / Maritza Olio</div>
+            <div class="industry">🫒 Edible Oils / Food Processing</div>
+        </div>
+        <span class="tier tier-3">TIER 3</span>
+    </div>
+    <div class="size">Top-10 Bulgarian food companies • Edible oils + fats production • Seasonal workers for harvest</div>
+    <div class="note">💡 Major player in food sector. Harvest season = large temporary workforce. Production + logistics roles.</div>
+    <div class="link-row">
+        <a href="https://bg.linkedin.com/in/ludmila-miteva-5b097a70" class="link-btn" target="_blank">👤 Ludmila Miteva (Plant Mgr)</a>
+    </div>
+</div>
+
+<div class="company-card" data-search="bert schi transport logistics burgas">
+    <div class="card-header">
+        <div>
+            <div class="name">Bertschi Group — Bulgaria</div>
+            <div class="industry">🚛 Transport / Tank Container Logistics</div>
+        </div>
+        <span class="tier tier-3">TIER 3</span>
+    </div>
+    <div class="size">Burgas-based • International tank container transport • Part of Swiss Bertschi Group</div>
+    <div class="note">💡 Swiss-founded logistics company. Burgas port operations. C/E drivers for international routes.</div>
+    <div class="link-row">
+        <a href="https://www.bertschi.com/en/career/jobs/bg-driver-ce-long-distance-traffic" class="link-btn" target="_blank">📄 Driver Job</a>
+    </div>
+</div>
+
+<div class="company-card" data-search="g v logistics plovdiv transport">
+    <div class="card-header">
+        <div>
+            <div class="name">G&V Logistics</div>
+            <div class="industry">🚛 Transport / Logistics — Plovdiv</div>
+        </div>
+        <span class="tier tier-3">TIER 3</span>
+    </div>
+    <div class="size">Plovdiv-based • Owner: Gert Bernard • Linked to Transport Group Bulgaria</div>
+    <div class="note">💡 Owner Gert Bernard also runs Transport Group Bulgaria. Fleet operations + driver hiring.</div>
+    <div class="link-row">
+        <a href="https://bg.linkedin.com/in/gert-bernard-580480a7" class="link-btn" target="_blank">👤 Gert Bernard (Owner)</a>
+    </div>
+</div>
+
+<div class="company-card" data-search="metro cash carry wholesale">
+    <div class="card-header">
+        <div>
+            <div class="name">Metro Cash & Carry — Bulgaria</div>
+            <div class="industry">🏪 Wholesale / Cash & Carry</div>
+        </div>
+        <span class="tier tier-3">TIER 3</span>
+    </div>
+    <div class="size">Multiple locations in Bulgaria • Wholesale to hospitality + retail businesses</div>
+    <div class="note">💡 Big employer in food wholesale. Warehouse + driver + sales roles. Metro is German-owned.</div>
+    <div class="link-row">
+        <a href="https://bg.linkedin.com/in/ivaylo-penev-a6654412a" class="link-btn" target="_blank">👤 Ivaylo Penev (Head Fresh)</a>
+    </div>
+</div>
+
+<div class="company-card" data-search="mondelez chocolate confectionery sofia">
+    <div class="card-header">
+        <div>
+            <div class="name">Mondelez Bulgaria</div>
+            <div class="industry">🍫 Confectionery / Food Manufacturing</div>
+        </div>
+        <span class="tier tier-3">TIER 3</span>
+    </div>
+    <div class="size">Part of global Mondelez • Chocolate + biscuit manufacturing • Sofia operations</div>
+    <div class="note">💡 Global confectionery giant. Manufacturing plant in Sofia. Production + logistics workers needed.</div>
+    <div class="link-row">
+        <a href="https://www.mondelezinternational.com/careers/jobs/job?jobid=r-165402&jobtitle=senior+international+customer+specialist+(f/m)" class="link-btn" target="_blank">📄 Senior CS Role</a>
+    </div>
+</div>
+
+</div>
+
+<h2>🎯 Key HR Contacts — Ready to Engage</h2>
+<div class="contact-section">
+
+<div class="contact-card">
+    <div class="info">
+        <div class="name">Gergana Dimova</div>
+        <div class="role">Head of HR Department</div>
+        <div class="company">Eurohold Bulgaria AD</div>
+    </div>
+    <a href="https://bg.linkedin.com/in/gergana-dimova-b8780658" class="link-btn" target="_blank">💼 LinkedIn</a>
+</div>
+
+<div class="contact-card">
+    <div class="info">
+        <div class="name">Milena Andreeva</div>
+        <div class="role">HR Leader — 10+ years experience</div>
+        <div class="company">Sopharma Trading Jsc</div>
+    </div>
+    <a href="https://bg.linkedin.com/in/milenaandreeva" class="link-btn" target="_blank">💼 LinkedIn</a>
+</div>
+
+<div class="contact-card">
+    <div class="info">
+        <div class="name">Teodora Kirilova</div>
+        <div class="role">HR Business Partner</div>
+        <div class="company">Sopharma Trading Jsc</div>
+    </div>
+    <a href="https://bg.linkedin.com/in/teodora-kirilova-a255b559" class="link-btn" target="_blank">💼 LinkedIn</a>
+</div>
+
+<div class="contact-card">
+    <div class="info">
+        <div class="name">Katerina Shopova</div>
+        <div class="role">HR Professional</div>
+        <div class="company">Lidl Bulgaria</div>
+    </div>
+    <a href="https://bg.linkedin.com/in/katerina-shopova-b3142547" class="link-btn" target="_blank">💼 LinkedIn</a>
+</div>
+
+<div class="contact-card">
+    <div class="info">
+        <div class="name">Atanaska Pavlova-Tsigova</div>
+        <div class="role">Human Resources</div>
+        <div class="company">Biovet JSCo — Peshtera</div>
+    </div>
+    <a href="https://bg.linkedin.com/in/atanaska-pavlova-tsigova-3627b435" class="link-btn" target="_blank">💼 LinkedIn</a>
+</div>
+
+<div class="contact-card">
+    <div class="info">
+        <div class="name">Yanislav Totev</div>
+        <div class="role">Managing Director</div>
+        <div class="company">DSV Road Ltd / Bulgaria</div>
+    </div>
+    <a href="https://bg.linkedin.com/in/yanislav-totev-2689a18" class="link-btn" target="_blank">💼 LinkedIn</a>
+</div>
+
+<div class="contact-card">
+    <div class="info">
+        <div class="name">Hariton Karadzhov</div>
+        <div class="role">Strategic Transport Manager</div>
+        <div class="company">DB Schenker Bulgaria</div>
+    </div>
+    <a href="https://bg.linkedin.com/in/hariton-karadzhov-19a939120" class="link-btn" target="_blank">💼 LinkedIn</a>
+</div>
+
+<div class="contact-card">
+    <div class="info">
+        <div class="name">Gert Bernard</div>
+        <div class="role">Owner / General Manager</div>
+        <div class="company">G&V Logistics + Transport Group Bulgaria</div>
+    </div>
+    <a href="https://bg.linkedin.com/in/gert-bernard-580480a7" class="link-btn" target="_blank">💼 LinkedIn</a>
+</div>
+
+<div class="contact-card">
+    <div class="info">
+        <div class="name">Deyana Ivanova</div>
+        <div class="role">HR Manager — TELUS International</div>
+        <div class="company">Eurohold Bulgaria AD</div>
+    </div>
+    <a href="https://bg.linkedin.com/in/deyana-ivanova-3340a32" class="link-btn" target="_blank">💼 LinkedIn</a>
+</div>
+
+<div class="contact-card">
+    <div class="info">
+        <div class="name">Pamela Dyukmedzhieva</div>
+        <div class="role">HR Specialist — HR & Org Development</div>
+        <div class="company">Sopharma Trading Jsc</div>
+    </div>
+    <a href="https://bg.linkedin.com/in/pamela-dyukmedzhieva-b7b08117b" class="link-btn" target="_blank">💼 LinkedIn</a>
+</div>
+
+<div class="contact-card">
+    <div class="info">
+        <div class="name">Rayna Markova</div>
+        <div class="role">Head of Operations — Land/Groupage Transport</div>
+        <div class="company">DB Schenker Bulgaria</div>
+    </div>
+    <a href="https://bg.linkedin.com/in/rayna-markova-1a41bb63" class="link-btn" target="_blank">💼 LinkedIn</a>
+</div>
+
+</div>
+
+<h2>📊 Market Context</h2>
+<div class="section-note">
+<strong>Bulgaria's 262,000 worker shortage explained:</strong><br><br>
+• <strong>Demographics:</strong> Bulgaria lost ~600,000 people since 2012 (emigration). Population: 6.5M. Aging fast.<br>
+• <strong>EUR adoption Jan 2025:</strong> Stability boost. Investors flooding in. New factories + logistics hubs = more demand.<br>
+• <strong>Tourism boom:</strong> Sunny Beach (3M+ tourists/yr), Bansko ski resort, Burgas coastal. Burgas alone needed 18,400 seasonal workers Q3 2024.<br>
+• <strong>Construction surge:</strong> Infrastructure boom. Strabag + others building. Heavy demand for welders, electricians, machine operators.<br>
+• <strong>Meat processing:</strong> Major gap. Bulgarian meat industry needs foreign workers — local supply insufficient.<br>
+• <strong>Philippine angle:</strong> PISCO (Placewell) already works Bulgarian employers. Filipino workers in Bulgaria = growing trend.
+</div>
+
+<div class="section-note" style="border-color: var(--accent);">
+<strong>🎯 Top 5 Entry Points — Start Here:</strong><br><br>
+1. <strong>MKD / Mesokombinat Dobrudzha</strong> — Bulgaria's largest slaughterhouse. Already hiring. Careers page live. Direct pipeline ask.<br>
+2. <strong>Gradus AD</strong> — Largest poultry producer. Recently expanded €8M. Taking on 200 new workers. Perfect for food processing Filipino placement.<br>
+3. <strong>Transport Group Bulgaria / G&V Logistics</strong> — Plovdiv. Actively recruiting drivers internationally. Warm contact: Gert Bernard (owner).<br>
+4. <strong>Ajax Group</strong> — Largest pig producer in BG (400K pigs). Fully integrated. Year-round demand for farm + processing workers.<br>
+5. <strong>Gergana Dimova — Eurohold</strong> — HR Head at Bulgaria's largest company by revenue (€3.3B). Strategic hire.
+</div>
+
+<footer>
+    Bulgaria Dashboard — Data compiled May 2026 • Sources: LinkedIn, company websites, EURES, TradingView, USDA/FAS, PitchBook, SeeNews
+</footer>
+
+</div>
+
+<script>
+function filterCards(query) {
+    const cards = document.querySelectorAll('.company-card');
+    const lower = query.toLowerCase();
+    cards.forEach(card => {
+        const search = card.getAttribute('data-search') || '';
+        card.style.display = search.includes(lower) || lower === '' ? '' : 'none';
+    });
+}
+</script>
+
+</body>
+</html>

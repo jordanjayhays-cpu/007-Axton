@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neurotech Lead Intelligence — 2026-05-20</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0a0a0f; --card: #141420; --border: #1e1e2e; --text: #e2e8f0;
+            --muted: #64748b; --accent: #6366f1; --green: #22c55e;
+            --yellow: #f59e0b; --red: #ef4444; --cyan: #06b6d4; --purple: #a855f7;
+        }
+        body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, sans-serif; line-height: 1.6; padding: 2rem; }
+        .header { text-align: center; margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 2px solid var(--border); }
+        .header h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .header .subtitle { color: var(--muted); font-size: 0.9rem; }
+        .search-bar { width: 100%; max-width: 600px; margin: 0 auto 2rem; display: block; padding: 0.75rem 1rem; background: var(--card); border: 2px solid var(--border); border-radius: 8px; color: var(--text); font-size: 1rem; }
+        .search-bar:focus { outline: none; border-color: var(--accent); }
+        .search-bar::placeholder { color: var(--muted); }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 2rem; }
+        th { text-align: left; padding: 1rem; border-bottom: 2px solid var(--border); color: var(--muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        td { padding: 1rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+        tr:hover td { background: rgba(99, 102, 241, 0.05); }
+        .company-cell { font-weight: 600; }
+        .funding-cell { font-weight: 600; color: var(--green); }
+        .signal-high { color: var(--green); }
+        .signal-mid { color: var(--yellow); }
+        .why-cell { font-size: 0.85rem; color: var(--muted); }
+        .tag { display: inline-block; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; margin-right: 0.25rem; }
+        .tag-bci { background: rgba(6, 182, 212, 0.2); color: var(--cyan); }
+        .tag-neuro { background: rgba(168, 85, 247, 0.2); color: var(--purple); }
+        .tag-clinical { background: rgba(239, 68, 68, 0.2); color: var(--red); }
+        .tag-partnership { background: rgba(34, 197, 94, 0.2); color: var(--green); }
+        .tag-regulatory { background: rgba(56, 189, 248, 0.2); color: #38bdf8; }
+        .footer { text-align: center; padding-top: 2rem; border-top: 2px solid var(--border); color: var(--muted); font-size: 0.85rem; }
+        .footer a { color: var(--accent); text-decoration: none; }
+        @media (max-width: 1024px) { table { display: block; overflow-x: auto; } }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🧠 Neurotech Lead Intelligence</h1>
+        <div class="subtitle">Non-US Companies Entering the US Market — May 20, 2026</div>
+    </div>
+    <input type="text" class="search-bar" id="search" placeholder="Search companies, countries, signals..." oninput="filterTable()">
+    <table id="leads-table">
+        <thead><tr><th>Company</th><th>Country</th><th>Product</th><th>Last Funding</th><th>US Signal</th><th>Buyer Persona</th><th>Why Jordan</th></tr></thead>
+        <tbody>
+            <tr data-search="zander labs netherlands germany dutch german pBCI passive BCI neuroadaptive ai US expansion partners 2026">
+                <td class="company-cell">Zander Labs</td><td class="country-cell">🇳🇱🇩🇪</td><td><span class="tag tag-bci">BCI</span><span class="tag tag-neuro">NeuroAI</span> Passive BCI platform for mental state detection in defense, mobility, healthcare</td><td class="funding-cell">Unfunded (seeking partners)</td><td class="signal-high"><span class="tag tag-partnership">HOT</span> CEO on record: "seeking US partners West Coast" for 2026 integration</td><td>VP Business Development, Defense contractors, AI robotics</td><td class="why-cell">#1 target — CEO explicitly seeking Bay Area partners NOW</td>
+            </tr>
+            <tr data-search="synphne singapore stroke rehabilitation wearable Series A US expansion 2026">
+                <td class="company-cell">SynPhNe</td><td class="country-cell">🇸🇬</td><td><span class="tag tag-bci">BCI</span><span class="tag tag-clinical">Clinical</span> Wearable stroke rehab system (NTU spin-out)</td><td class="funding-cell">$5M Series A (2024)</td><td class="signal-high"><span class="tag tag-partnership">HOT</span> CEO: "Raising Part 2 for US scale." Partnership with Indegene (US medtech)</td><td>Stroke rehab hospitals, VA hospitals</td><td class="why-cell">🔥 CEO on record actively raising US-focused round</td>
+            </tr>
+            <tr data-search="inbrain neuroelectronics spain graphene BCI Microsoft Azure US market 2026">
+                <td class="company-cell">INBRAIN Neuroelectronics</td><td class="country-cell">🇪🇸</td><td><span class="tag tag-bci">BCI</span> Graphene-based bi-directional BCI, 1024 channels</td><td class="funding-cell">$50M Series B</td><td class="signal-high"><span class="tag tag-partnership">HOT</span> Microsoft partnership (Azure AI). CEO Carola Aguilar available</td><td>Neurosurgery dept heads, BCI researchers</td><td class="why-cell">$50M war chest, Microsoft imprimatur — Jordan helps with US medical device pathway</td>
+            </tr>
+            <tr data-search="neuroelectrics spain barcelona EEG tDCS epilepsy depression FDA clinical trials US market">
+                <td class="company-cell">Neuroelectrics</td><td class="country-cell">🇪🇸</td><td><span class="tag tag-neuro">Neuro</span><span class="tag tag-clinical">Clinical</span> Cloud neuromodulation for epilepsy/MDD</td><td class="funding-cell">$17.5M Series A</td><td class="signal-high"><span class="tag tag-regulatory">SIGNAL</span> "Spain bets on noninvasive brain cap as Neuroelectrics targets US"</td><td>Epilepsy centers, psychiatry depts, VA research</td><td class="why-cell">Ana Maiques CEO — Jordan's Barcelona connection, $17.5M for clinical trials</td>
+            </tr>
+            <tr data-search="graymatters health israel PTSD FDA 510k clearance neuromodulation US market">
+                <td class="company-cell">GrayMatters Health</td><td class="country-cell">🇮🇱</td><td><span class="tag tag-neuro">Neuro</span><span class="tag tag-regulatory">FDA</span> Non-invasive PTSD treatment (Prism)</td><td class="funding-cell">$18.3M Series A</td><td class="signal-high"><span class="tag tag-regulatory">REGULATORY</span> US FDA 510(k) clearance. US market entry imminent.</td><td>VA hospitals, military mental health, trauma centers</td><td class="why-cell">Israeli neuro mental health, FDA cleared — Jordan's FDA navigation positioning</td>
+            </tr>
+            <tr data-search="neurolief israel depression tDCS FDA ProlivRx home neuromodulation US 2026">
+                <td class="company-cell">Neurolief</td><td class="country-cell">🇮🇱</td><td><span class="tag tag-neuro">Neuro</span><span class="tag tag-regulatory">FDA</span> Proliv™Rx — first at-home neuromodulation for MDD</td><td class="funding-cell">$6M (2026)</td><td class="signal-high"><span class="tag tag-regulatory">REGULATORY</span> FDA PMA approved. US deployment early 2026.</td><td>Psychiatry groups, telehealth providers</td><td class="why-cell">Israeli, FDA approved for home use — Jordan helps US commercialization</td>
+            </tr>
+            <tr data-search="flow neuroscience sweden depression tDCS FDA approval home treatment US expansion">
+                <td class="company-cell">Flow Neuroscience</td><td class="country-cell">🇸🇪</td><td><span class="tag tag-neuro">Neuro</span><span class="tag tag-regulatory">FDA</span> tDCS headset for medication-free depression</td><td class="funding-cell">$9M Series A</td><td class="signal-high"><span class="tag tag-regulatory">REGULATORY</span> FDA approved Dec 2025. US market entry planned.</td><td>Psychiatry groups, direct-to-consumer</td><td class="why-cell">Swedish, FDA approved — Jordan helps with US channel/reimbursement</td>
+            </tr>
+            <tr data-search="saluda medical australia spinal cord stimulation Eva sensing Boston Scientific IPO US expansion 2026">
+                <td class="company-cell">Saluda Medical</td><td class="country-cell">🇦🇺</td><td><span class="tag tag-bci">BCI</span><span class="tag tag-clinical">Clinical</span> Closed-loop spinal cord stimulation</td><td class="funding-cell">AU$231M IPO + $75M Boston Scientific</td><td class="signal-high"><span class="tag tag-partnership">PARTNERSHIP</span> Boston Scientific partnership. US sales force +81% in 2026.</td><td>Pain management, hospital procurement</td><td class="why-cell">Boston Scientific backing. US expansion mode — channel strategy</td>
+            </tr>
+            <tr data-search="nobi smart lights belgium age tech fall detection UK US expansion Series B 37M">
+                <td class="company-cell">Nobi</td><td class="country-cell">🇧🇪</td><td><span class="tag tag-neuro">Neuro</span> AI smart lights for fall detection</td><td class="funding-cell">€37M Series B</td><td class="signal-mid"><span class="tag tag-partnership">SIGNAL</span> European AgeTech with US office planned</td><td>Senior living, home health, insurance</td><td class="why-cell">Belgium $37M AgeTech — Jordan helps US channel</td>
+            </tr>
+            <tr data-search="neurable UK EEG BCI gaming productivity DoD contract 13M US DoD">
+                <td class="company-cell">Neurable</td><td class="country-cell">🇬🇧</td><td><span class="tag tag-bci">BCI</span> Non-invasive EEG for consumer products</td><td class="funding-cell">$13M + $5M DoD</td><td class="signal-mid"><span class="tag tag-partnership">SIGNAL</span> $5M+ DoD contracts. UK MoD partnership. London/Boston.</td><td>Gaming, defense contractors</td><td class="why-cell">UK BCI with DoD ties — Jordan bridges UK/US defense</td>
+            </tr>
+            <tr data-search="brainq israel stroke BCI AI therapy 40M funding US market 2026">
+                <td class="company-cell">BrainQ</td><td class="country-cell">🇮🇱</td><td><span class="tag tag-bci">BCI</span><span class="tag tag-neuro">AI</span> AI-powered non-invasive BCI for stroke recovery</td><td class="funding-cell">$40M Series B</td><td class="signal-mid"><span class="tag tag-partnership">SIGNAL</span> $40M raised. AI + BCI + FDA pathway.</td><td>Stroke rehab networks, hospitals</td><td class="why-cell">Israeli $40M stroke BCI — Jordan helps FDA/reimbursement</td>
+            </tr>
+            <tr data-search="neo-bionica australia medtech bionic US expansion manufacturing 2026">
+                <td class="company-cell">Neo-Bionica</td><td class="country-cell">🇦🇺</td><td><span class="tag tag-bci">BCI</span> MedTech manufacturing for bionic devices</td><td class="funding-cell">Service revenue</td><td class="signal-mid"><span class="tag tag-partnership">SIGNAL</span> Official US expansion May 2026. US team formed.</td><td>Neurotech startups, medtech OEMs</td><td class="why-cell">Australian manufacturer — JoJo Platt BD lead, Jordan connects ecosystem</td>
+            </tr>
+            <tr data-search="bitbrain spain sleep EEG consumer neurotech US expansion Series A 18M">
+                <td class="company-cell">Bitbrain</td><td class="country-cell">🇪🇸</td><td><span class="tag tag-neuro">Neuro</span> EEG headsets: research (BRAINSTORM) + consumer sleep</td><td class="funding-cell">$18.8M</td><td class="signal-mid"><span class="tag tag-partnership">SIGNAL</span> Showing US expansion positioning. English-speaking.</td><td>Sleep clinics, consumer electronics</td><td class="why-cell">Spanish consumer sleep + neurotech crossover</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="footer">
+        <p>Jordan Hays | <strong>Niah</strong> | <a href="mailto:jordan@niah.io">jordan@niah.io</a></p>
+        <p style="margin-top: 0.5rem; font-size: 0.75rem;">Non-US neurotech with US entry signals. Sources: Neurotech Notables, Crunchbase, Yahoo Finance.</p>
+    </div>
+    <script>
+        function filterTable() { var input = document.getElementById('search'); var filter = input.value.toLowerCase(); var rows = document.getElementsByTagName('tr'); for (var i = 1; i < rows.length; i++) { var s = rows[i].getAttribute('data-search') || ''; rows[i].style.display = s.toLowerCase().includes(filter) ? '' : 'none'; } }
+    </script>
+</body>
+</html>

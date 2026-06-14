@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧠 Philosophical Songhooks</title>
+    <style>
+        :root {
+            --bg: #f5f4f0;
+            --card: #ffffff;
+            --border: #d4d0c8;
+            --text: #1a1a1a;
+            --muted: #6b6560;
+            --accent: #c41e3a;
+            --green: #1a7a3a;
+            --blue: #1a5faa;
+            --orange: #a06800;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; line-height: 1.6; padding: 20px; }
+        .container { max-width: 900px; margin: 0 auto; }
+        .hero { text-align: center; padding: 40px 20px; border-bottom: 2px solid var(--border); margin-bottom: 30px; }
+        .hero h1 { font-size: 2em; margin-bottom: 8px; color: #111; }
+        .hero h1 span { color: var(--accent); }
+        .hero .subtitle { color: var(--muted); font-size: 1em; max-width: 550px; margin: 0 auto; line-height: 1.5; }
+        .meta-bar { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin: 20px 0; }
+        .meta-card { background: var(--card); border: 2px solid var(--border); border-radius: 12px; padding: 16px 24px; text-align: center; }
+        .meta-card .number { font-size: 1.8em; font-weight: 700; color: var(--accent); }
+        .meta-card .label { color: var(--muted); font-size: 0.8em; margin-top: 2px; }
+        .search-bar { width: 100%; background: var(--card); border: 2px solid var(--border); border-radius: 10px; padding: 14px 18px; color: var(--text); font-size: 1em; outline: none; margin-bottom: 30px; }
+        .search-bar:focus { border-color: var(--accent); }
+        .continent-header { display: flex; align-items: center; gap: 16px; margin: 40px 0 20px; }
+        .continent-header .flag { font-size: 2.5em; }
+        .continent-header .info { flex: 1; }
+        .continent-header h2 { font-size: 1.3em; font-weight: 700; color: #111; margin-bottom: 2px; }
+        .continent-header .region { color: var(--muted); font-size: 0.85em; }
+        .philosophy-card { background: var(--card); border: 2px solid var(--border); border-radius: 14px; padding: 28px; margin-bottom: 20px; transition: border-color 0.2s, box-shadow 0.2s; }
+        .philosophy-card:hover { border-color: var(--accent); box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+        .philosophy-card .concept-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
+        .philosophy-card .concept-name { font-size: 1.3em; font-weight: 700; color: #111; }
+        .philosophy-card .origin { background: var(--bg); border: 2px solid var(--border); border-radius: 20px; padding: 4px 12px; font-size: 0.8em; color: var(--muted); font-weight: 500; }
+        .explain-box { background: #f8f6f2; border: 2px solid var(--border); border-radius: 10px; padding: 16px 20px; margin: 16px 0; font-size: 0.95em; line-height: 1.7; color: #333; }
+        .explain-box strong { color: var(--accent); }
+        .section-label { font-size: 0.75em; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); margin-bottom: 8px; }
+        .song-angle { background: #e8f0fc; border: 2px solid #a0bde0; border-radius: 10px; padding: 14px 18px; margin: 14px 0; font-size: 0.92em; color: var(--blue); font-weight: 500; line-height: 1.5; }
+        .themes-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0; }
+        .theme-tag { background: #fef6e4; border: 2px solid var(--orange); border-radius: 20px; padding: 5px 14px; font-size: 0.82em; color: var(--orange); font-weight: 600; }
+        .prompt-box { background: #f0f7f2; border: 2px solid #b8ddc4; border-radius: 10px; padding: 16px 20px; margin: 14px 0; font-size: 0.9em; line-height: 1.6; color: var(--green); }
+        .prompt-box strong { font-size: 0.8em; text-transform: uppercase; letter-spacing: 1px; }
+        .divider { border: none; border-top: 2px dashed var(--border); margin: 40px 0; }
+        footer { text-align: center; color: var(--muted); font-size: 0.8em; margin-top: 60px; padding: 20px; border-top: 2px solid var(--border); }
+        @media (max-width: 600px) { .philosophy-card { padding: 20px; } .concept-row { flex-direction: column; } }
+    </style>
+</head>
+<body>
+<div class="container">
+
+<div class="hero">
+    <h1>🧠 Philosophical <span>Songhooks</span></h1>
+    <p class="subtitle">Obscure philosophies from around the world — the kind with a story inside them, waiting to become a song. One concept per continent, every Monday.</p>
+    <div class="meta-bar">
+        <div class="meta-card"><div class="number">15</div><div class="label">total concepts</div></div>
+        <div class="meta-card"><div class="number">5</div><div class="label">continents</div></div>
+        <div class="meta-card"><div class="number">3</div><div class="label">weeks running</div></div>
+    </div>
+</div>
+
+<input type="text" class="search-bar" placeholder="Search concepts, themes, continents..." oninput="filterCards(this.value)">
+
+<!-- AFRICA -->
+<div class="continent-header">
+    <div class="flag">🌍</div>
+    <div class="info">
+        <h2>Africa</h2>
+        <div class="region">Ghana — Akan tradition</div>
+    </div>
+</div>
+
+<div class="philosophy-card" data-search="sankofa ghana akanghana return collect past ancestor memory">
+    <div class="concept-row">
+        <div class="concept-name">Sankofa</div>
+        <div class="origin">Akan word · Ghana · Akan tradition</div>
+    </div>
+    <div class="explain-box">
+        <strong>What it means:</strong> "Go back and collect." Sankofa is a bird that flies forward but looks backward — its head turns completely around. It means: <em>you have to go back to where you came from to know where you're going.</em> It's not nostalgia. It's medicine. The idea is that wisdom is inherited, not invented — you carry your ancestors in your decisions, whether you acknowledge them or not.
+    </div>
+    <div class="section-label">🎵 Song Angle</div>
+    <div class="song-angle">
+        A person standing in their childhood home — it's been sold, someone else lives there — but through the window they can see the exact corner where their grandmother sat. The song is about carrying history you never asked for but can't ignore.
+    </div>
+    <div class="section-label">✍️ Lyrical Themes</div>
+    <div class="themes-row">
+        <span class="theme-tag">Inherited weight</span>
+        <span class="theme-tag">Return to unlock forward</span>
+        <span class="theme-tag">Ancestors as living guests</span>
+    </div>
+    <div class="prompt-box">
+        <strong>Writing Prompt:</strong><br>
+        "A woman attends her father's funeral and realizes she's been running from his last name her whole life — she changed it, moved cities, started over. Now she's standing over the grave and someone asks 'what was his name?' and she realizes she doesn't know how to answer."
+    </div>
+</div>
+
+<hr class="divider">
+
+<!-- ASIA -->
+<div class="continent-header">
+    <div class="flag">🌏</div>
+    <div class="info">
+        <h2>East Asia</h2>
+        <div class="region">Japan — aesthetic philosophy</div>
+    </div>
+</div>
+
+<div class="philosophy-card" data-search="yugen japan japanese aesthetics mysterious depth beauty hidden">
+    <div class="concept-row">
+        <div class="concept-name">Yugen (幽玄)</div>
+        <div class="origin">幽 = faint/hidden · 玄 = profound/mysterious</div>
+    </div>
+    <div class="explain-box">
+        <strong>What it means:</strong> Literally "faint depth." Yugen is the feeling you get when you look at something so beautiful or profound that language fails — the moment when "I can't explain it" is the most accurate sentence. It describes the sadness in autumn leaves falling, or the pull of a moon seen through clouds, or hearing a song that reminds you of a moment you can't quite remember. It's beauty that makes you feel the edge of something vast.
+    </div>
+    <div class="section-label">🎵 Song Angle</div>
+    <div class="song-angle">
+        Two people sitting on a rooftop at 3am, not talking. One of them is about to leave the country. The song isn't about what they say — it's about what hangs between them in the silence: that particular kind of beautiful ache that has no words.
+    </div>
+    <div class="section-label">✍️ Lyrical Themes</div>
+    <div class="themes-row">
+        <span class="theme-tag">Beauty at the edge of language</span>
+        <span class="theme-tag">Things seen through something</span>
+        <span class="theme-tag">The sadness of depth</span>
+    </div>
+    <div class="prompt-box">
+        <strong>Writing Prompt:</strong><br>
+        "A man learns to play piano at 47 because his son died at 7 and never got to. He practices in the dark, 2am, with headphones — not because it sounds good, but because the act of pressing keys feels like speaking to someone who ran out of time."
+    </div>
+</div>
+
+<hr class="divider">
+
+<!-- MIDDLE EAST / WEST ASIA -->
+<div class="continent-header">
+    <div class="flag">🏛️</div>
+    <div class="info">
+        <h2>Middle East / West Asia</h2>
+        <div class="region">Persia & Islamic world — Sufi mysticism</div>
+    </div>
+</div>
+
+<div class="philosophy-card" data-search="fana sufi annihilation ego god love divine lover rumi">
+    <div class="concept-row">
+        <div class="concept-name">Fana (فنا)</div>
+        <div class="origin">Arabic — Sufi / Islamic mysticism</div>
+    </div>
+    <div class="explain-box">
+        <strong>What it means:</strong> "Annihilation" or "dissolution." Fana is the Sufi idea that you have to destroy your ego — your sense of being a separate self — in order to become truly present with the divine. It's not death. It's the moment you stop defending yourself and dissolve into what you're actually part of. Rumi called it "die before you die" — the ego dies so the real self can show up. Love is the annihilator.
+    </div>
+    <div class="section-label">🎵 Song Angle</div>
+    <div class="song-angle">
+        A person in love who loses themselves completely — not in a romantic way but in an existential way. The song is about falling so hard into someone (or something) that you stop existing as a person who tries to protect themselves. The chorus is the moment of dissolution. It should feel dangerous and freeing at the same time.
+    </div>
+    <div class="section-label">✍️ Lyrical Themes</div>
+    <div class="themes-row">
+        <span class="theme-tag">Ego death as gift</span>
+        <span class="theme-tag">Love as annihilator</span>
+        <span class="theme-tag">Surrender as becoming</span>
+    </div>
+    <div class="prompt-box">
+        <strong>Writing Prompt:</strong><br>
+        "A man gives up his career to follow someone — not because they're in love, but because following them is the only way he knows how to stop being himself. He crosses a border in the middle of the night and doesn't look back. The song is about what it feels like to step out of yourself."
+    </div>
+</div>
+
+<hr class="divider">
+
+<!-- EUROPE -->
+<div class="continent-header">
+    <div class="flag">🏰</div>
+    <div class="info">
+        <h2>Europe</h2>
+        <div class="region">Spain — flamenco & bullfighting philosophy</div>
+    </div>
+</div>
+
+<div class="philosophy-card" data-search="querencia spain bullfighting flamenco place sacred gravity">
+    <div class="concept-row">
+        <div class="concept-name">Querencia</div>
+        <div class="origin">Spanish — from querer (to want/long for)</div>
+    </div>
+    <div class="explain-box">
+        <strong>What it means:</strong> From the verb querer (to want/long for). In bullfighting, it's the spot where the bull goes to rest before returning to fight — a place of gathered strength, stillness, and deep calm. Outside the ring, it's the place where you feel most like yourself. Not where you're comfortable — where you're <em>true</em>. The place that holds you when everything else is chaos. You can have multiple querencias in a life.
+    </div>
+    <div class="section-label">🎵 Song Angle</div>
+    <div class="song-angle">
+        A person returns to their hometown after 20 years. Everyone asks if they've changed. They say no, but something is different — the place doesn't hold them the way it used to. The song is about finding your querencia again in an unexpected place, after the expected one fails you.
+    </div>
+    <div class="section-label">✍️ Lyrical Themes</div>
+    <div class="themes-row">
+        <span class="theme-tag">Place as identity anchor</span>
+        <span class="theme-tag">Coming home changed</span>
+        <span class="theme-tag">Finding the spot that holds you</span>
+    </div>
+    <div class="prompt-box">
+        <strong>Writing Prompt:</strong><br>
+        "A woman leaves a marriage and moves to a small coastal town she's never been to. She rents a room above a bar. On the first night she can't sleep, so she walks to the water. The sea is black and enormous. She realizes this is her querencia — not the place she planned to go, but the place she actually belongs."
+    </div>
+</div>
+
+<hr class="divider">
+
+<!-- AMERICAS -->
+<div class="continent-header">
+    <div class="flag">🌎</div>
+    <div class="info">
+        <h2>The Americas</h2>
+        <div class="region">Andes — Quechua & Aymara philosophy</div>
+    </div>
+</div>
+
+<div class="philosophy-card" data-search="ayllu andes quechua aymara community land kinship identity peru bolivia">
+    <div class="concept-row">
+        <div class="concept-name">Ayllu</div>
+        <div class="origin">Quechua / Aymara · Peru, Bolivia, Ecuador</div>
+    </div>
+    <div class="explain-box">
+        <strong>What it means:</strong> The traditional Andean community unit — but not just "a group of people." An ayllu is a network where identity is shared: people belong to the land, the land belongs to the people, ancestors live in the soil, descendants are already anticipated. You're not born into an ayllu — you emerge from it. Individual identity is a fiction; you're a node in a living web. In Andean thought, no one is an orphan.
+    </div>
+    <div class="section-label">🎵 Song Angle</div>
+    <div class="song-angle">
+        An immigrant in a big city works three jobs and sends money home. But one day the money stops getting received — a flood, or war, or just silence. The song is about what it means to be a node rather than a whole: your life suddenly has a gap in it, and you don't know who you are without the circuit completing.
+    </div>
+    <div class="section-label">✍️ Lyrical Themes</div>
+    <div class="themes-row">
+        <span class="theme-tag">Identity as network</span>
+        <span class="theme-tag">Disconnection as identity loss</span>
+        <span class="theme-tag">Being a node in a living web</span>
+    </div>
+    <div class="prompt-box">
+        <strong>Writing Prompt:</strong><br>
+        "A man is the last person in his family village still alive there. Everyone else emigrated — to Madrid, to Buenos Aires, to New York. He tends the land alone. One evening he sits in the exact spot where his family gathered for 200 years and realizes: if he leaves, the ayllu dies. But if he stays, he starves. What do you do when you're the last one?"
+    </div>
+</div>
+
+<footer>
+    Philosophical Songhooks · Week 1 · May 2026 · Obscure philosophies, one per continent, every Monday
+</footer>
+
+<!-- ═══════════════════════════════════════════════════════════
+     WEEK 2 — May 19, 2026
+═══════════════════════════════════════════════════════════ -->
+
+<div class="continent-header" style="margin-top:60px;">
+    <div class="flag">🌍</div>
+    <div class="info">
+        <h2>Africa</h2>
+        <div class="region">Yoruba tradition — Nigeria</div>
+        <div class="tier-badge" style="margin-top:4px;"><span class="theme-tag" style="background:#e8f0fc;border-color:#4090e0;color:#1a5faa;">🔎 Obscure — Tier 2</span></div>
+    </div>
+</div>
+
+<div class="philosophy-card" data-search="ori yoruba nigeria head destiny spiritual intuition choice">
+    <div class="concept-row">
+        <div class="concept-name">Ori (Orí)</div>
+        <div class="origin">Yoruba · Nigeria · West Africa</div>
+    </div>
+    <div class="explain-box">
+        <strong>What it means:</strong> Literally "the head," but it means your spiritual intuition and personal destiny — the inner oracle each person carries. The Yoruba believe you chose your Ori before you were born. It's not just personality. It's the cosmic angle at which your life arrives: some people are born at good angles, others at difficult ones. And you can honor or dishonor it. Your Ori is the clearest version of you — the one that knows things before your mind does.
+    </div>
+    <div class="section-label">🎵 Song Angle</div>
+    <div class="song-angle">
+        A person who has always felt they were born at the wrong angle — wrong city, wrong family, wrong decade — and one day meets someone who looks at them and says "I know exactly what you are." The song is about recognizing your own face in someone else's understanding of you.
+    </div>
+    <div class="section-label">✍️ Lyrical Themes</div>
+    <div class="themes-row">
+        <span class="theme-tag">Destiny as chosen before birth</span>
+        <span class="theme-tag">The self you were before the world got to you</span>
+        <span class="theme-tag">Being recognized by the right person</span>
+    </div>
+    <div class="prompt-box">
+        <strong>Writing Prompt:</strong><br>
+        "A teenager in Lagos is told by their grandmother — before she dies — that she was born under a particular star and it means something specific. She doesn't believe it. Years later, in a moment of complete failure, she looks up at the sky and realizes the grandmother was describing the exact shape of her life."
+    </div>
+</div>
+
+<hr class="divider">
+
+<div class="continent-header">
+    <div class="flag">🌏</div>
+    <div class="info">
+        <h2>East Asia</h2>
+        <div class="region">Korea — emotional philosophy</div>
+        <div class="tier-badge" style="margin-top:4px;"><span class="theme-tag" style="background:#e8f0fc;border-color:#4090e0;color:#1a5faa;">🔎 Obscure — Tier 2</span></div>
+    </div>
+</div>
+
+<div class="philosophy-card" data-search="han korea korean suffering resentment grief collective sorrow pain resilience">
+    <div class="concept-row">
+        <div class="concept-name">Han (한 / 恨)</div>
+        <div class="origin">Korean · Korea</div>
+    </div>
+    <div class="explain-box">
+        <strong>What it means:</strong> A deep, accumulated grief — the kind formed not from one loss but from generations of loss. Han isn't self-pity. It's heavier: it's collective sorrow that gets passed down through families, through communities, through a people. The Korean term links sadness, resentment, bitterness, and longing into one word. What's radical about han is what comes after: it's supposed to be transformed. Not erased — transformed. The philosophy is that this pain can become fuel, become power, become art.
+    </div>
+    <div class="section-label">🎵 Song Angle</div>
+    <div class="song-angle">
+        A grandmother who survived a war teaches her granddaughter how to cry — not as weakness, but as practice. The song is about grief as inheritance: you carry what your mother carried, and her mother, and hers. But somewhere in the chain, the carrying becomes a choice, not a sentence.
+    </div>
+    <div class="section-label">✍️ Lyrical Themes</div>
+    <div class="themes-row">
+        <span class="theme-tag">Grief as generational inheritance</span>
+        <span class="theme-tag">Transforming suffering into creation</span>
+        <span class="theme-tag">The difference between carrying and being carried</span>
+    </div>
+    <div class="prompt-box">
+        <strong>Writing Prompt:</strong><br>
+        "A Korean-American woman goes to the DMZ for the first time — the border between North and South. She has no family history there, she grew up in California. But standing at the fence, she begins to cry and doesn't know why. Later she realizes: her grandmother's tears are in her body. She's not crying as herself."
+    </div>
+</div>
+
+<hr class="divider">
+
+<div class="continent-header">
+    <div class="flag">🏛️</div>
+    <div class="info">
+        <h2>Middle East / West Asia</h2>
+        <div class="region">Arabic / Islamic tradition — moral philosophy</div>
+        <div class="tier-badge" style="margin-top:4px;"><span class="theme-tag" style="background:#e8f0fc;border-color:#4090e0;color:#1a5faa;">🔎 Obscure — Tier 2</span></div>
+    </div>
+</div>
+
+<div class="philosophy-card" data-search="ghayra arabic jealousy honor modesty protective dignity dignity-gaze">
+    <div class="concept-row">
+        <div class="concept-name">Ghayra (غيرة)</div>
+        <div class="origin">Arabic · Islamic moral philosophy</div>
+    </div>
+    <div class="explain-box">
+        <strong>What it means:</strong> Often translated as "jealousy," but it means something more specific and more dignified: the protective fire you feel when something precious to you is at risk. Ghayra is what a person feels when their family's honor, their own dignity, or the sacredness of a relationship is threatened. It's not insecurity — it's guardian energy. The word implies aversion to anything that diminishes what you love. The etymology is related to "遮" (covering, protecting) — it's about shielding, not controlling. Ibn al-Qayyim wrote extensively on how ghayra is actually a form of divine dignity — God has ghayra, and so do people made in His image.
+    </div>
+    <div class="section-label">🎵 Song Angle</div>
+    <div class="song-angle">
+        A person who has spent their whole life not being possessive — easygoing, unbothered — suddenly feels ghayra for the first time. Not for a partner. For a version of themselves they almost became and lost. The song is about what it feels like to suddenly care fiercely about something you'd convinced yourself was beneath you.
+    </div>
+    <div class="section-label">✍️ Lyrical Themes</div>
+    <div class="themes-row">
+        <span class="theme-tag">Protective fire vs. possessive control</span>
+        <span class="theme-tag">Dignity as a form of love</span>
+        <span class="theme-tag">Caring about something you've spent years pretending not to want</span>
+    </div>
+    <div class="prompt-box">
+        <strong>Writing Prompt:</strong><br>
+        "A man sees an old photograph of himself — before his father died, before he became cautious and small. In the photo he is laughing with a kind of freedom he's forgotten. He realizes he's been protecting that version of himself without knowing it. The ghayra he feels is for his own abandoned aliveness."
+    </div>
+</div>
+
+<hr class="divider">
+
+<div class="continent-header">
+    <div class="flag">🏰</div>
+    <div class="info">
+        <h2>Europe</h2>
+        <div class="region">Germany — Romantic philosophy</div>
+        <div class="tier-badge" style="margin-top:4px;"><span class="theme-tag" style="background:#e8f0fc;border-color:#4090e0;color:#1a5faa;">🔎 Obscure — Tier 2</span></div>
+    </div>
+</div>
+
+<div class="philosophy-card" data-search="sehnsucht germany german longing yearning unattainable ideal romantic wistful">
+    <div class="concept-row">
+        <div class="concept-name">Sehnsucht</div>
+        <div class="origin">German · Romantic philosophical tradition</div>
+    </div>
+    <div class="explain-box">
+        <strong>What it means:</strong> From sehnen (to yearn) + sucht (addiction/craving). It's that inconsolable longing — not for something specific, but for something you can't name or locate. psychologists call it "life-longings": the feeling that this world is not quite your home, that there's something more you were meant for. It's not sadness exactly — it's bittersweet. It's the ache that beauty causes when you know it can't be held. Sehnsucht is the emotional engine behind most Romantic art, most blues music, most of what makes humans stare at the horizon.
+    </div>
+    <div class="section-label">🎵 Song Angle</div>
+    <div class="song-angle">
+        A person standing at a window on a Sunday afternoon, not sad, not happy — just aware that something is calling them that they will never reach. The song is about that specific quality of longing that has no object. The chorus is the feeling of almost-but-not-quite, repeated.
+    </div>
+    <div class="section-label">✍️ Lyrical Themes</div>
+    <div class="themes-row">
+        <span class="theme-tag">Yearning with no name or address</span>
+        <span class="theme-tag">Beauty as ache</span>
+        <span class="theme-tag">Almost-but-not-quite as a permanent state</span>
+    </div>
+    <div class="prompt-box">
+        <strong>Writing Prompt:</strong><br>
+        "A man drives through the American Southwest for no reason. He has a job, a family, a house. He pulls over at a rest stop in the desert at dusk. A hawk is circling. He sits there for forty minutes and realizes he's not sad — he's just homesick for a place he's never been. He drives home the next morning and nothing has changed. He goes back to work."
+    </div>
+</div>
+
+<hr class="divider">
+
+<div class="continent-header">
+    <div class="flag">🌎</div>
+    <div class="info">
+        <h2>The Americas</h2>
+        <div class="region">Aztec / Mesoamerica — Nahuatl philosophy</div>
+        <div class="tier-badge" style="margin-top:4px;"><span class="theme-tag" style="background:#e8f0fc;border-color:#4090e0;color:#1a5faa;">🔎 Obscure — Tier 2</span></div>
+    </div>
+</div>
+
+<div class="philosophy-card" data-search="tonalli aztec mexica mesoamerica vital force sun destiny soul heat warmth">
+    <div class="concept-row">
+        <div class="concept-name">Tonalli</div>
+        <div class="origin">Nahuatl · Aztec / Mesoamerica</div>
+    </div>
+    <div class="explain-box">
+        <strong>What it means:</strong> From tona, "to make heat" — Tonalli is the vital force that comes from the sun. It's your warmth, your growth, your destiny, and your life-energy all at once. The Aztecs believed your Tonalli lived partly in your head and could be affected by what touched you. Crucially: your Tonalli was shared with your community and your gods. You weren't born with a fixed amount — it could be increased by right action, generosity, and honor, or decreased by selfishness and cowardice. Your destiny wasn't fixed; it was thermal. You could heat up or cool out over the course of a life.
+    </div>
+    <div class="section-label">🎵 Song Angle</div>
+    <div class="song-angle">
+        A person who has gone cold — not depressed, not numb, but Tonalli-depleted — slowly reignites. The song is about the difference between surviving and living: one is passive, one requires generating your own heat. The heat isn't happiness. It's purpose, or presence, or the refusal to go small.
+    </div>
+    <div class="section-label">✍️ Lyrical Themes</div>
+    <div class="themes-row">
+        <span class="theme-tag">Destiny as thermal — you can heat up or cool out</span>
+        <span class="theme-tag">Generosity as fuel</span>
+        <span class="theme-tag">The difference between surviving and burning</span>
+    </div>
+    <div class="prompt-box">
+        <strong>Writing Prompt:</strong><br>
+        "A woman has been ill for two years. Not dying — just cold. She goes to Mexico for three weeks. On the last day she climbs Teotihuacán. At the top of the Sun Pyramid she stands where the sun hits hardest. She realizes she can feel it again — not just on her skin but inside. The Tonalli she lost is coming back. She descends different."
+    </div>
+</div>
+
+<footer style="border-top:3px solid var(--border); margin-top:60px; padding-top:30px;">
+    Philosophical Songhooks · Week 2 · May 19, 2026 · Obscure philosophies, one per continent, every Monday<br>
+    <span style="font-size:0.75em; color:var(--muted);">Tier 1 = most obscure · Tier 2 = lesser-known but rich · Tier 3 = semi-familiar</span>
+</footer>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     WEEK 3 — May 26, 2026
+═══════════════════════════════════════════════════════════ -->
+
+<div class="continent-header" style="margin-top:60px;">
+    <div class="flag">🌍</div>
+    <div class="info">
+        <h2>Africa</h2>
+        <div class="region">Mali — Bambara philosophy</div>
+        <div class="tier-badge" style="margin-top:4px;"><span class="theme-tag" style="background:#e8f0fc;border-color:#4090e0;color:#1a5faa;">🔎 Obscure — Tier 2</span></div>
+    </div>
+</div>
+
+<div class="philosophy-card" data-search="niginsoba bambara mali ubuntu reciprocity balance knife handle">
+    <div class="concept-row">
+        <div class="concept-name">Nigènsoba / Ubuntu</div>
+        <div class="origin">Bambara · Mali · West Africa / Southern Africa</div>
+    </div>
+    <div class="explain-box">
+        <strong>What it means:</strong> From the Bambara phrase "nigè" (we / us) + "soba" (to be / to exist). Ubuntu is the southern African expression of the same truth: "I am because we are." The idea is that a person is only a person through their relationships — isolated, the self is incomplete. There's a Bambara parable: a man asked "What is the most beautiful thing in the world?" The answer: "The most beautiful thing in the world is the handle of a knife — it brings two blades together." The handle is the relationship. The blades (individuals) only cut when joined.
+    </div>
+    <div class="section-label">🎵 Song Angle</div>
+    <div class="song-angle">
+        Two siblings who haven't spoken in years — one funeral brings them in the same room. The song isn't about the reconciliation. It's about what they realize in the middle of not talking: that they are each only half of something that used to be whole. The handle between them has been missing.
+    </div>
+    <div class="section-label">✍️ Lyrical Themes</div>
+    <div class="themes-row">
+        <span class="theme-tag">Identity through relationship</span>
+        <span class="theme-tag">The handle that joins two blades</span>
+        <span class="theme-tag">Half-people and the whole they made</span>
+    </div>
+    <div class="prompt-box">
+        <strong>Writing Prompt:</strong><br>
+        "A woman finds out she has a half-sister she never knew about — same father, different mothers. They meet at 35. The song is about the strange gravity of recognizing yourself in someone you've never met: you share a walk, a gesture, a way of laughing. You're both blades. Now you need to find the handle."
+    </div>
+</div>
+
+<hr class="divider">
+
+<div class="continent-header">
+    <div class="flag">🌏</div>
+    <div class="info">
+        <h2>East Asia</h2>
+        <div class="region">Japan — Zen Buddhist philosophy</div>
+        <div class="tier-badge" style="margin-top:4px;"><span class="theme-tag" style="background:#e8f0fc;border-color:#4090e0;color:#1a5faa;">🔎 Obscure — Tier 2</span></div>
+    </div>
+</div>
+
+<div class="philosophy-card" data-search="ma japan zen negative space gap between breathing room emptiness intervallo">
+    <div class="concept-row">
+        <div class="concept-name">Ma (間)</div>
+        <div class="origin">Japanese · Zen / spatial philosophy</div>
+    </div>
+    <div class="explain-box">
+        <strong>What it means:</strong> The space between. In Japanese aesthetics, Ma isn't empty — it's active. It's the pause between notes that makes music, the silence between words that makes conversation, the gap in a garden wall that makes you want to walk through it. Architects call it "negative space." Musicians call it "intervallo." Zen call it the gap through which the real enters. Ma is where you put your attention — because it's the space that defines the thing, not the thing itself. Without Ma, nothing breathes.
+    </div>
+    <div class="section-label">🎵 Song Angle</div>
+    <div class="song-angle">
+        A conversation between two people who have been married for 30 years. The song is set in the silence between a question and an answer — that specific pause where you realize you don't know this person anymore, or that you know them exactly, or both. The Ma of a long relationship.
+    </div>
+    <div class="section-label">✍️ Lyrical Themes</div>
+    <div class="themes-row">
+        <span class="theme-tag">The gap that defines what surrounds it</span>
+        <span class="theme-tag">Silence as active presence</span>
+        <span class="theme-tag">The Ma of a long relationship</span>
+    </div>
+    <div class="prompt-box">
+        <strong>Writing Prompt:</strong><br>
+        "Two old jazz musicians play together after 20 years. They don't speak while they play. Between every phrase there's a silence — a Ma — and they both know exactly how to fill it. The song is about what happens in the negative space of a collaboration: trust lives there."
+    </div>
+</div>
+
+<hr class="divider">
+
+<div class="continent-header">
+    <div class="flag">🏛️</div>
+    <div class="info">
+        <h2>Middle East / West Asia</h2>
+        <div class="region">Jewish / Hebrew — mystical philosophy</div>
+        <div class="tier-badge" style="margin-top:4px;"><span class="theme-tag" style="background:#e8f0fc;border-color:#4090e0;color:#1a5faa;">🔎 Obscure — Tier 2</span></div>
+    </div>
+</div>
+
+<div class="philosophy-card" data-search="kavanah judaism hebrew intention meaning heart direction mitzvah prayer">
+    <div class="concept-row">
+        <div class="concept-name">Kavanah (כוונה)</div>
+        <div class="origin">Hebrew · Jewish liturgical philosophy</div>
+    </div>
+    <div class="explain-box">
+        <strong>What it means:</strong> "Direction" or "intention." In Jewish tradition, a mitzvah (commandment) isn't complete without kavanah — you have to mean it. Praying the words without intending them is just noise. Kavanah is the inward turn: the moment you stop going through the motions and actually arrive at what you're doing. It's the difference between walking into a room and entering one. The word comes from "kaven" — to weigh, to measure. Your intention weighs the action. Without it, you're just moving.
+    </div>
+    <div class="section-label">🎵 Song Angle</div>
+    <div class="song-angle">
+        A person who shows up to everything — family dinners, holidays, funerals, weddings — but is never actually there. The song is about the difference between presence and attendance. Someone in the room says "I wish you were here" and they realize: they never have been.
+    </div>
+    <div class="section-label">✍️ Lyrical Themes</div>
+    <div class="themes-row">
+        <span class="theme-tag">Attendance vs. presence</span>
+        <span class="theme-tag">The inward turn that completes an action</span>
+        <span class="theme-tag">Arriving at what you're already doing</span>
+    </div>
+    <div class="prompt-box">
+        <strong>Writing Prompt:</strong><br>
+        "A man spends a decade taking care of his mother through her dementia. He baths her, feeds her, reads to her. On the last morning — after she's gone — he makes coffee in her kitchen and realizes: he was present for every moment except his own. He showed up to everything and arrived at nothing."
+    </div>
+</div>
+
+<hr class="divider">
+
+<div class="continent-header">
+    <div class="flag">🏰</div>
+    <div class="info">
+        <h2>Europe</h2>
+        <div class="region">Greece — Stoic philosophy</div>
+        <div class="tier-badge" style="margin-top:4px;"><span class="theme-tag" style="background:#e8f0fc;border-color:#4090e0;color:#1a5faa;">🔎 Obscure — Tier 2</span></div>
+    </div>
+</div>
+
+<div class="philosophy-card" data-search="apatheia greece stoic greek philosophy freedom pathos passionlessness">
+    <div class="concept-row">
+        <div class="concept-name">Apatheia (ἀπάθεια)</div>
+        <div class="origin">Greek · Stoic / Pyrrhic philosophy</div>
+    </div>
+    <div class="explain-box">
+        <strong>What it means:</strong> Often mistranslated as "passionlessness" — apatheia actually means freedom from suffering, not freedom from feeling. The Stoics (and Epicurus, and Pyrrho) meant something precise: you cannot be hurt by things that happen to you, only by your judgments about them. Apatheia is the state where external events pass through you without establishing a residence. It's not coldness. It's the particular calm of someone who has stopped arguing with reality. Marcus Aurelius sought it. So did the Buddhist arahant. Different traditions, same destination: the end of unnecessary suffering.
+    </div>
+    <div class="section-label">🎵 Song Angle</div>
+    <div class="song-angle">
+        A person who has been through something enormous — a loss, a disaster, a war — and has arrived at a strange stillness. The song is about what that calm actually is: not peace, not acceptance, but the exhausted clarity of someone who has already grieved everything that could be taken. The chorus is what it sounds like on the other side of argument with reality.
+    </div>
+    <div class="section-label">✍️ Lyrical Themes</div>
+    <div class="themes-row">
+        <span class="theme-tag">Freedom from suffering vs. freedom from feeling</span>
+        <span class="theme-tag">The calm on the other side of argument with reality</span>
+        <span class="theme-tag">Events passing through without establishing residence</span>
+    </div>
+    <div class="prompt-box">
+        <strong>Writing Prompt:</strong><br>
+        "A woman loses everything in a flood — house, photographs, her father's records. She stands in the ruined room and doesn't cry. Three months later she builds a new house a quarter mile away. Someone asks if she's sad about what she lost. She says: 'I grieved it the day of the flood. I've been free since.' The song is about what apatheia actually sounds like."
+    </div>
+</div>
+
+<hr class="divider">
+
+<div class="continent-header">
+    <div class="flag">🌎</div>
+    <div class="info">
+        <h2>The Americas</h2>
+        <div class="region">Navajo / Diné — indigenous philosophy</div>
+        <div class="tier-badge" style="margin-top:4px;"><span class="theme-tag" style="background:#e8f0fc;border-color:#4090e0;color:#1a5faa;">🔎 Obscure — Tier 2</span></div>
+    </div>
+</div>
+
+<div class="philosophy-card" data-search="hozho navajo dine beauty harmony balance walking beauty order">
+    <div class="concept-row">
+        <div class="concept-name">Hózhóón</div>
+        <div class="origin">Diné (Navajo) · Southwestern United States</div>
+    </div>
+    <div class="explain-box">
+        <strong>What it means:</strong> Often translated as "beauty" but means something vaster: the dynamic harmony of the universe, the state of balance where things are as they should be. Hózhóón is both the goal and the path. To walk in beauty is to live in hozhó — to bring everything you do into right relation with everything around you. The opposite isn't ugliness, it's confusion, disorder, walking in the wrong direction. The Navajo say you can restore hozhóón through ceremony, through intention, through putting yourself back in balance. It's not a destination. It's a way of walking.
+    </div>
+    <div class="section-label">🎵 Song Angle</div>
+    <div class="song-angle">
+        A person walks a long way to fix something — not a relationship, but themselves. The song is the walk. Every step they take brings something back into alignment: breath, memory, anger, grief, the decision to keep going. The chorus is the rhythm of walking in beauty — the particular pace that means you're heading somewhere worth going.
+    </div>
+    <div class="section-label">✍️ Lyrical Themes</div>
+    <div class="themes-row">
+        <span class="theme-tag">Harmony as a way of walking, not a destination</span>
+        <span class="theme-tag">Restoring order through motion</span>
+        <span class="theme-tag">The opposite of hózhóón is not ugliness — it's confusion</span>
+    </div>
+    <div class="prompt-box">
+        <strong>Writing Prompt:</strong><br>
+        "A man walks the desert for three days after his divorce — not as pilgrimage, not as penance, just because he needs to move and the desert is the only place that will have him. By the third morning he realizes: he's been walking in a direction. It's the direction that matters. Hózhóón isn't a destination. It's the way you know you're heading somewhere worth going."
+    </div>
+</div>
+
+<footer style="border-top:3px solid var(--border); margin-top:60px; padding-top:30px;">
+    Philosophical Songhooks · Week 3 · May 26, 2026 · Obscure philosophies, one per continent, every Monday<br>
+    <span style="font-size:0.75em; color:var(--muted);">5 new concepts added · Now at 15 total · Tier 1 = most obscure · Tier 2 = lesser-known but rich · Tier 3 = semi-familiar</span>
+</footer>
+
+</div>
+
+<script>
+function filterCards(query) {
+    const cards = document.querySelectorAll('.philosophy-card');
+    const continents = document.querySelectorAll('.continent-header');
+    const dividers = document.querySelectorAll('.divider');
+    const lower = query.toLowerCase().trim();
+    
+    if (!lower) {
+        cards.forEach(c => c.style.display = '');
+        continents.forEach(c => c.style.display = '');
+        dividers.forEach(d => d.style.display = '');
+        return;
+    }
+    
+    cards.forEach(card => {
+        const search = card.getAttribute('data-search') || '';
+        card.style.display = search.includes(lower) ? '' : 'none';
+    });
+    
+    let lastVisible = null;
+    continents.forEach(h => {
+        const next = h.nextElementSibling;
+        const visible = next && next.style.display !== 'none';
+        h.style.display = visible ? '' : 'none';
+        if (visible) lastVisible = h;
+    });
+    dividers.forEach(d => {
+        d.style.display = '';
+    });
+}
+</script>
+
+</body>
+</html>

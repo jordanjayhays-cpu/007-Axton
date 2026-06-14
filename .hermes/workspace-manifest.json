@@ -1,0 +1,542 @@
+{
+  "version": "2026-05-15",
+  "last_scanned": "2026-05-15T16:03:44.686087+00:00",
+  "total_files": 39,
+  "html_count": 24,
+  "md_count": 15,
+  "projects": {
+    "city-quiz": {
+      "html_files": [
+        {
+          "path": "city-quiz/city-match-quiz-v2.html",
+          "name": "city-match-quiz-v2",
+          "web_url": "https://jordanjayhays-cpu.github.io/mission-control/city-quiz/city-match-quiz-v2.html",
+          "exists": true
+        },
+        {
+          "path": "city-quiz/city-match-quiz.html",
+          "name": "city-match-quiz",
+          "web_url": "https://jordanjayhays-cpu.github.io/mission-control/city-quiz/city-match-quiz.html",
+          "exists": true
+        },
+        {
+          "path": "city-quiz/index.html",
+          "name": "index",
+          "web_url": "https://jordanjayhays-cpu.github.io/mission-control/city-quiz/index.html",
+          "exists": true
+        },
+        {
+          "path": "city-quiz-site/index.html",
+          "name": "index",
+          "web_url": "https://jordanjayhays-cpu.github.io/mission-control/city-quiz-site/index.html",
+          "exists": true
+        },
+        {
+          "path": "neuromatch/city-quiz/index.html",
+          "name": "index",
+          "web_url": "https://jordanjayhays-cpu.github.io/mission-control/neuromatch/city-quiz/index.html",
+          "exists": true
+        }
+      ],
+      "md_files": []
+    },
+    "other": {
+      "html_files": [
+        {
+          "path": "europe-hiring-linkedins.html",
+          "name": "europe-hiring-linkedins",
+          "web_url": "https://jordanjayhays-cpu.github.io/mission-control/europe-hiring-linkedins.html",
+          "exists": true
+        }
+      ],
+      "md_files": [
+        {
+          "path": "MAP.md",
+          "name": "MAP",
+          "web_url": "https://jordanjayhays-cpu.github.io/mission-control/MAP.md",
+          "exists": true
+        },
+        {
+          "path": "mba/README.md",
+          "name": "README",
+          "web_url": "https://jordanjayhays-cpu.github.io/mission-control/mba/README.md",
+          "exists": true
+        },
+        {
+          "path": "neurotech/README.md",
+          "name": "README",
+          "web_url": "https://jordanjayhays-cpu.github.io/mission-control/neurotech/README.md",
+          "exists": true
+        },
+        {
+          "path": "niah/README.md",
+          "name": "README",
+          "web_url": "https://jordanjayhays-cpu.github.io/mission-control/niah/README.md",
+          "exists": true
+        },
+        {
+          "path": "niah/south-summit/niah-south-summit-proposal.md",
+          "name": "niah-south-summit-proposal",
+          "web_url": "https://jordanjayhays-cpu.github.io/mission-control/niah/south-summit/niah-south-summit-proposal.md",
+          "exists": true
+        },
+        {
+          "path": "niah/south-summit/niah-south-summit-setup-guide.md",
+          "name": "niah-south-summit-setup-guide",
+          "web_url": "https://jordanjayhays-cpu.github.io/mission-control/niah/south-summit/niah-south-summit-setup-guide.md",
+          "exists": true
+        },
+        {
+          "path": "niah/south-summit/niah-south-summit-tool-research.md",
+          "name": "niah-south-summit-tool-research",
+          "web_url": "https://jordanjayhays-cpu.github.io/mission-control/niah/south-summit/niah-south-summit-tool-research.md",
+          "exists": true
+        },
+        {
+          "path": "pisco/README.md",
+          "name": "README",
+          "web_url": "https://jordanjayhays-cpu.github.io/mission-control/pisco/README.md",
+          "exists": true
+        }
+      ]
+    },
+    "harvard": {
+      "html_files": [
+        {
+          "path": "harvard-simulation-full.html",
+          "name": "harvard-simulation-full",
+          "web_url": "https://jordanjayhays-cpu.github.io/mission-control/harvard-simulation-full.html",
+          "exists": true
+        },
+        {
+          "path": "harvard-simulation-quiz.html",
+          "name": "harvard-simulation-quiz",
+          "web_url": "https://jordanjayhays-cpu.github.io/mission-control/harvard-simulation-quiz.html",
+          "exists": true
+        }
+      ],
+      "md_files": [
+        {
+          "path": "harvard-simulation-prep-guide.md",
+          "name": "harvard-simulation-prep-guide",
+          "web_url": "https://jordanjayhays-cpu.github.io/mission-control/harvard-simulation-prep-guide.md",
+          "exists": true
+        }
+      ]
+    },
+    "massage-pass": {
+      "html_files": [
+        {
+          "path": "massage-club/campaigns/01-madrid-launch-brief.html",
+          "name": "01-madrid-launch-brief",
+          "web_url": "https://jordanjayhays-cpu.github.io/mission-control/massage-club/campaigns/01-madrid-launch-brief.html",
+          "exists": true
+        },
+        {
+          "path": "overnight-builds/massage-pass-landing.html",
+          "name": "massage-pass-landing",
+          "web_url": "https://jordanjayhays-cpu.github.io/mission-control/overnight-builds/massage-pass-landing.html",
+          "exists": true
+        }
+      ],
+      "md_files": [
+        {
+          "path": "massage-club/README.md",
+          "name": "README",
+          "web_url": "https://jordanjayhays-cpu.github.io/mission-control/massage-club/README.md",
+          "exists": true
+        },
+        {
+          "path": "massage-club/campaigns/01-madrid-launch-brief.md",
+          "name": "01-madrid-launch-brief",
+          "web_url": "https://jordanjayhays-cpu.github.io/mission-control/massage-club/campaigns/01-madrid-launch-brief.md",
+          "exists": true
+        },
+        {
+          "path": "massage-club/data/competitor-analysis.md",
+          "name": "competitor-analysis",
+          "web_url": "https://jordanjayhays-cpu.github.io/mission-control/massage-club/data/competitor-analysis.md",
+          "exists": true
+        },
+        {
+          "path": "massage-club/data/madrid-neighborhoods.md",
+          "name": "madrid-neighborhoods",
+          "web_url": "https://jordanjayhays-cpu.github.io/mission-control/massage-club/data/madrid-neighborhoods.md",
+          "exists": true
+        },
+        {
+          "path": "massage-club/drafts/landing-page-copy.md",
+          "name": "landing-page-copy",
+          "web_url": "https://jordanjayhays-cpu.github.io/mission-control/massage-club/drafts/landing-page-copy.md",
+          "exists": true
+        },
+        {
+          "path": "massage-club/drafts/outreach-templates.md",
+          "name": "outreach-templates",
+          "web_url": "https://jordanjayhays-cpu.github.io/mission-control/massage-club/drafts/outreach-templates.md",
+          "exists": true
+        }
+      ]
+    },
+    "master-dashboard": {
+      "html_files": [
+        {
+          "path": "master-dashboard/master-dashboard.html",
+          "name": "master-dashboard",
+          "web_url": "https://jordanjayhays-cpu.github.io/mission-control/master-dashboard/master-dashboard.html",
+          "exists": true
+        }
+      ],
+      "md_files": []
+    },
+    "bulgaria": {
+      "html_files": [
+        {
+          "path": "neuromatch/bulgaria-dashboard.html",
+          "name": "bulgaria-dashboard",
+          "web_url": "https://jordanjayhays-cpu.github.io/mission-control/neuromatch/bulgaria-dashboard.html",
+          "exists": true
+        }
+      ],
+      "md_files": []
+    },
+    "neurotech": {
+      "html_files": [
+        {
+          "path": "neuromatch/funding/neurotech-dashboard.html",
+          "name": "neurotech-dashboard",
+          "web_url": "https://jordanjayhays-cpu.github.io/mission-control/neuromatch/funding/neurotech-dashboard.html",
+          "exists": true
+        },
+        {
+          "path": "neurotech/dashboards/neurotech-dashboard.html",
+          "name": "neurotech-dashboard",
+          "web_url": "https://jordanjayhays-cpu.github.io/mission-control/neurotech/dashboards/neurotech-dashboard.html",
+          "exists": true
+        }
+      ],
+      "md_files": []
+    },
+    "philosophy": {
+      "html_files": [
+        {
+          "path": "neuromatch/philosophy-songs.html",
+          "name": "philosophy-songs",
+          "web_url": "https://jordanjayhays-cpu.github.io/mission-control/neuromatch/philosophy-songs.html",
+          "exists": true
+        },
+        {
+          "path": "neuromatch/the-passage.html",
+          "name": "the-passage",
+          "web_url": "https://jordanjayhays-cpu.github.io/mission-control/neuromatch/the-passage.html",
+          "exists": true
+        }
+      ],
+      "md_files": []
+    },
+    "pisco": {
+      "html_files": [
+        {
+          "path": "neuromatch/pisco-dashboard.html",
+          "name": "pisco-dashboard",
+          "web_url": "https://jordanjayhays-cpu.github.io/mission-control/neuromatch/pisco-dashboard.html",
+          "exists": true
+        },
+        {
+          "path": "pisco-dashboard.html",
+          "name": "pisco-dashboard",
+          "web_url": "https://jordanjayhays-cpu.github.io/mission-control/pisco-dashboard.html",
+          "exists": true
+        }
+      ],
+      "md_files": []
+    },
+    "niah": {
+      "html_files": [
+        {
+          "path": "niah/dashboards/niah-dashboard.html",
+          "name": "niah-dashboard",
+          "web_url": "https://jordanjayhays-cpu.github.io/mission-control/niah/dashboards/niah-dashboard.html",
+          "exists": true
+        },
+        {
+          "path": "niah-dashboard.html",
+          "name": "niah-dashboard",
+          "web_url": "https://jordanjayhays-cpu.github.io/mission-control/niah-dashboard.html",
+          "exists": true
+        }
+      ],
+      "md_files": []
+    },
+    "overnight-builds": {
+      "html_files": [
+        {
+          "path": "overnight-builds/analytics.html",
+          "name": "analytics",
+          "web_url": "https://jordanjayhays-cpu.github.io/mission-control/overnight-builds/analytics.html",
+          "exists": true
+        },
+        {
+          "path": "overnight-builds/commitment-clock.html",
+          "name": "commitment-clock",
+          "web_url": "https://jordanjayhays-cpu.github.io/mission-control/overnight-builds/commitment-clock.html",
+          "exists": true
+        },
+        {
+          "path": "overnight-builds/leadpulse.html",
+          "name": "leadpulse",
+          "web_url": "https://jordanjayhays-cpu.github.io/mission-control/overnight-builds/leadpulse.html",
+          "exists": true
+        },
+        {
+          "path": "overnight-builds/pisco-hotel-pitch.html",
+          "name": "pisco-hotel-pitch",
+          "web_url": "https://jordanjayhays-cpu.github.io/mission-control/overnight-builds/pisco-hotel-pitch.html",
+          "exists": true
+        }
+      ],
+      "md_files": []
+    }
+  },
+  "all_files": [
+    {
+      "path": "city-quiz/city-match-quiz-v2.html",
+      "name": "city-match-quiz-v2",
+      "web_url": "https://jordanjayhays-cpu.github.io/mission-control/city-quiz/city-match-quiz-v2.html",
+      "exists": true
+    },
+    {
+      "path": "city-quiz/city-match-quiz.html",
+      "name": "city-match-quiz",
+      "web_url": "https://jordanjayhays-cpu.github.io/mission-control/city-quiz/city-match-quiz.html",
+      "exists": true
+    },
+    {
+      "path": "city-quiz/index.html",
+      "name": "index",
+      "web_url": "https://jordanjayhays-cpu.github.io/mission-control/city-quiz/index.html",
+      "exists": true
+    },
+    {
+      "path": "city-quiz-site/index.html",
+      "name": "index",
+      "web_url": "https://jordanjayhays-cpu.github.io/mission-control/city-quiz-site/index.html",
+      "exists": true
+    },
+    {
+      "path": "europe-hiring-linkedins.html",
+      "name": "europe-hiring-linkedins",
+      "web_url": "https://jordanjayhays-cpu.github.io/mission-control/europe-hiring-linkedins.html",
+      "exists": true
+    },
+    {
+      "path": "harvard-simulation-full.html",
+      "name": "harvard-simulation-full",
+      "web_url": "https://jordanjayhays-cpu.github.io/mission-control/harvard-simulation-full.html",
+      "exists": true
+    },
+    {
+      "path": "harvard-simulation-quiz.html",
+      "name": "harvard-simulation-quiz",
+      "web_url": "https://jordanjayhays-cpu.github.io/mission-control/harvard-simulation-quiz.html",
+      "exists": true
+    },
+    {
+      "path": "massage-club/campaigns/01-madrid-launch-brief.html",
+      "name": "01-madrid-launch-brief",
+      "web_url": "https://jordanjayhays-cpu.github.io/mission-control/massage-club/campaigns/01-madrid-launch-brief.html",
+      "exists": true
+    },
+    {
+      "path": "master-dashboard/master-dashboard.html",
+      "name": "master-dashboard",
+      "web_url": "https://jordanjayhays-cpu.github.io/mission-control/master-dashboard/master-dashboard.html",
+      "exists": true
+    },
+    {
+      "path": "neuromatch/bulgaria-dashboard.html",
+      "name": "bulgaria-dashboard",
+      "web_url": "https://jordanjayhays-cpu.github.io/mission-control/neuromatch/bulgaria-dashboard.html",
+      "exists": true
+    },
+    {
+      "path": "neuromatch/city-quiz/index.html",
+      "name": "index",
+      "web_url": "https://jordanjayhays-cpu.github.io/mission-control/neuromatch/city-quiz/index.html",
+      "exists": true
+    },
+    {
+      "path": "neuromatch/funding/neurotech-dashboard.html",
+      "name": "neurotech-dashboard",
+      "web_url": "https://jordanjayhays-cpu.github.io/mission-control/neuromatch/funding/neurotech-dashboard.html",
+      "exists": true
+    },
+    {
+      "path": "neuromatch/philosophy-songs.html",
+      "name": "philosophy-songs",
+      "web_url": "https://jordanjayhays-cpu.github.io/mission-control/neuromatch/philosophy-songs.html",
+      "exists": true
+    },
+    {
+      "path": "neuromatch/pisco-dashboard.html",
+      "name": "pisco-dashboard",
+      "web_url": "https://jordanjayhays-cpu.github.io/mission-control/neuromatch/pisco-dashboard.html",
+      "exists": true
+    },
+    {
+      "path": "neuromatch/the-passage.html",
+      "name": "the-passage",
+      "web_url": "https://jordanjayhays-cpu.github.io/mission-control/neuromatch/the-passage.html",
+      "exists": true
+    },
+    {
+      "path": "neurotech/dashboards/neurotech-dashboard.html",
+      "name": "neurotech-dashboard",
+      "web_url": "https://jordanjayhays-cpu.github.io/mission-control/neurotech/dashboards/neurotech-dashboard.html",
+      "exists": true
+    },
+    {
+      "path": "niah/dashboards/niah-dashboard.html",
+      "name": "niah-dashboard",
+      "web_url": "https://jordanjayhays-cpu.github.io/mission-control/niah/dashboards/niah-dashboard.html",
+      "exists": true
+    },
+    {
+      "path": "niah-dashboard.html",
+      "name": "niah-dashboard",
+      "web_url": "https://jordanjayhays-cpu.github.io/mission-control/niah-dashboard.html",
+      "exists": true
+    },
+    {
+      "path": "overnight-builds/analytics.html",
+      "name": "analytics",
+      "web_url": "https://jordanjayhays-cpu.github.io/mission-control/overnight-builds/analytics.html",
+      "exists": true
+    },
+    {
+      "path": "overnight-builds/commitment-clock.html",
+      "name": "commitment-clock",
+      "web_url": "https://jordanjayhays-cpu.github.io/mission-control/overnight-builds/commitment-clock.html",
+      "exists": true
+    },
+    {
+      "path": "overnight-builds/leadpulse.html",
+      "name": "leadpulse",
+      "web_url": "https://jordanjayhays-cpu.github.io/mission-control/overnight-builds/leadpulse.html",
+      "exists": true
+    },
+    {
+      "path": "overnight-builds/massage-pass-landing.html",
+      "name": "massage-pass-landing",
+      "web_url": "https://jordanjayhays-cpu.github.io/mission-control/overnight-builds/massage-pass-landing.html",
+      "exists": true
+    },
+    {
+      "path": "overnight-builds/pisco-hotel-pitch.html",
+      "name": "pisco-hotel-pitch",
+      "web_url": "https://jordanjayhays-cpu.github.io/mission-control/overnight-builds/pisco-hotel-pitch.html",
+      "exists": true
+    },
+    {
+      "path": "pisco-dashboard.html",
+      "name": "pisco-dashboard",
+      "web_url": "https://jordanjayhays-cpu.github.io/mission-control/pisco-dashboard.html",
+      "exists": true
+    },
+    {
+      "path": "MAP.md",
+      "name": "MAP",
+      "web_url": "https://jordanjayhays-cpu.github.io/mission-control/MAP.md",
+      "exists": true
+    },
+    {
+      "path": "harvard-simulation-prep-guide.md",
+      "name": "harvard-simulation-prep-guide",
+      "web_url": "https://jordanjayhays-cpu.github.io/mission-control/harvard-simulation-prep-guide.md",
+      "exists": true
+    },
+    {
+      "path": "massage-club/README.md",
+      "name": "README",
+      "web_url": "https://jordanjayhays-cpu.github.io/mission-control/massage-club/README.md",
+      "exists": true
+    },
+    {
+      "path": "massage-club/campaigns/01-madrid-launch-brief.md",
+      "name": "01-madrid-launch-brief",
+      "web_url": "https://jordanjayhays-cpu.github.io/mission-control/massage-club/campaigns/01-madrid-launch-brief.md",
+      "exists": true
+    },
+    {
+      "path": "massage-club/data/competitor-analysis.md",
+      "name": "competitor-analysis",
+      "web_url": "https://jordanjayhays-cpu.github.io/mission-control/massage-club/data/competitor-analysis.md",
+      "exists": true
+    },
+    {
+      "path": "massage-club/data/madrid-neighborhoods.md",
+      "name": "madrid-neighborhoods",
+      "web_url": "https://jordanjayhays-cpu.github.io/mission-control/massage-club/data/madrid-neighborhoods.md",
+      "exists": true
+    },
+    {
+      "path": "massage-club/drafts/landing-page-copy.md",
+      "name": "landing-page-copy",
+      "web_url": "https://jordanjayhays-cpu.github.io/mission-control/massage-club/drafts/landing-page-copy.md",
+      "exists": true
+    },
+    {
+      "path": "massage-club/drafts/outreach-templates.md",
+      "name": "outreach-templates",
+      "web_url": "https://jordanjayhays-cpu.github.io/mission-control/massage-club/drafts/outreach-templates.md",
+      "exists": true
+    },
+    {
+      "path": "mba/README.md",
+      "name": "README",
+      "web_url": "https://jordanjayhays-cpu.github.io/mission-control/mba/README.md",
+      "exists": true
+    },
+    {
+      "path": "neurotech/README.md",
+      "name": "README",
+      "web_url": "https://jordanjayhays-cpu.github.io/mission-control/neurotech/README.md",
+      "exists": true
+    },
+    {
+      "path": "niah/README.md",
+      "name": "README",
+      "web_url": "https://jordanjayhays-cpu.github.io/mission-control/niah/README.md",
+      "exists": true
+    },
+    {
+      "path": "niah/south-summit/niah-south-summit-proposal.md",
+      "name": "niah-south-summit-proposal",
+      "web_url": "https://jordanjayhays-cpu.github.io/mission-control/niah/south-summit/niah-south-summit-proposal.md",
+      "exists": true
+    },
+    {
+      "path": "niah/south-summit/niah-south-summit-setup-guide.md",
+      "name": "niah-south-summit-setup-guide",
+      "web_url": "https://jordanjayhays-cpu.github.io/mission-control/niah/south-summit/niah-south-summit-setup-guide.md",
+      "exists": true
+    },
+    {
+      "path": "niah/south-summit/niah-south-summit-tool-research.md",
+      "name": "niah-south-summit-tool-research",
+      "web_url": "https://jordanjayhays-cpu.github.io/mission-control/niah/south-summit/niah-south-summit-tool-research.md",
+      "exists": true
+    },
+    {
+      "path": "pisco/README.md",
+      "name": "README",
+      "web_url": "https://jordanjayhays-cpu.github.io/mission-control/pisco/README.md",
+      "exists": true
+    }
+  ],
+  "git_tracked": [],
+  "git_untracked": [
+    "__pycache__/harvard-simulation-practice.cpython-312.pyc",
+    "harvard-simulation-practice.py"
+  ]
+}

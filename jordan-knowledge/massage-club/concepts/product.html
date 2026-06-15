@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Massage Club — Product</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e8e8e8; min-height: 100vh; padding: 40px 20px; }
+  .container { max-width: 700px; margin: 0 auto; }
+  h1 { font-size: 1.8rem; font-weight: 700; margin-bottom: 8px; color: #fff; }
+  h2 { font-size: 1.3rem; font-weight: 600; margin: 24px 0 12px; color: #fff; border-bottom: 1px solid #1f1f2e; padding-bottom: 8px; }
+  h3 { font-size: 1.1rem; font-weight: 600; margin: 20px 0 8px; color: #ddd; }
+  p { color: #aaa; line-height: 1.7; margin-bottom: 12px; font-size: 0.95rem; }
+  ul, ol { margin: 12px 0 12px 24px; color: #aaa; line-height: 1.8; font-size: 0.95rem; }
+  li { margin-bottom: 6px; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
+  th { background: #1a1a2e; color: #6366f1; padding: 10px 12px; text-align: left; }
+  td { padding: 10px 12px; border-bottom: 1px solid #1a1a2e; color: #aaa; }
+  .back { display: inline-block; margin-bottom: 24px; color: #6366f1; text-decoration: none; font-size: 0.9rem; }
+  .back:hover { text-decoration: underline; }
+  .meta { color: #555; font-size: 0.8rem; margin-bottom: 24px; }
+  .tags { margin-top: 20px; }
+  .tag { display: inline-block; background: #1a1a2e; color: #6366f1; font-size: 0.7rem; padding: 3px 8px; border-radius: 4px; margin-right: 4px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <a href="../index.html" class="back">← Knowledge Hub</a>
+  <div class="tags"><span class="tag">massage-club</span><span class="tag">product</span><span class="tag">core</span></div>
+  <h1>Massage Club — Product</h1>
+<h2>What It Does</h2>
+<p>Subscription massage booking platform for Madrid. "Uber for massage" — open, tap, done.</p>
+<p>**Tagline:** "Open, tap, done. No manual last-mile."</p>
+<h2>Pain Point</h2>
+<p>Current massage booking is "like emailing a taxi to pick you up." Manual back-and-forth, scheduling friction, no instant booking.</p>
+<h2>Target</h2>
+<ul>
+<li>**Customers:** Spanish speakers in Madrid, urban professionals</li>
+<li>**Therapists:** Independent massage therapists onboarded as partners</li>
+<li>**Neighborhood-first:** Chamberí first, then expand</li>
+</ul>
+<h2>Model</h2>
+<ul>
+<li>Subscription / membership</li>
+<li>On-demand booking via web app</li>
+<li>Therapists receive bookings via the platform</li>
+</ul>
+<h2>Current Status</h2>
+<ul>
+<li>**Live URL:** https://your-massage-pass-2rmjyzjtr-jordanjayhays-cpus-projects.vercel.app</li>
+<li>**Domain:** massageclub.io (SqualSquarespace, DNS not configured)</li>
+<li>**Stack:** Vercel + Supabase + Lovable</li>
+<li>**Repo:** jordanjayhays-cpu/your-massage-pass</li>
+</ul>
+<h2>Blocker</h2>
+<ul>
+<li>`vercel.json` missing SPA rewrite rules — `/partner` and sub-pages return 404</li>
+<li>Supabase service_role key not in Hermes secrets</li>
+<li>Domain DNS not pointed to Vercel</li>
+</ul>
+<h2>Launch Status</h2>
+<ul>
+<li>Micro-launch model: 5 studios + 10 customers in Chamberí first</li>
+<li>Lead gen via FB groups/forums (Spanish outreach)</li>
+<li>Cron job `1bdcb5a0900e` runs daily 9am for lead scouting</li>
+</ul>
+<h2>Competitors</h2>
+<ul>
+<li>Booksy, Treatwell, Fulero — positioning gaps around subscription + instant booking</li>
+</ul>
+<h2>Process</h2>
+<ol>
+<li>Scout leads (cron or manual)</li>
+<li>Write outreach copy (humanizer skill)</li>
+<li>Push to FB groups/forums</li>
+<li>Track bookings via Supabase</li>
+</ul>
+</div>
+</body>
+</html>

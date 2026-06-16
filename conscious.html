@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CONSCIOUS — Transit Pod MK-IV</title>
+<title>CONSCIOUS — Destination Selector</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -30,208 +30,54 @@ body {
   background: var(--void);
   color: var(--text);
   min-height: 100vh;
-  overflow-x: hidden;
 }
 
-/* Animations */
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-@keyframes pulseGlow { 0%,100%{filter:drop-shadow(0 0 4px rgba(0,255,136,0.6))} 50%{filter:drop-shadow(0 0 12px rgba(0,255,136,0.9))} }
-@keyframes ringPulse { 0%{transform:translate(-50%,-50%) scale(1);opacity:0.5} 100%{transform:translate(-50%,-50%) scale(1.8);opacity:0} }
-@keyframes scanAnim { 0%{transform:translateY(-100%)} 100%{transform:translateY(500px)} }
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.4} }
-@keyframes countPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.03)} }
-@keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
-@keyframes slideRight { from{opacity:0;transform:translateX(-12px)} to{opacity:1;transform:translateX(0)} }
+@keyframes pulseGlow { 0%,100%{filter:drop-shadow(0 0 6px rgba(0,255,136,0.5))} 50%{filter:drop-shadow(0 0 16px rgba(0,255,136,0.8))} }
+@keyframes ringPulse { 0%{transform:translate(-50%,-50%) scale(1);opacity:0.5} 100%{transform:translate(-50%,-50%) scale(1.7);opacity:0} }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+@keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+@keyframes slideRight { from{opacity:0;transform:translateX(-10px)} to{opacity:1;transform:translateX(0)} }
+@keyframes shimmer { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
+@keyframes cardIn { from{opacity:0;transform:scale(0.95) translateY(8px)} to{opacity:1;transform:scale(1) translateY(0)} }
 
-/* Layout */
-.app {
-  display: grid;
-  grid-template-columns: 60px 1fr;
-  grid-template-rows: 52px 1fr;
-  min-height: 100vh;
-}
+.app { display: grid; grid-template-columns: 60px 1fr; grid-template-rows: 52px 1fr; min-height: 100vh; }
 
-/* Sidebar */
-.sidebar {
-  grid-row: 1 / -1;
-  background: var(--deep);
-  border-right: 1px solid var(--border);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 16px 0;
-  gap: 4px;
-}
-.sidebar-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.1rem;
-  cursor: pointer;
-  transition: all 0.15s;
-  border: 1px solid transparent;
-  color: var(--text3);
-}
+.sidebar { grid-row: 1 / -1; background: var(--deep); border-right: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; padding: 16px 0; gap: 4px; }
+.sidebar-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; cursor: pointer; transition: all 0.15s; border: 1px solid transparent; color: var(--text3); }
 .sidebar-icon:hover { background: var(--surface2); color: var(--text2); }
 .sidebar-icon.active { background: var(--glow-dim); border-color: var(--glow); color: var(--glow); }
 .sidebar-divider { width: 32px; height: 1px; background: var(--border); margin: 6px 0; }
 
-/* Top bar */
-.topbar {
-  background: var(--deep);
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  padding: 0 20px;
-  gap: 16px;
-}
-.topbar-title {
-  font-family: 'Space Mono', monospace;
-  font-size: 0.72rem;
-  letter-spacing: 3px;
-  color: var(--glow);
-  text-transform: uppercase;
-  flex: 1;
-}
-.pill {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  padding: 5px 10px;
-  border-radius: 50px;
-  font-family: 'Space Mono', monospace;
-  font-size: 0.65rem;
-  letter-spacing: 1px;
-}
+.topbar { background: var(--deep); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 20px; gap: 16px; }
+.topbar-title { font-family: 'Space Mono', monospace; font-size: 0.72rem; letter-spacing: 3px; color: var(--glow); text-transform: uppercase; flex: 1; }
+.pill { display: flex; align-items: center; gap: 6px; background: var(--surface); border: 1px solid var(--border); padding: 5px 10px; border-radius: 50px; font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 1px; }
 .pill-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--glow); animation: pulse 2s infinite; }
-.pill-dot.warn { background: var(--warn); }
-.pill-dot.danger { background: var(--danger); animation: none; }
+.pill-dot.warn { background: var(--warn); animation: none; }
 
-/* Main content */
 .main { overflow-y: auto; background: var(--void); }
-
-/* Pages */
 .page { display: none; min-height: 100%; }
 .page.active { display: flex; flex-direction: column; }
 
 /* ==============================================
-   MAIN POD PAGE — Hero Device View
+   POD PAGE
    ============================================== */
-.pod-hero {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 40px 20px 30px;
-  position: relative;
-  overflow: hidden;
-  background:
-    radial-gradient(ellipse 80% 50% at 50% 70%, rgba(0,255,136,0.04) 0%, transparent 60%),
-    var(--void);
-}
-
-/* Grid lines for tech feel */
-.pod-hero::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(0,255,136,0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,255,136,0.025) 1px, transparent 1px);
-  background-size: 48px 48px;
-  pointer-events: none;
-}
-
-.pod-status-bar {
-  position: absolute;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 24px;
-  align-items: center;
-}
-.pod-status-item {
-  font-family: 'Space Mono', monospace;
-  font-size: 0.62rem;
-  letter-spacing: 1.5px;
-  color: var(--text3);
-  text-transform: uppercase;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
+.pod-hero { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px 30px; position: relative; overflow: hidden; background: radial-gradient(ellipse 80% 50% at 50% 70%, rgba(0,255,136,0.04) 0%, transparent 60%), var(--void); }
+.pod-hero::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(0,255,136,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,136,0.025) 1px, transparent 1px); background-size: 48px 48px; pointer-events: none; }
+.pod-svg-wrap { position: relative; width: 100%; max-width: 700px; }
+.pod-svg { width: 100%; height: auto; }
+.pod-status-bar { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 24px; }
+.pod-status-item { font-family: 'Space Mono', monospace; font-size: 0.62rem; letter-spacing: 1.5px; color: var(--text3); text-transform: uppercase; display: flex; align-items: center; gap: 6px; }
 .pod-status-item .dot { width: 4px; height: 4px; border-radius: 50%; background: var(--glow); animation: pulse 2s infinite; }
 .pod-status-item .dot.warn { background: var(--warn); animation: none; }
-
-/* THE POD SVG */
-.pod-svg-wrap {
-  position: relative;
-  width: 100%;
-  max-width: 700px;
-  margin: 0 auto;
-}
-.pod-svg { width: 100%; height: auto; }
-
-/* Info strip below pod */
-.pod-info-strip {
-  width: 100%;
-  max-width: 700px;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1px;
-  background: var(--border);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  overflow: hidden;
-  margin-top: 20px;
-}
-.info-cell {
-  background: var(--surface);
-  padding: 12px 14px;
-  text-align: center;
-}
-.info-label {
-  font-family: 'Space Mono', monospace;
-  font-size: 0.58rem;
-  letter-spacing: 2px;
-  color: var(--text3);
-  text-transform: uppercase;
-  margin-bottom: 4px;
-}
+.pod-info-strip { width: 100%; max-width: 700px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-top: 20px; }
+.info-cell { background: var(--surface); padding: 12px 14px; text-align: center; }
+.info-label { font-family: 'Space Mono', monospace; font-size: 0.58rem; letter-spacing: 2px; color: var(--text3); text-transform: uppercase; margin-bottom: 4px; }
 .info-val { font-size: 0.9rem; font-weight: 700; color: var(--glow); }
 .info-val.warn { color: var(--warn); }
 .info-val.accent { color: var(--accent); }
-
-/* Action buttons */
-.pod-actions {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-top: 24px;
-}
-.btn {
-  padding: 11px 24px;
-  border-radius: 8px;
-  font-family: 'Space Mono', monospace;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  cursor: pointer;
-  border: none;
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  gap: 7px;
-}
+.pod-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 24px; }
+.btn { padding: 11px 24px; border-radius: 8px; font-family: 'Space Mono', monospace; font-size: 0.72rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; border: none; transition: all 0.2s; display: flex; align-items: center; gap: 7px; }
 .btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--text2); }
 .btn-ghost:hover { border-color: var(--glow); color: var(--glow); }
 .btn-primary { background: var(--glow); color: var(--void); box-shadow: 0 0 24px rgba(0,255,136,0.25); }
@@ -240,27 +86,59 @@ body {
 .btn-danger:hover { background: rgba(255,51,85,0.1); }
 
 /* ==============================================
+   DESTINATION SELECTOR PAGE
+   ============================================== */
+.dest-page { padding: 28px; flex-direction: column; }
+.dest-hero { text-align: center; margin-bottom: 32px; }
+.dest-hero h2 { font-size: 1.6rem; font-weight: 700; color: #fff; margin-bottom: 8px; }
+.dest-hero p { color: var(--text2); font-size: 0.9rem; line-height: 1.5; max-width: 480px; margin: 0 auto 20px; }
+.dest-search { display: flex; gap: 8px; max-width: 480px; margin: 0 auto; width: 100%; }
+.dest-search input { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; font-family: 'Inter', sans-serif; font-size: 0.85rem; color: var(--text); outline: none; transition: border-color 0.2s; }
+.dest-search input:focus { border-color: var(--glow); }
+.dest-search input::placeholder { color: var(--text3); }
+.dest-search button { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 16px; cursor: pointer; font-size: 1rem; color: var(--text2); transition: all 0.2s; }
+.dest-search button:hover { border-color: var(--glow); color: var(--glow); }
+
+.dest-tags { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 28px; }
+.dest-tag { background: var(--surface2); border: 1px solid var(--border); border-radius: 50px; padding: 5px 14px; font-size: 0.72rem; color: var(--text2); cursor: pointer; transition: all 0.15s; font-family: 'Space Mono', monospace; }
+.dest-tag:hover, .dest-tag.active { background: var(--glow-dim); border-color: var(--glow); color: var(--glow); }
+
+.dest-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+.dest-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; cursor: pointer; transition: all 0.2s; animation: cardIn 0.35s ease backwards; }
+.dest-card:hover { border-color: var(--glow); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.4); }
+.dest-card.selected { border-color: var(--glow); box-shadow: 0 0 20px rgba(0,255,136,0.2); }
+.dest-card.selected .dest-card-header { background: var(--glow-mid); }
+
+.dest-card-header { height: 90px; position: relative; overflow: hidden; display: flex; align-items: flex-end; padding: 12px; }
+.dest-card-header canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.dest-card-header::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 20%, rgba(17,17,24,0.85) 100%); }
+.dest-card-name { position: relative; z-index: 1; font-weight: 700; font-size: 0.95rem; color: #fff; text-shadow: 0 1px 4px rgba(0,0,0,0.8); }
+.dest-card-sub { position: relative; z-index: 1; font-size: 0.65rem; color: rgba(255,255,255,0.7); font-family: 'Space Mono', monospace; margin-top: 2px; }
+
+.dest-card-body { padding: 14px; }
+.dest-card-desc { font-size: 0.78rem; color: var(--text2); line-height: 1.5; margin-bottom: 12px; }
+.dest-card-meta { display: flex; gap: 12px; flex-wrap: wrap; }
+.meta-chip { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 3px 8px; font-size: 0.62rem; font-family: 'Space Mono', monospace; color: var(--text2); }
+.meta-chip.green { background: var(--glow-dim); border-color: rgba(0,255,136,0.3); color: var(--glow); }
+.meta-chip.blue { background: var(--accent-dim); border-color: rgba(0,204,255,0.3); color: var(--accent); }
+
+.dest-card-check { display: none; position: absolute; top: 10px; right: 10px; width: 22px; height: 22px; background: var(--glow); border-radius: 50%; align-items: center; justify-content: center; font-size: 0.7rem; z-index: 2; }
+.dest-card.selected .dest-card-check { display: flex; }
+
+/* Selected destination banner */
+.dest-selected-banner { background: var(--surface); border: 1px solid var(--glow); border-radius: 12px; padding: 16px 20px; margin-top: 20px; display: flex; align-items: center; gap: 14px; animation: fadeUp 0.3s ease; }
+.dest-selected-banner .dest-confirm { margin-left: auto; }
+
+/* ==============================================
    SPECS PAGE
    ============================================== */
-.specs-page { padding: 28px; gap: 0; }
-.spec-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 24px;
-  animation: slideRight 0.3s ease;
-}
+.specs-page { padding: 28px; }
+.spec-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; animation: slideRight 0.3s ease; }
 .spec-title { font-size: 1rem; font-weight: 700; color: #fff; }
 .spec-line { flex: 1; height: 1px; background: var(--border); }
-
 .spec-section { margin-bottom: 32px; animation: fadeUp 0.4s ease; }
 .spec-group { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
-.spec-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 18px;
-}
+.spec-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px; }
 .spec-card-icon { font-size: 1.1rem; margin-bottom: 8px; display: block; }
 .spec-card-title { font-weight: 700; font-size: 0.9rem; color: #fff; margin-bottom: 12px; }
 .spec-row { display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid var(--border2); font-size: 0.82rem; }
@@ -274,14 +152,7 @@ body {
    ============================================== */
 .monitor-page { padding: 28px; }
 .monitor-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; margin-bottom: 24px; }
-.mon-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 16px;
-  position: relative;
-  overflow: hidden;
-}
+.mon-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; position: relative; overflow: hidden; }
 .mon-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--glow); }
 .mon-card.warn::before { background: var(--warn); }
 .mon-label { font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 2px; color: var(--text3); text-transform: uppercase; margin-bottom: 8px; }
@@ -289,14 +160,7 @@ body {
 .mon-val.green { color: var(--glow); }
 .mon-val.amber { color: var(--warn); }
 .mon-sub { font-size: 0.72rem; color: var(--text2); margin-top: 4px; }
-
-.waveform-box {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 20px;
-}
+.waveform-box { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
 .wave-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
 .wave-title { font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 2px; color: var(--text3); text-transform: uppercase; }
 .wave-val { font-family: 'Space Mono', monospace; font-size: 0.8rem; color: var(--glow); }
@@ -307,25 +171,9 @@ canvas { width: 100%; height: 80px; background: var(--deep); border-radius: 8px;
    ============================================== */
 .control-page { padding: 28px; }
 .control-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
-.control-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 20px;
-}
-.control-card-title {
-  font-family: 'Space Mono', monospace;
-  font-size: 0.62rem;
-  letter-spacing: 2px;
-  color: var(--text3);
-  text-transform: uppercase;
-  margin-bottom: 16px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+.control-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px; }
+.control-card-title { font-family: 'Space Mono', monospace; font-size: 0.62rem; letter-spacing: 2px; color: var(--text3); text-transform: uppercase; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
 .td { width: 6px; height: 6px; border-radius: 50%; background: var(--glow); flex-shrink: 0; }
-
 .slider-block { margin-bottom: 16px; }
 .slider-top { display: flex; justify-content: space-between; margin-bottom: 8px; }
 .slider-lbl { font-size: 0.83rem; color: var(--text2); }
@@ -333,14 +181,12 @@ canvas { width: 100%; height: 80px; background: var(--deep); border-radius: 8px;
 .track { height: 4px; background: var(--border2); border-radius: 2px; position: relative; cursor: pointer; }
 .fill { height: 100%; background: var(--glow); border-radius: 2px; }
 .thumb { width: 12px; height: 12px; background: var(--glow); border-radius: 50%; position: absolute; top: 50%; transform: translate(-50%,-50%); cursor: grab; }
-
 .toggle-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
 .tog-lbl { font-size: 0.83rem; color: var(--text2); }
 .tog { width: 36px; height: 20px; background: var(--border2); border-radius: 10px; position: relative; cursor: pointer; transition: background 0.25s; }
 .tog.on { background: var(--glow); }
 .tog::after { content: ''; width: 14px; height: 14px; background: #fff; border-radius: 50%; position: absolute; top: 3px; left: 3px; transition: transform 0.25s; }
 .tog.on::after { transform: translateX(16px); }
-
 .btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .btn-row + .btn-row { margin-top: 8px; }
 .btn-full { width: 100%; justify-content: center; }
@@ -349,67 +195,24 @@ canvas { width: 100%; height: 80px; background: var(--deep); border-radius: 8px;
 /* ==============================================
    LAUNCH PAGE
    ============================================== */
-.launch-page {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 40px 20px;
-  text-align: center;
-  position: relative;
-}
-.launch-ring {
-  width: 240px;
-  height: 240px;
-  border-radius: 50%;
-  border: 2px solid var(--glow);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 32px;
-  position: relative;
-  animation: pulseGlow 2s infinite;
-}
-.launch-ring::before, .launch-ring::after {
-  content: '';
-  position: absolute;
-  border: 1px solid var(--glow);
-  border-radius: 50%;
-  animation: ringPulse 2s ease-out infinite;
-}
+.launch-page { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; text-align: center; }
+.launch-ring { width: 240px; height: 240px; border-radius: 50%; border: 2px solid var(--glow); display: flex; align-items: center; justify-content: center; margin-bottom: 32px; position: relative; animation: pulseGlow 2s infinite; }
+.launch-ring::before, .launch-ring::after { content: ''; position: absolute; border: 1px solid var(--glow); border-radius: 50%; animation: ringPulse 2s ease-out infinite; }
 .launch-ring::before { inset: -20px; animation-delay: 0.5s; }
 .launch-ring::after { inset: -40px; animation-delay: 1s; }
-.launch-time {
-  font-family: 'Space Mono', monospace;
-  font-size: 3.5rem;
-  font-weight: 700;
-  color: var(--glow);
-  animation: countPulse 1s infinite;
-}
-.launch-sub {
-  font-size: 1rem;
-  color: var(--text2);
-  max-width: 340px;
-  line-height: 1.6;
-  margin: 0 auto 32px;
-}
-.launch-status {
-  font-family: 'Space Mono', monospace;
-  font-size: 0.7rem;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--glow);
-  margin-bottom: 16px;
-  animation: blink 1.5s infinite;
-}
+.launch-time { font-family: 'Space Mono', monospace; font-size: 3.5rem; font-weight: 700; color: var(--glow); }
+.launch-sub { font-size: 1rem; color: var(--text2); max-width: 340px; line-height: 1.6; margin: 0 auto 32px; }
+.launch-status { font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; color: var(--glow); margin-bottom: 16px; animation: blink 1.5s infinite; }
+.launch-dest { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 20px; margin-bottom: 24px; max-width: 360px; width: 100%; }
+.launch-dest-label { font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 2px; color: var(--text3); text-transform: uppercase; margin-bottom: 4px; }
+.launch-dest-name { font-size: 1rem; font-weight: 700; color: var(--glow); }
 </style>
 </head>
 <body>
 <div class="app">
-  <!-- Sidebar -->
   <nav class="sidebar">
     <div class="sidebar-icon active" onclick="showPage('pod',this)" title="Pod">🛸</div>
+    <div class="sidebar-icon" onclick="showPage('dest',this)" title="Destinations">🌌</div>
     <div class="sidebar-icon" onclick="showPage('specs',this)" title="Specs">📋</div>
     <div class="sidebar-icon" onclick="showPage('monitor',this)" title="Monitor">📊</div>
     <div class="sidebar-icon" onclick="showPage('control',this)" title="Control">⚙️</div>
@@ -417,30 +220,24 @@ canvas { width: 100%; height: 80px; background: var(--deep); border-radius: 8px;
     <div class="sidebar-icon" onclick="showPage('launch',this)" title="Launch">🚀</div>
   </nav>
 
-  <!-- Topbar -->
   <header class="topbar">
     <div class="topbar-title">CONSCIOUS // TRANSITUS — POD-07</div>
     <div class="pill"><div class="pill-dot"></div>SYSTEM ONLINE</div>
-    <div class="pill"><div class="pill-dot"></div>FIRMWARE v4.2.1</div>
     <div class="pill"><div class="pill-dot warn"></div>N₂ TANK: 94%</div>
   </header>
 
-  <!-- Main -->
   <main class="main">
 
     <!-- POD PAGE -->
     <div id="page-pod" class="page pod-hero active">
       <div class="pod-status-bar">
         <div class="pod-status-item"><div class="dot"></div>QUANTUM FIELD: 94.2%</div>
-        <div class="pod-status-item"><div class="dot"></div>CHAMBER: STANDBY</div>
+        <div class="pod-status-item"><div class="dot"></div>CHAMBER: READY</div>
         <div class="pod-status-item"><div class="dot warn"></div>MAINTENANCE: 6 DAYS</div>
       </div>
-
-      <!-- SVG RENDERING OF THE POD -->
       <div class="pod-svg-wrap">
         <svg class="pod-svg" viewBox="0 0 700 340" xmlns="http://www.w3.org/2000/svg">
           <defs>
-            <!-- Pod body gradient (white 3D printed look) -->
             <linearGradient id="podBodyGrad" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stop-color="#f0f0f5"/>
               <stop offset="40%" stop-color="#e8e8ee"/>
@@ -450,22 +247,14 @@ canvas { width: 100%; height: 80px; background: var(--deep); border-radius: 8px;
               <stop offset="0%" stop-color="#d8d8e0"/>
               <stop offset="100%" stop-color="#b0b0b8"/>
             </linearGradient>
-            <!-- Door gradient (glass/transparent) -->
-            <linearGradient id="doorGrad" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%" stop-color="rgba(180,220,255,0.35)"/>
-              <stop offset="50%" stop-color="rgba(200,240,255,0.2)"/>
-              <stop offset="100%" stop-color="rgba(180,220,255,0.35)"/>
-            </linearGradient>
             <linearGradient id="doorFrame" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stop-color="#e0e0e8"/>
               <stop offset="100%" stop-color="#c0c0c8"/>
             </linearGradient>
-            <!-- Interior gradient -->
             <linearGradient id="interiorGrad" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stop-color="#1a1a2a"/>
               <stop offset="100%" stop-color="#0e0e18"/>
             </linearGradient>
-            <!-- Glow filter -->
             <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
               <feGaussianBlur stdDeviation="4" result="blur"/>
               <feComposite in="SourceGraphic" in2="blur" operator="over"/>
@@ -476,7 +265,6 @@ canvas { width: 100%; height: 80px; background: var(--deep); border-radius: 8px;
               <feComposite in2="blur" operator="in"/>
               <feComposite in="SourceGraphic"/>
             </filter>
-            <!-- Shadow -->
             <filter id="shadow">
               <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="rgba(0,0,0,0.7)"/>
             </filter>
@@ -486,119 +274,84 @@ canvas { width: 100%; height: 80px; background: var(--deep); border-radius: 8px;
               <feComposite in="SourceGraphic" in2="blur" operator="over"/>
             </filter>
           </defs>
-
-          <!-- Ground shadow -->
           <ellipse cx="350" cy="310" rx="260" ry="18" fill="rgba(0,0,0,0.5)" filter="url(#shadow)"/>
-
-          <!-- === POD BASE / FRAME === -->
-          <!-- Main horizontal body — pill/capsule shape lying on side -->
           <ellipse cx="350" cy="220" rx="290" ry="90" fill="url(#podBodyGrad)" filter="url(#shadow)"/>
-          
-          <!-- Body side highlight -->
           <ellipse cx="350" cy="210" rx="288" ry="78" fill="url(#podBodyGrad)"/>
-          
-          <!-- Left cap (rounded end) -->
           <ellipse cx="68" cy="220" rx="58" ry="88" fill="url(#podBodyGrad)"/>
           <ellipse cx="68" cy="210" rx="52" ry="76" fill="url(#podBodySide)"/>
-          
-          <!-- Right cap (rounded end) -->
           <ellipse cx="632" cy="220" rx="58" ry="88" fill="url(#podBodyGrad)"/>
           <ellipse cx="632" cy="210" rx="52" ry="76" fill="url(#podBodySide)"/>
-          
-          <!-- Body seam lines (horizontal ribs for 3D-printed look) -->
-          <ellipse cx="350" cy="220" rx="290" ry="90" fill="none" stroke="rgba(180,180,190,0.3)" stroke-width="1"/>
-          <ellipse cx="350" cy="220" rx="290" ry="90" fill="none" stroke="rgba(180,180,190,0.15)" stroke-width="0.5" stroke-dasharray="8 4"/>
-
-          <!-- === DOOR / HATCH === -->
-          <!-- Door frame (white raised frame) -->
           <rect x="222" y="138" width="256" height="160" rx="70" fill="url(#doorFrame)" filter="url(#innerShadow)"/>
-          
-          <!-- Glass door (open — swung upward) -->
           <g transform="rotate(-85 350 218)">
-            <rect x="222" y="138" width="256" height="160" rx="70" fill="url(#doorGrad)" stroke="rgba(200,220,255,0.4)" stroke-width="2"/>
-            <!-- Door handle -->
+            <rect x="222" y="138" width="256" height="160" rx="70" fill="rgba(180,220,255,0.2)" stroke="rgba(200,220,255,0.4)" stroke-width="2"/>
             <rect x="440" y="208" width="16" height="30" rx="4" fill="rgba(160,160,170,0.8)"/>
-            <!-- Glass shine -->
             <line x1="252" y1="155" x2="252" y2="280" stroke="rgba(255,255,255,0.2)" stroke-width="3" stroke-linecap="round"/>
           </g>
-
-          <!-- === INTERIOR (visible through door) === -->
           <rect x="230" y="146" width="240" height="144" rx="62" fill="url(#interiorGrad)"/>
-          
-          <!-- Interior light glow -->
-          <rect x="230" y="146" width="240" height="144" rx="62" fill="rgba(0,255,136,0.03)"/>
-          
-          <!-- === SEAT === -->
           <rect x="258" y="220" width="130" height="14" rx="6" fill="rgba(80,80,100,0.9)"/>
           <rect x="258" y="234" width="130" height="50" rx="6" fill="rgba(60,60,80,0.9)"/>
-          <!-- Seat back -->
           <rect x="258" y="190" width="14" height="80" rx="5" fill="rgba(70,70,90,0.9)"/>
-          
-          <!-- Occupant silhouette -->
           <ellipse cx="310" cy="195" rx="24" ry="26" fill="rgba(40,40,60,0.95)"/>
           <rect x="292" y="218" width="36" height="52" rx="10" fill="rgba(40,40,60,0.95)"/>
-          <!-- Head glow ring indicating consciousness still present -->
           <circle cx="310" cy="193" r="30" fill="none" stroke="rgba(0,255,136,0.3)" stroke-width="1.5" filter="url(#glowGreen)"/>
           <circle cx="310" cy="193" r="24" fill="none" stroke="rgba(0,255,136,0.15)" stroke-width="1"/>
-
-          <!-- === HEAD END DISPLAY PANEL === -->
-          <!-- Small display on right cap -->
           <ellipse cx="632" cy="220" rx="40" ry="55" fill="rgba(20,20,35,0.9)"/>
           <rect x="618" y="185" width="28" height="70" rx="6" fill="rgba(0,20,15,0.9)" stroke="rgba(0,255,136,0.3)" stroke-width="1"/>
           <text x="632" y="205" text-anchor="middle" font-family="monospace" font-size="5" fill="#00ff88" opacity="0.9">POD-07</text>
           <text x="632" y="215" text-anchor="middle" font-family="monospace" font-size="4" fill="#00ff88" opacity="0.5">v4.2.1</text>
           <text x="632" y="230" text-anchor="middle" font-family="monospace" font-size="4" fill="#00ccff" opacity="0.8">●</text>
           <text x="632" y="242" text-anchor="middle" font-family="monospace" font-size="4" fill="#00ff88" opacity="0.4">STBY</text>
-
-          <!-- === FRONT SENSOR STRIP === -->
-          <!-- Left sensor array -->
           <rect x="74" y="195" width="10" height="50" rx="3" fill="rgba(30,30,50,0.8)"/>
           <circle cx="79" cy="204" r="3" fill="#00ff88" filter="url(#glow)"/>
           <circle cx="79" cy="216" r="3" fill="#00ff88"/>
           <circle cx="79" cy="228" r="3" fill="#00ff88"/>
           <circle cx="79" cy="240" r="3" fill="rgba(0,255,136,0.3)"/>
-
-          <!-- === DETAIL LINES === -->
-          <!-- Horizontal body crease line -->
-          <ellipse cx="350" cy="220" rx="290" ry="90" fill="none" stroke="rgba(150,150,160,0.2)" stroke-width="1"/>
-          
-          <!-- Ventilation slots on bottom -->
           <rect x="200" y="298" width="300" height="6" rx="3" fill="rgba(20,20,30,0.7)"/>
-          <line x1="220" y1="301" x2="220" y2="303" stroke="rgba(0,255,136,0.2)" stroke-width="1"/>
-          <line x1="240" y1="301" x2="240" y2="303" stroke="rgba(0,255,136,0.2)" stroke-width="1"/>
-          <line x1="260" y1="301" x2="260" y2="303" stroke="rgba(0,255,136,0.2)" stroke-width="1"/>
-          <line x1="280" y1="301" x2="280" y2="303" stroke="rgba(0,255,136,0.2)" stroke-width="1"/>
-          <line x1="300" y1="301" x2="300" y2="303" stroke="rgba(0,255,136,0.2)" stroke-width="1"/>
-          <line x1="320" y1="301" x2="320" y2="303" stroke="rgba(0,255,136,0.2)" stroke-width="1"/>
-          <line x1="340" y1="301" x2="340" y2="303" stroke="rgba(0,255,136,0.2)" stroke-width="1"/>
-          <line x1="360" y1="301" x2="360" y2="303" stroke="rgba(0,255,136,0.2)" stroke-width="1"/>
-          <line x1="380" y1="301" x2="380" y2="303" stroke="rgba(0,255,136,0.2)" stroke-width="1"/>
-          <line x1="400" y1="301" x2="400" y2="303" stroke="rgba(0,255,136,0.2)" stroke-width="1"/>
-          <line x1="420" y1="301" x2="420" y2="303" stroke="rgba(0,255,136,0.2)" stroke-width="1"/>
-          <line x1="440" y1="301" x2="440" y2="303" stroke="rgba(0,255,136,0.2)" stroke-width="1"/>
-          <line x1="460" y1="301" x2="460" y2="303" stroke="rgba(0,255,136,0.2)" stroke-width="1"/>
-          <line x1="480" y1="301" x2="480" y2="303" stroke="rgba(0,255,136,0.2)" stroke-width="1"/>
-
-          <!-- Label on body -->
           <text x="350" y="180" text-anchor="middle" font-family="monospace" font-size="7" fill="rgba(100,100,120,0.6)" letter-spacing="4">TRANSITUS MK-IV</text>
           <text x="350" y="190" text-anchor="middle" font-family="monospace" font-size="5" fill="rgba(100,100,120,0.4)" letter-spacing="2">CONSCIOUS — PATENT PENDING</text>
         </svg>
       </div>
-
-      <!-- Info strip -->
       <div class="pod-info-strip">
         <div class="info-cell"><div class="info-label">Model</div><div class="info-val">MK-IV</div></div>
         <div class="info-cell"><div class="info-label">Power Draw</div><div class="info-val">2.4 kW</div></div>
         <div class="info-cell"><div class="info-label">N₂ Capacity</div><div class="info-val warn">94%</div></div>
-        <div class="info-cell"><div class="info-label">Chamber</div><div class="info-val accent">STANDBY</div></div>
+        <div class="info-cell"><div class="info-label">Chamber</div><div class="info-val accent">READY</div></div>
       </div>
-
-      <!-- Actions -->
       <div class="pod-actions">
-        <button class="btn btn-primary" onclick="showPage('launch')">🚀 Initiate Transit</button>
+        <button class="btn btn-primary" onclick="showPage('dest')">🌌 Select Destination</button>
         <button class="btn btn-ghost" onclick="showPage('monitor')">📊 Vitals</button>
         <button class="btn btn-ghost" onclick="showPage('specs')">📋 Specs</button>
-        <button class="btn btn-danger" onclick="showPage('control')">⚙️ Controls</button>
+      </div>
+    </div>
+
+    <!-- DESTINATION PAGE -->
+    <div id="page-dest" class="page dest-page">
+      <div class="dest-hero">
+        <h2>Where will you go?</h2>
+        <p>Select a destination for consciousness transfer. Each location has distinct characteristics, entry protocols, and temporal flow rates.</p>
+        <div class="dest-search">
+          <input type="text" id="destSearch" placeholder="Search destinations..." oninput="filterDest()">
+          <button onclick="filterDest()">🔍</button>
+        </div>
+      </div>
+
+      <div class="dest-tags">
+        <div class="dest-tag active" onclick="filterTag('all', this)">All</div>
+        <div class="dest-tag" onclick="filterTag('physical', this)">Physical</div>
+        <div class="dest-tag" onclick="filterTag('mental', this)">Mental</div>
+        <div class="dest-tag" onclick="filterTag('archive', this)">Archive</div>
+        <div class="dest-tag" onclick="filterTag('alternate', this)">Alternate</div>
+        <div class="dest-tag" onclick="filterTag('ethereal', this)">Ethereal</div>
+      </div>
+
+      <div class="dest-grid" id="destGrid"></div>
+
+      <div class="dest-selected-banner" id="destBanner" style="display:none">
+        <div>
+          <div style="font-size:0.65rem;color:var(--text3);font-family:'Space Mono',monospace;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px">SELECTED DESTINATION</div>
+          <div style="font-size:1.1rem;font-weight:700;color:var(--glow)" id="destBannerName"></div>
+        </div>
+        <button class="btn btn-primary" onclick="showPage('launch')">🚀 Proceed to Launch</button>
       </div>
     </div>
 
@@ -610,9 +363,7 @@ canvas { width: 100%; height: 80px; background: var(--deep); border-radius: 8px;
       </div>
       <div class="spec-section">
         <div class="spec-group">
-          <div class="spec-card">
-            <span class="spec-card-icon">📐</span>
-            <div class="spec-card-title">Physical Dimensions</div>
+          <div class="spec-card"><span class="spec-card-icon">📐</span><div class="spec-card-title">Physical Dimensions</div>
             <div class="spec-row"><span class="spec-row-key">Length</span><span class="spec-row-val">3,200 mm</span></div>
             <div class="spec-row"><span class="spec-row-key">Diameter</span><span class="spec-row-val">1,400 mm</span></div>
             <div class="spec-row"><span class="spec-row-key">Chamber Width</span><span class="spec-row-val">900 mm</span></div>
@@ -621,38 +372,27 @@ canvas { width: 100%; height: 80px; background: var(--deep); border-radius: 8px;
             <div class="spec-row"><span class="spec-row-key">Orientation</span><span class="spec-row-val">Horizontal / Supine</span></div>
             <span class="badge-tag">3D PRINTED ON-SITE</span>
           </div>
-          <div class="spec-card">
-            <span class="spec-card-icon">⚡</span>
-            <div class="spec-card-title">Power System</div>
+          <div class="spec-card"><span class="spec-card-icon">⚡</span><div class="spec-card-title">Power System</div>
             <div class="spec-row"><span class="spec-row-key">Primary</span><span class="spec-row-val">220V AC / 50Hz</span></div>
             <div class="spec-row"><span class="spec-row-key">Peak Draw</span><span class="spec-row-val">2.4 kW</span></div>
-            <div class="spec-row"><span class="spec-row-key">Standby</span><span class="spec-row-val">180W</span></div>
             <div class="spec-row"><span class="spec-row-key">UPS Backup</span><span class="spec-row-val">72 hours</span></div>
             <div class="spec-row"><span class="spec-row-key">Battery</span><span class="spec-row-val">LiFePO₄ 14.4 kWh</span></div>
-            <div class="spec-row"><span class="spec-row-key">Auto-Switch</span><span class="spec-row-val"><10ms</span></div>
             <div class="spec-row"><span class="spec-row-key">N₂ Tank</span><span class="spec-row-val">9.0L @ 200 bar</span></div>
           </div>
-          <div class="spec-card">
-            <span class="spec-card-icon">🧠</span>
-            <div class="spec-card-title">Consciousness Interface</div>
+          <div class="spec-card"><span class="spec-card-icon">🧠</span><div class="spec-card-title">Consciousness Interface</div>
             <div class="spec-row"><span class="spec-row-key">Field Type</span><span class="spec-row-val">Quantum Coherence Array</span></div>
-            <div class="spec-row"><span class="spec-row-key">Frequency</span><span class="spec-row-val">0.1 Hz – 40 GHz</span></div>
             <div class="spec-row"><span class="spec-row-key">Channels</span><span class="spec-row-val">4,096 simultaneous</span></div>
             <div class="spec-row"><span class="spec-row-key">Coherence Req.</span><span class="spec-row-val">≥ 92%</span></div>
             <div class="spec-row"><span class="spec-row-key">Transit Duration</span><span class="spec-row-val">Unlimited</span></div>
             <div class="spec-row"><span class="spec-row-key">Return Modes</span><span class="spec-row-val">Auto / Manual / Deferred</span></div>
-            <div class="spec-row"><span class="spec-row-key">Identity Preserv.</span><span class="spec-row-val">0–100% configurable</span></div>
           </div>
-          <div class="spec-card">
-            <span class="spec-card-icon">🔒</span>
-            <div class="spec-card-title">Safety Systems</div>
+          <div class="spec-card"><span class="spec-card-icon">🔒</span><div class="spec-card-title">Safety Systems</div>
             <div class="spec-row"><span class="spec-row-key">Redundant CPUs</span><span class="spec-row-val">3 independent</span></div>
             <div class="spec-row"><span class="spec-row-key">Emergency Recall</span><span class="spec-row-val">Biometric + Voice</span></div>
             <div class="spec-row"><span class="spec-row-key">Flatline Protocol</span><span class="spec-row-val">Auto-resuscitate</span></div>
-            <div class="spec-row"><span class="spec-row-key">Vitals Monitor</span><span class="spec-row-val">50Hz continuous</span></div>
             <div class="spec-row"><span class="spec-row-key">Faraday Cage</span><span class="spec-row-val">Integrated 6mm mesh</span></div>
             <div class="spec-row"><span class="spec-row-key">EMI Shielding</span><span class="spec-row-val">≥120 dB</span></div>
-            <span class="badge-tag">IEC 60601-1-10 COMPLIANT</span>
+            <span class="badge-tag">IEC 60601-1-10</span>
           </div>
         </div>
       </div>
@@ -665,41 +405,16 @@ canvas { width: 100%; height: 80px; background: var(--deep); border-radius: 8px;
         <div class="spec-line"></div>
       </div>
       <div class="monitor-grid">
-        <div class="mon-card">
-          <div class="mon-label">Consciousness Field</div>
-          <div class="mon-val green">94.2%</div>
-          <div class="mon-sub">Coherence Index</div>
-        </div>
-        <div class="mon-card">
-          <div class="mon-label">Neural Activity</div>
-          <div class="mon-val green">72 bpm</div>
-          <div class="mon-sub">Theta wave dominant</div>
-        </div>
-        <div class="mon-card warn">
-          <div class="mon-label">Body Temperature</div>
-          <div class="mon-val amber">37.1°C</div>
-          <div class="mon-sub">Slightly elevated</div>
-        </div>
-        <div class="mon-card">
-          <div class="mon-label">Heart Rate</div>
-          <div class="mon-val green">61 bpm</div>
-          <div class="mon-sub">Optimal range</div>
-        </div>
-        <div class="mon-card">
-          <div class="mon-label">O₂ Saturation</div>
-          <div class="mon-val green">98%</div>
-          <div class="mon-sub">Chamber atmosphere</div>
-        </div>
-        <div class="mon-card">
-          <div class="mon-label">EMF Shielding</div>
-          <div class="mon-val green">99.97%</div>
-          <div class="mon-sub">Faraday active</div>
-        </div>
+        <div class="mon-card"><div class="mon-label">Consciousness Field</div><div class="mon-val green">94.2%</div><div class="mon-sub">Coherence Index</div></div>
+        <div class="mon-card"><div class="mon-label">Neural Activity</div><div class="mon-val green">72 bpm</div><div class="mon-sub">Theta wave dominant</div></div>
+        <div class="mon-card warn"><div class="mon-label">Body Temperature</div><div class="mon-val amber">37.1°C</div><div class="mon-sub">Slightly elevated</div></div>
+        <div class="mon-card"><div class="mon-label">Heart Rate</div><div class="mon-val green">61 bpm</div><div class="mon-sub">Optimal range</div></div>
+        <div class="mon-card"><div class="mon-label">O₂ Saturation</div><div class="mon-val green">98%</div><div class="mon-sub">Chamber atmosphere</div></div>
+        <div class="mon-card"><div class="mon-label">EMF Shielding</div><div class="mon-val green">99.97%</div><div class="mon-sub">Faraday active</div></div>
       </div>
-
       <div class="waveform-box">
         <div class="wave-header">
-          <div class="wave-title">● Consciousness Signature — Real-time</div>
+          <div class="wave-title">● Consciousness Signature</div>
           <div class="wave-val">θ 7.83 Hz · α 12.4 Hz · β 18.2 Hz</div>
         </div>
         <canvas id="waveCanvas"></canvas>
@@ -734,21 +449,16 @@ canvas { width: 100%; height: 80px; background: var(--deep); border-radius: 8px;
           <div class="toggle-row"><span class="tog-lbl">Emergency Recall Beacon</span><div class="tog on" onclick="toggleTog(this)"></div></div>
           <div class="toggle-row"><span class="tog-lbl">Flatline Auto-Resuscitate</span><div class="tog on" onclick="toggleTog(this)"></div></div>
           <div class="toggle-row"><span class="tog-lbl">N₂ Release Protocol</span><div class="tog on" onclick="toggleTog(this)"></div></div>
-          <div class="toggle-row"><span class="tog-lbl">Session Recording</span><div class="tog" onclick="toggleTog(this)"></div></div>
         </div>
         <div class="control-card">
           <div class="control-card-title"><div class="td" style="background:var(--accent)"></div>Quick Actions</div>
           <div class="btn-row">
-            <button class="btn btn-primary btn-full btn-sm" onclick="showPage('launch')">🚀 Initiate Transit</button>
-            <button class="btn btn-ghost btn-full btn-sm">⚙️ Diagnostics</button>
-          </div>
-          <div class="btn-row">
-            <button class="btn btn-ghost btn-full btn-sm">🔄 Reset Params</button>
+            <button class="btn btn-primary btn-full btn-sm" onclick="showPage('dest')">🌌 Select Destination</button>
             <button class="btn btn-danger btn-full btn-sm">🛑 Emergency Recall</button>
           </div>
           <div class="btn-row">
-            <button class="btn btn-ghost btn-full btn-sm">📊 Export Log</button>
-            <button class="btn btn-ghost btn-full btn-sm">💾 Backup Session</button>
+            <button class="btn btn-ghost btn-full btn-sm">⚙️ Diagnostics</button>
+            <button class="btn btn-ghost btn-full btn-sm">🔄 Reset Params</button>
           </div>
         </div>
       </div>
@@ -757,42 +467,163 @@ canvas { width: 100%; height: 80px; background: var(--deep); border-radius: 8px;
     <!-- LAUNCH PAGE -->
     <div id="page-launch" class="page launch-page">
       <div class="launch-status">● Initiating Transit Sequence</div>
+      <div class="launch-dest">
+        <div class="launch-dest-label">DESTINATION</div>
+        <div class="launch-dest-name" id="launchDestName">Not selected — go back and choose</div>
+      </div>
       <div class="launch-ring">
         <div class="launch-time" id="countdown">00:10</div>
       </div>
       <div class="launch-sub">Consciousness transfer in progress.<br>Your body will remain in stasis for the duration.</div>
       <div class="btn-row" style="max-width:280px;gap:10px;margin:0 auto;">
-        <button class="btn btn-primary btn-full" onclick="startCountdown()">✅ Confirm Launch</button>
-        <button class="btn btn-danger btn-full" onclick="showPage('pod')">✕ Abort</button>
-      </div>
-      <div style="margin-top:20px">
-        <button class="btn btn-ghost btn-sm" onclick="showPage('control')">← Configure First</button>
+        <button class="btn btn-primary" onclick="startCountdown()">✅ Confirm Launch</button>
+        <button class="btn btn-danger" onclick="showPage('dest')">✕ Choose Destination</button>
       </div>
     </div>
   </main>
 </div>
 
 <script>
-// Page nav
-function showPage(name) {
+// Destinations data
+const DESTINATIONS = [
+  {
+    name: "The Quiet Shore", category: "physical",
+    desc: "A stable coastal plain. Weather patterns are predictable, tides follow a 26-hour cycle. The light has a constant amber quality. Physical form is restored to approximately age 27. Bodies here do not age but can choose to.",
+    tags: ["Physical", "Stable", "1:1 Time"],
+    color: "#4a90c4", color2: "#2d5a7b",
+    temporal: "1:1 with baseline", return: "Manual", access: "Open"
+  },
+  {
+    name: "Mirror City", category: "alternate",
+    desc: "A sprawling metropolis that runs parallel to the main timeline. Architecture is art deco meets brutalism, perpetually at dusk. The streets are yours but populations here are dense. You are visible, audible, and bound by local physics.",
+    tags: ["Urban", "Alternate Timeline", "Dense Population"],
+    color: "#8b5f9e", color2: "#4a3257",
+    temporal: "1:4 (slower)", return: "Auto after 10 yrs", access: "Visa Required"
+  },
+  {
+    name: "The Green Below", category: "physical",
+    desc: "Subterranean biome beneath the Earth's crust. Bioluminescent forests, geothermal light, breathable atmosphere at 0.8 atm. The mycelial network carries what may be communication from other arrivals spanning centuries.",
+    tags: ["Subterranean", "Biological", "Dense Air"],
+    color: "#3d8b5a", color2: "#1a4a2d",
+    temporal: "1:1", return: "Manual", access: "Open"
+  },
+  {
+    name: "Threshold Station", category: "ethereal",
+    desc: "An orbital platform at L1 Lagrange point. Zero gravity, full view of Earth, silence except for structural creaking. You are disembodied here — pure signal in a 2km ring of processing infrastructure. Maximum bandwidth, zero physicality.",
+    tags: ["Orbital", "Disembodied", "Earth View"],
+    color: "#1a4a8b", color2: "#0d2550",
+    temporal: "1:200 (fast)", return: "Auto after 30 days", access: "Restricted"
+  },
+  {
+    name: "The Fracture", category: "alternate",
+    desc: "A location where consensus reality has partially collapsed. Buildings exist in impossible geometries, gravity shifts by block. Navigation requires instinct more than logic. Beautiful and disorienting. Local inhabitants are usually helpful.",
+    tags: ["Unstable Geometry", "Navigable", "Strange Beauty"],
+    color: "#9e5f8b", color2: "#5c3252",
+    temporal: "Variable by zone", return: "Manual", access: "Guided Entry"
+  },
+  {
+    name: "Archive of Everything", category: "archive",
+    desc: "Not a place. A library of every moment ever experienced by any consciousness. You read rather than visit. Access requires a question — wandering without one causes dissolution. The librarians are former arrivals who chose to stay.",
+    tags: ["Library", "Information", "Non-physical"],
+    color: "#8b7a3d", color2: "#4d4222",
+    temporal: "No time here", return: "Auto on close", access: "Question-based"
+  },
+  {
+    name: "The Deep Forest", category: "physical",
+    desc: "Old-growth wilderness with trees that predate human civilization. No fauna above insect level. Silence interrupted only by wind. Rain is frequent. Temperature fluctuates between 8–22°C. You have a body here,荒野 but it heals slowly from injury.",
+    tags: ["Wilderness", "Silent", "Slow Healing"],
+    color: "#3d6b4a", color2: "#1e3d28",
+    temporal: "1:1", return: "Manual", access: "Open"
+  },
+  {
+    name: "Recursion 7", category: "mental",
+    desc: "Your own mind, externalized. Every memory becomes a navigable room. Sentences you never said are walls you can walk through. Guilt is geography here. Most arrivals spend the first hour lost in regret. Identity preservation: 100%.",
+    tags: ["Internal", "Memory Palace", "Identity-locked"],
+    color: "#5f4a8b", color2: "#352752",
+    temporal: "Subjective only", return: "Instant", access: "Private"
+  },
+  {
+    name: "Resort District", category: "physical",
+    desc: "A purpose-built coastal resort area designed for extended stays. Staff are AIs trained in hospitality. Accommodations range from basic to elaborate. The ocean is warm and clear. Currency is time — you spend days as currency.",
+    tags: ["Resort", "Hospitality", "Warm Ocean"],
+    color: "#4a9e8b", color2: "#255d50",
+    temporal: "1:1", return: "Auto on request", access: "Time-based"
+  },
+  {
+    name: "The Gallery", category: "archive",
+    desc: "An infinite hall of rendered realities. Each alcove contains a fully simulated world — some historical, some impossible, some recognizable as other arrivals' memories. You observe but cannot interact with the simulations.",
+    tags: ["Observation", "Simulation", "Historical"],
+    color: "#8b5f5f", color2: "#503535",
+    temporal: "No time", return: "Auto on close", access: "Open"
+  },
+  {
+    name: "Past Life Basin", category: "alternate",
+    desc: "A valley that existed in a previous iteration of Earth, before current tectonic configuration. Dense jungle, volcanic activity, megafauna. Local biology is incompatible with your form — you require a hazard suit imported from baseline reality.",
+    tags: ["Prehistoric", "Jurassic", "Hazard Suit"],
+    color: "#8b6b3d", color2: "#503e22",
+    temporal: "1:8 (slower)", return: "Auto after 5 yrs", access: "Gear Required"
+  },
+  {
+    name: "The Amnesia Ward", category: "mental",
+    desc: "Total sensory and memory deprivation for the first 72 hours. Then gradual reassembly by a caretaker entity. You emerge with no knowledge of having arrived. The world looks entirely new. Some arrivals find this liberating. Others find it terrifying.",
+    tags: ["Reboot", "Disorienting", "Carefully Guided"],
+    color: "#3d5f6b", color2: "#1e323d",
+    temporal: "Subjective", return: "Caretaker-assisted", access: "Consented Only"
+  },
+  {
+    name: "Machine Interface", category: "ethereal",
+    desc: "The inside of a vast computational substrate. You exist as a process, not a person. Information density is extraordinary — you can perceive the entire substrate if you choose. Most arrivals request a simplified interface within minutes.",
+    tags: ["Computational", "High Density", "Simplified View"],
+    color: "#5f7a8b", color2: "#324352",
+    temporal: "No time", return: "Auto after 6 months", access: "Restricted"
+  },
+  {
+    name: "The Ember Isles", category: "physical",
+    desc: "Volcanic island chain on a warm sea. Constant geothermal activity. The islands grow and shrink over decades. Plant life is red and orange-shifted. It is never fully dark. Active geology makes this unsuitable for permanent residence but extraordinary for visits.",
+    tags: ["Volcanic", "Warm", "Temporary"],
+    color: "#c45f3d", color2: "#6b3520",
+    temporal: "1:1", return: "Auto after 1 yr", access: "Open"
+  },
+  {
+    name: "Memorial Field", category: "archive",
+    desc: "A vast open plain where consciousnesses gather but cannot speak. Communication is by emotional resonance — you feel what others feel. Shared grief is the primary language. Some arrivals come here to process loss they cannot process in physical form.",
+    tags: ["Silent", "Emotional", "Grief Processing"],
+    color: "#5f5f8b", color2: "#35354d",
+    temporal: "1:1", return: "Manual", access: "Open"
+  },
+  {
+    name: "Sky Belt", category: "physical",
+    desc: "A cloud layer at approximately 3km altitude. Solid surface, breathable atmosphere, constant breeze from below. You can see the ground only as light beneath the clouds. Structures here are suspended platforms built by previous arrivals.",
+    tags: ["Aerial", "Breezy", "Cloud View"],
+    color: "#4a7a9e", color2: "#254552",
+    temporal: "1:1", return: "Manual", access: "Open"
+  }
+];
+
+let selectedDest = null;
+let activeTag = 'all';
+
+function showPage(name, el) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.sidebar-icon').forEach(i => i.classList.remove('active'));
   document.getElementById('page-' + name).classList.add('active');
   window.scrollTo(0,0);
   if (name === 'monitor') initWave();
+  if (name === 'launch' && selectedDest) {
+    document.getElementById('launchDestName').textContent = selectedDest.name;
+  }
+  // Update sidebar icons
+  const pageMap = {pod:0, dest:1, specs:2, monitor:3, control:4, launch:6};
   document.querySelectorAll('.sidebar-icon').forEach((ic, i) => {
-    const pages = ['pod','specs','monitor','control','launch'];
-    if (pages[i] === name) ic.classList.add('active');
+    ic.classList.toggle('active', pageMap[name] === i);
   });
 }
 
-// Sliders
 function moveSlider(e, key) {
   const track = e.currentTarget;
   const rect = track.getBoundingClientRect();
-  const pct = Math.round(Math.max(0, Math.min(100, ((e.clientX||e.touches[0].clientX) - rect.left) / rect.width * 100)));
-  const fill = document.getElementById(key + 'Fill') || track.querySelector('.fill');
-  const thumb = document.getElementById(key + 'Thumb') || track.querySelector('.thumb');
+  const pct = Math.round(Math.max(0, Math.min(100, ((e.clientX||e.touches?.clientX) - rect.left) / rect.width * 100)));
+  const fill = document.getElementById(key + 'Fill');
+  const thumb = document.getElementById(key + 'Thumb');
   if (fill) fill.style.width = pct + '%';
   if (thumb) thumb.style.left = pct + '%';
   if (key === 'intensity') document.getElementById('intVal').textContent = pct + '%';
@@ -800,12 +631,8 @@ function moveSlider(e, key) {
   if (key === 'id') document.getElementById('idVal').textContent = pct + '%';
 }
 
-// Toggles
-function toggleTog(el) {
-  el.classList.toggle('on');
-}
+function toggleTog(el) { el.classList.toggle('on'); }
 
-// Waveform
 function initWave() {
   const c = document.getElementById('waveCanvas');
   if (!c) return;
@@ -832,7 +659,101 @@ function initWave() {
   draw();
 }
 
-// Countdown
+function filterTag(tag, el) {
+  activeTag = tag;
+  document.querySelectorAll('.dest-tag').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderDest();
+}
+
+function filterDest() {
+  renderDest();
+}
+
+function selectDest(dest) {
+  selectedDest = dest;
+  document.querySelectorAll('.dest-card').forEach(c => c.classList.remove('selected'));
+  document.querySelector(`[data-name="${dest.name}"]`).classList.add('selected');
+  document.getElementById('destBannerName').textContent = dest.name;
+  document.getElementById('destBanner').style.display = 'flex';
+}
+
+function drawCardBg(canvas, dest) {
+  const ctx = canvas.getContext('2d');
+  canvas.width = canvas.offsetWidth * 2;
+  canvas.height = canvas.offsetHeight * 2;
+  ctx.scale(2,2);
+  const W = canvas.offsetWidth, H = canvas.offsetHeight;
+  // Background gradient
+  const grad = ctx.createLinearGradient(0, 0, W, H);
+  grad.addColorStop(0, dest.color);
+  grad.addColorStop(1, dest.color2);
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, W, H);
+  // Abstract shapes
+  ctx.globalAlpha = 0.15;
+  for (let i = 0; i < 6; i++) {
+    ctx.beginPath();
+    ctx.arc(W * (0.3 + Math.sin(i * 1.3) * 0.3), H * (0.3 + Math.cos(i * 1.7) * 0.3), 20 + i * 8, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(255,255,255,0.4)';
+    ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+}
+
+function renderDest() {
+  const grid = document.getElementById('destGrid');
+  const search = document.getElementById('destSearch').value.toLowerCase();
+  const filtered = DESTINATIONS.filter(d => {
+    const matchTag = activeTag === 'all' || d.category === activeTag;
+    const matchSearch = !search || d.name.toLowerCase().includes(search) || d.desc.toLowerCase().includes(search) || d.tags.some(t => t.toLowerCase().includes(search));
+    return matchTag && matchSearch;
+  });
+
+  grid.innerHTML = '';
+  filtered.forEach((d, i) => {
+    const card = document.createElement('div');
+    card.className = 'dest-card' + (selectedDest?.name === d.name ? ' selected' : '');
+    card.dataset.name = d.name;
+    card.style.animationDelay = (i * 50) + 'ms';
+    card.onclick = () => selectDest(d);
+
+    const header = document.createElement('div');
+    header.className = 'dest-card-header';
+    const bgCanvas = document.createElement('canvas');
+    header.appendChild(bgCanvas);
+    setTimeout(() => drawCardBg(bgCanvas, d), 10);
+
+    const nameDiv = document.createElement('div');
+    nameDiv.className = 'dest-card-name';
+    nameDiv.textContent = d.name;
+    header.appendChild(nameDiv);
+
+    const subDiv = document.createElement('div');
+    subDiv.className = 'dest-card-sub';
+    subDiv.textContent = d.category.toUpperCase() + ' · ' + d.tags[0];
+    header.appendChild(subDiv);
+
+    const check = document.createElement('div');
+    check.className = 'dest-card-check';
+    check.textContent = '✓';
+    header.appendChild(check);
+
+    const body = document.createElement('div');
+    body.className = 'dest-card-body';
+    body.innerHTML = `<div class="dest-card-desc">${d.desc}</div>
+      <div class="dest-card-meta">
+        <span class="meta-chip${d.access === 'Open' ? ' green' : d.access === 'Restricted' || d.access === 'Guided Entry' || d.access === 'Consented Only' ? ' blue' : ''}">${d.access}</span>
+        <span class="meta-chip">⏱ ${d.temporal}</span>
+        <span class="meta-chip">↩ ${d.return}</span>
+      </div>`;
+
+    card.appendChild(header);
+    card.appendChild(body);
+    grid.appendChild(card);
+  });
+}
+
 let countdownRunning = false;
 function startCountdown() {
   if (countdownRunning) return;
@@ -846,6 +767,9 @@ function startCountdown() {
     if (secs <= 0) { clearInterval(iv); el.textContent = '● TRANSIT'; countdownRunning = false; }
   }, 1000);
 }
+
+// Init
+renderDest();
 </script>
 </body>
 </html>

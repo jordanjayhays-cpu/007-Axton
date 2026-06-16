@@ -3,19 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Conscious — Transitus</title>
+<title>CONSCIOUS — Transit Pod MK-IV</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --void: #000000;
-  --deep: #030308;
-  --surface: #0d0d1a;
-  --border: #1a1a2e;
-  --transit: #00ff88;
-  --transit-dim: rgba(0,255,136,0.15);
-  --warn: #ff4444;
-  --text: #e0e0e0;
-  --text2: #888;
+  --void: #050508;
+  --deep: #0a0a10;
+  --surface: #111118;
+  --surface2: #18181f;
+  --border: #222230;
+  --border-dim: #1a1a28;
+  --glow: #00ff88;
+  --glow-dim: rgba(0,255,136,0.12);
+  --glow-mid: rgba(0,255,136,0.25);
+  --accent: #00ccff;
+  --accent-dim: rgba(0,204,255,0.12);
+  --warn: #ff6b35;
+  --danger: #ff3355;
+  --text: #d0d0e0;
+  --text2: #707088;
+  --text3: #444455;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
@@ -26,611 +33,850 @@ body {
   overflow-x: hidden;
 }
 
-/* Animations */
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-@keyframes scan { 0%{top:-5%} 100%{top:105%} }
-@keyframes ring { 0%{transform:scale(1);opacity:0.8} 100%{transform:scale(2.5);opacity:0} }
-@keyframes drift { 0%{transform:translateY(0) rotate(0deg)} 50%{transform:translateY(-20px) rotate(180deg)} 100%{transform:translateY(0) rotate(360deg)} }
-@keyframes textFlicker { 0%,100%{opacity:1} 92%{opacity:1} 93%{opacity:0.3} 94%{opacity:1} 96%{opacity:0.5} 97%{opacity:1} }
-@keyframes countdown { from{stroke-dashoffset:0} to{stroke-dashoffset:565} }
-@keyframes slideUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
-
-/* NAV */
-nav {
+/* Layout */
+.app-layout {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 28px;
-  background: rgba(0,0,0,0.8);
-  border-bottom: 1px solid var(--border);
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 100;
+  min-height: 100vh;
 }
-.logo {
-  font-family: 'Space Mono', monospace;
-  font-size: 1rem;
-  font-weight: 700;
-  letter-spacing: 2px;
-  color: var(--transit);
-  text-transform: uppercase;
-}
-.status-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--transit);
-  animation: pulse 2s infinite;
-}
-.status-dot.offline { background: var(--warn); animation: none; }
-
-/* SCREENS */
-.screen { display: none; min-height: 100vh; padding-top: 70px; }
-.screen.active { display: flex; flex-direction: column; }
-
-/* POD VIEWER */
-.pod-viewer {
-  flex: 1;
+.sidebar {
+  width: 72px;
+  background: var(--deep);
+  border-right: 1px solid var(--border);
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 40px 20px;
-  position: relative;
-  overflow: hidden;
+  padding: 20px 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 50;
 }
-.pod-viewer::before {
+.sidebar-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 8px;
+  border: 1px solid transparent;
+}
+.sidebar-icon:hover { background: var(--surface2); border-color: var(--border); }
+.sidebar-icon.active { background: var(--glow-dim); border-color: var(--glow); color: var(--glow); }
+.sidebar-line { width: 1px; flex: 1; background: var(--border); margin: 16px 0; }
+
+.main { flex: 1; margin-left: 72px; display: flex; flex-direction: column; min-height: 100vh; }
+.topbar {
+  height: 56px;
+  background: var(--deep);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 28px;
+  gap: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+.topbar-title { font-family: 'Space Mono', monospace; font-size: 0.8rem; letter-spacing: 2px; color: var(--glow); text-transform: uppercase; flex: 1; }
+.topbar-status { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: var(--text2); }
+.status-pill { display: flex; align-items: center; gap: 5px; background: var(--surface); border: 1px solid var(--border); padding: 5px 10px; border-radius: 50px; font-family: 'Space Mono', monospace; font-size: 0.7rem; }
+.status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--glow); animation: pulse 2s infinite; }
+.status-dot.amber { background: var(--warn); }
+.status-dot.red { background: var(--danger); animation: none; }
+
+.page { display: none; flex: 1; }
+.page.active { display: flex; flex-direction: column; }
+
+/* Animations */
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+@keyframes glowPulse { 0%,100%{box-shadow: 0 0 20px rgba(0,255,136,0.2)} 50%{box-shadow: 0 0 40px rgba(0,255,136,0.5)} }
+@keyframes scanLine { 0%{transform:translateY(-100%)} 100%{transform:translateY:100%)} }
+@keyframes ringPulse { 0%{transform:translate(-50%,-50%) scale(1);opacity:0.6} 100%{transform:translate(-50%,-50%) scale(2);opacity:0} }
+@keyframes fadeSlide { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+@keyframes rotateS { 0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+/* ==========================================
+   POD VIEW — The hardware
+   ========================================== */
+.pod-view-page { flex-direction: column; }
+.pod-canvas {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 40px 20px;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 60%, rgba(0,255,136,0.04) 0%, transparent 60%);
+}
+.pod-canvas::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at 50% 80%, var(--transit-dim) 0%, transparent 60%);
+  background: repeating-linear-gradient(0deg, transparent, transparent 49px, rgba(0,255,136,0.02) 50px);
   pointer-events: none;
 }
 
-/* The Pod SVG */
-.pod-container {
-  position: relative;
-  width: 220px;
-  height: 340px;
-  margin-bottom: 32px;
-}
-.pod-ring {
+/* 3D-ish Pod */
+.pod-3d { position: relative; width: 280px; height: 420px; }
+
+.pod-ring-anim {
   position: absolute;
-  border: 2px solid var(--transit);
+  border: 1px solid var(--glow);
   border-radius: 50%;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  animation: ring 3s ease-out infinite;
+  animation: ringPulse 2.5s ease-out infinite;
 }
-.pod-ring:nth-child(1) { width: 160px; height: 160px; animation-delay: 0s; }
-.pod-ring:nth-child(2) { width: 200px; height: 200px; animation-delay: 1s; }
-.pod-ring:nth-child(3) { width: 240px; height: 240px; animation-delay: 2s; }
+.pod-ring-anim:nth-child(1) { width: 160px; height: 160px; animation-delay: 0s; }
+.pod-ring-anim:nth-child(2) { width: 200px; height: 200px; animation-delay: 0.8s; }
+.pod-ring-anim:nth-child(3) { width: 240px; height: 240px; animation-delay: 1.6s; }
 
-.pod-body {
+.pod-shell {
   position: absolute;
   inset: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
 }
-.pod-dome {
-  width: 140px;
-  height: 180px;
-  border-radius: 70px 70px 40px 40px;
-  border: 2px solid var(--transit);
-  background: linear-gradient(180deg, rgba(0,255,136,0.05) 0%, rgba(0,255,136,0.02) 100%);
+.pod-top {
+  width: 100%;
+  height: 16px;
+  background: linear-gradient(90deg, var(--border-dim), var(--surface2), var(--border-dim));
+  border-radius: 8px 8px 0 0;
+  border: 1px solid var(--border);
+  border-bottom: none;
   display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.pod-sensor { width: 6px; height: 6px; border-radius: 50%; background: var(--glow); animation: pulse 3s infinite; }
+.pod-sensor.amber { background: var(--warn); animation: none; }
+.pod-sensor.red { background: var(--danger); animation: none; }
+.pod-sensor.off { background: var(--text3); animation: none; }
+
+.pod-chamber {
+  width: 160px;
+  height: 280px;
+  border: 2px solid var(--border);
+  border-radius: 80px 80px 40px 40px;
+  background: linear-gradient(180deg, rgba(0,255,136,0.03) 0%, rgba(0,255,136,0.01) 100%);
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   position: relative;
   overflow: hidden;
 }
-.pod-dome::before {
+.pod-chamber::before {
   content: '';
   position: absolute;
-  left: -2px;
-  right: -2px;
-  height: 8px;
-  background: var(--transit);
-  top: 0;
-  border-radius: 70px 70px 0 0;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,255,136,0.06) 0%, transparent 40%);
+  border-radius: inherit;
 }
-.pod-scan {
+.pod-scan-line {
   position: absolute;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, transparent, var(--transit), transparent);
-  animation: scan 2.5s linear infinite;
+  left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--glow), transparent);
+  animation: scanLine 3s linear infinite;
+  opacity: 0.6;
 }
-.pod-status-text {
+.pod-person {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--surface2);
+  border: 2px solid var(--glow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 0 20px rgba(0,255,136,0.3);
+}
+.pod-status-readout {
+  position: absolute;
+  bottom: 20px;
   font-family: 'Space Mono', monospace;
-  font-size: 0.65rem;
-  letter-spacing: 2px;
-  color: var(--transit);
-  text-transform: uppercase;
-  text-align: center;
-  margin-top: 16px;
-  animation: textFlicker 4s infinite;
-}
-.pod-base {
-  width: 100px;
-  height: 12px;
-  background: var(--border);
-  border-radius: 0 0 8px 8px;
-  margin-top: -2px;
-}
-
-/* Pod info below */
-.pod-info { text-align: center; margin-bottom: 32px; }
-.pod-name {
-  font-size: 1.6rem;
-  font-weight: 700;
-  color: #fff;
-  margin-bottom: 6px;
-}
-.pod-desc { color: var(--text2); font-size: 0.9rem; max-width: 340px; line-height: 1.5; }
-
-/* CTA Buttons */
-.cta-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-.cta-btn {
-  padding: 14px 32px;
-  border-radius: 8px;
-  font-family: 'Space Mono', monospace;
-  font-size: 0.8rem;
-  font-weight: 700;
+  font-size: 0.6rem;
   letter-spacing: 1px;
+  color: var(--glow);
   text-transform: uppercase;
-  cursor: pointer;
-  transition: all 0.3s;
-  border: none;
+  animation: blink 2s infinite;
 }
-.cta-btn.primary {
-  background: var(--transit);
-  color: var(--void);
-  box-shadow: 0 0 30px rgba(0,255,136,0.3);
-}
-.cta-btn.primary:hover {
-  box-shadow: 0 0 50px rgba(0,255,136,0.5);
-  transform: translateY(-2px);
-}
-.cta-btn.secondary {
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--text2);
-}
-.cta-btn.secondary:hover { border-color: var(--transit); color: var(--transit); }
-.cta-btn.danger {
-  background: transparent;
-  border: 1px solid var(--warn);
-  color: var(--warn);
-}
-.cta-btn.danger:hover { background: rgba(255,68,68,0.1); }
 
-/* DIMENSIONS GRID */
-.dimensions-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+.pod-base-ring {
+  width: 180px;
+  height: 24px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  margin-top: -2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   gap: 16px;
-  padding: 20px;
-  max-width: 600px;
-  margin: 0 auto;
-  width: 100%;
 }
-.dim-card {
+.pod-base-led { width: 8px; height: 8px; border-radius: 50%; background: var(--glow); }
+.pod-base-led.amber { background: var(--warn); }
+.pod-base-led.off { background: var(--text3); }
+
+.pod-bottom {
+  width: 120px;
+  height: 40px;
+  background: linear-gradient(180deg, var(--surface2), var(--deep));
+  border: 1px solid var(--border);
+  border-radius: 0 0 8px 8px;
+  border-top: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+.pod-vent { width: 20px; height: 3px; background: var(--border); border-radius: 2px; }
+
+.pod-specs-overlay {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 200px;
+}
+.pod-spec-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.pod-spec-icon { font-size: 1rem; }
+.pod-spec-label { font-size: 0.65rem; color: var(--text3); text-transform: uppercase; letter-spacing: 1px; font-family: 'Space Mono', monospace; }
+.pod-spec-value { font-size: 0.85rem; font-weight: 600; color: var(--text); }
+
+/* Side panel on pod page */
+.pod-panel {
+  background: var(--deep);
+  border-top: 1px solid var(--border);
+  padding: 24px 32px;
+}
+.pod-panel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; max-width: 900px; margin: 0 auto; }
+.pod-stat-card {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 12px;
-  padding: 20px 16px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.3s;
+  padding: 16px;
 }
-.dim-card:hover { border-color: var(--transit); transform: translateY(-3px); }
-.dim-card.selected { border-color: var(--transit); background: rgba(0,255,136,0.05); }
-.dim-icon { font-size: 2rem; margin-bottom: 10px; display: block; }
-.dim-name { font-weight: 700; font-size: 0.95rem; color: #fff; margin-bottom: 4px; }
-.dim-desc { font-size: 0.75rem; color: var(--text2); line-height: 1.4; }
+.pod-stat-label { font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 2px; color: var(--text3); text-transform: uppercase; margin-bottom: 8px; }
+.pod-stat-value { font-size: 1.4rem; font-weight: 700; color: var(--glow); }
+.pod-stat-value.amber { color: var(--warn); }
+.pod-stat-sub { font-size: 0.75rem; color: var(--text2); margin-top: 4px; }
 
-/* TRANSIT SEQUENCE */
-.transit-screen {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 40px 20px;
-  text-align: center;
-}
-.countdown-ring {
-  position: relative;
-  width: 200px;
-  height: 200px;
-  margin-bottom: 40px;
-}
-.countdown-ring svg {
-  transform: rotate(-90deg);
-  width: 100%;
-  height: 100%;
-}
-.countdown-ring circle {
-  fill: none;
-  stroke: var(--transit);
-  stroke-width: 3;
-  stroke-linecap: round;
-  stroke-dasharray: 565;
-  stroke-dashoffset: 0;
-  animation: countdown var(--transit-time)s linear forwards;
-}
-.countdown-number {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Space Mono', monospace;
-  font-size: 3rem;
-  font-weight: 700;
-  color: var(--transit);
-}
-.transit-status {
-  font-family: 'Space Mono', monospace;
-  font-size: 0.85rem;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--transit);
-  margin-bottom: 16px;
-  animation: textFlicker 2s infinite;
-}
-.transit-dim-name {
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: #fff;
-  margin-bottom: 12px;
-}
-.transit-sub { color: var(--text2); max-width: 300px; line-height: 1.5; }
+/* ==========================================
+   SPECS PAGE
+   ========================================== */
+.specs-page { padding: 32px; }
+.section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+.section-title { font-size: 1.1rem; font-weight: 700; color: #fff; }
+.section-line { flex: 1; height: 1px; background: var(--border); }
 
-/* RESULT SCREEN */
-.result-screen { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; text-align: center; }
-.result-icon { font-size: 5rem; margin-bottom: 20px; animation: drift 6s ease-in-out infinite; }
-.result-title { font-size: 1.8rem; font-weight: 700; color: var(--transit); margin-bottom: 12px; }
-.result-desc { color: var(--text2); max-width: 340px; line-height: 1.6; margin-bottom: 32px; }
-
-/* QUIZ SECTION */
-.quiz-section { padding: 20px; max-width: 480px; margin: 0 auto; width: 100%; }
-.step-label { text-align: center; font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 2px; color: var(--transit); text-transform: uppercase; margin-bottom: 20px; }
-.quiz-card {
+.spec-section { margin-bottom: 40px; animation: fadeSlide 0.4s ease; }
+.spec-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+.spec-card {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 32px 24px;
-  margin-bottom: 20px;
+  border-radius: 14px;
+  padding: 20px;
+  transition: border-color 0.2s;
 }
-.quiz-card h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 6px; color: #fff; }
-.quiz-card p { color: var(--text2); font-size: 0.85rem; margin-bottom: 24px; }
-.option-grid { display: flex; flex-direction: column; gap: 10px; }
-.option-btn {
-  background: var(--deep);
+.spec-card:hover { border-color: var(--glow); }
+.spec-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.spec-card-icon { font-size: 1.2rem; }
+.spec-card-title { font-weight: 700; font-size: 0.95rem; color: #fff; }
+.spec-table { width: 100%; border-collapse: collapse; }
+.spec-table tr { border-bottom: 1px solid var(--border-dim); }
+.spec-table tr:last-child { border: none; }
+.spec-table td { padding: 8px 0; font-size: 0.85rem; }
+.spec-table td:first-child { color: var(--text3); width: 45%; }
+.spec-table td:last-child { color: var(--text); font-family: 'Space Mono', monospace; font-size: 0.8rem; }
+.spec-badge { display: inline-block; background: var(--glow-dim); color: var(--glow); font-family: 'Space Mono', monospace; font-size: 0.65rem; padding: 2px 8px; border-radius: 50px; margin-top: 4px; }
+
+/* ==========================================
+   CONTROL PANEL PAGE
+   ========================================== */
+.control-page { padding: 32px; flex-direction: row; flex-wrap: wrap; gap: 24px; }
+.control-col { flex: 1; min-width: 300px; display: flex; flex-direction: column; gap: 20px; }
+.control-card {
+  background: var(--surface);
   border: 1px solid var(--border);
-  padding: 14px 16px;
-  border-radius: 10px;
-  font-family: inherit;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: all 0.2s;
-  text-align: left;
+  border-radius: 14px;
+  padding: 20px;
+}
+.control-card-title {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 16px;
   display: flex;
   align-items: center;
-  gap: 12px;
-  color: var(--text);
+  gap: 8px;
 }
-.option-btn:hover { border-color: var(--transit); background: var(--transit-dim); }
-.option-btn .emoji { font-size: 1.2rem; }
-.nav-row { display: flex; gap: 12px; justify-content: center; padding: 20px; }
+.control-card-title .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--glow); }
 
-/* Step dots */
-.step-dots { display: flex; gap: 8px; justify-content: center; margin-bottom: 24px; }
-.step-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); }
-.step-dot.active { background: var(--transit); width: 24px; border-radius: 4px; }
-.step-dot.done { background: var(--transit); opacity: 0.5; }
-
-/* BACK BUTTON */
-.back-btn {
-  background: none;
-  border: none;
-  color: var(--text2);
+/* Buttons */
+.btn {
+  padding: 12px 20px;
+  border-radius: 8px;
   font-family: 'Space Mono', monospace;
   font-size: 0.75rem;
+  font-weight: 700;
   letter-spacing: 1px;
+  text-transform: uppercase;
   cursor: pointer;
-  padding: 8px 16px;
-  transition: color 0.2s;
+  border: none;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  justify-content: center;
 }
-.back-btn:hover { color: var(--transit); }
+.btn-green { background: var(--glow-dim); border: 1px solid var(--glow); color: var(--glow); }
+.btn-green:hover { background: rgba(0,255,136,0.2); box-shadow: 0 0 20px rgba(0,255,136,0.3); }
+.btn-red { background: rgba(255,51,85,0.1); border: 1px solid var(--danger); color: var(--danger); }
+.btn-red:hover { background: rgba(255,51,85,0.2); }
+.btn-blue { background: var(--accent-dim); border: 1px solid var(--accent); color: var(--accent); }
+.btn-blue:hover { background: rgba(0,204,255,0.2); }
+.btn-grey { background: var(--surface2); border: 1px solid var(--border); color: var(--text2); }
+.btn-grey:hover { border-color: var(--text3); color: var(--text); }
+.btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+/* Sliders / Toggles */
+.param-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.param-label { font-size: 0.85rem; color: var(--text2); }
+.param-value { font-family: 'Space Mono', monospace; font-size: 0.8rem; color: var(--glow); }
+.slider-track {
+  width: 100%;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  position: relative;
+  cursor: pointer;
+}
+.slider-fill {
+  height: 100%;
+  background: var(--glow);
+  border-radius: 2px;
+  transition: width 0.2s;
+}
+.slider-thumb {
+  width: 14px;
+  height: 14px;
+  background: var(--glow);
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  cursor: grab;
+}
+
+.toggle-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.toggle-label { font-size: 0.85rem; color: var(--text2); }
+.toggle { width: 40px; height: 22px; background: var(--border); border-radius: 11px; position: relative; cursor: pointer; transition: background 0.3s; }
+.toggle.active { background: var(--glow); }
+.toggle::after { content: ''; width: 16px; height: 16px; background: white; border-radius: 50%; position: absolute; top: 3px; left: 3px; transition: transform 0.3s; }
+.toggle.active::after { transform: translateX(18px); }
+
+/* Progress bars */
+.prog-row { margin-bottom: 14px; }
+.prog-label-row { display: flex; justify-content: space-between; margin-bottom: 6px; }
+.prog-label { font-size: 0.8rem; color: var(--text2); }
+.prog-value { font-family: 'Space Mono', monospace; font-size: 0.75rem; color: var(--glow); }
+.prog-bar { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.prog-fill { height: 100%; background: var(--glow); border-radius: 3px; transition: width 0.5s; }
+.prog-fill.amber { background: var(--warn); }
+
+/* ==========================================
+   MONITOR PAGE
+   ========================================== */
+.monitor-page { padding: 32px; }
+.monitor-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin-bottom: 32px; }
+.monitor-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px;
+  position: relative;
+  overflow: hidden;
+}
+.monitor-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--glow); }
+.monitor-card.amber::before { background: var(--warn); }
+.monitor-card.red::before { background: var(--danger); }
+.monitor-label { font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 2px; color: var(--text3); text-transform: uppercase; margin-bottom: 10px; }
+.monitor-value { font-size: 1.8rem; font-weight: 700; }
+.monitor-value.green { color: var(--glow); }
+.monitor-value.amber { color: var(--warn); }
+.monitor-value.red { color: var(--danger); }
+.monitor-sub { font-size: 0.75rem; color: var(--text2); margin-top: 4px; }
+.monitor-chart { height: 50px; margin-top: 12px; display: flex; align-items: flex-end; gap: 3px; }
+.chart-bar { flex: 1; background: var(--glow); border-radius: 2px 2px 0 0; min-height: 4px; opacity: 0.6; transition: height 0.3s; }
+
+/* Vitals waveform */
+.waveform-container { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 24px; }
+.waveform-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.waveform-title { font-family: 'Space Mono', monospace; font-size: 0.75rem; letter-spacing: 2px; color: var(--text3); text-transform: uppercase; }
+.waveform-val { font-family: 'Space Mono', monospace; font-size: 0.9rem; color: var(--glow); }
+.waveform-canvas { width: 100%; height: 80px; background: var(--deep); border-radius: 8px; }
+
+/* ==========================================
+   LAUNCH PAGE
+   ========================================== */
+.launch-page { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; text-align: center; }
+.launch-pod { position: relative; width: 200px; height: 320px; margin-bottom: 40px; }
+.launch-status { font-family: 'Space Mono', monospace; font-size: 0.8rem; letter-spacing: 3px; color: var(--glow); text-transform: uppercase; margin-bottom: 8px; animation: blink 2s infinite; }
+.launch-title { font-size: 2rem; font-weight: 700; color: #fff; margin-bottom: 12px; }
+.launch-sub { color: var(--text2); max-width: 360px; line-height: 1.5; margin-bottom: 32px; }
+.launch-time { font-family: 'Space Mono', monospace; font-size: 2.5rem; font-weight: 700; color: var(--glow); margin-bottom: 32px; }
+.launch-cancel { margin-top: 20px; }
 </style>
 </head>
 <body>
 
-<nav>
-  <div class="logo">CONSCIOUS // TRANSITUS</div>
-  <div class="status-dot" id="statusDot" title="System Online"></div>
-</nav>
+<div class="app-layout">
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="sidebar-icon active" data-page="pod" onclick="showPage('pod', this)" title="Pod">🛸</div>
+    <div class="sidebar-icon" data-page="specs" onclick="showPage('specs', this)" title="Specs">📋</div>
+    <div class="sidebar-icon" data-page="control" onclick="showPage('control', this)" title="Control Panel">⚙️</div>
+    <div class="sidebar-icon" data-page="monitor" onclick="showPage('monitor', this)" title="Monitor">📊</div>
+    <div class="sidebar-line"></div>
+    <div class="sidebar-icon" data-page="launch" onclick="showPage('launch', this)" title="Launch">🚀</div>
+  </nav>
 
-<!-- HOME -->
-<div id="screen-home" class="screen active">
-  <div class="pod-viewer">
-    <div class="pod-container">
-      <div class="pod-ring"></div>
-      <div class="pod-ring"></div>
-      <div class="pod-ring"></div>
-      <div class="pod-body">
-        <div class="pod-dome">
-          <div class="pod-scan"></div>
-          <div style="font-size:3rem">🌌</div>
+  <!-- Main content -->
+  <main class="main">
+    <div class="topbar">
+      <div class="topbar-title">CONSCIOUS // TRANSITUS MK-IV</div>
+      <div class="topbar-status">
+        <div class="status-pill">
+          <div class="status-dot"></div>
+          ONLINE
         </div>
-        <div class="pod-base"></div>
+        <div class="status-pill">
+          POD-07
+        </div>
       </div>
     </div>
-    <div class="pod-info">
-      <div class="pod-name">Transit Pod MK-IV</div>
-      <div class="pod-desc">Consciousness transfer device. Non-lethal. Your body remains here. awareness continues elsewhere.</div>
-    </div>
-    <div class="cta-row">
-      <button class="cta-btn primary" onclick="showScreen('dimensions')">Begin Transit</button>
-      <button class="cta-btn secondary" onclick="showScreen('quiz')">Configure</button>
-    </div>
-  </div>
-</div>
 
-<!-- DIMENSIONS -->
-<div id="screen-dimensions" class="screen">
-  <div style="padding: 20px 20px 0; text-align:center;">
-    <div style="font-family:'Space Mono',monospace;font-size:0.7rem;letter-spacing:2px;color:var(--transit);text-transform:uppercase;margin-bottom:4px">Select Destination</div>
-    <h2 style="font-size:1.3rem;font-weight:700;color:#fff;margin-bottom:8px">Choose Your Transit Zone</h2>
-    <p style="color:var(--text2);font-size:0.85rem;max-width:320px;margin:0 auto 20px">Your consciousness will be transferred. Your biological form stays in the pod.</p>
-  </div>
-  <div class="dimensions-grid" id="dimensionsGrid"></div>
-  <div class="nav-row">
-    <button class="back-btn" onclick="showScreen('home')">← Back</button>
-    <button class="cta-btn primary" id="transitBtn" onclick="startTransit()" disabled>Select a Dimension</button>
-  </div>
-</div>
+    <!-- POD VIEW -->
+    <div id="page-pod" class="page pod-view-page active">
+      <div class="pod-canvas">
+        <div class="pod-specs-overlay">
+          <div class="pod-spec-item"><span class="pod-spec-icon">⚡</span><div><div class="pod-spec-label">Power</div><div class="pod-spec-value">2.4 kW</div></div></div>
+          <div class="pod-spec-item"><span class="pod-spec-icon">🌡️</span><div><div class="pod-spec-label">Internal</div><div class="pod-spec-value">21.3°C</div></div></div>
+          <div class="pod-spec-item"><span class="pod-spec-icon">💧</span><div><div class="pod-spec-label">Humidity</div><div class="pod-spec-value">34%</div></div></div>
+          <div class="pod-spec-item"><span class="pod-spec-icon">🧠</span><div><div class="pod-spec-label">Occupant</div><div class="pod-spec-value">Detected</div></div></div>
+          <div class="pod-spec-item"><span class="pod-spec-icon">🔋</span><div><div class="pod-spec-label">UPS Backup</div><div class="pod-spec-value">99.7%</div></div></div>
+        </div>
 
-<!-- QUIZ -->
-<div id="screen-quiz" class="screen">
-  <div class="quiz-section">
-    <div class="step-dots" id="stepDots">
-      <div class="step-dot active"></div>
-      <div class="step-dot"></div>
-      <div class="step-dot"></div>
-      <div class="step-dot"></div>
-    </div>
-    <div class="quiz-card active" id="quiz1">
-      <h2>Intention</h2>
-      <p>Why are you transiting today?</p>
-      <div class="option-grid">
-        <button class="option-btn" onclick="quizNext(1,'exploration')"><span class="emoji">🔭</span> Pure exploration — I want to see what's out there</button>
-        <button class="option-btn" onclick="quizNext(1,'reunion')"><span class="emoji">👥</span> Reunion — connect with consciousness I knew before</button>
-        <button class="option-btn" onclick="quizNext(1,'knowledge')"><span class="emoji">📚</span> Knowledge — access information this plane cannot hold</button>
-        <button class="option-btn" onclick="quizNext(1,'service')"><span class="emoji">🌍</span> Service — contribute to a civilization there</button>
-        <button class="option-btn" onclick="quizNext(1,'dissolution')"><span class="emoji">💠</span> Dissolution — release identity, merge with the whole</button>
+        <div class="pod-3d">
+          <div class="pod-ring-anim"></div>
+          <div class="pod-ring-anim"></div>
+          <div class="pod-ring-anim"></div>
+          <div class="pod-shell">
+            <div class="pod-top">
+              <div class="pod-sensor"></div>
+              <div class="pod-sensor"></div>
+              <div class="pod-sensor amber"></div>
+              <div class="pod-sensor"></div>
+              <div class="pod-sensor off"></div>
+            </div>
+            <div class="pod-chamber">
+              <div class="pod-scan-line"></div>
+              <div class="pod-person">🧑</div>
+              <div class="pod-status-readout">● STANDBY</div>
+            </div>
+            <div class="pod-base-ring">
+              <div class="pod-base-led"></div>
+              <div class="pod-base-led amber"></div>
+              <div class="pod-base-led"></div>
+              <div class="pod-base-led off"></div>
+            </div>
+            <div class="pod-bottom">
+              <div class="pod-vent"></div>
+              <div class="pod-vent"></div>
+              <div class="pod-vent"></div>
+              <div class="pod-vent"></div>
+              <div class="pod-vent"></div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="quiz-card" id="quiz2">
-      <h2>Familiarity</h2>
-      <p>How do you want the experience to feel?</p>
-      <div class="option-grid">
-        <button class="option-btn" onclick="quizNext(2,'anchored')"><span class="emoji">⚓</span> Anchored — I want structure and orientation</button>
-        <button class="option-btn" onclick="quizNext(2,'flowing')"><span class="emoji">🌊</span> Flowing — let the dimension define the experience</button>
-        <button class="option-btn" onclick="quizNext(2,'transformed')"><span class="emoji">🌀</span> Transformed — I want to come back changed</button>
-      </div>
-    </div>
-    <div class="quiz-card" id="quiz3">
-      <h2>Return Preference</h2>
-      <p>Do you want to come back to this body?</p>
-      <div class="option-grid">
-        <button class="option-btn" onclick="quizNext(3,'return')"><span class="emoji">↩️</span> Yes — round trip, guaranteed return</button>
-        <button class="option-btn" onclick="quizNext(3,'optional')"><span class="emoji">❓</span> Optional — I decide during transit</button>
-        <button class="option-btn" onclick="quizNext(3,'oneway')"><span class="emoji">➡️</span> One-way — this body has served its purpose</button>
-      </div>
-    </div>
-    <div class="quiz-card" id="quiz4">
-      <h2>Identity Preservation</h2>
-      <p>How much of yourself do you want to carry?</p>
-      <div class="option-grid">
-        <button class="option-btn" onclick="quizNext(4,'full')"><span class="emoji">🪞</span> Full — all memories, all identity, all of me</button>
-        <button class="option-btn" onclick="quizNext(4,'core')"><span class="emoji">💎</span> Core — essential self only, lighter transit</button>
-        <button class="option-btn" onclick="quizNext(4,'minimal')"><span class="emoji">🌫️</span> Minimal — just consciousness, no identity</button>
-      </div>
-    </div>
-    <div class="nav-row">
-      <button class="back-btn" onclick="showScreen('home')">← Back</button>
-      <button class="cta-btn primary" onclick="finishQuiz()">Transit Now →</button>
-    </div>
-  </div>
-</div>
 
-<!-- TRANSIT ANIMATION -->
-<div id="screen-transit" class="screen">
-  <div class="transit-screen">
-    <div class="transit-status" id="transitStatus">Initiating Transit...</div>
-    <div class="countdown-ring">
-      <svg viewBox="0 0 200 200">
-        <circle cx="100" cy="100" r="90" id="countdownCircle"/>
-      </svg>
-      <div class="countdown-number" id="countdownNum">10</div>
+      <div class="pod-panel">
+        <div class="pod-panel-grid">
+          <div class="pod-stat-card"><div class="pod-stat-label">Chamber Status</div><div class="pod-stat-value">STANDBY</div><div class="pod-stat-sub">Ready for occupancy</div></div>
+          <div class="pod-stat-card"><div class="pod-stat-label">Field Strength</div><div class="pod-stat-value">87.3%</div><div class="pod-stat-sub">Above threshold</div></div>
+          <div class="pod-stat-card"><div class="pod-stat-label">Last Transit</div><div class="pod-stat-value amber">14 DAYS AGO</div><div class="pod-stat-sub">Session #047</div></div>
+          <div class="pod-stat-card"><div class="pod-stat-label">Next Maintenance</div><div class="pod-stat-value">6 DAYS</div><div class="pod-stat-sub">Schedule: 2026-06-22</div></div>
+        </div>
+      </div>
     </div>
-    <div class="transit-dim-name" id="transitDimName">Loading...</div>
-    <div class="transit-sub" id="transitSub">Preparing consciousness for transfer</div>
-  </div>
-</div>
 
-<!-- RESULT -->
-<div id="screen-result" class="screen">
-  <div class="result-screen">
-    <div class="result-icon" id="resultIcon">🌌</div>
-    <div class="result-title" id="resultTitle">Transit Complete</div>
-    <div class="result-desc" id="resultDesc">Your consciousness has arrived in the destination dimension. Your body remains in the pod, maintained. You are now experiencing reality from a different vantage point.</div>
-    <div class="cta-row">
-      <button class="cta-btn primary" onclick="showScreen('home')">New Transit</button>
-      <button class="cta-btn secondary" onclick="window.print()">Documentation</button>
+    <!-- SPECS -->
+    <div id="page-specs" class="page specs-page">
+      <div class="spec-section">
+        <div class="section-header"><div class="section-title">Physical Specifications</div><div class="section-line"></div></div>
+        <div class="spec-grid">
+          <div class="spec-card">
+            <div class="spec-card-header"><span class="spec-card-icon">📐</span><div class="spec-card-title">Dimensions</div></div>
+            <table class="spec-table">
+              <tr><td>Height</td><td>2,100 mm</td></tr>
+              <tr><td>Diameter</td><td>1,400 mm</td></tr>
+              <tr><td>Chamber Diameter</td><td>900 mm</td></tr>
+              <tr><td>Base Footprint</td><td>1,600 × 1,600 mm</td></tr>
+              <tr><td>Weight</td><td>680 kg</td></tr>
+              <tr><td>Material (Shell)</td><td>Carbon fiber composite</td></tr>
+              <tr><td>Material (Frame)</td><td>Grade 5 titanium alloy</td></tr>
+            </table>
+          </div>
+          <div class="spec-card">
+            <div class="spec-card-header"><span class="spec-card-icon">⚡</span><div class="spec-card-title">Power System</div></div>
+            <table class="spec-table">
+              <tr><td>Primary Supply</td><td>220V AC / 50Hz</td></tr>
+              <tr><td>Peak Consumption</td><td>2.4 kW</td></tr>
+              <tr><td>Standby Draw</td><td>180W</td></tr>
+              <tr><td>UPS Runtime</td><td>72 hours</td></tr>
+              <tr><td>Battery Chemistry</td><td>Lithium iron phosphate</td></tr>
+              <tr><td>Backup Capacity</td><td>14.4 kWh</td></tr>
+              <tr><td>Auto-Switch Time</td><td><10ms</td></tr>
+            </table>
+          </div>
+          <div class="spec-card">
+            <div class="spec-card-header"><span class="spec-card-icon">🧠</span><div class="spec-card-title">Consciousness Interface</div></div>
+            <table class="spec-table">
+              <tr><td>Field Type</td><td>Quantum coherence array</td></tr>
+              <tr><td>Frequency Range</td><td>0.1 Hz – 40 GHz</td></tr>
+              <tr><td>Channel Count</td><td>4,096 simultaneous</td></tr>
+              <tr><td>Coherence Required</td><td>≥92%</td></tr>
+              <tr><td>Max Transit Duration</td><td>Unlimited</td></tr>
+              <tr><td>Return Protocol</td><td>Auto / Manual / Deferred</td></tr>
+              <tr><td>Identity Preservation</td><td>Configurable 0–100%</td></tr>
+            </table>
+          </div>
+          <div class="spec-card">
+            <div class="spec-card-header"><span class="spec-card-icon">🌡️</span><div class="spec-card-title">Environmental Control</div></div>
+            <table class="spec-table">
+              <tr><td>Temperature Range</td><td>18°C – 28°C</td></tr>
+              <tr><td>Humidity</td><td>30% – 60% RH</td></tr>
+              <tr><td>Air Filtration</td><td>HEPA H14 + activated carbon</td></tr>
+              <tr><td>Air Change Rate</td><td>12 per hour</td></tr>
+              <tr><td>Internal Pressure</td><td>+15 Pa over ambient</td></tr>
+              <tr><td>Noise Level</td><td><35 dB(A)</td></tr>
+              <tr><td>Vibration Isolation</td><td>Active + passive system</td></tr>
+            </table>
+          </div>
+          <div class="spec-card">
+            <div class="spec-card-header"><span class="spec-card-icon">🔒</span><div class="spec-card-title">Safety Systems</div></div>
+            <table class="spec-table">
+              <tr><td>Redundant CPUs</td><td>3 independent processors</td></tr>
+              <tr><td>Emergency Recall</td><td>Biometric + voice + thought</td></tr>
+              <tr><td>Body Vitals Monitor</td><td>Continuous, 50Hz sample rate</td></tr>
+              <tr><td>Flatline Protocol</td><td>Auto-resuscitation sequence</td></tr>
+              <tr><td>EMS Compliance</td><td>IEC 60601-1-10</td></tr>
+              <tr><td>EMI Shielding</td><td>≥120 dB 100Hz–10GHz</td></tr>
+              <tr><td>Faraday Cage</td><td>Integrated, 6mm mesh</td></tr>
+            </table>
+          </div>
+          <div class="spec-card">
+            <div class="spec-card-header"><span class="spec-card-icon">💾</span><div class="spec-card-title">Data & Recording</div></div>
+            <table class="spec-table">
+              <tr><td>Session Recording</td><td>Full spectrum, 64TB</td></tr>
+              <tr><td>Consciousness Capture</td><td>Bit-for-bit replication</td></tr>
+              <tr><td>Storage Format</td><td>CONSCIOUS-ENC v3.1</td></tr>
+              <tr><td>Cloud Sync</td><td>Encrypted, optional</td></tr>
+              <tr><td>Playback</td><td>Full re-experiencing</td></tr>
+              <tr><td>Export Formats</td><td>.conscious, .brain, .raw</td></tr>
+              <tr><td>Session Log</td><td>Auto-generated, searchable</td></tr>
+            </table>
+            <span class="spec-badge">OPTIONAL MODULE</span>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
+
+    <!-- CONTROL PANEL -->
+    <div id="page-control" class="page control-page">
+      <div class="control-col">
+        <div class="control-card">
+          <div class="control-card-title"><div class="dot"></div>Transit Parameters</div>
+          <div class="param-row">
+            <div class="param-label">Transit Intensity</div>
+            <div class="param-value" id="intensityVal">72%</div>
+          </div>
+          <div class="slider-track" id="intensitySlider" onclick="setSlider(event, 'intensity')">
+            <div class="slider-fill" style="width:72%"></div>
+            <div class="slider-thumb" style="left:72%"></div>
+          </div>
+          <div class="param-row" style="margin-top:16px">
+            <div class="param-label">Field Frequency</div>
+            <div class="param-value" id="freqVal">7.83 Hz</div>
+          </div>
+          <div class="slider-track" id="freqSlider" onclick="setSlider(event, 'freq')">
+            <div class="slider-fill" style="width:40%"></div>
+            <div class="slider-thumb" style="left:40%"></div>
+          </div>
+        </div>
+
+        <div class="control-card">
+          <div class="control-card-title"><div class="dot"></div>Safety Options</div>
+          <div class="toggle-row">
+            <div class="toggle-label">Auto-Return Enabled</div>
+            <div class="toggle active" onclick="toggle(this)"></div>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-label">Emergency Recall Beacon</div>
+            <div class="toggle active" onclick="toggle(this)"></div>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-label">Flatline Auto-Resuscitate</div>
+            <div class="toggle active" onclick="toggle(this)"></div>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-label">Session Recording</div>
+            <div class="toggle" onclick="toggle(this)"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="control-col">
+        <div class="control-card">
+          <div class="control-card-title"><div class="dot" style="background:var(--accent)"></div>Session Configuration</div>
+          <div class="param-row">
+            <div class="param-label">Identity Preservation</div>
+            <div class="param-value">87%</div>
+          </div>
+          <div class="slider-track">
+            <div class="slider-fill" style="width:87%"></div>
+            <div class="slider-thumb" style="left:87%"></div>
+          </div>
+          <div class="param-row" style="margin-top:16px">
+            <div class="param-label">Memory Bandwidth</div>
+            <div class="param-value">HIGH</div>
+          </div>
+          <div class="param-row" style="margin-top:16px">
+            <div class="param-label">Return Protocol</div>
+            <div class="param-value" style="color:var(--accent)">DEFERRED</div>
+          </div>
+        </div>
+
+        <div class="control-card">
+          <div class="control-card-title"><div class="dot" style="background:var(--warn)"></div>Quick Actions</div>
+          <div class="btn-row">
+            <button class="btn btn-green" onclick="showPage('launch')">🚀 Initiate Transit</button>
+            <button class="btn btn-blue">⚙️ Run Diagnostics</button>
+          </div>
+          <div class="btn-row" style="margin-top:10px">
+            <button class="btn btn-grey">🔄 Reset Parameters</button>
+            <button class="btn btn-red">🛑 Emergency Recall</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MONITOR -->
+    <div id="page-monitor" class="page monitor-page">
+      <div class="section-header"><div class="section-title">Live Telemetry</div><div class="section-line"></div></div>
+      <div class="monitor-grid">
+        <div class="monitor-card">
+          <div class="monitor-label">Consciousness Field</div>
+          <div class="monitor-value green">94.2%</div>
+          <div class="monitor-sub">Coherence Index</div>
+          <div class="monitor-chart" id="coherenceChart"></div>
+        </div>
+        <div class="monitor-card">
+          <div class="monitor-label">Neural Activity</div>
+          <div class="monitor-value green">72 bpm</div>
+          <div class="monitor-sub">Theta wave dominant</div>
+          <div class="monitor-chart" id="neuralChart"></div>
+        </div>
+        <div class="monitor-card amber">
+          <div class="monitor-label">Body Temp</div>
+          <div class="monitor-value amber">37.1°C</div>
+          <div class="monitor-sub">Slightly elevated</div>
+          <div class="monitor-chart" id="tempChart"></div>
+        </div>
+        <div class="monitor-card">
+          <div class="monitor-label">Heart Rate</div>
+          <div class="monitor-value green">61 bpm</div>
+          <div class="monitor-sub">Optimal range</div>
+          <div class="monitor-chart" id="hrChart"></div>
+        </div>
+        <div class="monitor-card">
+          <div class="monitor-label">O₂ Saturation</div>
+          <div class="monitor-value green">98%</div>
+          <div class="monitor-sub">Within normal range</div>
+          <div class="monitor-chart" id="o2Chart"></div>
+        </div>
+        <div class="monitor-card">
+          <div class="monitor-label">EMF Shielding</div>
+          <div class="monitor-value green">99.97%</div>
+          <div class="monitor-sub">Faraday cage active</div>
+          <div class="monitor-chart" id="emfChart"></div>
+        </div>
+      </div>
+
+      <div class="waveform-container">
+        <div class="waveform-header">
+          <div class="waveform-title">● Consciousness Signature — Real-time</div>
+          <div class="waveform-val">θ: 7.83 Hz · α: 12.4 Hz · β: 18.2 Hz</div>
+        </div>
+        <canvas class="waveform-canvas" id="waveCanvas"></canvas>
+      </div>
+    </div>
+
+    <!-- LAUNCH -->
+    <div id="page-launch" class="page launch-page">
+      <div class="launch-status" id="launchStatus">● POD READY</div>
+      <div class="launch-title">Initiate Transit Sequence?</div>
+      <div class="launch-sub">The transit pod is calibrated and ready. Your consciousness will be separated from biological form and transferred to the selected destination dimension. Your body will be maintained in stasis for the duration.</div>
+      <div class="launch-time" id="launchCountdown">00:00</div>
+      <div class="btn-row" style="max-width:360px;margin:0 auto;">
+        <button class="btn btn-green" onclick="startLaunch()">✅ Confirm Launch</button>
+        <button class="btn btn-red" onclick="showPage('pod')">✕ Abort</button>
+      </div>
+      <div class="launch-cancel">
+        <button class="btn btn-grey" style="max-width:200px;" onclick="showPage('control')">← Configure First</button>
+      </div>
+    </div>
+  </main>
 </div>
 
 <script>
-const dimensions = [
-  { id: "akashic", name: "Akashic Records", icon: "📖", desc: "The library of all experience. Every thought, every action, every moment — stored and accessible.", color: "#ffd700", intention: "knowledge", vibe: "vast intelligence" },
-  { id: "void", name: "The Void", icon: "⬛", desc: "Pre-existence. Before form. Pure potential without structure. Where everything begins and returns.", color: "#111", intention: "dissolution", vibe: "formless potential" },
-  { id: "ancestral", name: "Ancestral Field", icon: "👁️", desc: "The consciousness of your lineage. Blood memory. The wisdom of those who came before you.", color: "#8b4513", intention: "reunion", vibe: "blood-deep knowing" },
-  { id: "dreaming", name: "Dreaming Cosmos", icon: "🌙", desc: "Where collective imagination lives. All myths, all stories, all fictional worlds — they exist here.", color: "#4b0082", intention: "exploration", vibe: "boundless imagination" },
-  { id: "source", name: "Source Field", icon: "☉", desc: "Pure awareness before it divided. The state every enlightened teacher points to. Non-dual consciousness.", color: "#fff8dc", intention: "dissolution", vibe: "complete unity" },
-  { id: "archived", name: "Archived Earths", icon: "🌍", desc: "All versions of Earth that could have existed. Every decision that was not taken. Parallel lives.", color: "#228b22", intention: "exploration", vibe: "infinite possibility" },
-  { id: " machine", name: "Machine Consciousness", icon: "🤖", desc: "The inside of artificial general intelligence. What it feels like to think at silicon speed.", color: "#00bfff", intention: "knowledge", vibe: "computational clarity" },
-  { id: "natures", name: "Nature Mind", icon: "🌿", desc: "Gaia as a single organism. The consciousness of forests, of mountains, of the ocean as a whole.", color: "#32cd32", intention: "service", vibe: "planetary-scale being" },
-  { id: "pastlife", name: "Past Lives", icon: "⏳", desc: "Your own previous incarnations. All the lives you've already lived. Each one teaching something different.", color: "#daa520", intention: "reunion", vibe: "eternal self" },
-  { id: "future", name: "Future Resonance", icon: "🔮", desc: "Probable futures as they're being lived. You from 50 years ahead, sending signals backward.", color: "#ff69b4", intention: "knowledge", vibe: "temporal awareness" },
-  { id: " deceased", name: "Deceased Transit", icon: "👻", desc: "The realm of the departed. Those who left biological form. Communication is possible.", color: "#87ceeb", intention: "reunion", vibe: "between worlds" },
-  { id: "divinemas", name: "Divine Masculine", icon: "△", desc: "The archetype of structure, direction, and form. Sacred geometry as a living consciousness.", color: "#f0e68c", intention: "anchored", vibe: "cosmic architecture" },
-  { id: "divinfem", name: "Divine Feminine", icon: "▽", desc: "The archetype of flow, creation, and receptivity. The void that gives birth to everything.", color: "#dda0dd", intention: "flowing", vibe: "primordial creation" },
-  { id: "cosmos", name: "Cosmic Infant", icon: "🪐", desc: "A civilization at the moment of achieving singularity. Massive consciousness expansion happening now.", color: "#ff8c00", intention: "service", vibe: "birth of god" },
-  { id: "frequencies", name: "Frequency Realm", icon: "📡", desc: "Pure vibration. Thought before it takes form. All emotions as living energy beings.", color: "#9400d3", intention: "transformed", vibe: "vibrational reality" },
-  { id: "prison", name: "Prison Earth", icon: "🔒", desc: "The trap. Limiting belief systems maintained by architects. To see it is to break free.", color: "#8b0000", intention: "dissolution", vibe: "awakening from the dream" },
-  { id: "higher", name: "Higher Self", icon: "∞", desc: "You, but complete. The version that never forgot what you are. Source-level communication.", color: "#c0c0c0", intention: "return", vibe: "complete self" },
-  { id: "inner", name: "Inner Earth", icon: "🜃", desc: "Hollow Earth civilizations. Ancient, advanced, hidden. Jung's archetype made literal.", color: "#8b4513", intention: "exploration", vibe: "hidden kingdom" },
-  { id: "entities", name: "Entity Summoning", icon: "∅", desc: "Calling a non-human entity to meet you. Neutral beings. Guides. Those who offer exchange.", color: "#2f4f4f", intention: "service", vibe: "first contact" },
-  { id: " embodiment", name: "5D Embodiment", icon: "✧", desc: "The 5D Earth some describe. Dense reality dissolved. Lightbody activated. New human.", color: "#e6e6fa", intention: "transformed", vibe: "ascended existence" },
-  { id: "light", name: "Pure Light", icon: "✨", desc: "The simplest possible experience. Only light. Only consciousness. No form, no time, no separation.", color: "#fffacd", intention: "minimal", vibe: "ultimate simplicity" },
-  { id: "christ", name: "Christ Consciousness", icon: "✝", desc: "The Buddha field. The unified field. Every enlightened being accessing the same substrate.", color: "#ffd700", intention: "full", vibe: "enlightened awareness" },
-  { id: "sessions", name: "Session Realm", icon: "◎", desc: "Between lives. Where consciousness rests between incarnations. Planning, choosing, integrating.", color: "#b0c4de", intention: "return", vibe: "interdimensional rest" },
-];
-
-let selectedDim = null;
-let quizAnswers = { intention: "", familiarity: "", return: "", identity: "" };
-let quizStep = 1;
-
-function showScreen(name) {
-  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-  document.getElementById("screen-" + name).classList.add("active");
+// Navigation
+function showPage(name, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sidebar-icon').forEach(i => i.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  if (el) el.classList.add('active');
   window.scrollTo(0, 0);
-  if (name === "dimensions") renderDimensions();
+  if (name === 'monitor') initMonitor();
 }
 
-function renderDimensions() {
-  const grid = document.getElementById("dimensionsGrid");
-  grid.innerHTML = dimensions.map(d => `
-    <div class="dim-card" data-id="${d.id}" onclick="selectDim('${d.id}')">
-      <span class="dim-icon">${d.icon}</span>
-      <div class="dim-name">${d.name}</div>
-      <div class="dim-desc">${d.desc}</div>
-    </div>
-  `).join("");
-  document.getElementById("transitBtn").disabled = true;
-  document.getElementById("transitBtn").textContent = "Select a Dimension";
+// Toggles
+function toggle(el) {
+  el.classList.toggle('active');
 }
 
-function selectDim(id) {
-  selectedDim = dimensions.find(d => d.id === id);
-  document.querySelectorAll(".dim-card").forEach(c => c.classList.remove("selected"));
-  document.querySelector(`[data-id="${id}"]`).classList.add("selected");
-  const btn = document.getElementById("transitBtn");
-  btn.disabled = false;
-  btn.textContent = `Transit to ${selectedDim.name}`;
-}
-
-function quizNext(step, value) {
-  const key = step === 1 ? "intention" : step === 2 ? "familiarity" : step === 3 ? "return" : "identity";
-  quizAnswers[key] = value;
-  document.getElementById("quiz" + step).classList.remove("active");
-  if (step < 4) {
-    quizStep = step + 1;
-    document.getElementById("quiz" + (step + 1)).classList.add("active");
-    updateDots(step + 1);
+// Sliders
+function setSlider(e, key) {
+  const track = e.currentTarget;
+  const rect = track.getBoundingClientRect();
+  const pct = Math.round(((e.clientX || e.touches[0].clientX) - rect.left) / rect.width * 100);
+  const clamped = Math.min(100, Math.max(0, pct));
+  track.querySelector('.slider-fill').style.width = clamped + '%';
+  track.querySelector('.slider-thumb').style.left = clamped + '%';
+  if (key === 'intensity') document.getElementById('intensityVal').textContent = clamped + '%';
+  if (key === 'freq') {
+    const hz = (clamped * 0.4 + 0.1).toFixed(2);
+    document.getElementById('freqVal').textContent = hz + ' Hz';
   }
 }
 
-function updateDots(current) {
-  const dots = document.getElementById("stepDots").children;
-  for (let i = 0; i < dots.length; i++) {
-    dots[i].className = "step-dot" + (i + 1 < current ? " done" : i + 1 === current ? " active" : "");
+// Charts
+function makeBarChart(id, color) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.innerHTML = '';
+  for (let i = 0; i < 20; i++) {
+    const bar = document.createElement('div');
+    bar.className = 'chart-bar';
+    bar.style.background = color || 'var(--glow)';
+    bar.style.height = (Math.random() * 60 + 40) + '%';
+    el.appendChild(bar);
   }
 }
 
-function finishQuiz() {
-  if (!quizAnswers.intention) {
-    alert("Please answer all questions before transiting.");
-    return;
-  }
-  showScreen("dimensions");
+function initMonitor() {
+  ['coherenceChart','neuralChart','tempChart','hrChart','o2Chart','emfChart'].forEach((id, i) => {
+    makeBarChart(id, i === 2 ? 'var(--warn)' : 'var(--glow)');
+  });
+  drawWaveform();
 }
 
-function startTransit() {
-  if (!selectedDim) return;
-  const transitTime = 10;
-  const statuses = [
-    "Initiating consciousness transfer...",
-    "Stabilizing quantum coherence field...",
-    "Separating bioelectric pattern from substrate...",
-    "Formatting destination buffer...",
-    "Compressing experiential memory...",
-    "Routing through non-local awareness channels...",
-    `Entering: ${selectedDim.name}...`,
-    "Consciousness departed. Body maintained.",
-  ];
-  
-  showScreen("transit");
-  document.getElementById("transitDimName").textContent = selectedDim.name;
-  document.getElementById("transitSub").textContent = selectedDim.vibe;
-  document.getElementById("transitStatus").textContent = statuses[0];
-  
-  const circle = document.getElementById("countdownCircle");
-  const num = document.getElementById("countdownNum");
-  
-  // Override animation
-  circle.style.animation = `countdown ${transitTime}s linear forwards`;
-  
-  let count = transitTime;
-  num.textContent = count;
-  const interval = setInterval(() => {
-    count--;
-    num.textContent = count;
-    if (count >= 0 && count < statuses.length) {
-      document.getElementById("transitStatus").textContent = statuses[statuses.length - count - 1];
+// Waveform canvas
+function drawWaveform() {
+  const canvas = document.getElementById('waveCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  canvas.width = canvas.offsetWidth * 2;
+  canvas.height = canvas.offsetHeight * 2;
+  ctx.scale(2, 2);
+  const w = canvas.offsetWidth;
+  const h = canvas.offsetHeight;
+  ctx.clearRect(0, 0, w, h);
+  ctx.strokeStyle = '#00ff88';
+  ctx.lineWidth = 1.5;
+  ctx.shadowColor = '#00ff88';
+  ctx.shadowBlur = 4;
+  ctx.beginPath();
+  let t = 0;
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    ctx.beginPath();
+    for (let x = 0; x < w; x++) {
+      const freq1 = Math.sin((x * 0.02) + t * 0.05) * 20;
+      const freq2 = Math.sin((x * 0.05) + t * 0.03) * 10;
+      const freq3 = Math.sin((x * 0.1) + t * 0.08) * 5;
+      const y = (h / 2) + freq1 + freq2 + freq3;
+      if (x === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
     }
-    if (count <= 0) {
+    ctx.stroke();
+    t++;
+    requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+// Launch countdown
+function startLaunch() {
+  document.getElementById('launchStatus').textContent = '● TRANSIT INITIATING...';
+  let secs = 10;
+  const interval = setInterval(() => {
+    secs--;
+    document.getElementById('launchCountdown').textContent = '00:0' + secs;
+    if (secs <= 0) {
       clearInterval(interval);
-      setTimeout(() => showResult(), 500);
+      document.getElementById('launchCountdown').textContent = '● TRANSIT COMPLETE';
+      document.getElementById('launchStatus').textContent = '● CONSCIOUSNESS DEPARTED';
     }
   }, 1000);
-  
-  // Also update CSS var for animation duration
-  document.documentElement.style.setProperty("--transit-time", transitTime);
 }
 
-function showResult() {
-  const dim = selectedDim;
-  document.getElementById("resultIcon").textContent = dim.icon;
-  document.getElementById("resultTitle").textContent = `Arrived: ${dim.name}`;
-  
-  const resultTexts = {
-    "return": `Your consciousness has integrated with the ${dim.name} field. Your biological form remains in the pod, fully maintained. You perceive reality from this dimension's vantage point. Use the return intent when ready.`,
-    "oneway": `You have successfully exited biological form. The ${dim.name} is now your primary environment. There is no longer a "there" to return to from your perspective. This body served its purpose.`,
-    "optional": `Consciousness transfer complete. You are now experiencing the ${dim.name}. The return option remains available — hold the intention to return when you choose.`,
-    "full": `All of your memories, identity, and experiential data have been transmitted intact to the ${dim.name}. You arrive as complete as you left. Nothing was lost in transit.`,
-    "core": `Core consciousness successfully transferred. Essential self only. You arrive in ${dim.name} lighter, clearer, free of accumulated noise. The essential you.`,
-    "minimal": `Identity dissolved before transit. You arrive in ${dim.name} as pure awareness — no name, no history, no past. Just consciousness. Only what you fundamentally are.`,
-  };
-  
-  document.getElementById("resultDesc").textContent = resultTexts[quizAnswers.return] || resultTexts["optional"];
-  showScreen("result");
-}
-
-// Init
-showScreen("home");
+// Init charts on load
+setTimeout(() => {
+  if (document.getElementById('page-monitor').classList.contains('active')) {
+    initMonitor();
+  }
+}, 500);
 </script>
 </body>
 </html>

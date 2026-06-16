@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conscious — Find Your Mind Space</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0d14;
+  --surface: #111520;
+  --surface2: #1a1f2e;
+  --border: #232840;
+  --accent: #a78bfa;
+  --accent2: #38bdf8;
+  --accent3: #34d399;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --glow: rgba(167,139,250,0.15);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.logo {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.nav-btn {
+  background: var(--surface2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: 8px 18px;
+  border-radius: 50px;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.nav-btn:hover { border-color: var(--accent); color: var(--accent); }
+.nav-btn.active { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+
+.screen { display: none; padding: 0 20px 40px; max-width: 480px; margin: 0 auto; }
+.screen.active { display: block; animation: fadeIn 0.4s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+/* HERO */
+.hero { text-align: center; padding-top: 48px; }
+.hero-icon { font-size: 4rem; margin-bottom: 20px; display: block; animation: float 3s ease-in-out infinite; }
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 12px;
+  color: #fff;
+}
+.hero h1 em { font-style: italic; color: var(--accent); }
+.hero p { color: var(--text2); font-size: 1rem; line-height: 1.6; margin-bottom: 36px; max-width: 340px; margin-left: auto; margin-right: auto; }
+.features { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px; }
+.feature {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px 18px;
+  text-align: center;
+  min-width: 100px;
+}
+.feature span { font-size: 1.5rem; display: block; margin-bottom: 4px; }
+.feature small { font-size: 0.75rem; color: var(--text3); font-weight: 600; }
+.cta-btn {
+  background: linear-gradient(135deg, var(--accent), #8b5cf6);
+  color: white;
+  border: none;
+  padding: 16px 40px;
+  border-radius: 50px;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  width: 100%;
+  max-width: 300px;
+  transition: all 0.3s;
+  box-shadow: 0 8px 32px rgba(167,139,250,0.3);
+}
+.cta-btn:hover { transform: scale(1.04); box-shadow: 0 12px 40px rgba(167,139,250,0.4); }
+.cta-btn.secondary { background: transparent; border: 1px solid var(--border); color: var(--text2); box-shadow: none; margin-top: 10px; }
+.cta-btn.secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+/* QUIZ */
+.step-indicator { display: flex; gap: 8px; justify-content: center; margin: 24px 0 32px; }
+.step-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: all 0.3s; }
+.step-dot.current { background: var(--accent); width: 28px; border-radius: 4px; }
+.step-dot.done { background: var(--accent3); }
+
+.quiz-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 32px 24px;
+  text-align: center;
+}
+.quiz-card h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+  color: #fff;
+}
+.quiz-card p { color: var(--text2); font-size: 0.9rem; margin-bottom: 28px; }
+.quiz-input {
+  width: 100%;
+  padding: 14px 18px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  font-family: inherit;
+  font-size: 1rem;
+  color: var(--text);
+  outline: none;
+  margin-bottom: 16px;
+  transition: border-color 0.3s;
+}
+.quiz-input:focus { border-color: var(--accent); }
+.quiz-input::placeholder { color: var(--text3); }
+.option-grid { display: flex; flex-direction: column; gap: 10px; }
+.option-btn {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  padding: 14px 18px;
+  border-radius: 14px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.option-btn:hover { border-color: var(--accent); background: var(--glow); }
+.option-btn.selected { border-color: var(--accent); background: rgba(167,139,250,0.1); color: var(--accent); }
+.option-btn .emoji { font-size: 1.3rem; }
+
+/* CARDS */
+.card-stack { position: relative; width: 100%; max-width: 360px; height: 480px; margin: 20px auto; }
+.pod-card {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  overflow: hidden;
+  cursor: grab;
+  user-select: none;
+  transition: box-shadow 0.3s;
+}
+.pod-card:hover { box-shadow: 0 12px 48px rgba(167,139,250,0.15); }
+.card-header {
+  height: 55%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.card-header .bg-glow {
+  position: absolute;
+  inset: 0;
+  opacity: 0.4;
+}
+.card-icon { font-size: 5rem; position: relative; z-index: 1; }
+.card-type {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(8px);
+  color: var(--accent);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 6px 12px;
+  border-radius: 50px;
+  border: 1px solid rgba(167,139,250,0.3);
+}
+.card-body { padding: 20px; }
+.card-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 4px;
+}
+.card-tagline { color: var(--text3); font-size: 0.85rem; margin-bottom: 14px; font-style: italic; }
+.badge-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+.badge {
+  background: var(--surface2);
+  color: var(--text2);
+  padding: 4px 10px;
+  border-radius: 50px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  border: 1px solid var(--border);
+}
+.badge.mental { border-color: rgba(167,139,250,0.4); color: var(--accent); }
+.badge.physical { border-color: rgba(52,211,153,0.4); color: var(--accent3); }
+.badge.emotional { border-color: rgba(251,146,60,0.4); color: #fb923c; }
+.badge.spiritual { border-color: rgba(56,189,248,0.4); color: var(--accent2); }
+.match-score {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+.match-score .num { font-size: 1.4rem; color: var(--accent); }
+.match-score .sub { color: var(--text3); font-size: 0.8rem; }
+.match-actions { display: flex; justify-content: center; gap: 20px; margin-top: 16px; }
+.action-btn {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface);
+}
+.action-btn:hover { transform: scale(1.15); }
+.action-btn.skip:hover { border-color: #ef4444; color: #ef4444; }
+.action-btn.like:hover { border-color: var(--accent); background: rgba(167,139,250,0.1); color: var(--accent); }
+.action-btn.super:hover { border-color: var(--accent3); background: rgba(52,211,153,0.1); color: var(--accent3); }
+.swipe-hint { text-align: center; color: var(--text3); font-size: 0.8rem; margin-top: 16px; }
+
+/* MATCH POPUP */
+.match-popup {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  backdrop-filter: blur(8px);
+}
+.match-popup.show { display: flex; animation: fadeIn 0.3s; }
+.match-popup-content {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  padding: 40px 32px;
+  text-align: center;
+  max-width: 360px;
+  animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes popIn { from { transform: scale(0.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.match-emoji { font-size: 4rem; margin-bottom: 8px; }
+.match-popup h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  color: var(--accent);
+  margin: 12px 0 8px;
+}
+.match-popup p { color: var(--text2); font-size: 0.95rem; margin-bottom: 24px; line-height: 1.5; }
+
+/* MATCHES */
+.matches-list { padding-top: 20px; }
+.match-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.match-item-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  flex-shrink: 0;
+  background: var(--surface2);
+}
+.match-item-info h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 2px; color: #fff; }
+.match-item-info span { font-size: 0.78rem; color: var(--text3); }
+.empty-state { text-align: center; padding: 48px 20px; color: var(--text3); }
+.empty-state span { font-size: 2.5rem; display: block; margin-bottom: 10px; }
+
+@media (max-width: 480px) {
+  .hero h1 { font-size: 1.8rem; }
+  .card-stack { height: 440px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">conscious.</div>
+  <div>
+    <button class="nav-btn" onclick="showScreen('quiz')">New Search</button>
+    <button class="nav-btn active" onclick="showScreen('browse')">Browse</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div id="screen-hero" class="screen active">
+  <div class="hero">
+    <span class="hero-icon">✨</span>
+    <h1>Find your<br><em>mind space</em></h1>
+    <p>Discover consciousness pods, float tanks, sound baths and冥想 experiences near you.</p>
+    <div class="features">
+      <div class="feature"><span>🧘</span><small>Meditation</small></div>
+      <div class="feature"><span>🛁</span><small>Float Tank</small></div>
+      <div class="feature"><span>🔊</span><small>Sound Bath</small></div>
+      <div class="feature"><span>🌡️</span><small>Sensory</small></div>
+    </div>
+    <button class="cta-btn" onclick="showScreen('quiz')">Discover My Practice</button>
+    <br>
+    <button class="cta-btn secondary" onclick="showScreen('browse')">Browse All Pods</button>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div id="screen-quiz" class="screen">
+  <div class="step-indicator">
+    <div class="step-dot current" id="d1"></div>
+    <div class="step-dot" id="d2"></div>
+    <div class="step-dot" id="d3"></div>
+    <div class="step-dot" id="d4"></div>
+  </div>
+  <div class="quiz-step active" id="s1">
+    <div class="quiz-card">
+      <h2>What brings you here? 💜</h2>
+      <p>Your intention shapes everything</p>
+      <div class="option-grid">
+        <button class="option-btn" onclick="selectO('intention','stress')"><span class="emoji">😰</span> Stress & anxiety relief</button>
+        <button class="option-btn" onclick="selectO('intention','sleep')"><span class="emoji">😴</span> Better sleep</button>
+        <button class="option-btn" onclick="selectO('intention','focus')"><span class="emoji">🎯</span> Mental clarity & focus</button>
+        <button class="option-btn" onclick="selectO('intention','healing')"><span class="emoji">🌱</span> Emotional healing</button>
+        <button class="option-btn" onclick="selectO('intention','explore')"><span class="emoji">✨</span> Consciousness exploration</button>
+      </div>
+    </div>
+  </div>
+  <div class="quiz-step" id="s2">
+    <div class="quiz-card">
+      <h2>Experience level? 🌊</h2>
+      <p>We'll match you appropriately</p>
+      <div class="option-grid">
+        <button class="option-btn" onclick="selectO('level','beginner')"><span class="emoji">🌱</span> First-timer — curious but nervous</button>
+        <button class="option-btn" onclick="selectO('level','intermediate')"><span class="emoji">🌊</span> Some experience — ready to go deeper</button>
+        <button class="option-btn" onclick="selectO('level','advanced')"><span class="emoji">🌀</span> Regular practitioner — seeking the edge</button>
+      </div>
+    </div>
+  </div>
+  <div class="quiz-step" id="s3">
+    <div class="quiz-card">
+      <h2>Duration preference? ⏱️</h2>
+      <p>How long can you go inward?</p>
+      <div class="option-grid">
+        <button class="option-btn" onclick="selectO('duration','short')"><span class="emoji">⚡</span> Quick reset — 20 to 45 min</button>
+        <button class="option-btn" onclick="selectO('duration','medium')"><span class="emoji">🌙</span> Standard dive — 45 to 90 min</button>
+        <button class="option-btn" onclick="selectO('duration','deep')"><span class="emoji">🌌</span> Deep journey — 90 min or more</button>
+      </div>
+    </div>
+  </div>
+  <div class="quiz-step" id="s4">
+    <div class="quiz-card">
+      <h2>Location? 📍</h2>
+      <p>Find pods near you in Madrid</p>
+      <input class="quiz-input" id="userLocation" type="text" placeholder="e.g. Chamberí, Salamanca, Centro...">
+      <button class="cta-btn" onclick="finishQuiz()">Find My Practice ✨</button>
+    </div>
+  </div>
+</div>
+
+<!-- BROWSE / SWIPE -->
+<div id="screen-browse" class="screen">
+  <div id="cardStack" class="card-stack"></div>
+  <div class="swipe-hint">← Skip &nbsp;&nbsp;&nbsp; Save →</div>
+  <div class="match-actions">
+    <button class="action-btn skip" onclick="skipCard()">✕</button>
+    <button class="action-btn like" onclick="likeCard()">♡</button>
+    <button class="action-btn super" onclick="superLike()">★</button>
+  </div>
+  <div id="matchesView" class="matches-list" style="display:none;"></div>
+</div>
+
+<!-- MATCH POPUP -->
+<div class="match-popup" id="matchPopup">
+  <div class="match-popup-content">
+    <div class="match-emoji" id="mEmoji">🧘</div>
+    <h2>Saved to Your Practice ✨</h2>
+    <p id="mText">This experience has been added to your personal library.</p>
+    <button class="cta-btn" onclick="closeMatch()">Continue Exploring</button>
+  </div>
+</div>
+
+<script>
+const pods = [
+  { name: "Float Tank Session", tagline: "Weightless. Silent. Infinite.", type: "float", duration: "60min", intention: ["stress","healing","explore"], level: ["beginner","intermediate"], emoji: "🛁", color: "#1e40af", benefits: ["deep relaxation","anxiety relief","sensory reset"], description: "1,000 lbs of Epsom salt dissolved in water at skin temperature. You float. Nothing touches you. No light, no sound, no gravity. Just you." },
+  { name: "Sound Bath Journey", tagline: "Let the vibrations rewire you.", type: "sound", duration: "75min", intention: ["stress","healing","sleep","focus"], level: ["beginner","intermediate","advanced"], emoji: "🔊", color: "#7c3aed", benefits: ["nervous system reset","emotional release","brainwave entrainment"], description: "Tibetan singing bowls, crystal bowls, and gongs surround you. The sound does the work. You lie there and let it dissolve everything." },
+  { name: "Binaural Beats Session", tagline: "Hack your brainwaves.", type: "audio", duration: "45min", intention: ["focus","sleep","stress"], level: ["beginner","intermediate"], emoji: "🎧", color: "#0891b2", benefits: ["alpha/theta states","focus enhancement","creative flow"], description: "Precision-tuned frequencies played through headphones shift your brain into deeper states. Delta for sleep. Theta for creativity. You choose the destination." },
+  { name: "Sensory Deprivation Float", tagline: "Nothing. Then everything.", type: "float", duration: "90min", intention: ["explore","healing","focus"], level: ["intermediate","advanced"], emoji: "🌊", color: "#0f172a", benefits: ["extended deep rest","expanded awareness","pain relief"], description: "90 minutes in total darkness and silence. The longest float. For those ready to go past the surface and meet what's underneath." },
+  { name: "Breathwork & Ice Bath", tagline: "Shock. Breathe. Transform.", type: "somatic", duration: "45min", intention: ["stress","healing","focus"], level: ["intermediate","advanced"], emoji: "❄️", color: "#0369a1", benefits: ["adrenaline reset","mental toughness","emotional release"], description: "Wim Hof method meets conscious connected breathwork. Cold exposure followed by deep breathing. The body releases what the mind holds." },
+  { name: "Cacao Ceremony", tagline: "Open your heart. Connect.", type: "ceremony", duration: "120min", intention: ["healing","explore","emotional"], level: ["beginner","intermediate"], emoji: "🍫", color: "#92400e", benefits: ["heart opening","emotional release","community connection"], description: "Ceremonial-grade cacao guided by breathwork and music. A legal entheogen used for millennia. Not psychedelic — just deeply plant medicine." },
+  { name: "Meditation Pod Immersion", tagline: "Your first step into stillness.", type: "meditation", duration: "30min", intention: ["stress","sleep","focus","beginner"], level: ["beginner"], emoji: "🧘", color: "#6d28d9", benefits: ["intro to practice","stress relief","foundational calm"], description: "Guided meditation in a zero-gravity chair with noise-canceling environment. Perfect for those who think they can't meditate. You can." },
+  { name: "Infrared Sauna + Sound", tagline: "Sweat. Receive. Release.", type: "somatic", duration: "60min", intention: ["stress","healing","physical"], level: ["beginner","intermediate"], emoji: "🔥", color: "#b91c1c", benefits: ["detox","recovery","deep relaxation"], description: "Full-spectrum infrared sauna paired with sound healing. The heat opens the body while the bowls open the mind. Layered healing." },
+  { name: "Psilocybin Journey", tagline: "With support. With intention.", type: "psychedelic", duration: "5hrs", intention: ["explore","healing","ego"], level: ["advanced"], emoji: "🍄", color: "#1e3a2f", benefits: ["ego dissolution","profound insight","trauma resolution"], description: "Guided psilocybin session with trained sitter in a safe, legal context. Set and setting matter. Preparation matters. Integration matters. This is medicine work." },
+  { name: "Breathwork Only Session", tagline: "Your breath is the drug.", type: "somatic", duration: "45min", intention: ["stress","healing","emotional"], level: ["beginner","intermediate"], emoji: "💨", color: "#0d9488", benefits: ["emotional release","nervous system upgrade","clarity"], description: "Conscious connected breathwork without ice, without cacao, without anything but air. The most underrated tool in consciousness work." },
+  { name: "Float + Cold Combo", tagline: "The ultimate nervous system reset.", type: "float", duration: "90min", intention: ["stress","recovery","focus"], level: ["intermediate","advanced"], emoji: "🧊", color: "#1d4ed8", benefits: ["dual modality reset","inflammation reduction","peak performance"], description: "Cold plunge followed by 60-minute float. The cold wakes you up. The float puts you under. Both together create a unique third state." },
+  { name: "Yoga Nidra Session", tagline: "The sleep of the yogis.", type: "meditation", duration: "60min", intention: ["sleep","healing","stress"], level: ["beginner","intermediate"], emoji: "🌙", color: "#312e81", benefits: ["theta state access","deep restoration","subconscious work"], description: "Yoga Nidra is 45 minutes of conscious sleep. You lie down. Follow the guidance. Your body rests while your mind goes places it can't reach while awake." },
+  { name: "Sensory Art Immersion", tagline: "Let the environment change you.", type: "sensory", duration: "75min", intention: ["explore","creative","emotional"], level: ["beginner","intermediate"], emoji: "🎨", color: "#be185d", benefits: ["creative breakthrough","sensory integration","new perspectives"], description: "Multi-sensory room with light, sound, temperature, and scent variations. Designed to shift states without any substance. Pure environment engineering." },
+  { name: "Integrative Breathwork", tagline: "Release. Process. Integrate.", type: "somatic", duration: "3hrs", intention: ["healing","emotional","trauma"], level: ["intermediate","advanced"], emoji: "🌀", color: "#7e22ce", benefits: ["trauma release","emotional processing","nervous system repair"], description: "Extended breathwork session with coaching integration before and after. For working through specific emotional material with professional support." },
+  { name: "Float & Sound Combined", tagline: "Depth and frequency.", type: "float", duration: "75min", intention: ["stress","explore","healing"], level: ["intermediate"], emoji: "🔱", color: "#1e3a8a", benefits: ["multi-layered experience","expanded states","deep restore"], description: "60-minute float where speakers are installed in the tank. You float in zero-gravity while healing frequencies pulse through the water around you. Next level." },
+  { name: "Biofeedback Session", tagline: "See your mind. Train it.", type: "tech", duration: "45min", intention: ["focus","biofeedback","optimization"], level: ["beginner","intermediate"], emoji: "📊", color: "#065f46", benefits: ["real-time nervous state","mental training","quantified self"], description: "Heart rate variability and brainwave monitoring. See your state in real time. Use breathing and focus exercises to actually change it. The data doesn't lie." },
+  { name: "Ice Bath Masterclass", tagline: "Build resilience from the cold.", type: "somatic", duration: "30min", intention: ["stress","focus","physical"], level: ["intermediate","advanced"], emoji: "🥶", color: "#0369a1", benefits: ["mental resilience","inflammation reduction","adrenaline control"], description: "Guided progressive cold exposure. Start at 10°C, work toward 2°C. Learn to breathe through the shock. Build the skill of staying calm when everything in you says panic." },
+  { name: "Chakra Alignment Session", tagline: "Energy follows intention.", type: "energy", duration: "60min", intention: ["healing","spiritual","explore"], level: ["beginner","intermediate"], emoji: "🌈", color: "#b45309", benefits: ["energy balancing","emotional harmony","spiritual connection"], description: "Combination of sound healing, essential oils, and guided visualization targeting each energy center. No woo — just people who swear by it and feel different after." },
+  { name: "Float for Athletes", tagline: "Faster recovery. Sharper mind.", type: "float", duration: "60min", intention: ["recovery","focus","physical"], level: ["intermediate","advanced"], emoji: "🏅", color: "#166534", benefits: ["lactic acid recovery","mental rehearsal","sleep quality"], description: "Float protocol designed for athletes. Same zero-gravity environment, optimized for recovery metrics and mental rehearsal of performance." },
+  { name: "Meditation Retreat Day", tagline: "8 hours. One intention. Zero distraction.", type: "meditation", duration: "480min", intention: ["explore","healing","deep"], level: ["intermediate","advanced"], emoji: "⛩️", color: "#1c1917", benefits: ["profound depth","personal insight","reset of resets"], description: "Full day of alternating guided and silent meditation in a dedicated space. Breakfast, lunch, and integration coaching included. The real thing." },
+];
+
+let profile = { intention: "", level: "", duration: "", location: "" };
+let matches = JSON.parse(localStorage.getItem("conscious_matches") || "[]");
+let currentIndex = 0;
+let cardEl = null;
+let startX = 0, currentX = 0;
+
+function showScreen(name) {
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById("screen-" + name).classList.add("active");
+  if (name === "browse") initCards();
+  document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+  event?.target?.classList?.add("active");
+}
+
+function updateDots(n) {
+  for (let i = 1; i <= 4; i++) {
+    const d = document.getElementById("d" + i);
+    d.className = "step-dot" + (i < n ? " done" : i === n ? " current" : "");
+  }
+}
+
+function selectO(key, val) {
+  profile[key] = val;
+  const s = key === "intention" ? 1 : key === "level" ? 2 : 3;
+  document.getElementById("s" + s).classList.remove("active");
+  document.getElementById("s" + (s + 1)).classList.add("active");
+  updateDots(s + 1);
+}
+
+function finishQuiz() {
+  profile.location = document.getElementById("userLocation").value.trim() || "Madrid";
+  showScreen("browse");
+}
+
+function scorePod(pod) {
+  if (!profile.intention) return Math.floor(Math.random() * 25 + 70);
+  let score = 65;
+  if (pod.intention.includes(profile.intention)) score += 18;
+  if (pod.level.includes(profile.level)) score += 10;
+  else if (pod.level.includes("beginner") && profile.level === "intermediate") score += 5;
+  if (profile.duration === "short" && pod.duration.match(/\d+/)?.[0] < 45) score += 8;
+  else if (profile.duration === "deep" && pod.duration.match(/\d+/)?.[0] >= 90) score += 8;
+  else if (profile.duration === "medium") score += 5;
+  return Math.min(98, score);
+}
+
+function podColor(pod) {
+  const map = {
+    "float": "linear-gradient(135deg, #1e3a5f, #0f172a)",
+    "sound": "linear-gradient(135deg, #4c1d95, #7c3aed)",
+    "somatic": "linear-gradient(135deg, #0369a1, #0d9488)",
+    "meditation": "linear-gradient(135deg, #6d28d9, #a78bfa)",
+    "ceremony": "linear-gradient(135deg, #92400e, #b45309)",
+    "audio": "linear-gradient(135deg, #0891b2, #38bdf8)",
+    "psychedelic": "linear-gradient(135deg, #1e3a2f, #065f46)",
+    "sensory": "linear-gradient(135deg, #be185d, #ec4899)",
+    "tech": "linear-gradient(135deg, #065f46, #34d399)",
+    "energy": "linear-gradient(135deg, #b45309, #fbbf24)",
+  };
+  return map[pod.type] || "linear-gradient(135deg, #1a1f2e, #2d3748)";
+}
+
+function benefitBadge(b) {
+  const map = { mental: "mental", physical: "physical", emotional: "emotional", spiritual: "spiritual", healing: "emotional", focus: "mental", stress: "mental", sleep: "mental", recovery: "physical", explore: "spiritual" };
+  return `<span class="badge ${map[b] || ''}">${b}</span>`;
+}
+
+function initCards() {
+  const stack = document.getElementById("cardStack");
+  stack.style.display = "block";
+  document.getElementById("matchesView").style.display = "none";
+  document.querySelector(".swipe-hint").style.display = "block";
+  document.querySelector(".match-actions").style.display = "flex";
+  
+  if (currentIndex >= pods.length) {
+    stack.innerHTML = '<div style="text-align:center;padding:60px 20px;color:var(--text3);"><span style="font-size:2.5rem;display:block;margin-bottom:12px">🏛️</span><p>No more pods right now.<br>Check back soon for new experiences.</p></div>';
+    return;
+  }
+  
+  stack.innerHTML = "";
+  const pod = pods[currentIndex];
+  const score = scorePod(pod);
+  const bg = podColor(pod);
+  
+  cardEl = document.createElement("div");
+  cardEl.className = "pod-card";
+  cardEl.innerHTML = `
+    <div class="card-header">
+      <div class="bg-glow" style="background:${bg}"></div>
+      <div class="card-icon">${pod.emoji}</div>
+      <div class="card-type">${pod.type}</div>
+    </div>
+    <div class="card-body">
+      <div class="card-name">${pod.name}</div>
+      <div class="card-tagline">"${pod.tagline}"</div>
+      <div class="badge-row">
+        ${pod.benefits.slice(0,3).map(benefitBadge).join('')}
+        <span class="badge">${pod.duration}</span>
+      </div>
+      <div class="match-score">
+        <span class="num">${score}%</span>
+        <span>match for your intention</span>
+      </div>
+    </div>
+  `;
+  stack.appendChild(cardEl);
+  
+  let dragging = false;
+  cardEl.addEventListener("mousedown", e => { dragging = true; startX = e.clientX; currentX = 0; cardEl.style.transition = "none"; });
+  cardEl.addEventListener("touchstart", e => { dragging = true; startX = e.touches[0].clientX; currentX = 0; cardEl.style.transition = "none"; });
+  
+  const moveHandler = e => {
+    if (!dragging) return;
+    const cx = e.touches ? e.touches[0].clientX : e.clientX;
+    currentX = cx - startX;
+    cardEl.style.transform = `translateX(${currentX}px) rotate(${currentX * 0.08}deg)`;
+  };
+  const upHandler = () => {
+    if (!dragging) return;
+    dragging = false;
+    cardEl.style.transition = "transform 0.3s";
+    if (currentX > 80) { likeCard(); return; }
+    if (currentX < -80) { skipCard(); return; }
+    cardEl.style.transform = "";
+  };
+  
+  document.addEventListener("mousemove", moveHandler);
+  document.addEventListener("touchmove", moveHandler);
+  document.addEventListener("mouseup", upHandler);
+  document.addEventListener("touchend", upHandler);
+}
+
+function skipCard() {
+  if (!cardEl) return;
+  cardEl.style.transition = "transform 0.4s, opacity 0.4s";
+  cardEl.style.transform = "translateX(-160%) rotate(-15deg)";
+  cardEl.style.opacity = "0";
+  setTimeout(() => { currentIndex++; initCards(); }, 400);
+}
+
+function likeCard() {
+  if (!cardEl) return;
+  const pod = pods[currentIndex];
+  const score = scorePod(pod);
+  showMatchPopup(pod, score);
+  matches.push({ ...pod, score });
+  localStorage.setItem("conscious_matches", JSON.stringify(matches));
+  cardEl.style.transition = "transform 0.4s, opacity 0.4s";
+  cardEl.style.transform = "translateX(160%) rotate(15deg)";
+  cardEl.style.opacity = "0";
+  setTimeout(() => { currentIndex++; initCards(); }, 400);
+}
+
+function superLike() {
+  if (!cardEl) return;
+  const pod = pods[currentIndex];
+  showMatchPopup(pod, 97);
+  matches.push({ ...pod, score: 97 });
+  localStorage.setItem("conscious_matches", JSON.stringify(matches));
+  cardEl.style.transition = "transform 0.4s, opacity 0.4s";
+  cardEl.style.transform = "translateY(-150%) scale(0.8)";
+  cardEl.style.opacity = "0";
+  setTimeout(() => { currentIndex++; initCards(); }, 400);
+}
+
+function showMatchPopup(pod, score) {
+  document.getElementById("mEmoji").textContent = pod.emoji;
+  document.getElementById("mText").textContent = `"${pod.tagline}" — ${pod.duration}. Added to your practice.`;
+  document.getElementById("matchPopup").classList.add("show");
+}
+
+function closeMatch() {
+  document.getElementById("matchPopup").classList.remove("show");
+}
+
+function showMatches() {
+  const view = document.getElementById("matchesView");
+  if (matches.length === 0) {
+    view.innerHTML = '<div class="empty-state"><span>✦</span>No saved practices yet.<br>Start swiping to build your library.</div>';
+  } else {
+    view.innerHTML = '<h3 style="text-align:center;font-family:Playfair Display,serif;font-size:1.2rem;margin-bottom:16px;color:#fff;">Your Practice Library ✦</h3>' + matches.map(m => `
+      <div class="match-item">
+        <div class="match-item-icon">${m.emoji}</div>
+        <div class="match-item-info">
+          <h4>${m.name}</h4>
+          <span>${m.type} · ${m.duration} · ${m.score}% match</span>
+        </div>
+      </div>
+    `).join("");
+  }
+  document.getElementById("cardStack").style.display = "none";
+  document.querySelector(".swipe-hint").style.display = "none";
+  document.querySelector(".match-actions").style.display = "none";
+  view.style.display = "block";
+}
+
+// Click saved matches
+document.getElementById("matchesView")?.addEventListener("click", () => showMatches());
+</script>
+</body>
+</html>

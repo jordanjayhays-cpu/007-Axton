@@ -7,466 +7,475 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --v: #050508; --d: #07070d; --s: #0c0c14; --s2: #131320;
-  --b: #1a1a26; --b2: #222234; --g: #00ff88; --gdim: rgba(0,255,136,0.07);
-  --gmid: rgba(0,255,136,0.18); --txt: #c8c8d8; --txt2: #606078; --txt3: #38384a;
+  --v: #030306; --d: #060609; --s: #0b0b10; --s2: #101018;
+  --b: #18182a; --b2: #222236; --g: #00ff88; --gg: rgba(0,255,136,0.07);
+  --g2: rgba(0,255,136,0.15); --g3: rgba(0,255,136,0.04); --txt: #b8b8cc; --txt2: #505068; --txt3: #303048;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'Inter', sans-serif; background: var(--v); color: var(--txt); min-height: 100vh; overflow-x: hidden; }
-@keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.2} }
-@keyframes spin { 0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} }
+@keyframes fa { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pu { 0%,100%{opacity:1} 50%{opacity:0.15} }
+@keyframes rot { 0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} }
+@keyframes sh { 0%,100%{transform:scaleX(1)} 50%{transform:scaleX(0.96)} }
 
-.topnav {
+.n {
   position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-  height: 60px; display: flex; align-items: center; padding: 0 36px; gap: 32px;
-  background: rgba(5,5,8,0.92); backdrop-filter: blur(24px); border-bottom: 1px solid var(--b);
+  height: 58px; display: flex; align-items: center; padding: 0 32px; gap: 28px;
+  background: rgba(3,3,6,0.94); backdrop-filter: blur(24px); border-bottom: 1px solid var(--b);
 }
-.logo { font-family: 'Space Mono', monospace; font-size: 0.75rem; font-weight: 700; letter-spacing: 6px; color: var(--g); text-transform: uppercase; text-decoration: none; }
-.nav { display: flex; gap: 2px; margin-left: 20px; }
-.nav a { padding: 6px 12px; border-radius: 5px; font-size: 0.72rem; color: var(--txt3); text-decoration: none; transition: .15s; font-family: 'Space Mono', monospace; letter-spacing: 0.5px; }
-.nav a:hover { color: var(--txt2); }
-.nav a.active { color: var(--g); background: var(--gdim); }
-.navright { margin-left: auto; display: flex; align-items: center; gap: 14px; }
-.pill { display: flex; align-items: center; gap: 6px; background: var(--s); border: 1px solid var(--b); padding: 5px 12px; border-radius: 50px; font-family: 'Space Mono', monospace; font-size: 0.58rem; letter-spacing: 1px; color: var(--txt2); }
-.pdot { width: 5px; height: 5px; border-radius: 50%; background: var(--g); animation: pulse 2s infinite; }
-.cta { background: var(--g); color: #000; border: none; padding: 8px 18px; border-radius: 5px; font-family: 'Space Mono', monospace; font-size: 0.65rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; }
-.cta:hover { box-shadow: 0 0 28px rgba(0,255,136,0.4); }
+.l { font-family: 'Space Mono', monospace; font-size: 0.72rem; font-weight: 700; letter-spacing: 5px; color: var(--g); text-transform: uppercase; }
+.na { display: flex; gap: 2px; margin-left: 16px; }
+.na a { padding: 5px 11px; border-radius: 5px; font-size: 0.7rem; color: var(--txt3); text-decoration: none; transition: .15s; font-family: 'Space Mono', monospace; letter-spacing: 0.4px; }
+.na a:hover { color: var(--txt2); }
+.na a.ac { color: var(--g); background: var(--gg); }
+.nr { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+.pl { display: flex; align-items: center; gap: 6px; background: var(--s); border: 1px solid var(--b); padding: 5px 11px; border-radius: 50px; font-family: 'Space Mono', monospace; font-size: 0.55rem; letter-spacing: 1px; color: var(--txt2); }
+.pd { width: 5px; height: 5px; border-radius: 50%; background: var(--g); animation: pu 2s infinite; }
+.bt { background: var(--g); color: #000; border: none; padding: 7px 16px; border-radius: 5px; font-family: 'Space Mono', monospace; font-size: 0.62rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; }
+.bt:hover { box-shadow: 0 0 24px rgba(0,255,136,0.4); }
 
-/* Hero */
-.hero {
+.h {
   min-height: 100vh; display: flex; flex-direction: column; align-items: center;
-  justify-content: center; position: relative; padding: 80px 36px 70px; overflow: hidden;
+  justify-content: center; position: relative; padding: 80px 32px 70px; overflow: hidden;
 }
 .hbg { position: absolute; inset: 0;
-  background: radial-gradient(ellipse 90% 35% at 50% 65%, rgba(0,255,136,0.04) 0%, transparent 50%), var(--v);
+  background:
+    radial-gradient(ellipse 80% 40% at 50% 50%, rgba(0,255,136,0.045) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 30% at 30% 80%, rgba(0,60,255,0.025) 0%, transparent 40%),
+    var(--v);
 }
-.hbg::after { content: ''; position: absolute; bottom: 28%; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent 10%, rgba(0,255,136,0.06) 35%, rgba(0,255,136,0.09) 50%, rgba(0,255,136,0.06) 65%, transparent 90%); }
-.spot-a { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 700px; height: 100%; background: radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.035) 0%, transparent 55%); pointer-events: none; }
+.halo { position: absolute; width: 520px; height: 520px; border-radius: 50%; border: 1px solid rgba(0,255,136,0.04); top: 50%; left: 50%; transform: translate(-50%,-50%); animation: sh 6s ease-in-out infinite; }
+.halo2 { position: absolute; width: 680px; height: 680px; border-radius: 50%; border: 1px solid rgba(0,255,136,0.02); top: 50%; left: 50%; transform: translate(-50%,-50%); animation: sh 8s 1s ease-in-out infinite; }
+.halo3 { position: absolute; width: 840px; height: 840px; border-radius: 50%; border: 1px solid rgba(0,255,136,0.01); top: 50%; left: 50%; transform: translate(-50%,-50%); animation: sh 10s 2s ease-in-out infinite; }
+.fll { position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent 5%, rgba(0,255,136,0.07) 30%, rgba(0,255,136,0.1) 50%, rgba(0,255,136,0.07) 70%, transparent 95%); }
 
-/* Pod wrap */
-.pw { position: relative; width: 100%; max-width: 1040px; z-index: 1; }
+/* Pod wrap — the vertical pod is the hero */
+.pw { position: relative; width: 100%; max-width: 800px; z-index: 1; }
 .pw svg { width: 100%; height: auto; display: block; }
-.pw-reflect { width: 80%; margin: -3px auto 0; opacity: 0.15; transform: scaleY(-0.35); filter: blur(1.5px); display: block; }
+.pw-reflect { width: 48%; margin: -2px auto 0; opacity: 0.12; transform: scaleY(-0.3); filter: blur(1px); display: block; }
 
-/* Stats */
-.ps { position: absolute; width: 100%; top: 0; left: 0; pointer-events: none; }
-.psl { position: absolute; display: flex; flex-direction: column; gap: 2px; }
-.sl { height: 1px; width: 32px; }
-.sv { font-family: 'Space Mono', monospace; font-size: 0.78rem; font-weight: 700; color: var(--g); }
-.slbl { font-family: 'Space Mono', monospace; font-size: 0.52rem; letter-spacing: 2px; color: var(--txt3); text-transform: uppercase; }
-.a1 { top: 5%; left: 0%; animation: fadeUp 0.7s 0.2s backwards; }
-.a2 { top: 36%; right: 0%; animation: fadeUp 0.7s 0.4s backwards; }
-.a3 { bottom: 19%; left: 3%; animation: fadeUp 0.7s 0.6s backwards; }
+/* Floating callouts */
+.ca { position: absolute; width: 100%; top: 0; left: 0; pointer-events: none; }
+.cl { position: absolute; display: flex; flex-direction: column; gap: 2px; }
+.cll { height: 1px; width: 28px; }
+.clv { font-family: 'Space Mono', monospace; font-size: 0.75rem; font-weight: 700; color: var(--g); }
+.clt { font-family: 'Space Mono', monospace; font-size: 0.5rem; letter-spacing: 2px; color: var(--txt3); text-transform: uppercase; }
+.c1 { top: 3%; left: 0%; animation: fa 0.7s 0.2s backwards; }
+.c2 { top: 30%; right: 0%; animation: fa 0.7s 0.4s backwards; }
+.c3 { bottom: 22%; left: 2%; animation: fa 0.7s 0.6s backwards; }
 
 /* Hero text */
-.htext { text-align: center; z-index: 1; margin-top: 36px; }
-.heb { font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 5px; color: var(--g); text-transform: uppercase; margin-bottom: 10px; animation: fadeUp 0.6s ease; }
-.htit { font-size: clamp(2.2rem, 5.5vw, 4rem); font-weight: 700; color: #fff; line-height: 1.0; margin-bottom: 14px; animation: fadeUp 0.6s 0.1s backwards; }
+.ht { text-align: center; z-index: 1; margin-top: 36px; }
+.heb { font-family: 'Space Mono', monospace; font-size: 0.58rem; letter-spacing: 5px; color: var(--g); text-transform: uppercase; margin-bottom: 10px; animation: fa 0.6s ease; }
+.htit { font-size: clamp(2rem, 5vw, 3.8rem); font-weight: 700; color: #fff; line-height: 1.0; margin-bottom: 12px; animation: fa 0.6s 0.1s backwards; }
 .htit span { color: var(--g); }
-.hsub { font-size: 0.95rem; color: var(--txt2); max-width: 460px; margin: 0 auto 26px; line-height: 1.55; animation: fadeUp 0.6s 0.2s backwards; }
-.hprice { font-family: 'Space Mono', monospace; font-size: 1.5rem; font-weight: 700; color: #fff; margin-bottom: 5px; animation: fadeUp 0.6s 0.3s backwards; }
-.hpricenote { font-size: 0.75rem; color: var(--txt3); font-family: 'Space Mono', monospace; margin-bottom: 28px; animation: fadeUp 0.6s 0.3s backwards; }
-.hact { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; animation: fadeUp 0.6s 0.4s backwards; }
-.scroll-hint { position: absolute; bottom: 26px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 6px; color: var(--txt3); font-family: 'Space Mono', monospace; font-size: 0.55rem; letter-spacing: 3px; text-transform: uppercase; animation: fadeUp 1s 1s backwards; }
-.scroll-ln { width: 1px; height: 28px; background: linear-gradient(to bottom, var(--txt3), transparent); animation: pulse 2s infinite; }
+.hsub { font-size: 0.9rem; color: var(--txt2); max-width: 440px; margin: 0 auto 24px; line-height: 1.5; animation: fa 0.6s 0.2s backwards; }
+.hpr { font-family: 'Space Mono', monospace; font-size: 1.45rem; font-weight: 700; color: #fff; margin-bottom: 4px; animation: fa 0.6s 0.3s backwards; }
+.hprn { font-size: 0.72rem; color: var(--txt3); font-family: 'Space Mono', monospace; margin-bottom: 24px; animation: fa 0.6s 0.3s backwards; }
+.hac { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; animation: fa 0.6s 0.4s backwards; }
+.sh { position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 5px; color: var(--txt3); font-family: 'Space Mono', monospace; font-size: 0.52rem; letter-spacing: 3px; text-transform: uppercase; animation: fa 1s 1s backwards; }
+.sl { width: 1px; height: 24px; background: linear-gradient(to bottom, var(--txt3), transparent); animation: pu 2.5s infinite; }
 
-.btn { padding: 12px 26px; border-radius: 7px; font-family: 'Space Mono', monospace; font-size: 0.68rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; border: none; transition: .2s; display: inline-flex; align-items: center; gap: 8px; }
+.btn { padding: 11px 24px; border-radius: 6px; font-family: 'Space Mono', monospace; font-size: 0.65rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; border: none; transition: .2s; display: inline-flex; align-items: center; gap: 7px; }
 .btn-g { background: var(--g); color: #000; }
-.btn-g:hover { box-shadow: 0 0 36px rgba(0,255,136,0.4); transform: translateY(-1px); }
+.btn-g:hover { box-shadow: 0 0 32px rgba(0,255,136,0.4); transform: translateY(-1px); }
 .btn-o { background: transparent; border: 1px solid var(--b2); color: var(--txt2); }
 .btn-o:hover { border-color: var(--g); color: var(--g); }
-.btn-lg { padding: 14px 34px; font-size: 0.75rem; }
+.btn-lg { padding: 13px 30px; font-size: 0.7rem; }
 
 /* Sections */
-.sec { padding: 80px 36px; }
-.sec-alt { background: var(--d); border-top: 1px solid var(--b); border-bottom: 1px solid var(--b); }
-.scenter { text-align: center; }
-.seyb { font-family: 'Space Mono', monospace; font-size: 0.58rem; letter-spacing: 5px; color: var(--g); text-transform: uppercase; margin-bottom: 10px; }
-.stit { font-size: clamp(1.5rem, 3.5vw, 2.5rem); font-weight: 700; color: #fff; line-height: 1.1; margin-bottom: 12px; }
-.ssub { font-size: 0.92rem; color: var(--txt2); max-width: 500px; line-height: 1.55; margin: 0 auto; }
+.sec { padding: 75px 32px; }
+.sec-a { background: var(--d); border-top: 1px solid var(--b); border-bottom: 1px solid var(--b); }
+.sc { text-align: center; }
+.se { font-family: 'Space Mono', monospace; font-size: 0.55rem; letter-spacing: 5px; color: var(--g); text-transform: uppercase; margin-bottom: 10px; }
+.st { font-size: clamp(1.4rem, 3.5vw, 2.4rem); font-weight: 700; color: #fff; line-height: 1.1; margin-bottom: 11px; }
+.ss { font-size: 0.9rem; color: var(--txt2); max-width: 480px; line-height: 1.5; margin: 0 auto; }
 
 /* Experience */
-.ef { display: flex; flex-direction: column; gap: 0; margin-top: 48px; max-width: 760px; margin-left: auto; margin-right: auto; }
-.es { display: grid; grid-template-columns: 68px 1fr; gap: 18px; padding: 26px 0; border-bottom: 1px solid var(--b); }
+.ef { display: flex; flex-direction: column; gap: 0; margin-top: 44px; max-width: 720px; margin-left: auto; margin-right: auto; }
+.es { display: grid; grid-template-columns: 64px 1fr; gap: 16px; padding: 24px 0; border-bottom: 1px solid var(--b); }
 .es:last-child { border: none; }
-.esn { font-family: 'Space Mono', monospace; font-size: 0.65rem; color: var(--g); letter-spacing: 2px; padding-top: 2px; }
-.est { font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: 6px; }
-.esd { font-size: 0.82rem; color: var(--txt2); line-height: 1.5; margin-bottom: 10px; }
-.ec { background: var(--s2); border: 1px solid var(--b); border-radius: 5px; padding: 3px 8px; font-size: 0.65rem; font-family: 'Space Mono', monospace; color: var(--txt2); display: inline-block; margin-right: 6px; margin-bottom: 4px; }
-.esm { display: flex; gap: 6px; flex-wrap: wrap; }
+.esn { font-family: 'Space Mono', monospace; font-size: 0.62rem; color: var(--g); letter-spacing: 2px; padding-top: 2px; }
+.est { font-size: 0.95rem; font-weight: 700; color: #fff; margin-bottom: 5px; }
+.esd { font-size: 0.8rem; color: var(--txt2); line-height: 1.45; margin-bottom: 8px; }
+.ec { background: var(--s2); border: 1px solid var(--b); border-radius: 4px; padding: 2px 7px; font-size: 0.62rem; font-family: 'Space Mono', monospace; color: var(--txt2); display: inline-block; margin-right: 5px; margin-bottom: 3px; }
+.esm { display: flex; gap: 5px; flex-wrap: wrap; }
 
 /* Features */
-.fl { display: grid; grid-template-columns: 1fr 1fr; gap: 52px; align-items: center; margin-top: 48px; }
+.fl { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; margin-top: 44px; }
 @media(max-width: 768px) { .fl { grid-template-columns: 1fr; } }
-.fl svg { width: 100%; border-radius: 12px; }
-.fr { display: flex; flex-direction: column; gap: 20px; }
-.fi { display: flex; gap: 12px; align-items: flex-start; }
-.fii { width: 42px; height: 42px; background: var(--gdim); border: 1px solid rgba(0,255,136,0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.05rem; flex-shrink: 0; }
-.fit { font-size: 0.9rem; font-weight: 700; color: #fff; margin-bottom: 3px; }
-.fid { font-size: 0.78rem; color: var(--txt2); line-height: 1.45; }
+.fl svg { width: 100%; }
+.fr { display: flex; flex-direction: column; gap: 18px; }
+.fi { display: flex; gap: 11px; align-items: flex-start; }
+.fii { width: 40px; height: 40px; background: var(--gg); border: 1px solid rgba(0,255,136,0.15); border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+.fit { font-size: 0.88rem; font-weight: 700; color: #fff; margin-bottom: 2px; }
+.fid { font-size: 0.76rem; color: var(--txt2); line-height: 1.4; }
 
 /* Specs */
-.sg { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; margin-top: 40px; }
-.sc { background: var(--s); border: 1px solid var(--b); border-radius: 12px; padding: 18px; }
-.sct { font-family: 'Space Mono', monospace; font-size: 0.55rem; letter-spacing: 3px; color: var(--g); text-transform: uppercase; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--b2); }
-.sr { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid var(--b2); font-size: 0.78rem; }
+.sg { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 10px; margin-top: 36px; }
+.sc { background: var(--s); border: 1px solid var(--b); border-radius: 10px; padding: 16px; }
+.sct { font-family: 'Space Mono', monospace; font-size: 0.52rem; letter-spacing: 3px; color: var(--g); text-transform: uppercase; margin-bottom: 9px; padding-bottom: 7px; border-bottom: 1px solid var(--b2); }
+.sr { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid var(--b2); font-size: 0.76rem; }
 .sr:last-child { border: none; }
 .srk { color: var(--txt3); }
-.srv { color: var(--txt); font-family: 'Space Mono', monospace; font-size: 0.72rem; }
-.sb { display: inline-block; background: var(--gdim); color: var(--g); font-family: 'Space Mono', monospace; font-size: 0.52rem; padding: 2px 8px; border-radius: 50px; margin-top: 8px; }
+.srv { color: var(--txt); font-family: 'Space Mono', monospace; font-size: 0.7rem; }
+.sb { display: inline-block; background: var(--gg); color: var(--g); font-family: 'Space Mono', monospace; font-size: 0.5rem; padding: 2px 7px; border-radius: 50px; margin-top: 7px; }
 
 /* Safety */
-.sfg { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin-top: 40px; }
-.sfcard { background: var(--s); border: 1px solid var(--b); border-radius: 12px; padding: 18px; display: flex; gap: 12px; }
-.sfi { font-size: 1.2rem; flex-shrink: 0; }
-.sft { font-size: 0.85rem; font-weight: 700; color: #fff; margin-bottom: 4px; }
-.sfd { font-size: 0.76rem; color: var(--txt2); line-height: 1.45; }
+.sfg { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 10px; margin-top: 36px; }
+.sfc { background: var(--s); border: 1px solid var(--b); border-radius: 10px; padding: 16px; display: flex; gap: 10px; }
+.sfi { font-size: 1.1rem; flex-shrink: 0; }
+.sft { font-size: 0.82rem; font-weight: 700; color: #fff; margin-bottom: 3px; }
+.sfd { font-size: 0.74rem; color: var(--txt2); line-height: 1.4; }
 
 /* Order */
-.ol { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; margin-top: 40px; align-items: start; }
+.ol { display: grid; grid-template-columns: 1fr 1fr; gap: 44px; margin-top: 36px; align-items: start; }
 @media(max-width: 768px) { .ol { grid-template-columns: 1fr; } }
-.ot { font-size: 1.05rem; font-weight: 700; color: #fff; margin-bottom: 18px; }
-.frow { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-.ff { display: flex; flex-direction: column; gap: 4px; }
-.ff label { font-family: 'Space Mono', monospace; font-size: 0.55rem; letter-spacing: 2px; color: var(--txt3); text-transform: uppercase; }
-.ff input, .ff select { background: var(--s2); border: 1px solid var(--b); border-radius: 6px; padding: 9px 12px; font-family: 'Inter', sans-serif; font-size: 0.82rem; color: var(--txt); outline: none; width: 100%; transition: border-color .2s; }
+.ot { font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: 16px; }
+.frow { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+.ff { display: flex; flex-direction: column; gap: 3px; }
+.ff label { font-family: 'Space Mono', monospace; font-size: 0.52rem; letter-spacing: 2px; color: var(--txt3); text-transform: uppercase; }
+.ff input, .ff select { background: var(--s2); border: 1px solid var(--b); border-radius: 6px; padding: 8px 11px; font-family: 'Inter', sans-serif; font-size: 0.8rem; color: var(--txt); outline: none; width: 100%; transition: border-color .2s; }
 .ff input:focus { border-color: var(--g); }
 .ff input::placeholder { color: var(--txt3); }
-.ffull { margin-bottom: 10px; }
-.ps { background: var(--s); border: 1px solid var(--b); border-radius: 12px; padding: 16px; margin-top: 12px; }
-.pr { display: flex; justify-content: space-between; padding: 6px 0; font-size: 0.8rem; border-bottom: 1px solid var(--b2); }
+.ffull { margin-bottom: 8px; }
+.ps { background: var(--s); border: 1px solid var(--b); border-radius: 10px; padding: 14px; margin-top: 10px; }
+.pr { display: flex; justify-content: space-between; padding: 5px 0; font-size: 0.78rem; border-bottom: 1px solid var(--b2); }
 .pr:last-child { border: none; }
 .pr .l { color: var(--txt2); }
-.pr .v { color: var(--txt); font-family: 'Space Mono', monospace; font-size: 0.72rem; }
-.pr.tot { border-top: 1px solid var(--b); margin-top: 4px; padding-top: 10px; font-weight: 700; }
-.pr.tot .v { color: var(--g); font-size: 0.95rem; }
-.btnsub { width: 100%; justify-content: center; padding: 13px; font-size: 0.72rem; margin-top: 12px; }
-.on { font-size: 0.68rem; color: var(--txt3); margin-top: 8px; line-height: 1.45; }
-.orp { background: var(--s); border: 1px solid var(--b); border-radius: 12px; padding: 22px; }
-.orpt { font-family: 'Space Mono', monospace; font-size: 0.55rem; letter-spacing: 3px; color: var(--txt3); text-transform: uppercase; margin-bottom: 12px; }
-.ori { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--b2); font-size: 0.78rem; }
+.pr .v { color: var(--txt); font-family: 'Space Mono', monospace; font-size: 0.7rem; }
+.pr.tot { border-top: 1px solid var(--b); margin-top: 3px; padding-top: 9px; font-weight: 700; }
+.pr.tot .v { color: var(--g); font-size: 0.9rem; }
+.btnsub { width: 100%; justify-content: center; padding: 12px; font-size: 0.68rem; margin-top: 10px; }
+.on { font-size: 0.65rem; color: var(--txt3); margin-top: 7px; line-height: 1.4; }
+.orp { background: var(--s); border: 1px solid var(--b); border-radius: 10px; padding: 20px; }
+.orpt { font-family: 'Space Mono', monospace; font-size: 0.52rem; letter-spacing: 3px; color: var(--txt3); text-transform: uppercase; margin-bottom: 11px; }
+.ori { display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid var(--b2); font-size: 0.76rem; }
 .ori .l { color: var(--txt2); }
-.ori .v { color: var(--txt); font-family: 'Space Mono', monospace; font-size: 0.72rem; }
-.otr { display: flex; justify-content: space-between; padding: 12px 0 0; font-weight: 700; }
-.otr .v { color: var(--g); font-family: 'Space Mono', monospace; font-size: 1rem; }
-.od { margin-top: 16px; padding: 11px; background: var(--gdim); border: 1px solid rgba(0,255,136,0.2); border-radius: 7px; font-family: 'Space Mono', monospace; font-size: 0.65rem; color: var(--g); letter-spacing: 1px; text-align: center; }
+.ori .v { color: var(--txt); font-family: 'Space Mono', monospace; font-size: 0.7rem; }
+.otr { display: flex; justify-content: space-between; padding: 10px 0 0; font-weight: 700; }
+.otr .v { color: var(--g); font-family: 'Space Mono', monospace; font-size: 0.95rem; }
+.od { margin-top: 14px; padding: 10px; background: var(--gg); border: 1px solid rgba(0,255,136,0.2); border-radius: 6px; font-family: 'Space Mono', monospace; font-size: 0.62rem; color: var(--g); letter-spacing: 1px; text-align: center; }
 </style>
 </head>
 <body>
 
-<header class="topnav">
-  <a href="#" class="logo">TransitUs</a>
-  <nav class="nav">
-    <a href="#" class="active">Showroom</a>
+<header class="n">
+  <a href="#" class="l">TransitUs</a>
+  <nav class="na">
+    <a href="#" class="ac">Showroom</a>
     <a href="#exp">Experience</a>
     <a href="#feat">Features</a>
     <a href="#specs">Specs</a>
     <a href="#safety">Safety</a>
     <a href="#order">Reserve</a>
   </nav>
-  <div class="navright">
-    <div class="pill"><div class="pdot"></div>Live Demo</div>
-    <button class="cta" onclick="document.getElementById('order').scrollIntoView({behavior:'smooth'})">Reserve</button>
+  <div class="nr">
+    <div class="pl"><div class="pd"></div>Live Demo</div>
+    <button class="bt" onclick="document.getElementById('order').scrollIntoView({behavior:'smooth'})">Reserve</button>
   </div>
 </header>
 
 <main>
 
-<section class="hero" id="showroom">
-  <div class="hbg"><div class="spot-a"></div></div>
+<section class="h" id="showroom">
+  <div class="hbg">
+    <div class="halo"></div>
+    <div class="halo2"></div>
+    <div class="halo3"></div>
+    <div class="fll"></div>
+  </div>
 
   <div class="pw">
-    <!-- Stats -->
-    <div class="ps">
-      <div class="psl a1">
-        <div class="sl" style="background:linear-gradient(90deg,var(--g),transparent)"></div>
-        <div class="sv">3.2m</div>
-        <div class="slbl">Length</div>
+    <!-- Floating callouts -->
+    <div class="ca">
+      <div class="cl c1">
+        <div class="cll" style="background:linear-gradient(90deg,var(--g),transparent)"></div>
+        <div class="clv">2.4m</div>
+        <div class="clt">Height</div>
       </div>
-      <div class="psl a2">
-        <div class="sl" style="background:linear-gradient(90deg,transparent,var(--g));margin-left:auto"></div>
-        <div class="sv" style="margin-left:auto">1,400mm</div>
-        <div class="slbl" style="margin-left:auto">Diameter</div>
+      <div class="cl c2">
+        <div class="cll" style="background:linear-gradient(90deg,transparent,var(--g));margin-left:auto"></div>
+        <div class="clv" style="margin-left:auto">4,096</div>
+        <div class="clt" style="margin-left:auto">Channels</div>
       </div>
-      <div class="psl a3">
-        <div class="sl" style="background:linear-gradient(90deg,var(--g),transparent)"></div>
-        <div class="sv">4,096</div>
-        <div class="slbl">Channels</div>
+      <div class="cl c3">
+        <div class="cll" style="background:linear-gradient(90deg,var(--g),transparent)"></div>
+        <div class="clv">€247K</div>
+        <div class="clt">All-inclusive</div>
       </div>
     </div>
 
-    <!-- NEW SLEEK MODERN POD SVG -->
-    <svg viewBox="0 0 1040 420" xmlns="http://www.w3.org/2000/svg">
+    <!-- VERTICAL CRYO POD SVG -->
+    <svg viewBox="0 0 520 680" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <!-- Main sleek white body — matte finish -->
-        <linearGradient id="mb" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#f4f4f8"/>
-          <stop offset="18%" stop-color="#ededf3"/>
-          <stop offset="42%" stop-color="#e6e6ee"/>
-          <stop offset="68%" stop-color="#dedee6"/>
-          <stop offset="100%" stop-color="#d0d0d8"/>
-        </linearGradient>
-        <!-- Side face (shadow side of cylinder) -->
-        <linearGradient id="ms" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#c8c8d2"/>
+        <!-- Premium metallic body -->
+        <linearGradient id="mb" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#b8b8c4"/>
+          <stop offset="8%" stop-color="#e8e8f0"/>
+          <stop offset="20%" stop-color="#f6f6fb"/>
+          <stop offset="35%" stop-color="#fafafd"/>
+          <stop offset="50%" stop-color="#f2f2f8"/>
+          <stop offset="65%" stop-color="#e4e4ec"/>
+          <stop offset="80%" stop-color="#d4d4dc"/>
+          <stop offset="92%" stop-color="#c0c0cc"/>
           <stop offset="100%" stop-color="#a8a8b4"/>
         </linearGradient>
-        <!-- End cap side -->
-        <linearGradient id="me" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#cccCD6"/>
-          <stop offset="100%" stop-color="#aaaab4"/>
+        <!-- Dark premium glass -->
+        <linearGradient id="mg" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="rgba(15,18,35,0.96)"/>
+          <stop offset="30%" stop-color="rgba(20,24,44,0.93)"/>
+          <stop offset="50%" stop-color="rgba(12,15,30,0.97)"/>
+          <stop offset="70%" stop-color="rgba(20,24,44,0.93)"/>
+          <stop offset="100%" stop-color="rgba(15,18,35,0.96)"/>
         </linearGradient>
-        <!-- Dark premium interior -->
-        <linearGradient id="mi" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#0e0e1a"/>
+        <!-- Interior ambient -->
+        <linearGradient id="mia" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#0a0a18"/>
           <stop offset="100%" stop-color="#060610"/>
         </linearGradient>
-        <!-- Sleek dark seat -->
-        <linearGradient id="mc" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#1e1e2e"/>
-          <stop offset="100%" stop-color="#141424"/>
+        <!-- Seat gradient -->
+        <linearGradient id="ms" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#1c1c2e"/>
+          <stop offset="100%" stop-color="#101020"/>
         </linearGradient>
-        <!-- Glass — more subtle/realistic -->
-        <linearGradient id="mg" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stop-color="rgba(200,225,255,0.07)"/>
-          <stop offset="60%" stop-color="rgba(195,218,255,0.03)"/>
-          <stop offset="100%" stop-color="rgba(185,210,255,0.08)"/>
+        <!-- Base gradient -->
+        <linearGradient id="mba" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#242432"/>
+          <stop offset="100%" stop-color="#18182a"/>
         </linearGradient>
-        <!-- Display gradient -->
-        <linearGradient id="md" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#001510"/>
-          <stop offset="100%" stop-color="#000a08"/>
+        <!-- Top ring -->
+        <linearGradient id="mt" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#d8d8e2"/>
+          <stop offset="100%" stop-color="#a8a8b4"/>
         </linearGradient>
-        <!-- Glow filters -->
-        <filter id="fgg" x="-30%" y="-30%" width="160%" height="160%">
-          <feGaussianBlur stdDeviation="4" result="b"/>
-          <feFlood flood-color="#00ff88" flood-opacity="0.85"/>
+        <!-- Glow -->
+        <filter id="fg" x="-40%" y="-40%" width="180%" height="180%">
+          <feGaussianBlur stdDeviation="5" result="b"/>
+          <feFlood flood-color="#00ff88" flood-opacity="0.9"/>
           <feComposite in2="b" operator="in"/>
           <feComposite in="SourceGraphic"/>
         </filter>
-        <filter id="fgss" x="-25%" y="-25%" width="150%" height="150%">
-          <feGaussianBlur stdDeviation="3" result="b"/>
-          <feFlood flood-color="#00ff88" flood-opacity="0.5"/>
+        <filter id="fgs" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur stdDeviation="3.5" result="b"/>
+          <feFlood flood-color="#00ff88" flood-opacity="0.6"/>
           <feComposite in2="b" operator="in"/>
           <feComposite in="SourceGraphic"/>
         </filter>
-        <filter id="fgb" x="-25%" y="-25%" width="150%" height="150%">
-          <feGaussianBlur stdDeviation="3" result="b"/>
-          <feFlood flood-color="#00ccff" flood-opacity="0.8"/>
+        <filter id="fgb" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur stdDeviation="3.5" result="b"/>
+          <feFlood flood-color="#00ccff" flood-opacity="0.85"/>
           <feComposite in2="b" operator="in"/>
           <feComposite in="SourceGraphic"/>
         </filter>
         <filter id="fds">
-          <feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="rgba(0,0,0,0.75)"/>
+          <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="rgba(0,0,0,0.8)"/>
         </filter>
         <filter id="fdsl">
-          <feDropShadow dx="0" dy="6" stdDeviation="9" flood-color="rgba(0,0,0,0.5)"/>
-        </filter>
-        <filter id="fdin">
-          <feOffset dx="0" dy="-4"/>
-          <feGaussianBlur stdDeviation="7" result="b"/>
-          <feComposite in="SourceGraphic" in2="b" operator="over"/>
+          <feDropShadow dx="0" dy="5" stdDeviation="8" flood-color="rgba(0,0,0,0.6)"/>
         </filter>
       </defs>
 
       <!-- Ground shadow -->
-      <ellipse cx="520" cy="362" rx="400" ry="24" fill="rgba(0,0,0,0.65)"/>
-      <!-- Floor glow -->
-      <ellipse cx="520" cy="366" rx="320" ry="8" fill="rgba(0,255,136,0.02)"/>
+      <ellipse cx="260" cy="630" rx="155" ry="16" fill="rgba(0,0,0,0.7)"/>
+      <!-- Subtle floor glow -->
+      <ellipse cx="260" cy="628" rx="100" ry="5" fill="rgba(0,255,136,0.04)"/>
 
-      <!-- ===== MAIN SLEEK CAPSULE BODY ===== -->
-      <ellipse cx="520" cy="248" rx="410" ry="96" fill="rgba(0,0,0,0.4)" filter="url(#fds)"/>
-      <!-- Main white body -->
-      <ellipse cx="520" cy="222" rx="410" ry="96" fill="url(#mb)"/>
-      <!-- Top highlight — clean matte -->
-      <ellipse cx="520" cy="210" rx="408" ry="84" fill="#f8f8fc"/>
+      <!-- ===== MAIN BODY — vertical cylinder, tapered ===== -->
+      <!-- Body shadow -->
+      <ellipse cx="260" cy="598" rx="140" ry="20" fill="rgba(0,0,0,0.6)" filter="url(#fds)"/>
+      <!-- Main cylindrical body -->
+      <rect x="120" y="170" width="280" height="430" rx="70" fill="url(#mb)"/>
+      <!-- Top highlight band -->
+      <rect x="120" y="170" width="280" height="430" rx="70" fill="none" stroke="#fafafd" stroke-width="1" opacity="0.5"/>
+      <!-- Left shine -->
+      <rect x="130" y="175" width="22" height="420" rx="11" fill="rgba(255,255,255,0.18)"/>
+      <!-- Right shadow -->
+      <rect x="368" y="175" width="22" height="420" rx="11" fill="rgba(0,0,0,0.08)"/>
 
-      <!-- Left end cap -->
-      <ellipse cx="112" cy="222" rx="80" ry="96" fill="url(#mb)"/>
-      <ellipse cx="112" cy="208" rx="74" ry="84" fill="url(#ms)"/>
-      <!-- Right end cap -->
-      <ellipse cx="928" cy="222" rx="80" ry="96" fill="url(#mb)"/>
-      <ellipse cx="928" cy="208" rx="74" ry="84" fill="url(#ms)"/>
+      <!-- Subtle horizontal seam lines (premium panel joints) -->
+      <rect x="120" y="170" width="280" height="430" rx="70" fill="none" stroke="rgba(180,180,195,0.04)" stroke-width="0.5"/>
 
-      <!-- Subtle body seam -->
-      <ellipse cx="520" cy="222" rx="410" ry="96" fill="none" stroke="rgba(180,180,192,0.08)" stroke-width="0.6"/>
+      <!-- ===== TOP RING / COLLAR ===== -->
+      <ellipse cx="260" cy="170" rx="140" ry="22" fill="url(#mt)" filter="url(#fdsl)"/>
+      <ellipse cx="260" cy="165" rx="137" ry="19" fill="#e8e8f2"/>
+      <ellipse cx="260" cy="162" rx="134" ry="16" fill="#f2f2f8"/>
+      <!-- Top sensor ring -->
+      <ellipse cx="260" cy="162" rx="128" ry="14" fill="none" stroke="rgba(0,255,136,0.3)" stroke-width="1"/>
+      <circle cx="180" cy="162" r="2.5" fill="rgba(0,255,136,0.4)"/>
+      <circle cx="215" cy="158" r="2" fill="rgba(0,255,136,0.28)"/>
+      <circle cx="260" cy="156" r="2.5" fill="rgba(0,255,136,0.38)"/>
+      <circle cx="305" cy="158" r="2" fill="rgba(0,255,136,0.28)"/>
+      <circle cx="340" cy="162" r="2.5" fill="rgba(0,255,136,0.4)"/>
 
-      <!-- ===== DOOR FRAME — clean recessed surround ===== -->
-      <rect x="240" y="130" width="560" height="176" rx="78" fill="#e2e2ea" filter="url(#fdin)"/>
+      <!-- ===== GLASS DOOR — front view, slightly open ===== -->
+      <!-- Glass frame -->
+      <rect x="128" y="178" width="264" height="410" rx="62" fill="#c0c0cc" filter="url(#fdsl)"/>
+      <!-- Glass -->
+      <rect x="134" y="184" width="252" height="398" rx="58" fill="url(#mg)"/>
+      <!-- Glass specular — left side light catch -->
+      <rect x="138" y="190" width="38" height="386" rx="30" fill="rgba(255,255,255,0.04)"/>
+      <rect x="142" y="196" width="16" height="374" rx="8" fill="rgba(255,255,255,0.025)"/>
 
-      <!-- ===== INTERIOR CAVITY ===== -->
-      <rect x="250" y="140" width="540" height="156" rx="70" fill="url(#mi)"/>
+      <!-- ===== INTERIOR — standing/semi-recumbent occupant ===== -->
+      <!-- Seat — contoured premium chair -->
+      <path d="M 168 448 Q 165 480 168 510 L 352 510 Q 355 480 352 448 Z" fill="url(#ms)"/>
+      <path d="M 172 445 Q 260 440 348 445 L 348 455 Q 260 450 172 455 Z" fill="#222232"/>
+      <!-- Lumbar / backrest -->
+      <rect x="155" y="360" width="30" height="90" rx="14" fill="url(#ms)"/>
+      <rect x="335" y="360" width="30" height="90" rx="14" fill="url(#ms)"/>
 
-      <!-- ===== SUPINE OCCUPANT — sleek figure lying flat ===== -->
+      <!-- Occupant — seated semi-recumbent, head upright -->
       <!-- Head -->
-      <ellipse cx="378" cy="194" rx="24" ry="22" fill="#181828"/>
-      <!-- Torso — lying flat -->
-      <rect x="343" y="204" width="148" height="40" rx="17" fill="#181828"/>
-      <!-- Legs extended -->
-      <rect x="408" y="210" width="130" height="32" rx="13" fill="#181828"/>
-      <rect x="500" y="215" width="120" height="28" rx="11" fill="#181828"/>
-      <!-- Arms at sides -->
-      <rect x="334" y="210" width="52" height="18" rx="8" fill="#181828"/>
-      <rect x="548" y="216" width="44" height="16" rx="7" fill="#181828"/>
+      <ellipse cx="260" cy="320" rx="28" ry="30" fill="#14141e"/>
+      <!-- Neck -->
+      <rect x="250" y="345" width="20" height="20" rx="8" fill="#14141e"/>
+      <!-- Torso — slightly reclined -->
+      <rect x="215" y="362" width="90" height="72" rx="22" fill="#14141e"/>
+      <!-- Arms — resting on armrests -->
+      <rect x="178" y="400" width="45" height="22" rx="10" fill="#14141e"/>
+      <rect x="297" y="400" width="45" height="22" rx="10" fill="#14141e"/>
+      <!-- Legs — seated, knees bent at ~110° -->
+      <rect x="222" y="428" width="76" height="28" rx="12" fill="#14141e"/>
+      <rect x="200" y="450" width="120" height="24" rx="11" fill="#14141e"/>
+      <!-- Lower legs -->
+      <rect x="205" y="468" width="32" height="34" rx="10" fill="#14141e"/>
+      <rect x="283" y="468" width="32" height="34" rx="10" fill="#14141e"/>
 
-      <!-- Subtle glow field around occupant — premium, minimal -->
-      <ellipse cx="460" cy="222" rx="130" ry="40" fill="none" stroke="rgba(0,255,136,0.35)" stroke-width="1.2" filter="url(#fgss)"/>
-      <ellipse cx="460" cy="222" rx="95" ry="29" fill="none" stroke="rgba(0,255,136,0.18)" stroke-width="1"/>
+      <!-- Neural headset / halo -->
+      <ellipse cx="260" cy="318" rx="50" ry="16" fill="none" stroke="rgba(0,255,136,0.55)" stroke-width="1.5" filter="url(#fgs)"/>
+      <ellipse cx="260" cy="318" rx="40" ry="12" fill="none" stroke="rgba(0,255,136,0.25)" stroke-width="1"/>
+      <!-- Halo glow points -->
+      <circle cx="260" cy="302" r="3.5" fill="#00ff88" filter="url(#fg)"/>
+      <circle cx="242" cy="306" r="2.2" fill="rgba(0,255,136,0.6)"/>
+      <circle cx="278" cy="306" r="2.2" fill="rgba(0,255,136,0.6)"/>
 
-      <!-- ===== SLEEK SEAT — low profile, modern ===== -->
-      <rect x="258" y="262" width="470" height="16" rx="7" fill="url(#mc)"/>
-      <rect x="258" y="252" width="470" height="12" rx="5" fill="#1a1a2c"/>
+      <!-- Spine glow strip -->
+      <rect x="256" y="328" width="8" height="90" rx="4" fill="rgba(0,255,136,0.08)"/>
+      <rect x="257" y="328" width="6" height="90" rx="3" fill="rgba(0,255,136,0.04)"/>
 
-      <!-- ===== SENSOR STRIPS — minimal, sleek ===== -->
-      <!-- Left strip -->
-      <rect x="247" y="148" width="5" height="128" rx="2" fill="#c8c8d2"/>
-      <circle cx="249" cy="163" r="2.8" fill="#00ff88" filter="url(#fgss)"/>
-      <circle cx="249" cy="183" r="2.8" fill="#00ff88" filter="url(#fgss)"/>
-      <circle cx="249" cy="203" r="2.8" fill="#00ff88"/>
-      <circle cx="249" cy="223" r="2.8" fill="#00ff88" filter="url(#fgss)"/>
-      <circle cx="249" cy="243" r="2.5" fill="rgba(0,255,136,0.25)"/>
-      <circle cx="249" cy="263" r="2.5" fill="rgba(0,255,136,0.15)"/>
+      <!-- Heartbeat line on chest -->
+      <path d="M 222 390 L 238 390 L 244 382 L 250 398 L 256 385 L 262 393 L 268 390 L 298 390" fill="none" stroke="rgba(0,255,136,0.35)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" filter="url(#fgs)"/>
 
-      <!-- Right strip -->
-      <rect x="788" y="148" width="5" height="128" rx="2" fill="#c8c8d2"/>
-      <circle cx="791" cy="163" r="2.8" fill="#00ff88" filter="url(#fgss)"/>
-      <circle cx="791" cy="183" r="2.8" fill="#00ff88" filter="url(#fgss)"/>
-      <circle cx="791" cy="203" r="2.8" fill="#00ff88"/>
-      <circle cx="791" cy="223" r="2.8" fill="#00ff88" filter="url(#fgss)"/>
-      <circle cx="791" cy="243" r="2.5" fill="rgba(0,255,136,0.25)"/>
-      <circle cx="791" cy="263" r="2.5" fill="rgba(0,255,136,0.15)"/>
+      <!-- ===== SIDE PANEL — display and controls on body ===== -->
+      <!-- Left panel strip -->
+      <rect x="112" y="280" width="16" height="180" rx="8" fill="#c8c8d2"/>
+      <rect x="114" y="284" width="12" height="172" rx="6" fill="#1c1c28"/>
+      <!-- Sensor dots left -->
+      <circle cx="120" cy="296" r="2.2" fill="#00ff88" filter="url(#fgs)"/>
+      <circle cx="120" cy="316" r="2.2" fill="#00ff88" filter="url(#fgs)"/>
+      <circle cx="120" cy="336" r="2.2" fill="#00ff88"/>
+      <circle cx="120" cy="356" r="2.2" fill="#00ff88" filter="url(#fgs)"/>
+      <circle cx="120" cy="376" r="2.2" fill="#00ff88"/>
+      <circle cx="120" cy="396" r="2" fill="rgba(0,255,136,0.2)"/>
+      <circle cx="120" cy="416" r="2" fill="rgba(0,255,136,0.15)"/>
+      <circle cx="120" cy="436" r="2" fill="rgba(0,255,136,0.1)"/>
 
-      <!-- ===== DOOR — sleek, swings open ===== -->
-      <g transform="rotate(-78 240 222)">
-        <!-- Main door panel -->
-        <rect x="240" y="130" width="560" height="176" rx="78" fill="#ececf3"/>
-        <!-- Subtle top highlight on door -->
-        <rect x="240" y="130" width="560" height="176" rx="78" fill="none" stroke="rgba(255,255,255,0.65)" stroke-width="1.2"/>
-        <!-- Glass area -->
-        <rect x="268" y="158" width="504" height="120" rx="58" fill="url(#mg)" stroke="rgba(200,220,255,0.18)" stroke-width="0.8"/>
-        <!-- Subtle glass specular -->
-        <line x1="292" y1="172" x2="292" y2="260" stroke="rgba(255,255,255,0.15)" stroke-width="3" stroke-linecap="round"/>
-        <line x1="308" y1="176" x2="308" y2="255" stroke="rgba(255,255,255,0.07)" stroke-width="1.5" stroke-linecap="round"/>
-        <!-- Sleek horizontal handle -->
-        <rect x="762" y="202" width="8" height="32" rx="3" fill="#b0b0b8"/>
-        <rect x="760" y="202" width="12" height="32" rx="4" fill="#c4c4cc"/>
-        <!-- Hinge hints -->
-        <circle cx="240" cy="222" r="5" fill="#c0c0c8"/>
-        <circle cx="800" cy="222" r="5" fill="#c0c0c8"/>
-      </g>
+      <!-- Right panel — main display -->
+      <rect x="392" y="270" width="18" height="220" rx="9" fill="#c8c8d2"/>
+      <rect x="394" y="274" width="14" height="212" rx="7" fill="#0a0a14"/>
+      <!-- Display screen -->
+      <rect x="396" y="285" width="12" height="90" rx="3" fill="#000d0a" stroke="rgba(0,255,136,0.3)" stroke-width="0.5"/>
+      <text x="402" y="302" text-anchor="middle" font-family="'Courier New',monospace" font-size="4" font-weight="bold" fill="#00ff88">POD-07</text>
+      <text x="402" y="314" text-anchor="middle" font-family="'Courier New',monospace" font-size="3" fill="rgba(0,255,136,0.45)">v4.2.1</text>
+      <circle cx="402" cy="325" r="2.8" fill="#00ccff" filter="url(#fgb)"/>
+      <text x="402" y="338" text-anchor="middle" font-family="'Courier New',monospace" font-size="3.2" fill="rgba(0,255,136,0.6)">READY</text>
+      <text x="402" y="350" text-anchor="middle" font-family="'Courier New',monospace" font-size="2.8" fill="rgba(0,255,136,0.25)">COH: 94%</text>
+      <text x="402" y="366" text-anchor="middle" font-family="'Courier New',monospace" font-size="2.5" fill="rgba(0,255,136,0.2)">HR: 62</text>
 
-      <!-- ===== CABLE — sleek white, minimal ===== -->
-      <path d="M 910 270 Q 928 275 938 295 Q 945 315 960 328" stroke="#c8c8d0" stroke-width="5" fill="none" stroke-linecap="round"/>
-      <path d="M 910 270 Q 928 275 938 295 Q 945 315 960 328" stroke="#e2e2ea" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <!-- Right control buttons -->
+      <rect x="397" y="384" width="10" height="7" rx="2" fill="#1e1e2e"/>
+      <rect x="397" y="397" width="10" height="7" rx="2" fill="#1e1e2e"/>
+      <rect x="397" y="410" width="10" height="7" rx="2" fill="rgba(0,255,136,0.2)"/>
+      <rect x="397" y="423" width="10" height="7" rx="2" fill="#1e1e2e"/>
+      <rect x="397" y="436" width="10" height="7" rx="2" fill="#1e1e2e"/>
+      <rect x="397" y="449" width="10" height="7" rx="2" fill="#1e1e2e"/>
+      <rect x="397" y="462" width="10" height="7" rx="2" fill="#1e1e2e"/>
 
-      <!-- ===== DISPLAY PANEL — sleek dark glass ===== -->
-      <ellipse cx="928" cy="222" rx="54" ry="66" fill="rgba(8,8,16,0.92)"/>
-      <rect x="910" y="184" width="36" height="76" rx="7" fill="url(#md)" stroke="rgba(0,255,136,0.28)" stroke-width="0.8"/>
-      <!-- Display content -->
-      <text x="928" y="201" text-anchor="middle" font-family="'Courier New',monospace" font-size="5.5" font-weight="bold" fill="#00ff88">POD-07</text>
-      <text x="928" y="214" text-anchor="middle" font-family="'Courier New',monospace" font-size="3.8" fill="rgba(0,255,136,0.45)">v4.2.1</text>
-      <circle cx="928" cy="227" r="3.2" fill="#00ccff" filter="url(#fgb)"/>
-      <text x="928" y="242" text-anchor="middle" font-family="'Courier New',monospace" font-size="4" fill="rgba(0,255,136,0.6)">READY</text>
-      <text x="928" y="255" text-anchor="middle" font-family="'Courier New',monospace" font-size="3.4" fill="rgba(0,255,136,0.25)">COH: 94%</text>
+      <!-- Bottom vent strip -->
+      <rect x="130" y="576" width="260" height="6" rx="3" fill="rgba(8,8,16,0.9)"/>
+      <line x1="160" y1="579" x2="160" y2="582" stroke="rgba(0,255,136,0.2)" stroke-width="1"/>
+      <line x1="195" y1="579" x2="195" y2="582" stroke="rgba(0,255,136,0.15)" stroke-width="1"/>
+      <line x1="230" y1="579" x2="230" y2="582" stroke="rgba(0,255,136,0.18)" stroke-width="1"/>
+      <line x1="265" y1="579" x2="265" y2="582" stroke="rgba(0,255,136,0.15)" stroke-width="1"/>
+      <line x1="300" y1="579" x2="300" y2="582" stroke="rgba(0,255,136,0.18)" stroke-width="1"/>
+      <line x1="335" y1="579" x2="335" y2="582" stroke="rgba(0,255,136,0.15)" stroke-width="1"/>
+      <line x1="360" y1="579" x2="360" y2="582" stroke="rgba(0,255,136,0.2)" stroke-width="1"/>
 
-      <!-- ===== BRAND ===== -->
-      <text x="520" y="166" text-anchor="middle" font-family="monospace" font-size="8.5" fill="rgba(80,80,96,0.45)" letter-spacing="5">TRANSITUS</text>
-      <text x="520" y="179" text-anchor="middle" font-family="monospace" font-size="4.5" fill="rgba(80,80,96,0.22)" letter-spacing="3">MK-IV</text>
+      <!-- Base platform -->
+      <rect x="148" y="598" width="224" height="24" rx="12" fill="url(#mba)" filter="url(#fdsl)"/>
+      <rect x="148" y="598" width="224" height="8" rx="6" fill="#2a2a3a"/>
 
-      <!-- ===== TOP SENSOR DOTS — minimal ===== -->
-      <circle cx="168" cy="128" r="2.5" fill="rgba(0,255,136,0.3)"/>
-      <circle cx="260" cy="123" r="2" fill="rgba(0,255,136,0.2)"/>
-      <circle cx="400" cy="120" r="2" fill="rgba(0,255,136,0.2)"/>
-      <circle cx="520" cy="119" r="2.5" fill="rgba(0,255,136,0.32)"/>
-      <circle cx="640" cy="120" r="2" fill="rgba(0,255,136,0.2)"/>
-      <circle cx="780" cy="123" r="2" fill="rgba(0,255,136,0.2)"/>
-      <circle cx="870" cy="128" r="2.5" fill="rgba(0,255,136,0.3)"/>
+      <!-- Status ring at base -->
+      <ellipse cx="260" cy="600" rx="112" ry="8" fill="none" stroke="rgba(0,255,136,0.25)" stroke-width="1"/>
+      <ellipse cx="260" cy="600" rx="80" ry="5" fill="none" stroke="rgba(0,255,136,0.15)" stroke-width="1"/>
 
-      <!-- ===== BASE VENT — sleek minimal strip ===== -->
-      <rect x="195" y="312" width="650" height="6" rx="3" fill="rgba(8,8,16,0.85)"/>
-      <line x1="230" y1="315" x2="230" y2="318" stroke="rgba(0,255,136,0.18)" stroke-width="1"/>
-      <line x1="265" y1="315" x2="265" y2="318" stroke="rgba(0,255,136,0.15)" stroke-width="1"/>
-      <line x1="300" y1="315" x2="300" y2="318" stroke="rgba(0,255,136,0.18)" stroke-width="1"/>
-      <line x1="335" y1="315" x2="335" y2="318" stroke="rgba(0,255,136,0.15)" stroke-width="1"/>
-      <line x1="370" y1="315" x2="370" y2="318" stroke="rgba(0,255,136,0.18)" stroke-width="1"/>
-      <line x1="405" y1="315" x2="405" y2="318" stroke="rgba(0,255,136,0.15)" stroke-width="1"/>
-      <line x1="440" y1="315" x2="440" y2="318" stroke="rgba(0,255,136,0.18)" stroke-width="1"/>
-      <line x1="475" y1="315" x2="475" y2="318" stroke="rgba(0,255,136,0.15)" stroke-width="1"/>
-      <line x1="510" y1="315" x2="510" y2="318" stroke="rgba(0,255,136,0.18)" stroke-width="1"/>
-      <line x1="545" y1="315" x2="545" y2="318" stroke="rgba(0,255,136,0.15)" stroke-width="1"/>
-      <line x1="580" y1="315" x2="580" y2="318" stroke="rgba(0,255,136,0.18)" stroke-width="1"/>
-      <line x1="615" y1="315" x2="615" y2="318" stroke="rgba(0,255,136,0.15)" stroke-width="1"/>
-      <line x1="650" y1="315" x2="650" y2="318" stroke="rgba(0,255,136,0.18)" stroke-width="1"/>
-      <line x1="685" y1="315" x2="685" y2="318" stroke="rgba(0,255,136,0.15)" stroke-width="1"/>
-      <line x1="720" y1="315" x2="720" y2="318" stroke="rgba(0,255,136,0.18)" stroke-width="1"/>
-      <line x1="755" y1="315" x2="755" y2="318" stroke="rgba(0,255,136,0.15)" stroke-width="1"/>
-      <line x1="790" y1="315" x2="790" y2="318" stroke="rgba(0,255,136,0.18)" stroke-width="1"/>
-      <line x1="825" y1="315" x2="825" y2="318" stroke="rgba(0,255,136,0.15)" stroke-width="1"/>
+      <!-- Ambient glow around base -->
+      <ellipse cx="260" cy="608" rx="140" ry="14" fill="rgba(0,255,136,0.03)"/>
+
+      <!-- Brand text on body -->
+      <text x="260" y="530" text-anchor="middle" font-family="monospace" font-size="7" fill="rgba(80,80,96,0.35)" letter-spacing="5">TRANSITUS</text>
+      <text x="260" y="544" text-anchor="middle" font-family="monospace" font-size="4" fill="rgba(80,80,96,0.18)" letter-spacing="3">MK-IV · CONSCIOUSNESS TRANSIT</text>
     </svg>
 
-    <!-- Floor reflection -->
-    <svg class="pw-reflect" viewBox="0 0 1040 420" xmlns="http://www.w3.org/2000/svg">
+    <!-- Reflection -->
+    <svg class="pw-reflect" viewBox="0 0 520 680" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <linearGradient id="mbr" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#d0d0d8"/><stop offset="100%" stop-color="#a8a8b4"/></linearGradient>
-        <linearGradient id="mer" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#aaaab4"/><stop offset="100%" stop-color="#909098"/></linearGradient>
+        <linearGradient id="mbr" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#a8a8b4"/><stop offset="50%" stop-color="#d4d4dc"/><stop offset="100%" stop-color="#a8a8b4"/></linearGradient>
       </defs>
-      <ellipse cx="520" cy="222" rx="410" ry="96" fill="url(#mbr)"/>
-      <ellipse cx="112" cy="222" rx="80" ry="96" fill="url(#mbr)"/>
-      <ellipse cx="112" cy="208" rx="74" ry="84" fill="url(#mer)"/>
-      <ellipse cx="928" cy="222" rx="80" ry="96" fill="url(#mbr)"/>
-      <ellipse cx="928" cy="208" rx="74" ry="84" fill="url(#mer)"/>
-      <rect x="910" y="184" width="36" height="76" rx="7" fill="#000a08"/>
+      <rect x="120" y="170" width="280" height="430" rx="70" fill="url(#mbr)"/>
+      <ellipse cx="260" cy="170" rx="140" ry="22" fill="#a8a8b4"/>
+      <rect x="148" y="598" width="224" height="24" rx="12" fill="#18182a"/>
     </svg>
   </div>
 
-  <div class="htext">
+  <div class="ht">
     <div class="heb">Introducing · 2026</div>
     <div class="htit">TransitUs <span>MK-IV</span></div>
-    <div class="hsub">A precision-engineered consciousness transit system. Body stays. Awareness goes.</div>
-    <div class="hprice">€247,000</div>
-    <div class="hpricenote">Lease from €4,200/mo · Reservation deposit €12,500</div>
-    <div class="hact">
+    <div class="hsub">Vertical consciousness transit. Precision-engineered. Body-assisted positioning.</div>
+    <div class="hpr">€247,000</div>
+    <div class="hprn">Lease from €4,200/mo · Reservation deposit €12,500</div>
+    <div class="hac">
       <button class="btn btn-g btn-lg" onclick="document.getElementById('order').scrollIntoView({behavior:'smooth'})">Reserve Your Pod</button>
       <button class="btn btn-o btn-lg" onclick="document.getElementById('exp').scrollIntoView({behavior:'smooth'})">How It Works</button>
     </div>
   </div>
 
-  <div class="scroll-hint">
-    <div class="scroll-ln"></div>
+  <div class="sh">
+    <div class="sl"></div>
     Scroll
   </div>
 </section>
 
 <!-- EXPERIENCE -->
-<section class="sec sec-alt" id="exp">
-  <div class="scenter">
-    <div class="seyb">The Experience</div>
-    <div class="stit">30 minutes from entry to departure</div>
-    <div class="ssub">Fully automated. No staff. No assistance.</div>
+<section class="sec sec-a" id="exp">
+  <div class="sc">
+    <div class="se">The Experience</div>
+    <div class="st">25 minutes. Fully automated.</div>
+    <div class="ss">Body-assisted seated position. No lying flat. No confined feeling.</div>
   </div>
   <div class="ef">
     <div class="es">
       <div class="esn">01</div>
       <div class="escontent">
-        <div class="est">Enter & Seal</div>
-        <div class="esd">Step through the clamshell and lie supine. The door seals quietly. Soft ambient light. No rush.</div>
-        <div class="esm"><span class="ec">~4 min</span><span class="ec">Self-operated</span></div>
+        <div class="est">Enter & Sit</div>
+        <div class="esd">Step in, sit down. Semi-recumbent seat adjusts to your frame. Door seals with a quiet magnetic lock. The world goes quiet.</div>
+        <div class="esm"><span class="ec">~3 min</span><span class="ec">Self-operated</span></div>
       </div>
     </div>
     <div class="es">
       <div class="esn">02</div>
       <div class="escontent">
-        <div class="est">Quantum Calibration</div>
-        <div class="esd">4,096 channels map your consciousness signature. Below 92% coherence — session holds. Above — transit authorized.</div>
-        <div class="esm"><span class="ec">~8 min</span><span class="ec">Automated</span></div>
+        <div class="est">Neural Calibration</div>
+        <div class="esd">4,096-channel array maps your neural signature in real-time. 92% coherence required before transit is authorized.</div>
+        <div class="esm"><span class="ec">~7 min</span><span class="ec">Automated</span></div>
       </div>
     </div>
     <div class="es">
       <div class="esn">03</div>
       <div class="escontent">
-        <div class="est">Nitrogen Atmosphere</div>
-        <div class="esd">Nitrogen floods at 9L/min. Oxygen drops to under 5% in 90 seconds. Smooth, like falling asleep.</div>
+        <div class="est">Atmosphere Shift</div>
+        <div class="esd">Nitrogen at 9L/min. Oxygen drops below 5% in 90 seconds. Calm, like a slow exhale. No gasping, no distress.</div>
         <div class="esm"><span class="ec">~90 sec</span><span class="ec">No sensation</span></div>
       </div>
     </div>
@@ -474,15 +483,15 @@ body { font-family: 'Inter', sans-serif; background: var(--v); color: var(--txt)
       <div class="esn">04</div>
       <div class="escontent">
         <div class="est">Consciousness Transfer</div>
-        <div class="esd">At 92% coherence, awareness separates. The quantum field maintains your complete pattern. You continue.</div>
-        <div class="esm"><span class="ec">Instant</span><span class="ec">Continuous</span></div>
+        <div class="esd">At 92% coherence, your awareness separates. The quantum field holds your complete pattern. You continue uninterrupted.</div>
+        <div class="esm"><span class="ec">Instant</span><span class="ec">Continuous awareness</span></div>
       </div>
     </div>
     <div class="es">
       <div class="esn">05</div>
       <div class="escontent">
         <div class="est">Return</div>
-        <div class="esd">Thought command, voice keyword, or auto-schedule. Oxygen restores, consciousness returns. You open your eyes.</div>
+        <div class="esd">Voice command, app trigger, or auto-schedule. Oxygen restores, atmosphere normalizes, consciousness returns. Eyes open.</div>
         <div class="esm"><span class="ec">~5 min</span><span class="ec">No side effects</span></div>
       </div>
     </div>
@@ -491,109 +500,134 @@ body { font-family: 'Inter', sans-serif; background: var(--v); color: var(--txt)
 
 <!-- FEATURES -->
 <section class="sec" id="feat">
-  <div class="seyb">The Hardware</div>
-  <div class="stit">Engineered for a lifetime.</div>
-  <div class="ssub" style="margin:0">Printed once. Placed anywhere. Used unlimited times.</div>
+  <div class="se">The Hardware</div>
+  <div class="st">Vertical precision.</div>
+  <div class="ss" style="margin:0">Body-assisted seating. No floor entry. No awkward climbing.</div>
 
   <div class="fl">
     <div class="fl-left">
-      <svg viewBox="0 0 520 340" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 480 620" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <linearGradient id="mb2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f2f2f8"/><stop offset="50%" stop-color="#e6e6ee"/><stop offset="100%" stop-color="#d0d0d8"/></linearGradient>
-          <linearGradient id="ms2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#c8c8d2"/><stop offset="100%" stop-color="#a8a8b4"/></linearGradient>
-          <linearGradient id="mi2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0e0e1a"/><stop offset="100%" stop-color="#060610"/></linearGradient>
-          <linearGradient id="mg2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="rgba(200,225,255,0.07)"/><stop offset="100%" stop-color="rgba(185,210,255,0.08)"/></linearGradient>
-          <filter id="fgg2"><feGaussianBlur stdDeviation="4" result="b"/><feFlood flood-color="#00ff88" flood-opacity="0.85"/><feComposite in2="b" operator="in"/><feComposite in="SourceGraphic"/></filter>
-          <filter id="fggg2"><feGaussianBlur stdDeviation="5" result="b"/><feFlood flood-color="#00ff88" flood-opacity="0.45"/><feComposite in2="b" operator="in"/><feComposite in="SourceGraphic"/></filter>
-          <filter id="fds2"><feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="rgba(0,0,0,0.7)"/></filter>
-          <filter id="fd2"><feOffset dy="-3"/><feGaussianBlur stdDeviation="6" result="b"/><feComposite in="SourceGraphic" in2="b" operator="over"/></filter>
+          <linearGradient id="mbv" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#b0b0bc"/><stop offset="20%" stop-color="#e8e8f0"/><stop offset="50%" stop-color="#f4f4fa"/><stop offset="80%" stop-color="#d8d8e2"/><stop offset="100%" stop-color="#a8a8b4"/></linearGradient>
+          <linearGradient id="mgv" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="rgba(12,15,30,0.97)"/><stop offset="50%" stop-color="rgba(18,22,42,0.95)"/><stop offset="100%" stop-color="rgba(12,15,30,0.97)"/></linearGradient>
+          <linearGradient id="msv" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e1e30"/><stop offset="100%" stop-color="#101020"/></linearGradient>
+          <filter id="fgv"><feGaussianBlur stdDeviation="4" result="b"/><feFlood flood-color="#00ff88" flood-opacity="0.9"/><feComposite in2="b" operator="in"/><feComposite in="SourceGraphic"/></filter>
+          <filter id="fgvv"><feGaussianBlur stdDeviation="3" result="b"/><feFlood flood-color="#00ff88" flood-opacity="0.5"/><feComposite in2="b" operator="in"/><feComposite in="SourceGraphic"/></filter>
+          <filter id="fgbv"><feGaussianBlur stdDeviation="3" result="b"/><feFlood flood-color="#00ccff" flood-opacity="0.85"/><feComposite in2="b" operator="in"/><feComposite in="SourceGraphic"/></filter>
+          <filter id="fdsv"><feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="rgba(0,0,0,0.7)"/></filter>
+          <filter id="fdslv"><feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="rgba(0,0,0,0.5)"/></filter>
         </defs>
-        <ellipse cx="260" cy="328" rx="220" ry="16" fill="rgba(0,0,0,0.55)"/>
-        <ellipse cx="260" cy="218" rx="220" ry="84" fill="url(#mb2)" filter="url(#fds2)"/>
-        <ellipse cx="260" cy="206" rx="218" ry="74" fill="#f8f8fc"/>
-        <ellipse cx="42" cy="218" rx="68" ry="84" fill="url(#mb2)"/>
-        <ellipse cx="42" cy="206" rx="62" ry="74" fill="url(#ms2)"/>
-        <ellipse cx="478" cy="218" rx="68" ry="84" fill="url(#mb2)"/>
-        <ellipse cx="478" cy="206" rx="62" ry="74" fill="url(#ms2)"/>
-        <rect x="120" y="136" width="280" height="154" rx="70" fill="#e0e0e8" filter="url(#fd2)"/>
-        <rect x="128" y="144" width="264" height="138" rx="64" fill="url(#mi2)"/>
-        <!-- Supine figure -->
-        <ellipse cx="205" cy="192" rx="20" ry="18" fill="#181828"/>
-        <rect x="175" cy="200" width="120" height="35" rx="14" fill="#181828"/>
-        <rect x="215" cy="206" width="100" height="28" rx="11" fill="#181828"/>
-        <rect x="290" cy="212" width="90" height="24" rx="10" fill="#181828"/>
-        <rect x="168" cy="206" width="46" height="16" rx="7" fill="#181828"/>
-        <ellipse cx="205" cy="190" rx="26" ry="18" fill="none" stroke="rgba(0,255,136,0.38)" stroke-width="1.1" filter="url(#fggg2)"/>
-        <ellipse cx="205" cy="190" rx="19" ry="13" fill="none" stroke="rgba(0,255,136,0.16)"/>
+        <ellipse cx="240" cy="582" rx="135" ry="13" fill="rgba(0,0,0,0.7)"/>
+        <rect x="108" y="152" width="264" height="432" rx="66" fill="url(#mbv)" filter="url(#fdsv)"/>
+        <rect x="115" y="158" width="18" height="420" rx="9" fill="rgba(255,255,255,0.2)"/>
+        <rect x="347" y="158" width="18" height="420" rx="9" fill="rgba(0,0,0,0.08)"/>
+        <ellipse cx="240" cy="152" rx="132" ry="20" fill="#d0d0dc"/>
+        <ellipse cx="240" cy="148" rx="129" ry="17" fill="#e4e4ec"/>
+        <ellipse cx="240" cy="145" rx="125" ry="14" fill="rgba(0,255,136,0.15)"/>
+        <ellipse cx="240" cy="145" rx="120" ry="12" fill="none" stroke="rgba(0,255,136,0.3)" stroke-width="0.8"/>
+        <circle cx="168" cy="145" r="2" fill="rgba(0,255,136,0.4)"/>
+        <circle cx="240" cy="140" r="2.5" fill="rgba(0,255,136,0.5)"/>
+        <circle cx="312" cy="145" r="2" fill="rgba(0,255,136,0.4)"/>
+        <rect x="114" y="158" width="252" height="420" rx="62" fill="#c0c0cc" filter="url(#fdslv)"/>
+        <rect x="118" y="162" width="244" height="412" rx="58" fill="url(#mgv)"/>
+        <rect x="122" y="167" width="32" height="402" rx="16" fill="rgba(255,255,255,0.035)"/>
         <!-- Seat -->
-        <rect x="132" y="250" width="256" height="14" rx="6" fill="#1e1e2e"/>
-        <rect x="132" y="241" width="256" height="11" rx="5" fill="#181828"/>
-        <!-- Sensor strips -->
-        <rect x="117" y="144" width="5" height="130" rx="2" fill="#c0c0c8"/>
-        <circle cx="119" cy="159" r="2.5" fill="#00ff88" filter="url(#fgg2)"/>
-        <circle cx="119" cy="179" r="2.5" fill="#00ff88" filter="url(#fgg2)"/>
-        <circle cx="119" cy="199" r="2.5" fill="#00ff88"/>
-        <circle cx="119" cy="219" r="2.5" fill="#00ff88" filter="url(#fgg2)"/>
-        <circle cx="119" cy="239" r="2.2" fill="rgba(0,255,136,0.2)"/>
-        <rect x="398" y="144" width="5" height="130" rx="2" fill="#c0c0c8"/>
-        <circle cx="401" cy="159" r="2.5" fill="#00ff88" filter="url(#fgg2)"/>
-        <circle cx="401" cy="179" r="2.5" fill="#00ff88" filter="url(#fgg2)"/>
-        <circle cx="401" cy="199" r="2.5" fill="#00ff88"/>
-        <circle cx="401" cy="219" r="2.5" fill="#00ff88" filter="url(#fgg2)"/>
-        <circle cx="401" cy="239" r="2.2" fill="rgba(0,255,136,0.2)"/>
-        <!-- Door open -->
-        <g transform="rotate(-78 120 218)">
-          <rect x="120" y="136" width="280" height="154" rx="70" fill="#e8e8f0"/>
-          <rect x="120" y="136" width="280" height="154" rx="70" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1"/>
-          <rect x="140" y="156" width="240" height="114" rx="55" fill="url(#mg2)" stroke="rgba(200,220,255,0.15)" stroke-width="0.7"/>
-          <line x1="158" y1="168" x2="158" y2="252" stroke="rgba(255,255,255,0.13)" stroke-width="2.5" stroke-linecap="round"/>
-          <rect x="372" y="202" width="7" height="28" rx="3" fill="#b0b0b8"/>
-          <rect x="370" y="202" width="11" height="28" rx="3.5" fill="#c0c0c8"/>
-        </g>
-        <!-- Display -->
-        <ellipse cx="478" cy="218" rx="44" ry="56" fill="rgba(8,8,16,0.92)"/>
-        <rect x="462" y="178" width="32" height="80" rx="6" fill="#000a08" stroke="rgba(0,255,136,0.25)" stroke-width="0.7"/>
-        <text x="478" y="196" text-anchor="middle" font-family="'Courier New',monospace" font-size="5" font-weight="bold" fill="#00ff88">POD-07</text>
-        <circle cx="478" cy="210" r="2.8" fill="#00ccff"/>
-        <text x="478" y="225" text-anchor="middle" font-family="'Courier New',monospace" font-size="3.8" fill="rgba(0,255,136,0.55)">READY</text>
-        <text x="478" y="248" text-anchor="middle" font-family="'Courier New',monospace" font-size="3.2" fill="rgba(0,255,136,0.25)">COH: 94%</text>
-        <!-- Cable -->
-        <path d="M 458 248 Q 442 268 432 288" stroke="#c8c8d0" stroke-width="4.5" fill="none" stroke-linecap="round"/>
-        <path d="M 458 248 Q 442 268 432 288" stroke="#e0e0e8" stroke-width="2.8" fill="none" stroke-linecap="round"/>
-        <text x="260" y="175" text-anchor="middle" font-family="monospace" font-size="6.5" fill="rgba(75,75,92,0.4)" letter-spacing="4.5">TRANSITUS MK-IV</text>
+        <path d="M 152 418 Q 150 452 152 482 L 328 482 Q 330 452 328 418 Z" fill="url(#msv)"/>
+        <path d="M 156 415 Q 240 410 324 415 L 324 424 Q 240 420 156 424 Z" fill="#222232"/>
+        <!-- Side panels -->
+        <rect x="140" y="340" width="26" height="80" rx="12" fill="url(#msv)"/>
+        <rect x="314" y="340" width="26" height="80" rx="12" fill="url(#msv)"/>
+        <!-- Occupant -->
+        <ellipse cx="240" cy="298" rx="26" ry="28" fill="#14141e"/>
+        <rect x="231" y="322" width="18" height="18" rx="7" fill="#14141e"/>
+        <rect x="198" cy="338" width="84" height="66" rx="20" fill="#14141e"/>
+        <rect x="162" cy="375" width="42" height="20" rx="9" fill="#14141e"/>
+        <rect x="276" cy="375" width="42" height="20" rx="9" fill="#14141e"/>
+        <rect x="205" y="398" width="70" height="26" rx="11" fill="#14141e"/>
+        <rect x="185" y="418" width="110" height="22" rx="10" fill="#14141e"/>
+        <rect x="188" y="435" width="28" height="32" rx="9" fill="#14141e"/>
+        <rect x="264" y="435" width="28" height="32" rx="9" fill="#14141e"/>
+        <!-- Neural halo -->
+        <ellipse cx="240" cy="296" rx="46" ry="14" fill="none" stroke="rgba(0,255,136,0.5)" stroke-width="1.4" filter="url(#fgvv)"/>
+        <ellipse cx="240" cy="296" rx="36" ry="10" fill="none" stroke="rgba(0,255,136,0.22)"/>
+        <circle cx="240" cy="282" r="3.2" fill="#00ff88" filter="url(#fgv)"/>
+        <circle cx="224" cy="286" r="2" fill="rgba(0,255,136,0.55)"/>
+        <circle cx="256" cy="286" r="2" fill="rgba(0,255,136,0.55)"/>
+        <!-- Spine glow -->
+        <rect x="237" y="305" width="6" height="82" rx="3" fill="rgba(0,255,136,0.07)"/>
+        <!-- Heartbeat -->
+        <path d="M 205 368 L 218 368 L 223 361 L 228 375 L 233 363 L 238 370 L 243 368 L 275 368" fill="none" stroke="rgba(0,255,136,0.32)" stroke-width="1" stroke-linecap="round" filter="url(#fgvv)"/>
+        <!-- Left panel -->
+        <rect x="100" y="255" width="14" height="160" rx="7" fill="#b8b8c4"/>
+        <rect x="102" y="259" width="10" height="152" rx="5" fill="#141420"/>
+        <circle cx="107" cy="272" r="2" fill="#00ff88" filter="url(#fgvv)"/>
+        <circle cx="107" cy="292" r="2" fill="#00ff88" filter="url(#fgvv)"/>
+        <circle cx="107" cy="312" r="2" fill="#00ff88"/>
+        <circle cx="107" cy="332" r="2" fill="#00ff88" filter="url(#fgvv)"/>
+        <circle cx="107" cy="352" r="2" fill="#00ff88"/>
+        <circle cx="107" cy="372" r="1.8" fill="rgba(0,255,136,0.2)"/>
+        <!-- Right panel -->
+        <rect x="366" y="248" width="14" height="198" rx="7" fill="#b8b8c4"/>
+        <rect x="368" y="252" width="10" height="190" rx="5" fill="#080812"/>
+        <rect x="370" y="262" width="6" height="80" rx="2" fill="#000d0a" stroke="rgba(0,255,136,0.28)" stroke-width="0.5"/>
+        <text x="373" y="277" text-anchor="middle" font-family="'Courier New',monospace" font-size="3.5" font-weight="bold" fill="#00ff88">POD-07</text>
+        <circle cx="373" cy="289" r="2.5" fill="#00ccff" filter="url(#fgbv)"/>
+        <text x="373" y="302" text-anchor="middle" font-family="'Courier New',monospace" font-size="3" fill="rgba(0,255,136,0.55)">READY</text>
+        <text x="373" y="314" text-anchor="middle" font-family="'Courier New',monospace" font-size="2.5" fill="rgba(0,255,136,0.25)">COH: 94%</text>
+        <text x="373" y="326" text-anchor="middle" font-family="'Courier New',monospace" font-size="2.5" fill="rgba(0,255,136,0.2)">HR: 62</text>
+        <rect x="370" y="350" width="6" height="5" rx="1.5" fill="#1a1a2a"/>
+        <rect x="370" y="360" width="6" height="5" rx="1.5" fill="rgba(0,255,136,0.2)"/>
+        <rect x="370" y="370" width="6" height="5" rx="1.5" fill="#1a1a2a"/>
+        <rect x="370" y="380" width="6" height="5" rx="1.5" fill="#1a1a2a"/>
+        <rect x="370" y="390" width="6" height="5" rx="1.5" fill="#1a1a2a"/>
+        <rect x="370" y="400" width="6" height="5" rx="1.5" fill="#1a1a2a"/>
+        <!-- Base -->
+        <rect x="138" y="558" width="204" height="20" rx="10" fill="#222232" filter="url(#fdslv)"/>
+        <rect x="138" y="558" width="204" height="7" rx="5" fill="#2e2e3e"/>
+        <ellipse cx="240" cy="560" rx="102" ry="6" fill="none" stroke="rgba(0,255,136,0.22)" stroke-width="0.8"/>
+        <!-- Vent -->
+        <rect x="120" y="540" width="240" height="5" rx="2.5" fill="rgba(6,6,14,0.9)"/>
+        <line x1="148" y1="543" x2="148" y2="546" stroke="rgba(0,255,136,0.18)" stroke-width="1"/>
+        <line x1="182" y1="543" x2="182" y2="546" stroke="rgba(0,255,136,0.14)" stroke-width="1"/>
+        <line x1="216" y1="543" x2="216" y2="546" stroke="rgba(0,255,136,0.18)" stroke-width="1"/>
+        <line x1="250" y1="543" x2="250" y2="546" stroke="rgba(0,255,136,0.14)" stroke-width="1"/>
+        <line x1="284" y1="543" x2="284" y2="546" stroke="rgba(0,255,136,0.18)" stroke-width="1"/>
+        <line x1="318" y1="543" x2="318" y2="546" stroke="rgba(0,255,136,0.14)" stroke-width="1"/>
+        <line x1="352" y1="543" x2="352" y2="546" stroke="rgba(0,255,136,0.18)" stroke-width="1"/>
+        <text x="240" y="510" text-anchor="middle" font-family="monospace" font-size="6.5" fill="rgba(75,75,92,0.3)" letter-spacing="4.5">TRANSITUS MK-IV</text>
       </svg>
     </div>
     <div class="fr">
-      <div class="fi"><div class="fii">🖨️</div><div><div class="fit">3D Printed On-Site</div><div class="fid">Carbon fiber composite, printed in 72 hours. No transport. Fits through any 900mm doorway.</div></div></div>
-      <div class="fi"><div class="fii">🚪</div><div><div class="fit">Full Clamshell Entry</div><div class="fid">Upper shell opens 85°. Wide 900mm clearance. Wheelchair-height. No assistance needed.</div></div></div>
-      <div class="fi"><div class="fii">⚡</div><div><div class="fit">Standard Power</div><div class="fid">220V / 32A. Peak 2.4kW, standby 180W. 72-hour LiFePO₄ UPS backup.</div></div></div>
-      <div class="fi"><div class="fii">🧠</div><div><div class="fit">4,096-Channel Array</div><div class="fid">Quantum coherence field, auto-tunes to your neural signature. 92% threshold enforced.</div></div></div>
-      <div class="fi"><div class="fii">💧</div><div><div class="fit">Integrated N₂ System</div><div class="fid">9L tank at 200 bar. Refillable anywhere. No per-session consumables.</div></div></div>
-      <div class="fi"><div class="fii">📱</div><div><div class="fit">Private App Control</div><div class="fid">iOS/Android. Session management, destination, return scheduling, live vitals. Local only.</div></div></div>
+      <div class="fi"><div class="fii">🪑</div><div><div class="fit">Body-Assisted Seating</div><div class="fid">Semi-recumbent seat. Wheelchair-height entry. No floor entry. No climbing. Step in and sit.</div></div></div>
+      <div class="fi"><div class="fii">🖨️</div><div><div class="fit">3D Printed In-Place</div><div class="fid">Carbon fiber composite. Printed on-site in 72 hours. Disassembles for doorways. Reassembles in hours.</div></div></div>
+      <div class="fi"><div class="fii">🧠</div><div><div class="fit">4,096-Channel Array</div><div class="fid">Quantum coherence field auto-tunes to your neural signature. 92% coherence threshold. No exceptions.</div></div></div>
+      <div class="fi"><div class="fii">⚡</div><div><div class="fit">Standard Power + UPS</div><div class="fid">220V / 32A. 2.4kW peak, 180W standby. 72-hour LiFePO₄ backup. Total power loss protection.</div></div></div>
+      <div class="fi"><div class="fii">💧</div><div><div class="fit">Nitrogen System</div><div class="fid">9L at 200 bar. Refillable from any industrial supplier. No consumables cost per session.</div></div></div>
+      <div class="fi"><div class="fii">📱</div><div><div class="fit">Private App</div><div class="fid">iOS/Android. Session control, vitals, return scheduling. Local network only. No cloud dependency.</div></div></div>
     </div>
   </div>
 </section>
 
 <!-- SPECS -->
-<section class="sec sec-alt" id="specs">
-  <div class="scenter">
-    <div class="seyb">Technical</div>
-    <div class="stit">Full Specifications</div>
+<section class="sec sec-a" id="specs">
+  <div class="sc">
+    <div class="se">Technical</div>
+    <div class="st">Full Specifications</div>
   </div>
   <div class="sg">
     <div class="sc"><div class="sct">Dimensions & Build</div>
-      <div class="sr"><span class="srk">Length</span><span class="srv">3,200 mm</span></div>
-      <div class="sr"><span class="srk">Diameter</span><span class="srv">1,400 mm</span></div>
-      <div class="sr"><span class="srk">Chamber</span><span class="srv">900 mm</span></div>
-      <div class="sr"><span class="srk">Weight</span><span class="srv">680 kg</span></div>
-      <div class="sr"><span class="srk">Material</span><span class="srv">Carbon fiber composite</span></div>
+      <div class="sr"><span class="srk">Height</span><span class="srv">2,400 mm</span></div>
+      <div class="sr"><span class="srk">Diameter</span><span class="srv">1,200 mm</span></div>
+      <div class="sr"><span class="srk">Chamber Width</span><span class="srv">900 mm</span></div>
+      <div class="sr"><span class="srk">Weight</span><span class="srv">640 kg</span></div>
+      <div class="sr"><span class="srk">Shell</span><span class="srv">Carbon fiber composite</span></div>
       <div class="sr"><span class="srk">Print Time</span><span class="srv">72 hours on-site</span></div>
     </div>
     <div class="sc"><div class="sct">Power & Environment</div>
       <div class="sr"><span class="srk">Supply</span><span class="srv">220V AC / 50Hz</span></div>
       <div class="sr"><span class="srk">Peak Draw</span><span class="srv">2.4 kW</span></div>
       <div class="sr"><span class="srk">Standby</span><span class="srv">180W</span></div>
-      <div class="sr"><span class="srk">UPS</span><span class="srv">72 hours LiFePO₄</span></div>
+      <div class="sr"><span class="srk">UPS Backup</span><span class="srv">72 hours LiFePO₄</span></div>
       <div class="sr"><span class="srk">Temp Range</span><span class="srv">18°C – 28°C</span></div>
       <div class="sr"><span class="srk">Noise</span><span class="srv"><35 dB(A)</span></div>
     </div>
@@ -602,13 +636,13 @@ body { font-family: 'Inter', sans-serif; background: var(--v); color: var(--txt)
       <div class="sr"><span class="srk">Channels</span><span class="srv">4,096 simultaneous</span></div>
       <div class="sr"><span class="srk">Coherence</span><span class="srv">≥ 92% required</span></div>
       <div class="sr"><span class="srk">Transit</span><span class="srv">Unlimited duration</span></div>
-      <div class="sr"><span class="srk">Return</span><span class="srv">Auto / Manual / Deferred</span></div>
+      <div class="sr"><span class="srk">Return</span><span class="srv">Auto / Voice / App</span></div>
     </div>
-    <div class="sc"><div class="sct">Safety</div>
+    <div class="sc"><div class="sct">Safety & Compliance</div>
       <div class="sr"><span class="srk">CPUs</span><span class="srv">3 independent</span></div>
-      <div class="sr"><span class="srk">Recall</span><span class="srv">Biometric + Voice + Thought</span></div>
+      <div class="sr"><span class="srk">Recall</span><span class="srv">Biometric + Voice + App</span></div>
       <div class="sr"><span class="srk">Vitals</span><span class="srv">50Hz continuous</span></div>
-      <div class="sr"><span class="srk">Faraday</span><span class="srv">6mm mesh, 120dB</span></div>
+      <div class="sr"><span class="srk">Faraday</span><span class="srv">6mm copper mesh, 120dB</span></div>
       <span class="sb">IEC 60601-1-10</span>
     </div>
   </div>
@@ -616,27 +650,27 @@ body { font-family: 'Inter', sans-serif; background: var(--v); color: var(--txt)
 
 <!-- SAFETY -->
 <section class="sec" id="safety">
-  <div class="scenter">
-    <div class="seyb">Protection</div>
-    <div class="stit">Seven independent layers.</div>
-    <div class="ssub">Every layer operates independently.</div>
+  <div class="sc">
+    <div class="se">Protection</div>
+    <div class="st">Six independent layers.</div>
+    <div class="ss">Every system operates independently. Failure in one does not affect the others.</div>
   </div>
   <div class="sfg">
-    <div class="sfcard"><div class="sfi">🖥️</div><div><div class="sft">Triple-Redundant CPUs</div><div class="sfd">Three processors. <10ms failover. Session never interrupts.</div></div></div>
-    <div class="sfcard"><div class="sfi">🩺</div><div><div class="sft">50Hz Vitals Monitor</div><div class="sfd">HR, O₂, temp, neural. Anomaly triggers automatic recall.</div></div></div>
-    <div class="sfcard"><div class="sfi">🔔</div><div><div class="sft">Emergency Recall</div><div class="sfd">Three triggers: biometric, voice keyword, thought command.</div></div></div>
-    <div class="sfcard"><div class="sfi">💓</div><div><div class="sft">Flatline Protocol</div><div class="sfd">Critical vitals: recall, oxygen restore, EMS notified.</div></div></div>
-    <div class="sfcard"><div class="sfi">🛡️</div><div><div class="sft">Faraday Cage</div><div class="sfd">Integrated 6mm copper mesh. EMF protected. 120dB.</div></div></div>
-    <div class="sfcard"><div class="sfi">🔋</div><div><div class="sft">72-Hour UPS</div><div class="sfd">LiFePO₄ backup maintains all systems during power loss.</div></div></div>
+    <div class="sfc"><div class="sfi">🖥️</div><div><div class="sft">Triple-Redundant CPUs</div><div class="sfd">Three processors. <10ms failover. Session never drops.</div></div></div>
+    <div class="sfc"><div class="sfi">🩺</div><div><div class="sft">50Hz Vitals Monitor</div><div class="sfd">Heart rate, O₂, temperature, neural. Anomaly triggers recall.</div></div></div>
+    <div class="sfc"><div class="sfi">🔔</div><div><div class="sft">Emergency Recall</div><div class="sfd">Voice keyword, app button, or biometric distress triggers recall.</div></div></div>
+    <div class="sfc"><div class="sfi">💓</div><div><div class="sft">Flatline Protocol</div><div class="sfd">Critical vitals: oxygen restore, EMS notification, full recall.</div></div></div>
+    <div class="sfc"><div class="sfi">🛡️</div><div><div class="sft">Faraday Cage</div><div class="sfd">Integrated 6mm copper mesh. EMF protected. 120dB attenuation.</div></div></div>
+    <div class="sfc"><div class="sfi">🔋</div><div><div class="sft">72-Hour UPS</div><div class="sfd">LiFePO₄ backup. Complete power failure maintained automatically.</div></div></div>
   </div>
 </section>
 
 <!-- ORDER -->
-<section class="sec sec-alt" id="order">
-  <div class="scenter">
-    <div class="seyb">Reserve</div>
-    <div class="stit">Secure Your Production Slot</div>
-    <div class="ssub">€12,500 deposit locks your 2026 slot. 8–14 weeks from print start.</div>
+<section class="sec sec-a" id="order">
+  <div class="sc">
+    <div class="se">Reserve</div>
+    <div class="st">Secure Your Production Slot</div>
+    <div class="ss">€12,500 deposit locks your 2026 slot. 8–14 weeks from commencement.</div>
   </div>
   <div class="ol">
     <div class="ol-left">
@@ -668,13 +702,13 @@ body { font-family: 'Inter', sans-serif; background: var(--v); color: var(--txt)
       <div class="orp">
         <div class="orpt">Your Configuration</div>
         <div class="ori"><span class="l">Model</span><span class="v">TransitUs MK-IV</span></div>
+        <div class="ori"><span class="l">Orientation</span><span class="v">Vertical</span></div>
         <div class="ori"><span class="l">Shell</span><span class="v">Carbon Fiber Composite</span></div>
-        <div class="ori"><span class="l">Power</span><span class="v">220V / 50Hz</span></div>
         <div class="ori"><span class="l">Channels</span><span class="v">4,096</span></div>
         <div class="ori"><span class="l">UPS</span><span class="v">72 hours</span></div>
         <div class="ori"><span class="l">Warranty</span><span class="v">Lifetime structural</span></div>
         <div class="ori"><span class="l">Delivery</span><span class="v">Q3–Q4 2026</span></div>
-        <div class="otr"><span class="l" style="font-size:0.85rem;font-weight:700;color:#fff">Total</span><span class="v">€247,000</span></div>
+        <div class="otr"><span class="l" style="font-size:0.82rem;font-weight:700;color:#fff">Total</span><span class="v">€247,000</span></div>
       </div>
       <div class="od">✓ Refundable deposit · Slot held 14 days</div>
     </div>

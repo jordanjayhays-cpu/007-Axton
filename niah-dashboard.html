@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Niah — South Summit Dashboard</title>
+<title>Niah — Event Organizer Dashboard</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   :root {
@@ -14,735 +14,701 @@
     --border: #332D29;
     --pending: #E8C547;
     --confirmed: #4CAF50;
-    --notified: #FF8C00;
-    --survey-sent: #9C27B0;
-    --completed: #2196F3;
+    --highlight: #C4785A;
   }
   body { background: var(--bg); color: var(--off-white); font-family: 'Segoe UI', sans-serif; min-height: 100vh; }
   a { color: var(--terracotta); text-decoration: none; }
   a:hover { text-decoration: underline; }
 
   /* HEADER */
-  header { background: var(--border); padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--taupe); }
+  header { background: var(--border); padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--terracotta); }
   .brand { display: flex; align-items: center; gap: 12px; }
-  .brand-icon { width: 32px; height: 32px; background: var(--terracotta); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; }
-  .brand-name { font-size: 20px; font-weight: 700; color: var(--off-white); letter-spacing: 2px; }
-  .event-badge { background: var(--terracotta); color: var(--off-white); padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; }
+  .brand-icon { width: 36px; height: 36px; background: var(--terracotta); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; }
+  .brand-name { font-size: 20px; font-weight: 700; letter-spacing: 3px; }
   .header-right { display: flex; align-items: center; gap: 16px; font-size: 13px; color: var(--taupe); }
 
   /* MAIN */
   main { max-width: 1400px; margin: 0 auto; padding: 24px; }
 
+  /* SECTION HEADERS */
+  h2 { font-size: 12px; text-transform: uppercase; letter-spacing: 2px; color: var(--taupe); margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  h3 { font-size: 13px; color: var(--off-white); margin-bottom: 8px; font-weight: 600; }
+
   /* STATS BAR */
-  .stats-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin-bottom: 32px; }
-  .stat-card { background: var(--border); border-radius: 12px; padding: 20px; border: 1px solid var(--taupe); }
-  .stat-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--taupe); margin-bottom: 8px; }
-  .stat-value { font-size: 36px; font-weight: 700; color: var(--off-white); }
-  .stat-sub { font-size: 11px; color: var(--taupe); margin-top: 4px; }
-  .stat-card.highlight { border-color: var(--terracotta); }
-  .stat-card.highlight .stat-value { color: var(--terracotta); }
+  .stats-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 32px; }
+  .stat-card { background: var(--border); border-radius: 10px; padding: 16px; border: 1px solid var(--border); }
+  .stat-card.top { border-color: var(--terracotta); }
+  .stat-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--taupe); margin-bottom: 6px; }
+  .stat-value { font-size: 32px; font-weight: 700; }
+  .stat-value.terracotta { color: var(--terracotta); }
+  .stat-value.off-white { color: var(--off-white); }
+  .stat-sub { font-size: 10px; color: var(--taupe); margin-top: 4px; }
+
+  /* FILTER BAR */
+  .filter-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; align-items: center; }
+  .filter-label { font-size: 11px; color: var(--taupe); text-transform: uppercase; letter-spacing: 1px; }
+  .filter-btn { background: var(--border); border: 1px solid var(--border); color: var(--taupe); padding: 6px 14px; border-radius: 20px; font-size: 12px; cursor: pointer; transition: all 0.2s; }
+  .filter-btn:hover, .filter-btn.active { background: var(--terracotta); border-color: var(--terracotta); color: var(--off-white); }
+  .search-box { background: var(--border); border: 1px solid var(--border); color: var(--off-white); padding: 6px 14px; border-radius: 20px; font-size: 12px; outline: none; }
+  .search-box::placeholder { color: var(--taupe); }
+
+  /* EVENTS GRID */
+  .events-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; margin-bottom: 40px; }
+  .event-card { background: var(--border); border-radius: 12px; padding: 20px; border: 1px solid var(--border); transition: border-color 0.2s; position: relative; overflow: hidden; }
+  .event-card:hover { border-color: var(--taupe); }
+  .event-card.top-event { border-color: var(--terracotta); }
+  .event-card.top-event::before { content: '★ MUST ATTEND'; position: absolute; top: 12px; right: 12px; background: var(--terracotta); color: var(--off-white); font-size: 9px; padding: 3px 8px; border-radius: 4px; font-weight: 700; letter-spacing: 1px; }
+  .event-type { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--taupe); margin-bottom: 6px; }
+  .event-name { font-size: 15px; font-weight: 700; color: var(--off-white); margin-bottom: 8px; line-height: 1.3; }
+  .event-meta { display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px; }
+  .event-meta-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--taupe); }
+  .event-meta-icon { width: 16px; text-align: center; }
+  .event-desc { font-size: 12px; color: var(--off-white); line-height: 1.5; opacity: 0.8; margin-bottom: 12px; }
+  .event-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+  .tag { background: var(--bg); border: 1px solid var(--border); color: var(--taupe); font-size: 10px; padding: 3px 8px; border-radius: 4px; }
+  .event-url { display: inline-block; background: var(--bg); border: 1px solid var(--terracotta); color: var(--terracotta); padding: 6px 14px; border-radius: 6px; font-size: 11px; font-weight: 600; transition: all 0.2s; }
+  .event-url:hover { background: var(--terracotta); color: var(--off-white); text-decoration: none; }
+
+  /* SOUTH SUMMIT SECTION */
+  .south-summit { background: var(--border); border-radius: 12px; padding: 24px; border: 1px solid var(--terracotta); margin-bottom: 40px; }
+  .ss-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+  .ss-title { font-size: 18px; font-weight: 700; color: var(--terracotta); }
+  .ss-date { font-size: 12px; color: var(--taupe); margin-top: 4px; }
+  .ss-badge { background: var(--terracotta); color: var(--off-white); padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+  .ss-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+  .ss-item { }
+  .ss-item-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--taupe); margin-bottom: 4px; }
+  .ss-item-value { font-size: 13px; color: var(--off-white); }
+  .ss-url { color: var(--terracotta); }
+
+  /* LOOP ENGINEERING FRAMEWORK */
+  .framework { background: var(--border); border-radius: 12px; padding: 24px; border: 1px solid var(--border); margin-bottom: 40px; }
+  .framework-intro { font-size: 13px; color: var(--taupe); margin-bottom: 20px; line-height: 1.6; max-width: 800px; }
+  .loop-diagram { display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; padding: 20px; background: var(--bg); border-radius: 10px; }
+  .loop-node { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .loop-icon { width: 56px; height: 56px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 700; }
+  .loop-icon.check { background: #1a4d2e; color: var(--confirmed); border: 2px solid var(--confirmed); }
+  .loop-icon.decide { background: #4d3d1a; color: var(--pending); border: 2px solid var(--pending); }
+  .loop-icon.act { background: #1a2d4d; color: #64b5f6; border: 2px solid #64b5f6; }
+  .loop-icon.feedback { background: #4d1a3d; color: #ce93d8; border: 2px solid #ce93d8; }
+  .loop-icon.done { background: #3d4d1a; color: #a5d6a7; border: 2px solid #a5d6a7; }
+  .loop-label { font-size: 10px; color: var(--taupe); text-align: center; text-transform: uppercase; letter-spacing: 1px; }
+  .loop-arrow { color: var(--taupe); font-size: 20px; }
+  .loop-types { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  @media (max-width: 700px) { .loop-types { grid-template-columns: 1fr; } }
+  .loop-type { background: var(--bg); border-radius: 8px; padding: 16px; border: 1px solid var(--border); }
+  .loop-type-name { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+  .loop-type-name.det { color: var(--confirmed); }
+  .loop-type-name.non-det { color: var(--pending); }
+  .loop-type-desc { font-size: 12px; color: var(--taupe); line-height: 1.5; }
+  .loop-keys { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
+  .loop-key { background: var(--bg); border-radius: 6px; padding: 10px 14px; border: 1px solid var(--border); }
+  .loop-key-name { font-size: 11px; font-weight: 700; color: var(--off-white); margin-bottom: 4px; }
+  .loop-key-desc { font-size: 11px; color: var(--taupe); }
+
+  /* TOOL FLOW */
+  .tool-flow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 32px; padding: 20px; background: var(--border); border-radius: 12px; }
 
   /* KPI STATUS */
   .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 32px; }
-  .kpi-item { display: flex; justify-content: space-between; align-items: center; background: var(--border); padding: 12px 16px; border-radius: 8px; border: 1px solid var(--border); }
-  .kpi-name { font-size: 13px; color: var(--off-white); }
+  .kpi-item { display: flex; justify-content: space-between; align-items: center; background: var(--border); padding: 12px 16px; border-radius: 8px; }
+  .kpi-name { font-size: 13px; }
   .kpi-value { font-size: 14px; font-weight: 700; }
   .kpi-good { color: var(--confirmed); }
   .kpi-warn { color: var(--pending); }
-  .kpi-bad { color: #e74c3c; }
-
-  /* SECTION HEADERS */
-  h2 { font-size: 14px; text-transform: uppercase; letter-spacing: 2px; color: var(--taupe); margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
-
-  /* TOOL FLOW */
-  .tool-flow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 32px; padding: 20px; background: var(--border); border-radius: 12px; border: 1px solid var(--border); }
-  .tool-node { display: flex; flex-direction: column; align-items: center; gap: 4px; }
-  .tool-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; color: var(--off-white); }
-  .tool-name { font-size: 10px; color: var(--taupe); text-align: center; }
-  .tool-arrow { color: var(--taupe); font-size: 18px; }
-
-  /* OPERATIONAL FLOW */
-  .op-flow { display: grid; grid-template-columns: 1fr 2fr; gap: 24px; margin-bottom: 32px; }
-  @media (max-width: 900px) { .op-flow { grid-template-columns: 1fr; } }
-
-  .flow-steps { display: flex; flex-direction: column; gap: 8px; }
-  .flow-step { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: var(--border); border-radius: 8px; border-left: 3px solid var(--taupe); }
-  .flow-step.purple { border-left-color: #9C27B0; }
-  .flow-step.green { border-left-color: #4CAF50; }
-  .flow-step.blue { border-left-color: #2196F3; }
-  .flow-step.orange { border-left-color: #FF8C00; }
-  .flow-step.dark { border-left-color: #7C4DFF; }
-  .step-num { width: 28px; height: 28px; border-radius: 50%; background: var(--taupe); color: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
-  .step-text { font-size: 13px; color: var(--off-white); }
-  .step-sub { font-size: 11px; color: var(--taupe); }
-
-  /* CENTRAL FLOWCHART */
-  .flowchart { background: var(--border); border-radius: 12px; padding: 24px; border: 1px solid var(--border); }
-  .flowchart h3 { font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--taupe); margin-bottom: 16px; }
-  .chart-row { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 8px; }
-  .chart-node { background: var(--bg); border: 2px solid var(--border); border-radius: 8px; padding: 10px 16px; font-size: 12px; text-align: center; min-width: 120px; }
-  .chart-node.trigger { border-color: var(--terracotta); color: var(--terracotta); }
-  .chart-node.action { border-color: var(--taupe); }
-  .chart-node.decision { border-color: var(--pending); border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; font-size: 10px; color: var(--pending); }
-  .chart-node.success { border-color: var(--confirmed); color: var(--confirmed); }
-  .chart-node.warning { border-color: var(--notified); color: var(--notified); }
-  .chart-node.purple { border-color: #9C27B0; color: #9C27B0; }
-  .chart-node.blue { border-color: #2196F3; color: #2196F3; }
-  .chart-arrow { color: var(--taupe); font-size: 16px; }
-  .chart-arrow-down { display: block; text-align: center; color: var(--taupe); font-size: 18px; margin: 4px 0; }
-  .chart-branch { display: flex; gap: 32px; justify-content: center; margin-top: 12px; }
-  .chart-branch-item { display: flex; flex-direction: column; align-items: center; gap: 4px; }
-  .chart-label { font-size: 10px; color: var(--taupe); text-transform: uppercase; }
 
   /* STATUS LEGEND */
   .legend { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 32px; }
   .legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--taupe); }
   .legend-dot { width: 12px; height: 12px; border-radius: 3px; }
-  .legend-dot.pending { background: var(--pending); }
-  .legend-dot.confirmed { background: var(--confirmed); }
-  .legend-dot.notified { background: var(--notified); }
-  .legend-dot.survey-sent { background: var(--survey-sent); }
-  .legend-dot.completed { background: var(--completed); }
-
-  /* CONTACTS TABLE */
-  .table-wrap { background: var(--border); border-radius: 12px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 32px; }
-  table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  th { background: var(--bg); padding: 12px 16px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--taupe); border-bottom: 1px solid var(--border); }
-  td { padding: 12px 16px; border-bottom: 1px solid var(--border); color: var(--off-white); }
-  tr:last-child td { border-bottom: none; }
-  tr:hover td { background: rgba(255,255,255,0.03); }
-  .status-badge { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
-  .status-pending { background: rgba(232,197,71,0.2); color: var(--pending); }
-  .status-confirmed { background: rgba(76,175,80,0.2); color: var(--confirmed); }
-  .status-matched { background: rgba(33,150,243,0.2); color: var(--completed); }
-  .status-notified { background: rgba(255,140,0,0.2); color: var(--notified); }
-  .status-survey { background: rgba(156,39,176,0.2); color: var(--survey-sent); }
-  .role-tag { display: inline-block; padding: 2px 8px; background: var(--bg); border-radius: 4px; font-size: 11px; color: var(--taupe); margin-right: 4px; }
-
-  /* EMAIL SEQUENCE */
-  .email-seq { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 32px; }
-  .email-card { background: var(--border); border-radius: 12px; padding: 20px; border: 1px solid var(--border); }
-  .email-day { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--taupe); margin-bottom: 8px; }
-  .email-subject { font-size: 14px; font-weight: 600; color: var(--off-white); margin-bottom: 8px; }
-  .email-preview { font-size: 12px; color: var(--taupe); line-height: 1.5; }
-  .email-status { margin-top: 12px; font-size: 11px; font-weight: 600; }
-  .email-status.ready { color: var(--confirmed); }
-  .email-status.todo { color: var(--pending); }
-
-  /* TOOLS GRID */
-  .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 32px; }
-  .tool-card { background: var(--border); border-radius: 10px; padding: 16px; border: 1px solid var(--border); text-align: center; }
-  .tool-card-name { font-size: 12px; font-weight: 600; color: var(--off-white); margin-top: 8px; }
-  .tool-card-status { font-size: 11px; margin-top: 4px; }
-  .tool-ready { color: var(--confirmed); }
-  .tool-todo { color: var(--pending); }
-  .tool-wip { color: var(--notified); }
-
-  /* COST CARD */
-  .cost-card { background: var(--border); border-radius: 12px; padding: 24px; border: 1px solid var(--terracotta); margin-bottom: 32px; max-width: 500px; }
-  .cost-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
-  .cost-row:last-child { border-bottom: none; }
-  .cost-total { font-weight: 700; font-size: 16px; color: var(--off-white); padding-top: 12px; margin-top: 8px; border-top: 2px solid var(--terracotta); }
-  .cost-amount { color: var(--terracotta); font-weight: 700; }
 
   /* FOOTER */
-  footer { text-align: center; padding: 32px; font-size: 12px; color: var(--taupe); border-top: 1px solid var(--border); margin-top: 48px; }
-
-  /* LIVE INDICATOR */
-  .live-dot { width: 8px; height: 8px; background: var(--confirmed); border-radius: 50%; animation: pulse 2s infinite; display: inline-block; }
-  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-
-  /* TALLY SURVEY PREVIEW */
-  .survey-preview { background: var(--border); border-radius: 12px; padding: 24px; border: 1px solid var(--border); margin-bottom: 32px; }
-  .survey-field { padding: 12px 0; border-bottom: 1px solid var(--border); }
-  .survey-field:last-child { border-bottom: none; }
-  .survey-field-label { font-size: 13px; color: var(--off-white); margin-bottom: 4px; }
-  .survey-field-type { font-size: 11px; color: var(--taupe); }
-  .survey-field.req .survey-field-label::after { content: ' *'; color: var(--terracotta); }
+  footer { border-top: 1px solid var(--border); padding: 16px 24px; text-align: center; font-size: 11px; color: var(--taupe); margin-top: 40px; }
 </style>
 </head>
 <body>
 
 <header>
   <div class="brand">
-    <div class="brand-icon">N</div>
+    <div class="brand-icon">⟁</div>
     <span class="brand-name">NIAH</span>
   </div>
-  <div class="event-badge">South Summit Afterparty · June 4, 2026</div>
   <div class="header-right">
-    <span><span class="live-dot"></span> Live</span>
-    <span>La Nave, Madrid</span>
-    <span>50–150 people</span>
+    <span>Event Organizer Intelligence</span>
+    <span class="event-badge">Madrid 2026</span>
   </div>
 </header>
 
 <main>
 
-  <!-- STATS -->
-  <div class="stats-bar">
-    <div class="stat-card">
-      <div class="stat-label">RSVPs</div>
-      <div class="stat-value">0</div>
-      <div class="stat-sub">Target: 150</div>
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat-card top">
+    <div class="stat-label">Total Events Found</div>
+    <div class="stat-value terracotta">20</div>
+    <div class="stat-sub">Spain 2026</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">★ Top Priority</div>
+    <div class="stat-value off-white">5</div>
+    <div class="stat-sub">Must attend</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Exhibitions</div>
+    <div class="stat-value off-white">6</div>
+    <div class="stat-sub">Trade shows</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Forums & Confs</div>
+    <div class="stat-value off-white">8</div>
+    <div class="stat-sub">B2B + MICE</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Event Listings</div>
+    <div class="stat-value off-white">6</div>
+    <div class="stat-sub">Directories</div>
+  </div>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <span class="filter-label">Filter:</span>
+  <button class="filter-btn active" onclick="filterEvents('all')">All</button>
+  <button class="filter-btn" onclick="filterEvents('exhibition')">Exhibitions</button>
+  <button class="filter-btn" onclick="filterEvents('forum')">Forums</button>
+  <button class="filter-btn" onclick="filterEvents('conference')">Conferences</button>
+  <button class="filter-btn" onclick="filterEvents('directory')">Directories</button>
+  <button class="filter-btn" onclick="filterEvents('miami')">IBTM Only</button>
+  <input type="text" class="search-box" placeholder="Search events..." oninput="searchEvents(this.value)">
+</div>
+
+<!-- TOP PRIORITY EVENTS -->
+<h2>★ Top Priority — Must Attend</h2>
+<div class="events-grid" id="eventsGrid">
+
+  <!-- IBTM WORLD — #1 PRIORITY -->
+  <div class="event-card top-event" data-type="exhibition" data-name="ibtm world barcelona">
+    <div class="event-type">Trade Exhibition — Global Events Industry</div>
+    <div class="event-name">IBTM World Barcelona</div>
+    <div class="event-meta">
+      <div class="event-meta-item"><span class="event-meta-icon">📅</span> Nov 17–19, 2026</div>
+      <div class="event-meta-item"><span class="event-meta-icon">📍</span> Barcelona, Spain</div>
+      <div class="event-meta-item"><span class="event-meta-icon">👥</span> 35,000+ trade visitors · 2,500 exhibitors · 150 countries</div>
     </div>
-    <div class="stat-card highlight">
-      <div class="stat-label">Matches Made</div>
-      <div class="stat-value">0</div>
-      <div class="stat-sub">Target: 80%+</div>
+    <div class="event-desc">World's largest exhibition for meetings & events. Every corporate planner, DMC, PCO, venue, and tech vendor attends. THE global events industry expo. 3 days of face-to-face prospecting.</div>
+    <div class="event-tags">
+      <span class="tag">Corporate Planners</span>
+      <span class="tag">DMCs</span>
+      <span class="tag">PCOs</span>
+      <span class="tag">Venues</span>
+      <span class="tag">Event Tech</span>
     </div>
-    <div class="stat-card">
-      <div class="stat-label">Notified</div>
-      <div class="stat-value">0</div>
-      <div class="stat-sub">WhatsApp + Email</div>
+    <a class="event-url" href="https://www.ibtmworld.com/" target="_blank">ibtmworld.com →</a>
+  </div>
+
+  <!-- GMF SPECIAL VENUES -->
+  <div class="event-card top-event" data-type="forum" data-name="gmf special venues destinations catalonia">
+    <div class="event-type">B2B Forum — MICE Buyers & Suppliers</div>
+    <div class="event-name">GMF Special Venues & Destinations</div>
+    <div class="event-meta">
+      <div class="event-meta-item"><span class="event-meta-icon">📅</span> Date TBC · 2026</div>
+      <div class="event-meta-item"><span class="event-meta-icon">📍</span> Catalonia / Salou, Spain</div>
+      <div class="event-meta-item"><span class="event-meta-icon">👥</span> 60–65 pre-qualified MICE buyers</div>
     </div>
-    <div class="stat-card">
-      <div class="stat-label">Survey Responses</div>
-      <div class="stat-value">0</div>
-      <div class="stat-sub">Target: 40%+</div>
+    <div class="event-desc">Pre-qualified MICE buyers: event agencies, DMCs, PCOs, corporate event managers. 70% Catalonia, 25% rest of Spain. Focused on venues, unique locations, boutique hotels, convention centers.</div>
+    <div class="event-tags">
+      <span class="tag">Venues</span>
+      <span class="tag">DMCs</span>
+      <span class="tag">Corporate Planners</span>
+      <span class="tag">MICE</span>
     </div>
-    <div class="stat-card">
-      <div class="stat-label">Satisfaction</div>
-      <div class="stat-value">—</div>
-      <div class="stat-sub">Post-event</div>
+    <a class="event-url" href="https://globalmiceforums.com/en/events/" target="_blank">globalmiceforums.com →</a>
+  </div>
+
+  <!-- GLOBAL MICE FORUM CÓRDOBA -->
+  <div class="event-card top-event" data-type="forum" data-name="global mice forum córdoba associative meeting tourism">
+    <div class="event-type">Forum — Associative Meeting Tourism</div>
+    <div class="event-name">Global MICE Forum Córdoba</div>
+    <div class="event-meta">
+      <div class="event-meta-item"><span class="event-meta-icon">📅</span> Date TBC · 2026</div>
+      <div class="event-meta-item"><span class="event-meta-icon">📍</span> Córdoba, Spain</div>
+      <div class="event-meta-item"><span class="event-meta-icon">👥</span> PCO agencies + association event managers</div>
+    </div>
+    <div class="event-desc">Exclusive forum for medical, scientific and professional societies and PCO agencies. Transatlantic business connecting European and US corporate planners. Great for relationship building with professional congress organizers.</div>
+    <div class="event-tags">
+      <span class="tag">PCOs</span>
+      <span class="tag">Associations</span>
+      <span class="tag">Medical/Scientific</span>
+      <span class="tag">Transatlantic</span>
+    </div>
+    <a class="event-url" href="https://globalmiceforums.com/en/global-mice-forums-revela-su-programacion-2026/" target="_blank">globalmiceforums.com →</a>
+  </div>
+
+  <!-- MADRID EVENTS CALENDAR -->
+  <div class="event-card top-event" data-type="directory" data-name="madrid events calendar 2026">
+    <div class="event-type">Events Calendar — Official Madrid Tourism</div>
+    <div class="event-name">Madrid Events Calendar 2026</div>
+    <div class="event-meta">
+      <div class="event-meta-item"><span class="event-meta-icon">📅</span> Ongoing · 324 events in June</div>
+      <div class="event-meta-item"><span class="event-meta-icon">📍</span> Madrid, Spain</div>
+      <div class="event-meta-item"><span class="event-meta-icon">👥</span> All event types</div>
+    </div>
+    <div class="event-desc">Official Madrid tourism events calendar. 324 events in June alone. Useful for identifying when corporate planners will be in Madrid — plan outreach around major events when they're already in town.</div>
+    <div class="event-tags">
+      <span class="tag">Madrid</span>
+      <span class="tag">Networking</span>
+      <span class="tag">Calendar</span>
+      <span class="tag">Timing</span>
+    </div>
+    <a class="event-url" href="https://www.esmadrid.com/en/events-calendar" target="_blank">esmadrid.com →</a>
+  </div>
+
+  <!-- 10TIMES SPAIN TOP 100 -->
+  <div class="event-card top-event" data-type="directory" data-name="10times spain top 100 events">
+    <div class="event-type">Directory — Top 100 Events in Spain</div>
+    <div class="event-name">10Times Spain Top 100 Events</div>
+    <div class="event-meta">
+      <div class="event-meta-item"><span class="event-meta-icon">📅</span> Throughout 2026</div>
+      <div class="event-meta-item"><span class="event-meta-icon">📍</span> Multiple Spain cities</div>
+      <div class="event-meta-item"><span class="event-meta-icon">👥</span> 342 events in May · 324 in June · 120 in July</div>
+    </div>
+    <div class="event-desc">Ranked list of Spain's top 100 events. Free directory. Good for prospecting venues and agencies across Madrid, Barcelona, Valencia, Málaga, Bilbao. Covers trade shows, conferences, festivals.</div>
+    <div class="event-tags">
+      <span class="tag">Directory</span>
+      <span class="tag">All Cities</span>
+      <span class="tag">Venues</span>
+      <span class="tag">Agencies</span>
+    </div>
+    <a class="event-url" href="https://10times.com/top100/spain" target="_blank">10times.com →</a>
+  </div>
+
+</div>
+
+<!-- ALL OTHER EVENTS -->
+<h2>All Events for Event Organizers — Spain 2026</h2>
+<div class="events-grid" id="allEventsGrid">
+
+  <!-- VIVATECH -->
+  <div class="event-card" data-type="conference" data-name="vivatech europe paris 2026">
+    <div class="event-type">Tech & Innovation Conference</div>
+    <div class="event-name">VivaTech Europe</div>
+    <div class="event-meta">
+      <div class="event-meta-item"><span class="event-meta-icon">📅</span> June 2026 (TBC)</div>
+      <div class="event-meta-item"><span class="event-meta-icon">📍</span> Paris, France</div>
+      <div class="event-meta-item"><span class="event-meta-icon">👥</span> Tech companies, event tech vendors</div>
+    </div>
+    <div class="event-desc">Europe's largest tech and innovation conference. Many Spain-based event tech companies attend. Good for meeting event tech vendors and innovation-focused planners who want to modernize their events.</div>
+    <div class="event-tags">
+      <span class="tag">Event Tech</span>
+      <span class="tag">Innovation</span>
+      <span class="tag">Paris</span>
+    </div>
+    <a class="event-url" href="https://vivatech.com/" target="_blank">vivatech.com →</a>
+  </div>
+
+  <!-- GMF WORLD -->
+  <div class="event-card" data-type="forum" data-name="global mice forum spain 2026">
+    <div class="event-type">Forum — Global MICE Industry</div>
+    <div class="event-name">Global MICE Forum</div>
+    <div class="event-meta">
+      <div class="event-meta-item"><span class="event-meta-icon">📅</span> Date TBC · 2026</div>
+      <div class="event-meta-item"><span class="event-meta-icon">📍</span> Spain</div>
+      <div class="event-meta-item"><span class="event-meta-icon">👥</span> Global MICE buyers + suppliers</div>
+    </div>
+    <div class="event-desc">Part of the Global MICE Forums series. Brings together meeting tourism professionals globally. Focused on business matching between buyers and suppliers in the events industry.</div>
+    <div class="event-tags">
+      <span class="tag">MICE</span>
+      <span class="tag">Global</span>
+      <span class="tag">B2B Matching</span>
+    </div>
+    <a class="event-url" href="https://globalmiceforums.com/en/events/" target="_blank">globalmiceforums.com →</a>
+  </div>
+
+  <!-- SÓNAR -->
+  <div class="event-card" data-type="conference" data-name="sónar festival barcelona 2026">
+    <div class="event-type">Music/Arts/Technology Festival + Professional Program</div>
+    <div class="event-name">Sónar Festival</div>
+    <div class="event-meta">
+      <div class="event-meta-item"><span class="event-meta-icon">📅</span> June 18–20, 2026</div>
+      <div class="event-meta-item"><span class="event-meta-icon">📍</span> Fira Gran Via, Barcelona</div>
+      <div class="event-meta-item"><span class="event-meta-icon">👥</span> Creative agencies, brand experience teams</div>
+    </div>
+    <div class="event-desc">Major international festival with Sónar+D professional program. Draws creative event producers, brand experience agencies, entertainment buyers. Good for premium brand partnership conversations.</div>
+    <div class="event-tags">
+      <span class="tag">Brand Experience</span>
+      <span class="tag">Creative</span>
+      <span class="tag">Entertainment</span>
+    </div>
+    <a class="event-url" href="https://sonar.es/" target="_blank">sonar.es →</a>
+  </div>
+
+  <!-- CVENT CONFERENCES -->
+  <div class="event-card" data-type="conference" data-name="cvent top event planning conferences 2026">
+    <div class="event-type">Event Planning Conference Series</div>
+    <div class="event-name">Cvent Top Event Planning Conferences</div>
+    <div class="event-meta">
+      <div class="event-meta-item"><span class="event-meta-icon">📅</span> Various dates · 2026</div>
+      <div class="event-meta-item"><span class="event-meta-icon">📍</span> Multiple EU locations</div>
+      <div class="event-meta-item"><span class="event-meta-icon">👥</span> Corporate event planners</div>
+    </div>
+    <div class="event-desc">Features AI in event management, event technology, hybrid events, attendee engagement. Cvent is the industry's leading event management platform — their conferences attract serious corporate planners.</div>
+    <div class="event-tags">
+      <span class="tag">AI Events</span>
+      <span class="tag">Hybrid</span>
+      <span class="tag">Event Tech</span>
+      <span class="tag">Corporate</span>
+    </div>
+    <a class="event-url" href="https://www.cvent.com/en/blog/events/top-event-planning-conferences" target="_blank">cvent.com →</a>
+  </div>
+
+  <!-- MADRID CONFERENCES VENDELUX -->
+  <div class="event-card" data-type="conference" data-name="madrid conferences 2026 vendelux">
+    <div class="event-type">Conference Calendar — Madrid</div>
+    <div class="event-name">Madrid Conferences 2026 (Vendelux)</div>
+    <div class="event-meta">
+      <div class="event-meta-item"><span class="event-meta-icon">📅</span> Throughout 2026</div>
+      <div class="event-meta-item"><span class="event-meta-icon">📍</span> Madrid, Spain</div>
+      <div class="event-meta-item"><span class="event-meta-icon">👥</span> Corporate planners, B2B professionals</div>
+    </div>
+    <div class="event-desc">Curated list of top Madrid conferences 2026. Useful for identifying when corporate planners will be in Madrid. Build relationships with venues and hotels near major conference dates.</div>
+    <div class="event-tags">
+      <span class="tag">Madrid</span>
+      <span class="tag">Calendar</span>
+      <span class="tag">B2B</span>
+    </div>
+    <a class="event-url" href="https://vendelux.com/locations/madrid-conferences-2026/" target="_blank">vendelux.com →</a>
+  </div>
+
+  <!-- ICEBMH BARCELONA -->
+  <div class="event-card" data-type="conference" data-name="icebmh barcelona international conference economics business management humanities">
+    <div class="event-type">International Academic Conference</div>
+    <div class="event-name">ICEBMH Barcelona</div>
+    <div class="event-meta">
+      <div class="event-meta-item"><span class="event-meta-icon">📅</span> June 10, 2026</div>
+      <div class="event-meta-item"><span class="event-meta-icon">📍</span> Barcelona, Spain</div>
+      <div class="event-meta-item"><span class="event-meta-icon">👥</span> Association event managers, PCOs</div>
+    </div>
+    <div class="event-desc">International Conference on Economics, Business, Management and Humanities. Attracts association event managers and PCOs organizing academic/professional conferences. Smaller, more intimate than trade shows.</div>
+    <div class="event-tags">
+      <span class="tag">Associations</span>
+      <span class="tag">Academic</span>
+      <span class="tag">PCOs</span>
+    </div>
+    <a class="event-url" href="https://conferenceindex.org/conferences/event-management/spain" target="_blank">conferenceindex.org →</a>
+  </div>
+
+  <!-- TRADE SHOWS SPAIN JUNE -->
+  <div class="event-card" data-type="exhibition" data-name="trade shows spain june 2026">
+    <div class="event-type">Trade Show Calendar</div>
+    <div class="event-name">Trade Shows in Spain — June 2026</div>
+    <div class="event-meta">
+      <div class="event-meta-item"><span class="event-meta-icon">📅</span> June 2026</div>
+      <div class="event-meta-item"><span class="event-meta-icon">📍</span> Multiple Spain cities</div>
+      <div class="event-meta-item"><span class="event-meta-icon">👥</span> 40+ events in August · 180+ in September</div>
+    </div>
+    <div class="event-desc">Full calendar of trade shows across Spain. Good for event production companies, corporate event planners, and DMC planners who work trade show circuits. Large volume of events.</div>
+    <div class="event-tags">
+      <span class="tag">Trade Shows</span>
+      <span class="tag">Event Production</span>
+      <span class="tag">DMCs</span>
+    </div>
+    <a class="event-url" href="https://www.eventseye.com/fairs/cd1_trade-shows_spain_june_1.html" target="_blank">eventseye.com →</a>
+  </div>
+
+  <!-- MADRID BUSINESS EVENTS EVENTBRITE -->
+  <div class="event-card" data-type="directory" data-name="madrid business events eventbrite 2026">
+    <div class="event-type">Event Listings — Business Networking</div>
+    <div class="event-name">Madrid Business Events on Eventbrite</div>
+    <div class="event-meta">
+      <div class="event-meta-item"><span class="event-meta-icon">📅</span> Ongoing throughout 2026</div>
+      <div class="event-meta-item"><span class="event-meta-icon">📍</span> Madrid, Spain</div>
+      <div class="event-meta-item"><span class="event-meta-icon">👥</span> Corporate event managers, entrepreneurs</div>
+    </div>
+    <div class="event-desc">Live listings for business/networking events in Madrid. Useful for identifying regular meetups, professional networks, and coworking communities where event organizers gather informally.</div>
+    <div class="event-tags">
+      <span class="tag">Madrid</span>
+      <span class="tag">Networking</span>
+      <span class="tag">Meetups</span>
+    </div>
+    <a class="event-url" href="https://www.eventbrite.com/b/spain--madrid/business/" target="_blank">eventbrite.com/madrid →</a>
+  </div>
+
+  <!-- BARCELONA BUSINESS EVENTS EVENTBRITE -->
+  <div class="event-card" data-type="directory" data-name="barcelona business events eventbrite 2026">
+    <div class="event-type">Event Listings — Business Networking</div>
+    <div class="event-name">Barcelona Business Events on Eventbrite</div>
+    <div class="event-meta">
+      <div class="event-meta-item"><span class="event-meta-icon">📅</span> Ongoing throughout 2026</div>
+      <div class="event-meta-item"><span class="event-meta-icon">📍</span> Barcelona, Spain</div>
+      <div class="event-meta-item"><span class="event-meta-icon">👥</span> Corporate event managers, sustainability planners</div>
+    </div>
+    <div class="event-desc">Live business and networking events in Barcelona. Barcelona has a strong sustainability and tech event scene. Good for meeting planners who care about event impact and modern event formats.</div>
+    <div class="event-tags">
+      <span class="tag">Barcelona</span>
+      <span class="tag">Sustainability</span>
+      <span class="tag">Tech Events</span>
+    </div>
+    <a class="event-url" href="https://www.eventbrite.com/b/spain--barcelona/business/" target="_blank">eventbrite.com/barcelona →</a>
+  </div>
+
+  <!-- TOP EVENT PLANNING COMPANIES SPAIN -->
+  <div class="event-card" data-type="directory" data-name="top 100 event planning companies spain">
+    <div class="event-type">Industry Directory</div>
+    <div class="event-name">Top 100 Event Planning Companies in Spain</div>
+    <div class="event-meta">
+      <div class="event-meta-item"><span class="event-meta-icon">📅</span> Ongoing 2026</div>
+      <div class="event-meta-item"><span class="event-meta-icon">📍</span> Spain-wide</div>
+      <div class="event-meta-item"><span class="event-meta-icon">👥</span> Agencies, DMCs, PCOs, venue operators</div>
+    </div>
+    <div class="event-desc">Comprehensive directory. Categories: Event Agency, PCO, DMC, Event Planner, Destination Management. Searchable. Best resource for identifying who to reach out to for partnerships or sales.</div>
+    <div class="event-tags">
+      <span class="tag">Directory</span>
+      <span class="tag">Agencies</span>
+      <span class="tag">DMCs</span>
+      <span class="tag">PCOs</span>
+    </div>
+    <a class="event-url" href="https://ensun.io/search/event-planning/spain" target="_blank">ensun.io →</a>
+  </div>
+
+  <!-- TECH MEETUPS MÁLAGA -->
+  <div class="event-card" data-type="conference" data-name="tech meetups málaga startup hub 2026">
+    <div class="event-type">Tech Meetup Series — Startup Hub</div>
+    <div class="event-name">Tech Meetups Málaga</div>
+    <div class="event-meta">
+      <div class="event-meta-item"><span class="event-meta-icon">📅</span> Ongoing throughout 2026</div>
+      <div class="event-meta-item"><span class="event-meta-icon">📍</span> Málaga, Spain</div>
+      <div class="event-meta-item"><span class="event-meta-icon">👥</span> Tech event organizers, startup community managers</div>
+    </div>
+    <div class="event-desc">Regular tech meetups in Málaga startup hub. Growing event planning community in southern Spain. Málaga is Spain's fastest-growing tech hub — these planners are building new-format events.</div>
+    <div class="event-tags">
+      <span class="tag">Málaga</span>
+      <span class="tag">Tech</span>
+      <span class="tag">Startups</span>
+      <span class="tag">Community</span>
+    </div>
+    <a class="event-url" href="https://dev.events/meetups/EU/ES/Malaga/tech" target="_blank">dev.events →</a>
+  </div>
+
+  <!-- GLOBAL BUSINESS CONFERENCE MADRID -->
+  <div class="event-card" data-type="conference" data-name="global business conference madrid eventbrite 2026">
+    <div class="event-type">Business Conference</div>
+    <div class="event-name">Global Business Conference Madrid</div>
+    <div class="event-meta">
+      <div class="event-meta-item"><span class="event-meta-icon">📅</span> 2026 (check Eventbrite)</div>
+      <div class="event-meta-item"><span class="event-meta-icon">📍</span> Madrid, Spain</div>
+      <div class="event-meta-item"><span class="event-meta-icon">👥</span> Corporate planners, entrepreneurs, B2B</div>
+    </div>
+    <div class="event-desc">Major international business conference in Madrid. Corporate planners, entrepreneurs, B2B networking. Good for meeting multiple decision-makers in one place over 1-2 days.</div>
+    <div class="event-tags">
+      <span class="tag">Madrid</span>
+      <span class="tag">B2B</span>
+      <span class="tag">Entrepreneurs</span>
+    </div>
+    <a class="event-url" href="https://www.eventbrite.com/d/spain/international-conference/" target="_blank">eventbrite.com →</a>
+  </div>
+
+  <!-- CORPORATE EVENTS SPAIN TOP PLANNERS -->
+  <div class="event-card" data-type="directory" data-name="corporate events spain top event planners 2026">
+    <div class="event-type">Industry Directory — Top Agencies</div>
+    <div class="event-name">Corporate Events in Spain — Top Planners 2026</div>
+    <div class="event-meta">
+      <div class="event-meta-item"><span class="event-meta-icon">📅</span> Ongoing 2026</div>
+      <div class="event-meta-item"><span class="event-meta-icon">📍</span> Spain-wide</div>
+      <div class="event-meta-item"><span class="event-meta-icon">👥</span> Top 10 event planning companies</div>
+    </div>
+    <div class="event-desc">Top 10 event planning companies in Spain 2026. Lists leading agencies by specialty, style, and best event types. Use to identify the agencies most likely to adopt Niah for their corporate clients.</div>
+    <div class="event-tags">
+      <span class="tag">Agencies</span>
+      <span class="tag">Corporate</span>
+      <span class="tag">Top 10</span>
+    </div>
+    <a class="event-url" href="https://www.corporateeventsinspain.com/post/top-10-event-planners-for-2026-in-spain" target="_blank">corporateeventsinspain.com →</a>
+  </div>
+
+  <!-- IBTM AMERICAS -->
+  <div class="event-card" data-type="exhibition" data-name="ibtm americas miami 2026">
+    <div class="event-type">Trade Exhibition — Americas</div>
+    <div class="event-name">IBTM Americas</div>
+    <div class="event-meta">
+      <div class="event-meta-item"><span class="event-meta-icon">📅</span> Sept 2026 (TBC)</div>
+      <div class="event-meta-item"><span class="event-meta-icon">📍</span> Miami, USA</div>
+      <div class="event-meta-item"><span class="event-meta-icon">👥</span> Americas MICE market · Spanish-speaking buyers</div>
+    </div>
+    <div class="event-desc">If you want to expand beyond Spain, IBTM Americas in Miami draws Latin American and US event buyers. Many Spanish-speaking planners attend. Good warm-up before IBTM World in Barcelona.</div>
+    <div class="event-tags">
+      <span class="tag">Americas</span>
+      <span class="tag">Latin America</span>
+      <span class="tag">Miami</span>
+    </div>
+    <a class="-event-url" href="https://www.ibtmamericas.com/" target="_blank">ibtmamericas.com →</a>
+  </div>
+
+  <!-- IMEX FRANKFURT -->
+  <div class="event-card" data-type="exhibition" data-name="imex frankfurt 2026">
+    <div class="event-type">Trade Exhibition — Global MICE</div>
+    <div class="event-name">IMEX Frankfurt</div>
+    <div class="event-meta">
+      <div class="event-meta-item"><span class="event-meta-icon">📅</span> May 2026 (TBC)</div>
+      <div class="event-meta-item"><span class="event-meta-icon">📍</span> Frankfurt, Germany</div>
+      <div class="event-meta-item"><span class="event-meta-icon">👥</span> Global MICE · 3,500+ exhibitors</div>
+    </div>
+    <div class="event-desc">Major global MICE exhibition. 3,500+ exhibitors from destinations, venues, hotels, event tech. Frankfurt is a short flight from Madrid. Another opportunity to meet European planners doing global events.</div>
+    <div class="event-tags">
+      <span class="tag">Global MICE</span>
+      <span class="tag">Event Tech</span>
+      <span class="tag">Venues</span>
+      <span class="tag">Frankfurt</span>
+    </div>
+    <a class="event-url" href="https://www.imexfrankfurt.com/" target="_blank">imexfrankfurt.com →</a>
+  </div>
+
+</div>
+
+<!-- SOUTH SUMMIT STATUS -->
+<h2>South Summit Status</h2>
+<div class="south-summit">
+  <div class="ss-header">
+    <div>
+      <div class="ss-title">South Summit 2026</div>
+      <div class="ss-date">October 2026 · Madrid, Spain</div>
+    </div>
+    <span class="ss-badge">Setup In Progress</span>
+  </div>
+  <div class="ss-grid">
+    <div class="ss-item">
+      <div class="ss-item-label">Status</div>
+      <div class="ss-item-value">Research complete, n8n workflow deployed</div>
+    </div>
+    <div class="ss-item">
+      <div class="ss-item-label">Tool Stack</div>
+      <div class="ss-item-value">n8n + Supabase + Resend + Telegram</div>
+    </div>
+    <div class="ss-item">
+      <div class="ss-item-label">Workflow</div>
+      <div class="ss-item-value">Booking → Supabase → Email → Follow-up</div>
+    </div>
+    <div class="ss-item">
+      <div class="ss-item-label">Dashboard</div>
+      <div class="ss-item-value"><a class="ss-url" href="https://jordanjayhays-cpu.github.io/007-Axton/niah-dashboard.html" target="_blank">View Live →</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- LOOP ENGINEERING FRAMEWORK -->
+<h2>Loop Engineering — How Niah Runs Itself</h2>
+<div class="framework">
+  <div class="framework-intro">
+    <strong>The shift:</strong> You stop being the person who writes prompts. Instead, you design systems that prompt themselves. Hermes runs Niah's operations in loops — you define the end goal, the agent figures out the steps. Based on the Loop Engineering concept from Hermes + Claude integration research.
+  </div>
+
+  <h3>The 5-Step Loop</h3>
+  <div class="loop-diagram">
+    <div class="loop-node">
+      <div class="loop-icon check">1</div>
+      <div class="loop-label">Check State</div>
+    </div>
+    <span class="loop-arrow">→</span>
+    <div class="loop-node">
+      <div class="loop-icon decide">2</div>
+      <div class="loop-label">Decide Action</div>
+    </div>
+    <span class="loop-arrow">→</span>
+    <div class="loop-node">
+      <div class="loop-icon act">3</div>
+      <div class="loop-label">Act</div>
+    </div>
+    <span class="loop-arrow">→</span>
+    <div class="loop-node">
+      <div class="loop-icon feedback">4</div>
+      <div class="loop-label">Gather Feedback</div>
+    </div>
+    <span class="loop-arrow">→</span>
+    <div class="loop-node">
+      <div class="loop-icon done">5</div>
+      <div class="loop-label">Done?</div>
     </div>
   </div>
 
-  <!-- KPI STATUS -->
-  <div class="kpi-grid">
-    <div class="kpi-item">
-      <span class="kpi-name">Survey Completion Rate</span>
-      <span class="kpi-value kpi-warn">— / 40%</span>
+  <div class="loop-types">
+    <div class="loop-type">
+      <div class="loop-type-name non-det">↯ Deterministic Loop</div>
+      <div class="loop-type-desc">Clear end goal: tests pass, code compiles, booking confirmed. Niah uses this for: new lead → email sent → follow-up scheduled → done. No judgment calls needed.</div>
     </div>
-    <div class="kpi-item">
-      <span class="kpi-name">Match Rate</span>
-      <span class="kpi-value kpi-warn">— / 80%</span>
-    </div>
-    <div class="kpi-item">
-      <span class="kpi-name">WhatsApp Notification Rate</span>
-      <span class="kpi-value kpi-good">— / 60%</span>
-    </div>
-    <div class="kpi-item">
-      <span class="kpi-name">Email Open Rate</span>
-      <span class="kpi-value kpi-warn">— / 50%</span>
+    <div class="loop-type">
+      <div class="loop-type-name non-det">↯ Non-Deterministic Loop</div>
+      <div class="loop-type-desc">Judgment calls: UI quality, outreach tone, event strategy. Niah uses this for: reviewing which events to prioritize, deciding outreach messaging, evaluating lead quality.</div>
     </div>
   </div>
 
-  <!-- TOOL FLOW -->
-  <h2>Tool Chain</h2>
-  <div class="tool-flow">
-    <div class="tool-node">
-      <div class="tool-icon" style="background:#4A154B;">T</div>
-      <span class="tool-name">Tally</span>
+  <h3>6 Things That Make Loops Work</h3>
+  <div class="loop-keys">
+    <div class="loop-key">
+      <div class="loop-key-name">Context Management</div>
+      <div class="loop-key-desc">What goes into context each turn — can't rely on chat history alone</div>
     </div>
-    <span class="tool-arrow">→</span>
-    <div class="tool-node">
-      <div class="tool-icon" style="background:#FF4D4D;">n8</div>
-      <span class="tool-name">n8n</span>
+    <div class="loop-key">
+      <div class="loop-key-name">Feedback Quality</div>
+      <div class="loop-key-desc">Test results, screenshots, open rates — what tells the agent how it did</div>
     </div>
-    <span class="tool-arrow">→</span>
-    <div class="tool-node">
-      <div class="tool-icon" style="background:#FFD300;">M</div>
-      <span class="tool-name">Mailchimp</span>
+    <div class="loop-key">
+      <div class="loop-key-name">Verification Gates</div>
+      <div class="loop-key-desc">Checkpoints that say "this task is actually done"</div>
     </div>
-    <span class="tool-arrow">→</span>
-    <div class="tool-node">
-      <div class="tool-icon" style="background:#4285F4;">S</div>
-      <span class="tool-name">Sheets</span>
+    <div class="loop-key">
+      <div class="loop-key-name">Termination Condition</div>
+      <div class="loop-key-desc">Rule that tells the loop when to stop — must be explicit</div>
     </div>
-    <span class="tool-arrow">→</span>
-    <div class="tool-node">
-      <div class="tool-icon" style="background:#25D366;">WA</div>
-      <span class="tool-name">WhatsApp</span>
+    <div class="loop-key">
+      <div class="loop-key-name">Error Handling</div>
+      <div class="loop-key-desc">What to do when a tool call fails — spell it out</div>
     </div>
-  </div>
-
-  <!-- STATUS LEGEND -->
-  <h2>Status Legend</h2>
-  <div class="legend">
-    <div class="legend-item"><div class="legend-dot pending"></div>Pending Match = Yellow</div>
-    <div class="legend-item"><div class="legend-dot confirmed"></div>Confirmed = Green</div>
-    <div class="legend-item"><div class="legend-dot notified"></div>Notified = Orange</div>
-    <div class="legend-item"><div class="legend-dot survey-sent"></div>Survey Sent = Purple</div>
-    <div class="legend-item"><div class="legend-dot completed"></div>Completed = Blue</div>
-  </div>
-
-  <!-- OPERATIONAL FLOW -->
-  <h2>Operational Flow</h2>
-  <div class="op-flow">
-    <div class="flow-steps">
-      <div class="flow-step purple">
-        <div class="step-num">1</div>
-        <div>
-          <div class="step-text">RSVP Submission</div>
-          <div class="step-sub">Attendee submits form via Tally</div>
-        </div>
-      </div>
-      <div class="flow-step green">
-        <div class="step-num">2</div>
-        <div>
-          <div class="step-text">Automation Trigger</div>
-          <div class="step-sub">n8n receives webhook → processes data</div>
-        </div>
-      </div>
-      <div class="flow-step blue">
-        <div class="step-num">3</div>
-        <div>
-          <div class="step-text">Match Confirmed</div>
-          <div class="step-sub">Matching team updates Google Sheets</div>
-        </div>
-      </div>
-      <div class="flow-step orange">
-        <div class="step-num">4</div>
-        <div>
-          <div class="step-text">Send Matches</div>
-          <div class="step-sub">WhatsApp (FREE) or Mailchimp email</div>
-        </div>
-      </div>
-      <div class="flow-step dark">
-        <div class="step-num">5</div>
-        <div>
-          <div class="step-text">Post-Event</div>
-          <div class="step-sub">Satisfaction survey + dashboard metrics</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="flowchart">
-      <h3>n8n Workflow — Node Map</h3>
-      <div class="chart-row">
-        <div class="chart-node trigger">Tally Trigger</div>
-        <span class="chart-arrow">→</span>
-        <div class="chart-node action">Parse Data</div>
-        <span class="chart-arrow">→</span>
-        <div class="chart-node action">+Sheets</div>
-        <span class="chart-arrow">→</span>
-        <div class="chart-node action">+Mailchimp</div>
-        <span class="chart-arrow">→</span>
-        <div class="chart-node success">WA Confirm</div>
-      </div>
-      <div class="chart-arrow-down">↓ Daily 9am (June 1–4)</div>
-      <div class="chart-row">
-        <div class="chart-node action">Get Pending</div>
-        <span class="chart-arrow">→</span>
-        <div class="chart-node decision">?</div>
-        <span class="chart-arrow">→</span>
-        <div class="chart-node warning">Reminder Email</div>
-      </div>
-      <div class="chart-arrow-down">↓ Matched in Sheets</div>
-      <div class="chart-row">
-        <div class="chart-node decision">24h?</div>
-        <span class="chart-arrow">→</span>
-        <div class="chart-node success">WA Match (FREE)</div>
-        <span class="chart-arrow">→</span>
-        <div class="chart-node warning">Email Match</div>
-      </div>
-      <div class="chart-arrow-down">→ Update Status: Notified</div>
-      <div class="chart-arrow-down">↓ June 5, 10am</div>
-      <div class="chart-row">
-        <div class="chart-node purple">Post-Event Survey</div>
-        <span class="chart-arrow">→</span>
-        <div class="chart-node blue">Airtable Update</div>
-      </div>
+    <div class="loop-key">
+      <div class="loop-key-name">State Across Turns</div>
+      <div class="loop-key-desc">External files track progress so context never loses the thread</div>
     </div>
   </div>
+</div>
 
-  <!-- TOOLS STATUS -->
-  <h2>Tool Setup Status</h2>
-  <div class="tools-grid">
-    <div class="tool-card">
-      <div class="tool-icon" style="background:#4A154B; margin:auto;">T</div>
-      <div class="tool-card-name">Tally Survey</div>
-      <div class="tool-card-status tool-todo">❓ Needs setup</div>
-    </div>
-    <div class="tool-card">
-      <div class="tool-icon" style="background:#FF4D4D; margin:auto;">n8</div>
-      <div class="tool-card-name">n8n Workflow</div>
-      <div class="tool-card-status tool-ready">✅ JSON ready to import</div>
-    </div>
-    <div class="tool-card">
-      <div class="tool-icon" style="background:#4285F4; margin:auto;">S</div>
-      <div class="tool-card-name">Google Sheets</div>
-      <div class="tool-card-status tool-todo">❓ Needs credentials</div>
-    </div>
-    <div class="tool-card">
-      <div class="tool-icon" style="background:#FFD300; margin:auto;">M</div>
-      <div class="tool-card-name">Mailchimp</div>
-      <div class="tool-card-status tool-todo">❓ Needs API key</div>
-    </div>
-    <div class="tool-card">
-      <div class="tool-icon" style="background:#25D366; margin:auto;">WA</div>
-      <div class="tool-card-name">WhatsApp API</div>
-      <div class="tool-card-status tool-wip">⚠ Needs Meta credentials</div>
-    </div>
-    <div class="tool-card">
-      <div class="tool-icon" style="background:#9C27B0; margin:auto;">A</div>
-      <div class="tool-card-name">Airtable</div>
-      <div class="tool-card-status tool-todo">❓ Needs API key + Base ID</div>
-    </div>
-  </div>
-
-  <!-- EMAIL SEQUENCE -->
-  <h2>Email Sequence (June 1–5)</h2>
-  <div class="email-seq">
-    <div class="email-card">
-      <div class="email-day">June 1 · 9:00 AM</div>
-      <div class="email-subject">"Before the Social Summit — 60 seconds to get matched"</div>
-      <div class="email-preview">Hi [Name], South Summit is in 3 days. Take 60 seconds to tell us who you want to meet — we'll send your match before you walk in.</div>
-      <div class="email-status todo">⏳ Mailchimp template — needs to be created</div>
-    </div>
-    <div class="email-card">
-      <div class="email-day">June 2 · 9:00 AM</div>
-      <div class="email-subject">"Still time to get matched at South Summit"</div>
-      <div class="email-preview">Friendly nudge — your profile is half-done. Complete it today and we'll have your introduction ready by June 4.</div>
-      <div class="email-status todo">⏳ Mailchimp template — needs to be created</div>
-    </div>
-    <div class="email-card">
-      <div class="email-day">June 3 · 9:00 AM</div>
-      <div class="email-subject">"Final reminder — Social Summit is tomorrow"</div>
-      <div class="email-preview">Tomorrow is the day. If you want a guaranteed match tonight, fill in the form in the next 24 hours.</div>
-      <div class="email-status todo">⏳ Mailchimp template — needs to be created</div>
-    </div>
-    <div class="email-card">
-      <div class="email-day">June 4 · 10:00 AM</div>
-      <div class="email-subject">"Your South Summit Match is ready — Find them at La Nave"</div>
-      <div class="email-preview">You're matched with [Match Name] at [Company]. Why: [Reason]. Find them at the Niah Bar, La Nave, 8 PM tonight.</div>
-      <div class="email-status todo">⏳ Mailchimp template — needs to be created</div>
-    </div>
-    <div class="email-card">
-      <div class="email-day">June 5 · 10:00 AM</div>
-      <div class="email-subject">"How was your connection? Tell us in 30 seconds"</div>
-      <div class="email-preview">Hi [Name], how was your Niah experience at South Summit? Take 30 seconds to rate your connection — your feedback shapes the next event.</div>
-      <div class="email-status todo">⏳ Tally satisfaction survey — needs to be created</div>
-    </div>
-  </div>
-
-  <!-- TALLY SURVEY PREVIEW -->
-  <h2>Tally Survey — 9 Fields</h2>
-  <div class="survey-preview">
-    <div class="survey-field req">
-      <div class="survey-field-label">What's your name?</div>
-      <div class="survey-field-type">Short text · Required</div>
-    </div>
-    <div class="survey-field req">
-      <div class="survey-field-label">What's your email?</div>
-      <div class="survey-field-type">Email · Required</div>
-    </div>
-    <div class="survey-field">
-      <div class="survey-field-label">What's your WhatsApp number?</div>
-      <div class="survey-field-type">Phone (ES) · Optional — enables FREE notifications</div>
-    </div>
-    <div class="survey-field req">
-      <div class="survey-field-label">What's your role?</div>
-      <div class="survey-field-type">Multiple choice · Required · Investor / Founder / Corporate / Startup / Media / Other</div>
-    </div>
-    <div class="survey-field req">
-      <div class="survey-field-label">Company / Fund name</div>
-      <div class="survey-field-type">Short text · Required</div>
-    </div>
-    <div class="survey-field">
-      <div class="survey-field-label">What brings you to South Summit?</div>
-      <div class="survey-field-type">Short text · Optional</div>
-    </div>
-    <div class="survey-field req">
-      <div class="survey-field-label">Who do you most want to meet?</div>
-      <div class="survey-field-type">Long text · Required · e.g. VCs on fintech, founders building AI tools</div>
-    </div>
-    <div class="survey-field">
-      <div class="survey-field-label">What can you help others with?</div>
-      <div class="survey-field-type">Long text · Optional · e.g. B2B SaaS GTM, fundraising, Spain regulatory</div>
-    </div>
-    <div class="survey-field">
-      <div class="survey-field-label">Any preferences or things to avoid?</div>
-      <div class="survey-field-type">Long text · Optional</div>
-    </div>
-  </div>
-
-  <!-- GOOGLE SHEETS HEADERS -->
-  <h2>Google Sheets — Required Columns</h2>
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th>name</th>
-          <th>email</th>
-          <th>phone</th>
-          <th>role</th>
-          <th>company</th>
-          <th>what_brings_you</th>
-          <th>who_to_meet</th>
-          <th>what_can_you_help</th>
-          <th>preferences</th>
-          <th>status</th>
-          <th>submitted_at</th>
-          <th>match_name</th>
-          <th>match_email</th>
-          <th>match_reason</th>
-          <th>match_link</th>
-          <th>notified_at</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td colspan="16" style="text-align:center; color: var(--taupe); padding: 32px; font-size: 13px;">
-            No RSVPs yet — connect Tally → n8n → Google Sheets to start receiving data
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <!-- COST -->
-  <h2>Cost Breakdown</h2>
-  <div class="cost-card">
-    <div class="cost-row">
-      <span>Tally Survey</span>
-      <span class="cost-amount">$0</span>
-    </div>
-    <div class="cost-row">
-      <span>n8n Cloud Pro (1 month)</span>
-      <span class="cost-amount">$59</span>
-    </div>
-    <div class="cost-row">
-      <span>Mailchimp Standard (1 month)</span>
-      <span class="cost-amount">$59</span>
-    </div>
-    <div class="cost-row">
-      <span>WhatsApp Business API</span>
-      <span class="cost-amount">$0</span>
-    </div>
-    <div class="cost-row">
-      <span>Google Sheets</span>
-      <span class="cost-amount">$0</span>
-    </div>
-    <div class="cost-row cost-total">
-      <span>Total</span>
-      <span class="cost-amount">~$59–$118</span>
-    </div>
-  </div>
-
-<!-- HARVARD SIMULATION PREP -->
-  <h2>Harvard GSCM Simulation Prep</h2>
-  <div class="table-wrap" style="margin-bottom: 32px;">
-    <table>
-      <thead>
-        <tr>
-          <th>Room</th>
-          <th>What to Do</th>
-          <th>Key Rule</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>Design Room</strong></td>
-          <td>Pick option with HIGHEST profit per unit for Model A and Model B</td>
-          <td>Higher profit = better option</td>
-        </tr>
-        <tr>
-          <td><strong>Forecasting</strong></td>
-          <td>Calculate YOUR OWN average of 6 forecasters, multiply by 8</td>
-          <td>Use your average, not Consensus</td>
-        </tr>
-        <tr>
-          <td><strong>Production</strong></td>
-          <td>Model A → cheapest/slow supplier. Model B → fastest/expensive</td>
-          <td>Model B = underproduce (neverage newsvendor)</td>
-        </tr>
-        <tr>
-          <td><strong>Boardroom</strong></td>
-          <td>Explain WHY you made each decision — not just what</td>
-          <td>Carla = forecast math. Ankit = risk. Matheo = cost. Adele = flexibility. Mia = capacity</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <!-- NEWSVENDOR -->
-  <h2>Newsvendor Rule</h2>
-  <div class="table-wrap" style="margin-bottom: 32px;">
-    <table>
-      <thead>
-        <tr>
-          <th>Model</th>
-          <th>Overage Cost</th>
-          <th>Underage Cost</th>
-          <th>Rule</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>Model A</strong></td>
-          <td>$17.50 (Cost − Markdown)</td>
-          <td>$70 (Price − Cost)</td>
-          <td>Underage > Overage</td>
-          <td style="color: var(--confirmed);">OVERPRODUCE</td>
-        </tr>
-        <tr>
-          <td><strong>Model B</strong></td>
-          <td>$136.50 (Cost − Markdown)</td>
-          <td>$90 (Price − Cost)</td>
-          <td>Overage > Underage</td>
-          <td style="color: #e74c3c;">UNDERPRODUCE</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <!-- FORMULAS -->
-  <h2>Formulas</h2>
-  <div class="table-wrap" style="margin-bottom: 32px;">
-    <table>
-      <thead>
-        <tr>
-          <th>Calculation</th>
-          <th>Formula</th>
-          <th>Example</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Profit per unit</td>
-          <td><code>Price − Cost</code></td>
-          <td>$245 − $175 = $70</td>
-        </tr>
-        <tr>
-          <td>Margin %</td>
-          <td><code>(Profit ÷ Price) × 100</code></td>
-          <td>($70 ÷ $245) × 100 = 28.6%</td>
-        </tr>
-        <tr>
-          <td>Total units</td>
-          <td><code>Consensus × 8</code></td>
-          <td>65 × 8 = 520 units</td>
-        </tr>
-        <tr>
-          <td>Your average</td>
-          <td><code>Sum of 6 forecasters ÷ 6</code></td>
-          <td>54+64+62+58+60+61 = 359 ÷ 6 = 60</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <!-- SUPPLIERS -->
-  <h2>Suppliers</h2>
-  <div class="table-wrap" style="margin-bottom: 32px;">
-    <table>
-      <thead>
-        <tr>
-          <th>Supplier</th>
-          <th>Cost</th>
-          <th>Speed</th>
-          <th>Best For</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>FarFarAway</strong></td>
-          <td>Cheapest</td>
-          <td>Slow (4 months)</td>
-          <td>Model A (stable demand)</td>
-        </tr>
-        <tr>
-          <td><strong>Far Away</strong></td>
-          <td>Medium</td>
-          <td>Medium (3 months)</td>
-          <td>Backup / mixed</td>
-        </tr>
-        <tr>
-          <td><strong>PrettyClose</strong></td>
-          <td>Expensive</td>
-          <td>Fast (0 months)</td>
-          <td>Model B (volatile demand)</td>
-        </tr>
-        <tr>
-          <td><strong>Very Fast</strong></td>
-          <td>Most expensive</td>
-          <td>Fastest (0 months)</td>
-          <td>Mid-year adjustments</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <!-- BOARD MEMBERS -->
-  <h2>Board Members</h2>
-  <div class="table-wrap" style="margin-bottom: 32px;">
-    <table>
-      <thead>
-        <tr>
-          <th>Who</th>
-          <th>Role</th>
-          <th>What They Ask</th>
-          <th>How to Answer</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>Carla</strong></td>
-          <td>Forecasting</td>
-          <td>"How did you develop your forecast?"</td>
-          <td>"We calculated our own average of all 6 forecasters rather than relying on Consensus"</td>
-        </tr>
-        <tr>
-          <td><strong>Ankit</strong></td>
-          <td>Risk</td>
-          <td>"How did you manage uncertainty?"</td>
-          <td>"We chose options that reduce standard deviation. For Model B, we underproduce because overage cost exceeds underage cost"</td>
-        </tr>
-        <tr>
-          <td><strong>Matheo</strong></td>
-          <td>Cost</td>
-          <td>"Why those suppliers?"</td>
-          <td>"Model A → low-cost (stable demand). Model B → flexible (volatile demand)"</td>
-        </tr>
-        <tr>
-          <td><strong>Adele</strong></td>
-          <td>Sourcing</td>
-          <td>"How do you ensure flexibility?"</td>
-          <td>"We scheduled 30-50% of Model B production early with a flexible supplier"</td>
-        </tr>
-        <tr>
-          <td><strong>Mia</strong></td>
-          <td>Capacity</td>
-          <td>"What's your capacity plan?"</td>
-          <td>"We ensure maximum flexible capacity for demand swings. Issue change order if demand 20%+ above forecast"</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <!-- DESIGN OPTIONS BY YEAR -->
-  <h2>Design Options by Year</h2>
-  <div class="table-wrap" style="margin-bottom: 32px;">
-    <table>
-      <thead>
-        <tr>
-          <th>Year</th>
-          <th>Options</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td><strong>Year 1</strong></td><td>Upgraded Communication, Exterior Material, Stylish, Storage Capacity</td></tr>
-        <tr><td><strong>Year 2</strong></td><td>Stylish, Storage Capacity, Extended Battery, Durability</td></tr>
-        <tr><td><strong>Year 3</strong></td><td>Extended Battery, Durability, Audio Quality, GPS Anti-theft</td></tr>
-        <tr><td><strong>Year 4</strong></td><td>GPS Anti-theft, Audio Quality, Super Slim, Camera Quality</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <!-- FULL GUIDE LINK -->
-  <div style="background: var(--border); border-radius: 12px; padding: 24px; border: 1px solid var(--terracotta); text-align: center; margin-bottom: 32px;">
-    <p style="font-size: 14px; color: var(--off-white); margin-bottom: 12px;">Full guide with step-by-step room explanations:</p>
-    <a href="https://raw.githubusercontent.com/jordanjayhays-cpu/mission-control/master/harvard-simulation-prep-guide.md" style="color: var(--terracotta); font-size: 13px; font-weight: 600;">Open Full Prep Guide (Markdown)</a>
-  </div>
+<!-- STATUS LEGEND -->
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background: var(--terracotta);"></div> ★ Top Priority — Must attend</div>
+  <div class="legend-item"><div class="legend-dot" style="background: var(--border);"></div> Standard event</div>
+  <div class="legend-item"><div class="legend-dot" style="background: var(--confirmed);"></div> Deterministic loop type</div>
+  <div class="legend-item"><div class="legend-dot" style="background: var(--pending);"></div> Non-deterministic loop type</div>
+</div>
 
 </main>
 
 <footer>
-  <p>Niah · South Summit Social Summit After Party · June 4, 2026 · La Nave, Madrid</p>
-  <p style="margin-top: 8px;">n8n workflow: <a href="https://github.com/jordanjayhays-cpu/mission-control">GitHub</a> · Dashboard built May 10, 2026</p>
+  Niah Dashboard · 20 events researched · Updated June 2026 · <a href="https://jordanjayhays-cpu.github.io/007-Axton/niah-dashboard.html">Live version</a>
 </footer>
+
+<script>
+function filterEvents(type) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const cards = document.querySelectorAll('.event-card');
+  cards.forEach(card => {
+    if (type === 'all' || card.dataset.type === type) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+
+function searchEvents(query) {
+  const q = query.toLowerCase();
+  document.querySelectorAll('.event-card').forEach(card => {
+    const name = card.dataset.name || '';
+    const desc = card.querySelector('.event-desc')?.textContent || '';
+    const tags = card.querySelector('.event-tags')?.textContent || '';
+    const text = name + ' ' + desc + ' ' + tags;
+    card.style.display = text.toLowerCase().includes(q) ? '' : 'none';
+  });
+}
+</script>
 
 </body>
 </html>

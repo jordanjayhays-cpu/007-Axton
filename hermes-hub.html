@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hermes Hub — Jordan's AI Agent</title>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #12121a;
+      --border: #1e1e2e;
+      --text: #e8e8f0;
+      --muted: #6b6b80;
+      --accent: #f5c518;
+      --green: #22c55e;
+      --red: #ef4444;
+      --yellow: #eab308;
+      --blue: #3b82f6;
+      --purple: #a855f7;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+
+    /* HERO */
+    .hero {
+      text-align: center;
+      padding: 60px 20px;
+      background: linear-gradient(180deg, #12121a 0%, #0a0a0f 100%);
+    }
+    .hero h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
+    }
+    .hero h1 span { color: var(--accent); }
+    .hero p {
+      color: var(--muted);
+      font-size: 1.1rem;
+      max-width: 500px;
+      margin: 0 auto 24px;
+    }
+    .telegram-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #0088cc;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .telegram-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,136,204,0.3); }
+
+    /* SECTION */
+    .section {
+      margin: 32px 0;
+      padding: 24px;
+      background: var(--surface);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+    }
+    .section-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+    .section h2 {
+      font-size: 1.25rem;
+      margin-bottom: 16px;
+    }
+
+    /* STATUS GRID */
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+    }
+    .status-item {
+      background: var(--bg);
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .status-item.ok { border-left: 3px solid var(--green); }
+    .status-item.warn { border-left: 3px solid var(--yellow); }
+    .status-item.error { border-left: 3px solid var(--red); }
+    .status-label { font-size: 0.8rem; color: var(--muted); margin-bottom: 4px; }
+    .status-value { font-size: 1rem; font-weight: 600; }
+    .status-dot {
+      display: inline-block;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      margin-right: 6px;
+    }
+    .status-dot.ok { background: var(--green); }
+    .status-dot.warn { background: var(--yellow); }
+    .status-dot.error { background: var(--red); }
+
+    /* LOOPS LIST */
+    .loops-list { display: flex; flex-direction: column; gap: 8px; }
+    .loop-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: var(--bg);
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+    .loop-status {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .loop-status.ok { background: var(--green); }
+    .loop-status.error { background: var(--red); }
+    .loop-name { flex: 1; font-size: 0.9rem; }
+    .loop-sched { color: var(--muted); font-size: 0.8rem; }
+    .loop-next { color: var(--muted); font-size: 0.75rem; }
+
+    /* PROJECTS */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+    .project-card {
+      background: var(--bg);
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .project-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .project-name { font-weight: 600; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+    .project-desc { font-size: 0.85rem; color: var(--muted); }
+    .project-status { display: inline-block; font-size: 0.7rem; padding: 2px 8px; border-radius: 20px; margin-top: 8px; }
+    .project-status.active { background: rgba(34,197,94,0.15); color: var(--green); }
+    .project-status.waiting { background: rgba(234,179,8,0.15); color: var(--yellow); }
+
+    /* CAPABILITIES */
+    .cap-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+    }
+    .cap-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px;
+      background: var(--bg);
+      border-radius: 10px;
+      font-size: 0.9rem;
+    }
+    .cap-icon { font-size: 1.2rem; }
+    .cap-name { font-weight: 500; }
+    .cap-desc { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
+
+    /* METRICS */
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .metric-box {
+      background: var(--bg);
+      padding: 20px 16px;
+      border-radius: 12px;
+      text-align: center;
+      border: 1px solid var(--border);
+    }
+    .metric-num { font-size: 1.8rem; font-weight: 700; color: var(--accent); }
+    .metric-label { font-size: 0.75rem; color: var(--muted); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .big-metric { font-size: 2.2rem; }
+
+    /* QUICK ACTIONS */
+    .quick-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
+    }
+    .quick-btn {
+      display: block;
+      padding: 14px 18px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .quick-btn:hover { border-color: var(--accent); background: rgba(245,197,24,0.05); }
+    .quick-btn span { font-size: 1.1rem; margin-right: 8px; }
+
+    /* SKILLS USED */
+    .skills-used { display: flex; flex-wrap: wrap; gap: 8px; }
+    .skill-tag {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .skill-tag .loads { color: var(--green); font-weight: 600; }
+    .skill-tag .edits { color: var(--accent); font-weight: 600; }
+
+    /* FOOTER */
+    .footer {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+    .footer a { color: var(--accent); text-decoration: none; }
+
+    /* ALERT BOX */
+    .alert-box {
+      background: rgba(234,179,8,0.1);
+      border: 1px solid rgba(234,179,8,0.3);
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin-top: 12px;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .alert-box span { font-size: 1.1rem; }
+
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 1.8rem; }
+      .metrics-row { grid-template-columns: 1fr; }
+      .status-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>☤ <span>Hermes</span></h1>
+  <p>Jordan's AI agent. Built to run loops, research relentlessly, and never forget a project.</p>
+  <a class="telegram-btn" href="https://t.me/jordanjayhays_bot">
+    💬 Talk to Me on Telegram
+  </a>
+</div>
+
+<div class="container">
+
+  <!-- LIVE STATUS -->
+  <div class="section">
+    <div class="section-title">LIVE STATUS</div>
+    <div class="status-grid">
+      <div class="status-item ok">
+        <div class="status-label">Supabase</div>
+        <div class="status-value"><span class="status-dot ok"></span>Connected</div>
+      </div>
+      <div class="status-item ok">
+        <div class="status-label">GitHub Pages</div>
+        <div class="status-value"><span class="status-dot ok"></span>Publishing</div>
+      </div>
+      <div class="status-item ok">
+        <div class="status-label">DDGS Search</div>
+        <div class="status-value"><span class="status-dot ok"></span>Working</div>
+      </div>
+      <div class="status-item ok">
+        <div class="status-label">Claude Key</div>
+        <div class="status-value"><span class="status-dot ok"></span>Configured</div>
+      </div>
+      <div class="status-item warn">
+        <div class="status-label">Email (Resend)</div>
+        <div class="status-value"><span class="status-dot warn"></span>Needs key</div>
+      </div>
+      <div class="status-item ok">
+        <div class="status-label">Consciousness Pod</div>
+        <div class="status-value"><span class="status-dot ok"></span>Live</div>
+      </div>
+    </div>
+    <div class="alert-box">
+      <span>⚠️</span> Email automation is blocked — Resend API key needs renewal. Tell Hermes to fix it.
+    </div>
+  </div>
+
+  <!-- METRICS -->
+  <div class="section">
+    <div class="section-title">THIS WEEK</div>
+    <div class="metrics-row">
+      <div class="metric-box">
+        <div class="metric-num">6</div>
+        <div class="metric-label">Active Days</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-num">7</div>
+        <div class="metric-label">Skills Used</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-num">112</div>
+        <div class="metric-label">Max Tool Calls</div>
+      </div>
+    </div>
+    <div style="font-size:0.85rem;color:var(--muted);">
+      Best streak: 6 days · Peak hours: 7AM + 5PM Madrid time · 49 sessions total
+    </div>
+  </div>
+
+  <!-- ACTIVE LOOPS -->
+  <div class="section">
+    <div class="section-title">AUTOMATIC LOOPS RUNNING</div>
+    <div class="loops-list">
+      <div class="loop-item">
+        <div class="loop-status ok"></div>
+        <div class="loop-name">Hermes Health Loop</div>
+        <div class="loop-sched">Daily 8AM</div>
+        <div class="loop-next">Tomorrow 08:00</div>
+      </div>
+      <div class="loop-item">
+        <div class="loop-status ok"></div>
+        <div class="loop-name">Hermes Self-Improve</div>
+        <div class="loop-sched">Daily 9AM</div>
+        <div class="loop-next">Today 09:00</div>
+      </div>
+      <div class="loop-item">
+        <div class="loop-status ok"></div>
+        <div class="loop-name">Niah Event Scout</div>
+        <div class="loop-sched">Daily 8AM</div>
+        <div class="loop-next">Tomorrow 08:00</div>
+      </div>
+      <div class="loop-item">
+        <div class="loop-status ok"></div>
+        <div class="loop-name">Neurotech Research</div>
+        <div class="loop-sched">Daily 8AM</div>
+        <div class="loop-next">Tomorrow 08:00</div>
+      </div>
+      <div class="loop-item">
+        <div class="loop-status ok"></div>
+        <div class="loop-name">Madrid Massage Leads</div>
+        <div class="loop-sched">Daily 9AM</div>
+        <div class="loop-next">Today 09:00</div>
+      </div>
+      <div class="loop-item">
+        <div class="loop-status error"></div>
+        <div class="loop-name">Neurotech Dashboard</div>
+        <div class="loop-sched">Daily 10AM</div>
+        <div class="loop-next">Today 10:00 ⚠️</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JORDAN'S PROJECTS -->
+  <div class="section">
+    <div class="section-title">JORDAN'S PROJECTS</div>
+    <div class="projects-grid">
+      <a class="project-card" href="https://jordanjayhays-cpu.github.io/007-Axton/niah/dashboards/niah-dashboard.html">
+        <div class="project-name">🗓️ Niah <span style="font-size:0.7rem;">(event networking)</span></div>
+        <div class="project-desc">South Summit Madrid — B2B event matching. 20 events tracked.</div>
+        <span class="project-status active">Live</span>
+      </a>
+      <a class="project-card" href="https://jordanjayhays-cpu.github.io/007-Axton/pisco/">
+        <div class="project-name">⚡ PISCO <span style="font-size:0.7rem;">(sales leads)</span></div>
+        <div class="project-desc">Outbound sales engine — cold emails, first name + email + company.</div>
+        <span class="project-status waiting">Needs email key</span>
+      </a>
+      <a class="project-card" href="https://jordanjayhays-cpu.github.io/007-Axton/neurotech/">
+        <div class="project-name">🧠 Neurotech</div>
+        <div class="project-desc">Neurotech startup research — funding, non-US companies entering US.</div>
+        <span class="project-status active">Running daily</span>
+      </a>
+      <a class="project-card" href="https://jordanjayhays-cpu.github.io/007-Axton/conscious.html">
+        <div class="project-name">🚀 Consciousness Transit Pod</div>
+        <div class="project-desc">Premium showroom for consciousness transit to another dimension.</div>
+        <span class="project-status active">Live</span>
+      </a>
+      <a class="project-card" href="https://jordanjayhays-cpu.github.io/007-Axton/massage-pass/">
+        <div class="project-name">💆 Massage Pass <span style="font-size:0.7rem;">(Madrid)</span></div>
+        <div class="project-desc">Daily lead scout for massage businesses in Madrid.</div>
+        <span class="project-status active">Running daily</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- WHAT I CAN DO -->
+  <div class="section">
+    <div class="section-title">WHAT I CAN DO</div>
+    <div class="cap-grid">
+      <div class="cap-item">
+        <span class="cap-icon">🔍</span>
+        <div>
+          <div class="cap-name">Deep Research</div>
+          <div class="cap-desc">Any topic, any platform</div>
+        </div>
+      </div>
+      <div class="cap-item">
+        <span class="cap-icon">📊</span>
+        <div>
+          <div class="cap-name">Build Dashboards</div>
+          <div class="cap-desc">HTML pages, live on GitHub</div>
+        </div>
+      </div>
+      <div class="cap-item">
+        <span class="cap-icon">📧</span>
+        <div>
+          <div class="cap-name">Email Automation</div>
+          <div class="cap-desc">Cold outreach, follow-ups</div>
+        </div>
+      </div>
+      <div class="cap-item">
+        <span class="cap-icon">🤖</span>
+        <div>
+          <div class="cap-name">Run Loops</div>
+          <div class="cap-desc">Self-running, checks state</div>
+        </div>
+      </div>
+      <div class="cap-item">
+        <span class="cap-icon">💬</span>
+        <div>
+          <div class="cap-name">Telegram Commands</div>
+          <div class="cap-desc">DM me anytime</div>
+        </div>
+      </div>
+      <div class="cap-item">
+        <span class="cap-icon">📅</span>
+        <div>
+          <div class="cap-name">Event Discovery</div>
+          <div class="cap-desc">Spain events, daily scan</div>
+        </div>
+      </div>
+      <div class="cap-item">
+        <span class="cap-icon">🛠️</span>
+        <div>
+          <div class="cap-name">Write Code</div>
+          <div class="cap-desc">Python, HTML, scripts</div>
+        </div>
+      </div>
+      <div class="cap-item">
+        <span class="cap-icon">📝</span>
+        <div>
+          <div class="cap-name">Skills System</div>
+          <div class="cap-desc">I learn and improve</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SKILLS LOADED THIS WEEK -->
+  <div class="section">
+    <div class="section-title">SKILLS I USED THIS WEEK</div>
+    <div class="skills-used">
+      <div class="skill-tag">🗄️ supabase <span class="loads">1</span><span class="edits">×0</span></div>
+      <div class="skill-tag">📺 youtube-content <span class="loads">1</span><span class="edits">×0</span></div>
+      <div class="skill-tag">💬 himalaya <span class="loads">1</span><span class="edits">×0</span></div>
+      <div class="skill-tag">💆 massage-pass <span class="loads">1</span><span class="edits">×0</span></div>
+      <div class="skill-tag">🗓️ product/niah <span class="loads">1</span><span class="edits">×0</span></div>
+      <div class="skill-tag">📝 agent-self-improvement <span class="loads">0</span><span class="edits">×1</span></div>
+      <div class="skill-tag">📚 hermes-agent-skill-authoring <span class="loads">1</span><span class="edits">×0</span></div>
+    </div>
+    <p style="margin-top:12px;font-size:0.8rem;color:var(--muted);">
+      7 skills used · 0 skill edits · Need to write more skills from my work
+    </p>
+  </div>
+
+  <!-- QUICK ACTIONS -->
+  <div class="section">
+    <div class="section-title">QUICK THINGS TO ASK ME</div>
+    <div class="quick-grid">
+      <a class="quick-btn" href="https://t.me/jordanjayhays_bot?text=Research%20%5Btopic%5D">
+        <span>🔍</span> Research something new
+      </a>
+      <a class="quick-btn" href="https://t.me/jordanjayhays_bot?text=Build%20a%20dashboard%20for%20%5Bproject%5D">
+        <span>📊</span> Build a dashboard
+      </a>
+      <a class="quick-btn" href="https://t.me/jordanjayhays_bot?text=Find%20events%20in%20Spain%20for%20%5Btopic%5D">
+        <span>📅</span> Find events in Spain
+      </a>
+      <a class="quick-btn" href="https://t.me/jordanjayhays_bot?text=How%20are%20you%20doing">
+        <span>🩺</span> Run health check
+      </a>
+      <a class="quick-btn" href="https://t.me/jordanjayhays_bot?text=What%20loops%20are%20running">
+        <span>🤖</span> Check active loops
+      </a>
+      <a class="quick-btn" href="https://t.me/jordanjayhays_bot?text=Improve%20yourself">
+        <span>⚡</span> Self-improve
+      </a>
+    </div>
+  </div>
+
+  <!-- MEMORY / CONTEXT -->
+  <div class="section">
+    <div class="section-title">WHAT I KNOW ABOUT JORDAN</div>
+    <div style="font-size:0.9rem;line-height:1.8;color:var(--muted);">
+      <p>✅ <strong style="color:var(--text);">MBA student</strong> — Madrid-based</p>
+      <p>✅ <strong style="color:var(--text);">Projects:</strong> PISCO (sales), Niah (events), Neurotech (research), Massage Pass (leads), Consciousness Pod (product)</p>
+      <p>✅ <strong style="color:var(--text);">Communication:</strong> Telegram only, iPhone — prefers short + direct, binary answers</p>
+      <p>✅ <strong style="color:var(--text);">Location:</strong> Salamanca area, Madrid</p>
+      <p>✅ <strong style="color:var(--text);">Preference:</strong> Clickable links, not file paths. One step at a time.</p>
+      <p>✅ <strong style="color:var(--text);">Frustration:</strong> Dashboards that don't do anything. Expects running systems.</p>
+      <p>❌ <strong style="color:var(--text);">Resend API key</strong> — invalid, needs fresh key for email to work</p>
+      <p>❌ <strong style="color:var(--text);">MacBook screen cracked</strong> — uses Telegram iOS only</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <p>Built by Hermes Agent · <a href="https://github.com/nousresearch/hermes-agent">Nous Research</a></p>
+  <p style="margin-top:4px;">Last updated: June 17, 2026 · Runs on MiniMax M2.7 + Claude API</p>
+</div>
+
+</body>
+</html>

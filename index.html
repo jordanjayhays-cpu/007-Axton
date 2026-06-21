@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Command Center</title>
+<style>
+:root {
+  --bg: #0a0a0f;
+  --surface: #111118;
+  --surface2: #18181f;
+  --border: #222230;
+  --text: #e8e8f0;
+  --muted: #666680;
+  --accent: #6366f1;
+  --green: #22c55e;
+  --red: #ef4444;
+  --yellow: #eab308;
+  --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; }
+
+.header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 20px; height: 56px; display: flex; align-items: center; position: sticky; top: 0; z-index: 100; }
+.header-title { font-size: 16px; font-weight: 600; }
+.live-dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; margin-left: 16px; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+.header-badge { margin-left: auto; background: rgba(99,102,241,0.15); color: var(--accent); font-size: 11px; padding: 3px 10px; border-radius: 20px; font-weight: 600; }
+
+.tabs { background: var(--surface); border-bottom: 1px solid var(--border); display: flex; padding: 0 20px; overflow-x: auto; flex-shrink: 0; }
+.tab { padding: 12px 16px; font-size: 13px; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; transition: all 0.15s; flex-shrink: 0; }
+.tab:hover { color: var(--text); }
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+.main { padding: 20px; max-width: 1200px; margin: 0 auto; }
+.panel { display: none; }
+.panel.active { display: block; }
+
+/* Status bar */
+.status-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 24px; }
+.status-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px; text-align: center; }
+.status-card.warn { border-color: var(--yellow); }
+.status-card.ok { border-color: var(--green); }
+.status-card.error { border-color: var(--red); }
+.val { font-size: 24px; font-weight: 700; margin-bottom: 2px; }
+.val.green { color: var(--green); }
+.val.red { color: var(--red); }
+.val.yellow { color: var(--yellow); }
+.lbl { font-size: 11px; color: var(--muted); }
+
+/* Alert */
+.alert { background: rgba(239,68,68,0.08); border: 1px solid var(--red); border-radius: 10px; padding: 14px 18px; margin-bottom: 20px; display: flex; align-items: flex-start; gap: 10px; font-size: 13px; color: var(--red); }
+.alert::before { content: "⚠"; font-size: 16px; flex-shrink: 0; }
+.alert code { background: rgba(255,255,255,0.08); padding: 1px 4px; border-radius: 3px; font-family: monospace; color: var(--text); }
+
+/* Section header */
+.sec-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); margin: 24px 0 12px; display: flex; align-items: center; gap: 8px; }
+.sec-title:first-child { margin-top: 0; }
+.sec-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+/* Dash grid */
+.dash-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+.dash-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; transition: all 0.15s; cursor: pointer; }
+.dash-card:hover { border-color: var(--accent); }
+.dash-card-header { background: var(--surface2); padding: 10px 14px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+.dash-dot { width: 6px; height: 6px; border-radius: 50%; }
+.dot-green { background: var(--green); }
+.dot-red { background: var(--red); }
+.dot-yellow { background: var(--yellow); }
+.dash-card-name { font-size: 13px; font-weight: 600; flex: 1; }
+.dash-card-meta { font-size: 11px; color: var(--muted); }
+.dash-card iframe { width: 100%; height: 200px; border: none; display: block; background: var(--bg); }
+.dash-card-footer { padding: 8px 14px; border-top: 1px solid var(--border); display: flex; gap: 8px; }
+.dash-btn { flex: 1; background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 6px 10px; font-size: 11px; color: var(--text); cursor: pointer; text-align: center; text-decoration: none; transition: all 0.15s; }
+.dash-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* Modal */
+.modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 200; }
+.modal.show { display: flex; flex-direction: column; }
+.modal-head { background: var(--surface); border-bottom: 1px solid var(--border); padding: 12px 20px; display: flex; align-items: center; }
+.modal-title { font-size: 14px; font-weight: 600; flex: 1; }
+.modal-close { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 6px 14px; font-size: 12px; color: var(--text); cursor: pointer; }
+.modal iframe { flex: 1; border: none; background: var(--bg); }
+
+/* Projects */
+.proj-list { display: flex; flex-direction: column; gap: 8px; }
+.proj-item { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: all 0.15s; }
+.proj-item:hover { border-color: var(--accent); }
+.proj-icon { width: 36px; height: 36px; background: var(--surface2); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+.proj-info { flex: 1; }
+.proj-name { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+.proj-desc { font-size: 12px; color: var(--muted); }
+.proj-status { font-size: 11px; padding: 2px 8px; border-radius: 4px; }
+.proj-status.ok { background: rgba(34,197,94,0.15); color: var(--green); }
+.proj-status.warn { background: rgba(234,179,8,0.15); color: var(--yellow); }
+.proj-status.error { background: rgba(239,68,68,0.15); color: var(--red); }
+
+/* Cron jobs */
+.job-list { display: flex; flex-direction: column; gap: 8px; }
+.job-item { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.job-item.error { border-color: rgba(239,68,68,0.4); }
+.job-head { background: var(--surface2); padding: 10px 14px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+.job-name { font-size: 13px; font-weight: 600; flex: 1; }
+.job-meta { display: flex; gap: 8px; align-items: center; }
+.job-time { font-size: 11px; color: var(--muted); background: var(--surface); border: 1px solid var(--border); padding: 2px 8px; border-radius: 4px; }
+.job-runs { font-size: 11px; color: var(--muted); }
+.job-body { padding: 10px 14px; }
+.job-path { font-family: monospace; font-size: 11px; color: var(--accent); background: rgba(99,102,241,0.1); padding: 3px 8px; border-radius: 4px; display: inline-block; margin: 2px 2px 2px 0; }
+.job-note { font-size: 11px; color: var(--muted); margin-top: 6px; }
+.job-note.fail { color: var(--red); }
+
+/* Flow diagram */
+.flow-row { display: flex; align-items: center; overflow-x: auto; padding: 8px 0; gap: 0; }
+.flow-col { display: flex; flex-direction: column; gap: 8px; min-width: 160px; }
+.flow-arrow { display: flex; flex-direction: column; align-items: center; width: 48px; flex-shrink: 0; }
+.flow-arrow-text { font-size: 18px; color: var(--muted); }
+.flow-arrow-label { font-size: 10px; color: var(--muted); text-align: center; }
+.node { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 12px; font-size: 12px; }
+.node-label { font-weight: 600; font-size: 13px; margin-bottom: 4px; }
+.node-detail { color: var(--muted); font-size: 11px; margin-top: 2px; }
+.node-tag { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 600; margin-top: 6px; }
+.tg { background: rgba(34,197,94,0.15); color: var(--green); }
+.tr { background: rgba(239,68,68,0.15); color: var(--red); }
+.ty { background: rgba(234,179,8,0.15); color: var(--yellow); }
+.nd-ok { border-color: var(--green); }
+.nd-err { border-color: var(--red); }
+.nd-warn { border-color: var(--yellow); }
+
+.fix-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+
+/* Discover */
+.disc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
+.disc-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+.disc-name { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+.disc-desc { font-size: 12px; color: var(--muted); line-height: 1.5; margin-bottom: 10px; }
+.disc-size { font-size: 11px; color: var(--muted); background: var(--surface2); padding: 3px 8px; border-radius: 4px; display: inline-block; margin-bottom: 10px; }
+.disc-btn { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 6px 14px; font-size: 12px; color: var(--accent); cursor: pointer; text-decoration: none; display: inline-block; }
+.disc-btn:hover { border-color: var(--accent); }
+
+/* Skills */
+.skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; }
+.skill-item { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; }
+.skill-cat { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--accent); margin-bottom: 4px; }
+.skill-name { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+.skill-desc { font-size: 11px; color: var(--muted); }
+
+/* School access */
+.school-banner { background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(34,197,94,0.1)); border: 1px solid var(--accent); border-radius: 10px; padding: 16px 20px; margin-bottom: 24px; display: flex; align-items: center; gap: 14px; }
+.school-banner-icon { font-size: 28px; flex-shrink: 0; }
+.school-banner-text { flex: 1; }
+.school-banner-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+.school-banner-body { font-size: 12px; color: var(--muted); line-height: 1.5; }
+.school-url { font-family: monospace; font-size: 12px; background: rgba(99,102,241,0.2); padding: 4px 10px; border-radius: 4px; color: var(--accent); text-decoration: none; display: inline-block; margin-top: 6px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-title">Command Center</div>
+  <div class="live-dot"></div>
+  <div class="header-badge">neurodashboards.com</div>
+</div>
+
+<div class="tabs">
+  <div class="tab" data-tab="dashboards">Dashboards</div>
+  <div class="tab" data-tab="projects">Projects</div>
+  <div class="tab" data-tab="cron">Cron Jobs</div>
+  <div class="tab active" data-tab="system">System Flow</div>
+  <div class="tab" data-tab="discover">Discover</div>
+  <div class="tab" data-tab="skills">Skills</div>
+</div>
+
+<div class="main">
+
+  <!-- SCHOOL ACCESS BANNER -->
+  <div class="school-banner">
+    <div class="school-banner-icon">🏫</div>
+    <div class="school-banner-text">
+      <div class="school-banner-title">At school? Use the GitHub Pages URL directly</div>
+      <div class="school-banner-body">
+        neurodashboards.com may be blocked by school firewall. Use this direct URL instead — schools whitelisted GitHub Pages by default.
+      </div>
+      <a href="https://jordanjayhays-cpu.github.io/007-Axton/" class="school-url" target="_blank">
+        jordanjayhays-cpu.github.io/007-Axton/
+      </a>
+    </div>
+  </div>
+
+  <!-- ===================== DASHBOARDS TAB ===================== -->
+  <div id="panel-dashboards" class="panel">
+
+    <div class="status-bar">
+      <div class="status-card ok">
+        <div class="val green">7</div>
+        <div class="lbl">Live Dashboards</div>
+      </div>
+      <div class="status-card ok">
+        <div class="val green">153 KB</div>
+        <div class="lbl">Neurotech Dashboard</div>
+      </div>
+      <div class="status-card warn">
+        <div class="val yellow">2</div>
+        <div class="lbl">Errors</div>
+      </div>
+      <div class="status-card ok">
+        <div class="val green">11</div>
+        <div class="lbl">Active Cron Jobs</div>
+      </div>
+    </div>
+
+    <div class="dash-grid">
+
+      <div class="dash-card" onclick="openDash('neurotech-dash','Neurotech Funding Dashboard','https://neurodashboards.com/neuromatch/funding/neurotech-dashboard.html')">
+        <div class="dash-card-header">
+          <span class="dash-dot dot-green"></span>
+          <span class="dash-card-name">Neurotech Funding</span>
+          <span class="dash-card-meta">153 KB · Live</span>
+        </div>
+        <div class="dash-card-footer">
+          <a class="dash-btn" href="https://neurodashboards.com/neuromatch/funding/neurotech-dashboard.html" target="_blank">Open</a>
+          <a class="dash-btn" href="https://github.com/jordanjayhays-cpu/007-Axton/tree/main/neuromatch/funding/neurotech-dashboard.html" target="_blank">Source</a>
+        </div>
+      </div>
+
+      <div class="dash-card" onclick="openDash('neuromatch','Neuro Intelligence Outreach','https://neurodashboards.com/neuromatch/funding/neurotech-dashboard.html')">
+        <div class="dash-card-header">
+          <span class="dash-dot dot-green"></span>
+          <span class="dash-card-name">Neuro Intelligence Outreach</span>
+          <span class="dash-card-meta">Embedded</span>
+        </div>
+        <div class="dash-card-footer">
+          <a class="dash-btn" href="https://neurodashboards.com/neuromatch/funding/neurotech-dashboard.html" target="_blank">Open</a>
+          <a class="dash-btn" href="https://github.com/jordanjayhays-cpu/007-Axton/tree/main/neuromatch" target="_blank">Source</a>
+        </div>
+      </div>
+
+      <div class="dash-card" onclick="openDash('niah','Niah — B2B Event Networking','https://jordanjayhays-cpu.github.io/niah-dashboard/')">
+        <div class="dash-card-header">
+          <span class="dash-dot dot-green"></span>
+          <span class="dash-card-name">Niah Dashboard</span>
+          <span class="dash-card-meta">Live</span>
+        </div>
+        <div class="dash-card-footer">
+          <a class="dash-btn" href="https://jordanjayhays-cpu.github.io/niah-dashboard/" target="_blank">Open</a>
+          <a class="dash-btn" href="https://github.com/jordanjayhays-cpu/niah-dashboard" target="_blank">Source</a>
+        </div>
+      </div>
+
+      <div class="dash-card" onclick="openDash('massage','Massage Club / Massage Pass','https://neurodashboards.com/overnight-builds/massage-pass-landing.html')">
+        <div class="dash-card-header">
+          <span class="dash-dot dot-green"></span>
+          <span class="dash-card-name">Massage Pass Landing</span>
+          <span class="dash-card-meta">21 KB</span>
+        </div>
+        <div class="dash-card-footer">
+          <a class="dash-btn" href="https://neurodashboards.com/overnight-builds/massage-pass-landing.html" target="_blank">Open</a>
+          <a class="dash-btn" href="https://github.com/jordanjayhays-cpu/007-Axton/tree/main/PROJECTS/MASSAGE-PASS" target="_blank">Source</a>
+        </div>
+      </div>
+
+      <div class="dash-card" onclick="openDash('conscious','Consciousness Transit / The Passage','https://jordanjayhays-cpu.github.io/mission-control/neuromatch/the-passage.html')">
+        <div class="dash-card-header">
+          <span class="dash-dot dot-green"></span>
+          <span class="dash-card-name">The Passage (Consciousness)</span>
+          <span class="dash-card-meta">147 KB</span>
+        </div>
+        <div class="dash-card-footer">
+          <a class="dash-btn" href="https://jordanjayhays-cpu.github.io/mission-control/neuromatch/the-passage.html" target="_blank">Open</a>
+          <a class="dash-btn" href="https://github.com/jordanjayhays-cpu/007-Axton/tree/main/neuromatch" target="_blank">Source</a>
+        </div>
+      </div>
+
+      <div class="dash-card" onclick="openDash('factory','Hermes Factory / Command Center','https://neurodashboards.com/hermes-factory.html')">
+        <div class="dash-card-header">
+          <span class="dash-dot dot-green"></span>
+          <span class="dash-card-name">Hermes Factory</span>
+          <span class="dash-card-meta">Agent Hub</span>
+        </div>
+        <div class="dash-card-footer">
+          <a class="dash-btn" href="https://neurodashboards.com/hermes-factory.html" target="_blank">Open</a>
+          <a class="dash-btn" href="https://github.com/jordanjayhays-cpu/007-Axton/tree/main/hermes-factory" target="_blank">Source</a>
+        </div>
+      </div>
+
+      <div class="dash-card" onclick="openDash('comare','COMARE Intelligence Bible','https://neurodashboards.com/PROJECTS/COMARE/INTELLIGENCE-BIBLE.html')">
+        <div class="dash-card-header">
+          <span class="dash-dot dot-green"></span>
+          <span class="dash-card-name">COMARE Intelligence Bible</span>
+          <span class="dash-card-meta">32 KB</span>
+        </div>
+        <div class="dash-card-footer">
+          <a class="dash-btn" href="https://neurodashboards.com/PROJECTS/COMARE/INTELLIGENCE-BIBLE.html" target="_blank">Open</a>
+          <a class="dash-btn" href="https://github.com/jordanjayhays-cpu/007-Axton/tree/main/PROJECTS/COMARE" target="_blank">Source</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===================== PROJECTS TAB ===================== -->
+  <div id="panel-projects" class="panel">
+    <div class="proj-list">
+
+      <div class="proj-item" onclick="openDash('neurotech','Neurotech','https://neurodashboards.com/neuromatch/funding/neurotech-dashboard.html')">
+        <div class="proj-icon">🧠</div>
+        <div class="proj-info">
+          <div class="proj-name">Neurotech</div>
+          <div class="proj-desc">Neurotech funding intelligence, YTD $625M+, 50+ companies tracked</div>
+        </div>
+        <span class="proj-status ok">Active</span>
+      </div>
+
+      <div class="proj-item" onclick="openDash('niah','Niah','https://jordanjayhays-cpu.github.io/niah-dashboard/')">
+        <div class="proj-icon">📅</div>
+        <div class="proj-info">
+          <div class="proj-name">Niah — B2B Event Networking</div>
+          <div class="proj-desc">Madrid-based conference discovery and B2B networking for MBAs</div>
+        </div>
+        <span class="proj-status ok">Active</span>
+      </div>
+
+      <div class="proj-item" onclick="openDash('massage','Massage Club','https://neurodashboards.com/overnight-builds/massage-pass-landing.html')">
+        <div class="proj-icon">💆</div>
+        <div class="proj-info">
+          <div class="proj-name">Massage Club (Massage Pass)</div>
+          <div class="proj-desc">MBA project — B2C massage booking, Madrid market</div>
+        </div>
+        <span class="proj-status ok">Active</span>
+      </div>
+
+      <div class="proj-item" onclick="openDash('conscious','Consciousness Transit Pod','https://jordanjayhays-cpu.github.io/mission-control/neuromatch/the-passage.html')">
+        <div class="proj-icon">🌌</div>
+        <div class="proj-info">
+          <div class="proj-name">Consciousness Transit Pod</div>
+          <div class="proj-desc">Hypothetical near-death experience research compilation</div>
+        </div>
+        <span class="proj-status warn">Concept</span>
+      </div>
+
+      <div class="proj-item" onclick="openDash('pisco','PISCO / Placewell','https://jordanjayhays-cpu.github.io/mission-control/neuromatch/pisco-dashboard.html')">
+        <div class="proj-icon">🏔️</div>
+        <div class="proj-info">
+          <div class="proj-name">PISCO (Placewell)</div>
+          <div class="proj-desc">B2B venue marketplace for corporate offsites in Peru</div>
+        </div>
+        <span class="proj-status warn">Stalled</span>
+      </div>
+
+      <div class="proj-item" onclick="openDash('nanobot','Nanobot','https://github.com/jordanjayhays-cpu/006')">
+        <div class="proj-icon">🦠</div>
+        <div class="proj-info">
+          <div class="proj-name">Nanobot</div>
+          <div class="proj-desc">Biotech startup research — 006 codename</div>
+        </div>
+        <span class="proj-status error">Archived</span>
+      </div>
+
+      <div class="proj-item" onclick="openDash('comare','COMARE','https://neurodashboards.com/PROJECTS/COMARE/INTELLIGENCE-BIBLE.html')">
+        <div class="proj-icon">📋</div>
+        <div class="proj-info">
+          <div class="proj-name">COMARE</div>
+          <div class="proj-desc">Competitor analysis bible, 200 prospects, action package, landscape</div>
+        </div>
+        <span class="proj-status ok">Research</span>
+      </div>
+
+      <div class="proj-item" onclick="openDash('harvard','Harvard Business School Case','https://neurodashboards.com/downloads/HARVARD-SIM.html')">
+        <div class="proj-icon">🎓</div>
+        <div class="proj-info">
+          <div class="proj-name">HBS Case Study</div>
+          <div class="proj-desc">Harvard Business School full case simulation — 46KB</div>
+        </div>
+        <span class="proj-status ok">Complete</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===================== CRON JOBS TAB ===================== -->
+  <div id="panel-cron" class="panel">
+
+    <div class="status-bar">
+      <div class="status-card ok">
+        <div class="val green">9</div>
+        <div class="lbl">Running OK</div>
+      </div>
+      <div class="status-card error">
+        <div class="val red">2</div>
+        <div class="lbl">With Errors</div>
+      </div>
+      <div class="status-card ok">
+        <div class="val green">11</div>
+        <div class="lbl">Total Jobs</div>
+      </div>
+      <div class="status-card warn">
+        <div class="val yellow">7-10</div>
+        <div class="lbl">UTC Run Hours</div>
+      </div>
+    </div>
+
+    <div class="job-list">
+
+      <div class="job-item">
+        <div class="job-head">
+          <span class="dash-dot dot-green"></span>
+          <span class="job-name">Neurotech Funding — Daily Research & Dashboard Update</span>
+          <div class="job-meta">
+            <span class="job-time">8:00 UTC</span>
+            <span class="job-runs">42 runs</span>
+          </div>
+        </div>
+        <div class="job-body">
+          <span class="job-path">~/workspace/007-Axton/neuromatch/funding/neurotech-dashboard.html</span>
+          <span class="job-path">→ git add + commit + push</span>
+          <div class="job-note fail">⚠ Writes locally, push fails silently (no remote)</div>
+        </div>
+      </div>
+
+      <div class="job-item">
+        <div class="job-head">
+          <span class="dash-dot dot-green"></span>
+          <span class="job-name">Neurotech Dashboard — Daily Refresh</span>
+          <div class="job-meta">
+            <span class="job-time">10:00 UTC</span>
+            <span class="job-runs">42 runs</span>
+          </div>
+        </div>
+        <div class="job-body">
+          <span class="job-path">/Users/jordan/workspace/007-Axton/neuromatch/funding/neurotech-dashboard.html</span>
+          <span class="job-path">→ reads + updates + writes</span>
+          <div class="job-note fail">⚠ Local only — no push</div>
+        </div>
+      </div>
+
+      <div class="job-item">
+        <div class="job-head">
+          <span class="dash-dot dot-green"></span>
+          <span class="job-name">Madrid Massage Leads — Daily Facebook/Forum Scout</span>
+          <div class="job-meta">
+            <span class="job-time">9:00 UTC</span>
+            <span class="job-runs">46 runs</span>
+          </div>
+        </div>
+        <div class="job-body">
+          <span class="job-path">Web search → Telegram direct</span>
+          <div class="job-note">✓ Best path — no file persistence issue</div>
+        </div>
+      </div>
+
+      <div class="job-item">
+        <div class="job-head">
+          <span class="dash-dot dot-green"></span>
+          <span class="job-name">Neuro US Expansion — Daily Prospecting Digest</span>
+          <div class="job-meta">
+            <span class="job-time">9:00 UTC</span>
+            <span class="job-runs">32 runs</span>
+          </div>
+        </div>
+        <div class="job-body">
+          <span class="job-path">~/workspace/007-Axton/neuro-companies/non-us-neuro-leads.html</span>
+          <span class="job-path">→ Telegram</span>
+          <div class="job-note fail">⚠ Local only — no remote</div>
+        </div>
+      </div>
+
+      <div class="job-item">
+        <div class="job-head">
+          <span class="dash-dot dot-green"></span>
+          <span class="job-name">Daily Deal Machine — Neurotech Lead Intelligence</span>
+          <div class="job-meta">
+            <span class="job-time">9:00 UTC</span>
+            <span class="job-runs">32 runs</span>
+          </div>
+        </div>
+        <div class="job-body">
+          <span class="job-path">autonomous-daily-machine.py → /tmp/mission-control</span>
+          <span class="job-path">→ reads output → Telegram</span>
+          <div class="job-note">✓ Uses script — no git push attempted</div>
+        </div>
+      </div>
+
+      <div class="job-item">
+        <div class="job-head">
+          <span class="dash-dot dot-green"></span>
+          <span class="job-name">Hermes Health Loop</span>
+          <div class="job-meta">
+            <span class="job-time">8:00 UTC</span>
+            <span class="job-runs">5 runs</span>
+          </div>
+        </div>
+        <div class="job-body">
+          <span class="job-path">hermes-health-check.py</span>
+          <span class="job-path">Supabase monitoring</span>
+        </div>
+      </div>
+
+      <div class="job-item">
+        <div class="job-head">
+          <span class="dash-dot dot-green"></span>
+          <span class="job-name">Niah Event Scout — Daily Madrid Conference Discovery</span>
+          <div class="job-meta">
+            <span class="job-time">8:00 UTC</span>
+            <span class="job-runs">9 runs</span>
+          </div>
+        </div>
+        <div class="job-body">
+          <span class="job-path">Discovers Madrid events → niah-dashboard → GitHub Pages</span>
+          <div class="job-note">✓ Working path</div>
+        </div>
+      </div>
+
+      <div class="job-item">
+        <div class="job-head">
+          <span class="dash-dot dot-yellow"></span>
+          <span class="job-name">Neurotech Weekly Dashboard Update</span>
+          <div class="job-meta">
+            <span class="job-time">Mon 9:00 UTC</span>
+            <span class="job-runs">6 runs</span>
+          </div>
+        </div>
+        <div class="job-body">
+          <span class="job-path">neurotech-weekly-update.py</span>
+          <span class="job-path">→ pushes to niah-dashboard GitHub Pages</span>
+          <div class="job-note">⚠ Pushes to wrong repo URL</div>
+        </div>
+      </div>
+
+      <div class="job-item">
+        <div class="job-head">
+          <span class="dash-dot dot-red"></span>
+          <span class="job-name">Non-US Neurotech → US Market</span>
+          <div class="job-meta">
+            <span class="job-time">8:00 UTC</span>
+            <span class="job-runs">37 runs</span>
+          </div>
+        </div>
+        <div class="job-body">
+          <span class="job-path">~/.hermes/cron/output/neurotech-leads-YYYY-MM-DD.html</span>
+          <span class="job-path">→ Telegram</span>
+          <div class="job-note fail">✗ Error — web search failing in cron sandbox</div>
+        </div>
+      </div>
+
+      <div class="job-item">
+        <div class="job-head">
+          <span class="dash-dot dot-red"></span>
+          <span class="job-name">Self-Improvement Research</span>
+          <div class="job-meta">
+            <span class="job-time">7:00 UTC</span>
+            <span class="job-runs">37 runs</span>
+          </div>
+        </div>
+        <div class="job-body">
+          <span class="job-path">~/.hermes/cron/output/self-improvement-YYYY-MM-DD.html</span>
+          <span class="job-path">→ Telegram</span>
+          <div class="job-note fail">✗ Error — web search failing in cron sandbox</div>
+        </div>
+      </div>
+
+      <div class="job-item">
+        <div class="job-head">
+          <span class="dash-dot dot-yellow"></span>
+          <span class="job-name">Hermes Self-Improve</span>
+          <div class="job-meta">
+            <span class="job-time">9:00 UTC</span>
+            <span class="job-runs">5 runs</span>
+          </div>
+        </div>
+        <div class="job-body">
+          <span class="job-path">hermes-self-improve.py</span>
+          <span class="job-path">Checks health, runs curator, reports</span>
+          <div class="job-note">⚠ Status: error — curator not self-improving</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===================== SYSTEM FLOW TAB ===================== -->
+  <div id="panel-system" class="panel active">
+
+    <div class="alert">
+      <span>Root cause: <code>~/workspace/007-Axton</code> has NO remote configured — every <code>git push</code> silently fails. Data writes locally but never reaches GitHub. I manually synced it, but the next cron run will diverge again.</span>
+    </div>
+
+    <div class="flow-row" style="margin-bottom:24px">
+      <div class="flow-col">
+        <div class="node nd-ok">
+          <div class="node-label">11 Cron Jobs</div>
+          <div class="node-detail">Daily 7-10am UTC</div>
+          <div class="node-detail">Write to local filesystem</div>
+          <span class="node-tag tg">WRITE LOCAL</span>
+        </div>
+      </div>
+      <div class="flow-arrow">
+        <div class="flow-arrow-text">→</div>
+        <div class="flow-arrow-label">writes</div>
+      </div>
+      <div class="flow-col">
+        <div class="node nd-err">
+          <div class="node-label">~/workspace/007-Axton</div>
+          <div class="node-detail">Local filesystem</div>
+          <div class="node-detail">Branch: master</div>
+          <div class="node-detail" style="color:var(--red)">NO REMOTE</div>
+          <span class="node-tag tr">PUSH FAILS</span>
+        </div>
+      </div>
+      <div class="flow-arrow">
+        <div class="flow-arrow-text" style="color:var(--red)">✗</div>
+        <div class="flow-arrow-label" style="color:var(--red)">git push</div>
+      </div>
+      <div class="flow-col">
+        <div class="node nd-warn">
+          <div class="node-label">GitHub master</div>
+          <div class="node-detail">ce40312 — stale</div>
+          <div class="node-detail" style="color:var(--red)">Missing updates</div>
+          <span class="node-tag ty">DIVERGED</span>
+        </div>
+      </div>
+      <div class="flow-arrow">
+        <div class="flow-arrow-text">→</div>
+        <div class="flow-arrow-label">manual sync</div>
+      </div>
+      <div class="flow-col">
+        <div class="node nd-ok">
+          <div class="node-label">GitHub gh-pages</div>
+          <div class="node-detail">neurodashboards.com</div>
+          <div class="node-detail">153 KB dashboard ✓</div>
+          <span class="node-tag tg">LIVE</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec-title">What needs fixing</div>
+    <div class="fix-grid">
+      <div class="node nd-ok">
+        <div class="node-label">Fix 1: Add remote + push</div>
+        <div class="node-detail">git remote add origin https://ghp_...@github.com/jordanjayhays-cpu/007-Axton.git</div>
+        <div class="node-detail" style="margin-top:6px">Then push master after each cron run</div>
+      </div>
+      <div class="node nd-ok">
+        <div class="node-label">Fix 2: Auto-sync to gh-pages</div>
+        <div class="node-detail">After push to master, sync to gh-pages</div>
+        <div class="node-detail" style="margin-top:6px">Or change GitHub Pages source → master</div>
+      </div>
+      <div class="node nd-warn">
+        <div class="node-label">Fix 3: Repair 2 failing jobs</div>
+        <div class="node-detail">Non-US Neurotech + Self-Improve</div>
+        <div class="node-detail" style="margin-top:6px">Search tools failing in cron sandbox</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===================== DISCOVER TAB ===================== -->
+  <div id="panel-discover" class="panel">
+
+    <div class="sec-title">Research Intelligence</div>
+    <div class="disc-grid">
+
+      <div class="disc-card">
+        <div class="disc-name">100 Projects to Steal</div>
+        <div class="disc-desc">Curated collection of viable startup/business ideas across B2B, B2C, biotech, and tech sectors</div>
+        <div class="disc-size">31 KB</div>
+        <a href="https://neurodashboards.com/downloads/100-PROJECTS-TO-STEAL.html" class="disc-btn" target="_blank">Open</a>
+      </div>
+
+      <div class="disc-card">
+        <div class="disc-name">COMARE Intelligence Bible</div>
+        <div class="disc-desc">Comprehensive competitor analysis framework — market mapping, positioning, GTM strategies</div>
+        <div class="disc-size">32 KB</div>
+        <a href="https://neurodashboards.com/PROJECTS/COMARE/INTELLIGENCE-BIBLE.html" class="disc-btn" target="_blank">Open</a>
+      </div>
+
+      <div class="disc-card">
+        <div class="disc-name">COMARE Prospects-200</div>
+        <div class="disc-desc">200 company prospect list with contact intelligence, funding data, and outreach sequences</div>
+        <div class="disc-size">108 KB</div>
+        <a href="https://neurodashboards.com/PROJECTS/COMARE/PROSPECTS-200.html" class="disc-btn" target="_blank">Open</a>
+      </div>
+
+      <div class="disc-card">
+        <div class="disc-name">Harvard Business School Full Case</div>
+        <div class="disc-desc">Complete HBS case study simulation with analysis, frameworks, and strategic recommendations</div>
+        <div class="disc-size">46 KB</div>
+        <a href="https://neurodashboards.com/downloads/HARVARD-SIM.html" class="disc-btn" target="_blank">Open</a>
+      </div>
+
+      <div class="disc-card">
+        <div class="disc-name">COMARE Action Package</div>
+        <div class="disc-desc">Immediate action steps, outreach templates, and execution playbook</div>
+        <div class="disc-size">5 KB</div>
+        <a href="https://neurodashboards.com/PROJECTS/COMARE/ACTION-PACKAGE.html" class="disc-btn" target="_blank">Open</a>
+      </div>
+
+      <div class="disc-card">
+        <div class="disc-name">COMARE Competitor Landscape</div>
+        <div class="disc-desc">Market landscape visualization — direct competitors, substitutes, and adjacent players</div>
+        <div class="disc-size">12 KB</div>
+        <a href="https://neurodashboards.com/PROJECTS/COMARE/COMPETITOR-LANDSCAPE.html" class="disc-btn" target="_blank">Open</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===================== SKILLS TAB ===================== -->
+  <div id="panel-skills" class="panel">
+    <div class="skills-grid">
+
+      <div class="skill-item">
+        <div class="skill-cat">mlops</div>
+        <div class="skill-name">llama-cpp</div>
+        <div class="skill-desc">Local GGUF inference + HF Hub model discovery</div>
+      </div>
+
+      <div class="skill-item">
+        <div class="skill-cat">mlops</div>
+        <div class="skill-name">serving-llms-vllm</div>
+        <div class="skill-desc">vLLM: high-throughput LLM serving, OpenAI API, quantization</div>
+      </div>
+
+      <div class="skill-item">
+        <div class="skill-cat">mlops</div>
+        <div class="skill-name">fine-tuning-with-trl</div>
+        <div class="skill-desc">SFT, DPO, PPO, GRPO, reward modeling for LLM RLHF</div>
+      </div>
+
+      <div class="skill-item">
+        <div class="skill-cat">mlops</div>
+        <div class="skill-name">unsloth</div>
+        <div class="skill-desc">2-5x faster LoRA/QLoRA fine-tuning, less VRAM</div>
+      </div>
+
+      <div class="skill-item">
+        <div class="skill-cat">mlops</div>
+        <div class="skill-name">weights-and-biases</div>
+        <div class="skill-desc">Log ML experiments, sweeps, model registry, dashboards</div>
+      </div>
+
+      <div class="skill-item">
+        <div class="skill-cat">mlops</div>
+        <div class="skill-name">huggingface-hub</div>
+        <div class="skill-desc">HF CLI: search/download/upload models, datasets</div>
+      </div>
+
+      <div class="skill-item">
+        <div class="skill-cat">autonomous-ai-agents</div>
+        <div class="skill-name">claude-code</div>
+        <div class="skill-desc">Delegate coding to Claude Code CLI</div>
+      </div>
+
+      <div class="skill-item">
+        <div class="skill-cat">autonomous-ai-agents</div>
+        <div class="skill-name">codex</div>
+        <div class="skill-desc">Delegate coding to OpenAI Codex CLI</div>
+      </div>
+
+      <div class="skill-item">
+        <div class="skill-cat">devops</div>
+        <div class="skill-name">supabase</div>
+        <div class="skill-desc">Supabase setup: tables, RLS policies, idempotent SQL</div>
+      </div>
+
+      <div class="skill-item">
+        <div class="skill-cat">devops</div>
+        <div class="skill-name">webhook-subscriptions</div>
+        <div class="skill-desc">Event-driven agent runs via webhooks</div>
+      </div>
+
+      <div class="skill-item">
+        <div class="skill-cat">product</div>
+        <div class="skill-name">niah</div>
+        <div class="skill-desc">Niah — B2B event networking product for Madrid MBAs</div>
+      </div>
+
+      <div class="skill-item">
+        <div class="skill-cat">product</div>
+        <div class="skill-name">massage-pass</div>
+        <div class="skill-desc">Massage Pass — MBA project product vision + architecture</div>
+      </div>
+
+      <div class="skill-item">
+        <div class="skill-cat">research</div>
+        <div class="skill-name">arxiv</div>
+        <div class="skill-desc">Search arXiv papers by keyword, author, category</div>
+      </div>
+
+      <div class="skill-item">
+        <div class="skill-cat">research</div>
+        <div class="skill-name">polymarket</div>
+        <div class="skill-desc">Query Polymarket: markets, prices, orderbooks, history</div>
+      </div>
+
+      <div class="skill-item">
+        <div class="skill-cat">github</div>
+        <div class="skill-name">github-pr-workflow</div>
+        <div class="skill-desc">GitHub PR lifecycle: branch, commit, open, CI, merge</div>
+      </div>
+
+      <div class="skill-item">
+        <div class="skill-cat">github</div>
+        <div class="skill-name">github-code-review</div>
+        <div class="skill-desc">Review PRs: diffs, inline comments via gh or REST</div>
+      </div>
+
+      <div class="skill-item">
+        <div class="skill-cat">productivity</div>
+        <div class="skill-name">powerpoint</div>
+        <div class="skill-desc">Create, read, edit .pptx decks, slides, notes, templates</div>
+      </div>
+
+      <div class="skill-item">
+        <div class="skill-cat">productivity</div>
+        <div class="skill-name">google-workspace</div>
+        <div class="skill-desc">Gmail, Calendar, Drive, Docs, Sheets via gws CLI</div>
+      </div>
+
+      <div class="skill-item">
+        <div class="skill-cat">software</div>
+        <div class="skill-name">systematic-debugging</div>
+        <div class="skill-desc">4-phase root cause debugging: understand before fixing</div>
+      </div>
+
+      <div class="skill-item">
+        <div class="skill-cat">software</div>
+        <div class="skill-name">test-driven-development</div>
+        <div class="skill-desc">TDD: enforce RED-GREEN-REFACTOR, tests before code</div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- end main -->
+
+<!-- Modal for embedded dashboards -->
+<div id="modal" class="modal">
+  <div class="modal-head">
+    <div class="modal-title" id="modal-title">Dashboard</div>
+    <button class="modal-close" onclick="closeModal()">Close</button>
+  </div>
+  <iframe id="modal-iframe" src=""></iframe>
+</div>
+
+<script>
+function openTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelector(`[data-tab="${name}"]`).classList.add('active');
+  document.getElementById('panel-' + name).classList.add('active');
+}
+document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => openTab(t.dataset.tab)));
+
+function openDash(id, title, url) {
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-iframe').src = url;
+  document.getElementById('modal').classList.add('show');
+}
+function closeModal() {
+  document.getElementById('modal').classList.remove('show');
+  document.getElementById('modal-iframe').src = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// Open System Flow tab by default
+openTab('system');
+</script>
+
+</body>
+</html>

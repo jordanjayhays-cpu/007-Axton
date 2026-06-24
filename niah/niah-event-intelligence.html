@@ -3,25 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Niah — Event Intelligence · Madrid · June 24, 2025+</title>
+<title>Niah — Event Intelligence · Madrid · June 24, 2026</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   :root {
-    --bg: #0a0e17;
-    --surface: #111827;
-    --surface-2: #1a2234;
-    --border: #1e2d40;
-    --accent: #3b82f6;
-    --accent-dim: rgba(59,130,246,0.15);
-    --green: #10b981;
-    --green-dim: rgba(16,185,129,0.15);
-    --yellow: #f59e0b;
-    --yellow-dim: rgba(245,158,11,0.15);
-    --red: #ef4444;
-    --red-dim: rgba(239,68,68,0.15);
+    --bg: #0a0e17; --surface: #111827; --surface-2: #1a2234; --border: #1e2d40;
+    --accent: #3b82f6; --accent-dim: rgba(59,130,246,0.15);
+    --green: #10b981; --green-dim: rgba(16,185,129,0.15);
+    --yellow: #f59e0b; --yellow-dim: rgba(245,158,11,0.15);
+    --red: #ef4444; --red-dim: rgba(239,68,68,0.15);
     --purple: #8b5cf6;
-    --text: #e0e6ed;
-    --muted: #6b7a90;
+    --text: #e0e6ed; --muted: #6b7a90;
   }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 0 0 80px; }
   a { color: var(--accent); text-decoration: none; }
@@ -42,25 +34,24 @@
 
   main { max-width: 1100px; margin: 0 auto; padding: 28px 24px; }
 
-  /* SECTION */
-  .section { margin-bottom: 40px; }
   h2 { font-size: 16px; font-weight: 700; color: #f0f0f0; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
   h2 .icon { font-size: 18px; }
+  .section { margin-bottom: 40px; }
 
-  /* ALERT BANNER */
-  .alert { background: var(--red-dim); border: 1px solid rgba(239,68,68,0.3); border-radius: 12px; padding: 16px 20px; margin-bottom: 28px; }
-  .alert-title { font-size: 14px; font-weight: 700; color: #f87171; margin-bottom: 6px; }
-  .alert-text { font-size: 13px; color: var(--muted); line-height: 1.5; }
-
-  /* SCORE BANNER */
+  /* SCORE */
   .score-banner { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px 24px; margin-bottom: 28px; display: flex; gap: 32px; align-items: center; flex-wrap: wrap; }
   .score-title { font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
-  .score-value { font-size: 36px; font-weight: 700; color: var(--yellow); }
+  .score-value { font-size: 36px; font-weight: 700; color: var(--green); }
   .score-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
   .score-breakdown { display: flex; gap: 20px; flex-wrap: wrap; }
   .score-item { text-align: center; }
   .score-item .num { font-size: 20px; font-weight: 700; }
   .score-item .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+
+  /* ALERT */
+  .alert { background: var(--green-dim); border: 1px solid rgba(16,185,129,0.3); border-radius: 12px; padding: 16px 20px; margin-bottom: 28px; }
+  .alert-title { font-size: 14px; font-weight: 700; color: #6ee7b7; margin-bottom: 6px; }
+  .alert-text { font-size: 13px; color: var(--muted); line-height: 1.5; }
 
   /* EVENT CARD */
   .event-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; margin-bottom: 12px; transition: border-color 0.15s; }
@@ -72,7 +63,6 @@
   .event-price { font-size: 13px; font-weight: 700; padding: 3px 10px; border-radius: 6px; }
   .price-free { background: var(--green-dim); color: var(--green); }
   .price-paid { background: var(--yellow-dim); color: var(--yellow); }
-  .price-niche { background: rgba(139,92,246,0.15); color: #a78bfa; }
   .event-meta { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 8px; }
   .event-meta-item { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 4px; }
   .event-meta-item strong { color: var(--text); }
@@ -84,19 +74,15 @@
   .tag.founder { background: rgba(239,68,68,0.1); color: #f87171; }
   .tag.b2b { background: var(--green-dim); color: var(--green); }
   .tag.invest { background: var(--yellow-dim); color: var(--yellow); }
-  .tag.crypto { background: rgba(245,158,11,0.1); color: #f59e0b; }
   .tag.product { background: rgba(236,72,153,0.15); color: #f472b6; }
-  .tag.diaspora { background: rgba(16,185,129,0.15); color: #10b981; }
-  .tag.growth { background: rgba(59,130,246,0.15); color: #60a5fa; }
-  .event-score { display: flex; align-items: center; gap: 6px; font-size: 12px; }
-  .score-pill { padding: 2px 8px; border-radius: 4px; font-weight: 700; }
+  .tag.past { background: rgba(100,116,139,0.2); color: #94a3b8; }
+  .score-pill { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 700; }
   .score-pill.hot { background: rgba(239,68,68,0.15); color: #ef4444; }
   .score-pill.good { background: var(--green-dim); color: var(--green); }
   .score-pill.maybe { background: var(--yellow-dim); color: var(--yellow); }
-  .score-pill.past { background: var(--tag-bg); color: #94a3b8; }
-  .tag-bg { background: rgba(100,116,139,0.2); color: #94a3b8; }
+  .score-pill.past { background: rgba(100,116,139,0.2); color: #94a3b8; }
 
-  /* RECURRING CARDS */
+  /* RECURRING GRID */
   .recurring-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
   .recurring-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; }
   .recurring-name { font-size: 14px; font-weight: 600; color: #f0f0f0; margin-bottom: 4px; }
@@ -125,20 +111,23 @@
   .insight-title { font-size: 14px; font-weight: 700; color: #f0f0f0; margin-bottom: 8px; }
   .insight-text { font-size: 13px; color: var(--muted); line-height: 1.6; }
 
-  /* PLATFORM CARDS */
+  /* PAST EVENT CARD */
+  .event-card.past { opacity: 0.6; }
+  .event-card.past:hover { opacity: 0.85; }
+
+  /* GAP NOTE */
+  .gap-note { background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.25); border-radius: 10px; padding: 14px 16px; margin-bottom: 20px; font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+  /* PLATFORM GRID */
   .platform-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
   .platform-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
   .platform-name { font-size: 15px; font-weight: 700; color: #f0f0f0; margin-bottom: 6px; }
   .platform-desc { font-size: 12px; color: var(--muted); line-height: 1.4; }
   .platform-url { font-size: 11px; color: var(--accent); margin-top: 8px; display: block; }
 
-  /* SUMMER NOTE */
-  .summer-note { background: var(--yellow-dim); border: 1px solid rgba(245,158,11,0.3); border-radius: 10px; padding: 14px 16px; margin-bottom: 20px; font-size: 13px; color: var(--muted); line-height: 1.5; }
-
   @media (max-width: 600px) {
     .recs-row { flex-wrap: wrap; }
     .recs-date { width: 100%; }
-    .event-top { flex-direction: column; }
     .score-banner { flex-direction: column; align-items: flex-start; }
   }
 </style>
@@ -148,240 +137,338 @@
 <div class="back-btn"><a href="https://neurodashboards.com/niah-dashboard.html">← Back to Niah Dashboard</a></div>
 
 <header>
-  <div class="badge">Niah · Event Intelligence · Updated Jun 25, 2025</div>
+  <div class="badge">Niah · Event Intelligence · Updated June 24, 2026</div>
   <h1>Madrid B2B Events Radar</h1>
-  <p class="subtitle">Events from June 24, 2025 onwards · Luma, Meetup.com, Startup Grind, direct scraping</p>
+  <p class="subtitle">Live intelligence from Luma, Meetup.com, Startup Grind, Eventbrite, South Summit · June 24, 2026 onwards</p>
   <div class="meta-row">
-    <div class="meta-item"><span class="val">3</span> confirmed events (Jun 24+)</div>
+    <div class="meta-item"><span class="val">8</span> events analyzed</div>
+    <div class="meta-item"><span class="val">3</span> confirmed upcoming</div>
     <div class="meta-item"><span class="val">5</span> recurring groups</div>
-    <div class="meta-item"><span class="val">Major gap:</span> Jul–Aug Madrid summer shutdown</div>
-    <div class="meta-item">Next major event: <span class="val">Sep 12</span></div>
+    <div class="meta-item"><span class="val">Aug 3 → Oct 1</span> = dead zone (48 days!)</div>
   </div>
 </header>
 
 <main>
 
-<!-- ⚠️ PAST EVENTS WARNING -->
-<div class="alert">
-  <div class="alert-title">⚠️ Events below this point already happened — left for reference only</div>
-  <div class="alert-text">
-    South Summit Madrid 2025 (June 4–6) · CreateWith_ Maker Meetup (June 2) · Ladies in Product MAD (June 5) — all already past as of June 24, 2025.
-  </div>
-</div>
-
 <!-- SCORE -->
 <div class="score-banner">
   <div>
-    <div class="score-title">Niah Opportunity Score — H2 2025</div>
-    <div class="score-value">6.2 / 10</div>
-    <div class="score-sub">September is the real start. Summer (Jul–Aug) is dead in Madrid. Plan now, execute in September.</div>
+    <div class="score-title">Niah Opportunity Score — Summer/Autumn 2026</div>
+    <div class="score-value">7.5 / 10</div>
+    <div class="score-sub">Rich June-July window + South Summit aftermath. Oct is packed. Gap Aug is prep time.</div>
   </div>
   <div class="score-breakdown">
-    <div class="score-item"><div class="num" style="color:#ef4444;">Low</div><div class="label">Jun 24–30</div></div>
-    <div class="score-item"><div class="num" style="color:#94a3b8;">Dead</div><div class="label">July–August</div></div>
-    <div class="score-item"><div class="num" style="color:#f59e0b;">Medium</div><div class="label">September</div></div>
-    <div class="score-item"><div class="num" style="color:#10b981;">High</div><div class="label">Oct–Dec</div></div>
+    <div class="score-item"><div class="num" style="color:#ef4444;">🔥 Hot</div><div class="label">Jun 24–Jul 8</div></div>
+    <div class="score-item"><div class="num" style="color:#10b981;">Active</div><div class="label">Jul–Aug gap</div></div>
+    <div class="score-item"><div class="num" style="color:#f59e0b;">Busy</div><div class="label">Oct–Nov</div></div>
+    <div class="score-item"><div class="num" style="color:#a78bfa;">Strategic</div><div class="label">South Summit AF</div></div>
   </div>
 </div>
 
-<!-- PLATFORM OVERVIEW -->
+<!-- 🔴 UPCOMING EVENTS -->
 <div class="section">
-  <h2><span class="icon">🌐</span> Event Platforms to Monitor</h2>
-  <div class="platform-grid">
-    <div class="platform-card">
-      <div class="platform-name">Luma</div>
-      <div class="platform-desc">Best for tech/AI startup events. Most active Madrid community. Submit events for free. Check weekly.</div>
-      <a class="platform-url" href="https://lu.ma/madrid" target="_blank">lu.ma/madrid →</a>
-    </div>
-    <div class="platform-card">
-      <div class="platform-name">Meetup.com</div>
-      <div class="platform-desc">Recurring professional communities — ProductTank, AI Devs, IT Brunch. Join groups to get event notifications.</div>
-      <a class="platform-url" href="https://meetup.com/madrid-tech-meetup-group/" target="_blank">meetup.com →</a>
-    </div>
-    <div class="platform-card">
-      <div class="platform-name">Startup Grind</div>
-      <div class="platform-desc">Global founder/tech community with strong Madrid chapter. September 18 event confirmed. Recurring.</div>
-      <a class="platform-url" href="https://www.startupgrind.com/madrid/" target="_blank">startupgrind.com/madrid →</a>
-    </div>
-    <div class="platform-card">
-      <div class="platform-name">South Summit</div>
-      <div class="platform-desc">Spain's #1 startup/VC event. 2025 edition already happened (June 4–6). Next is 2026. Apply for competition.</div>
-      <a class="platform-url" href="https://southsummit.io" target="_blank">southsummit.io →</a>
-    </div>
-  </div>
-</div>
-
-<!-- CONFIRMED EVENTS: JUN 24+ -->
-<div class="section">
-  <h2><span class="icon">📅</span> Confirmed Events — June 24, 2025 Onwards</h2>
+  <h2><span class="icon">📅</span> Confirmed Events — June 24, 2026 Onwards</h2>
 
   <div class="event-card">
     <div class="event-top">
-      <div class="event-name"><a href="https://lu.ma/xcs2yski" target="_blank">AI Builder Co-working launch</a></div>
+      <div class="event-name"><a href="https://events.ie.edu/event/ie-mba-admissions-day-madrid-20260505143054" target="_blank">IE MBA Admissions Day — Madrid</a></div>
       <span class="event-price price-free">Free</span>
     </div>
     <div class="event-meta">
-      <div class="event-meta-item">📅 <strong>June 26, 2025</strong> 17:20–20:00</div>
-      <div class="event-meta-item">📍 <strong>Online Event</strong></div>
-      <div class="event-meta-item">👥 <strong>Carlos Vecina</strong></div>
+      <div class="event-meta-item">📅 <strong>Saturday, June 27, 2026</strong> · 9:00 AM</div>
+      <div class="event-meta-item">📍 <strong>IE Business School, María de Molina 11-13-15, Madrid</strong></div>
+      <div class="event-meta-item">👥 <strong>IE University</strong></div>
     </div>
-    <div class="event-desc">Brand new AI builder/entrepreneur community launching in Madrid. Focus on people actively building AI products. First event is online — future sessions likely in-person in Madrid. Great ICP: founders, developers, AI enthusiasts. This is the community launch so there's an opportunity to get in at the ground floor before they pick a regular venue or platform.</div>
+    <div class="event-desc">IE's MBA admissions open house in Madrid. Prospective students tour the campus, meet admissions team, hear from current students. Jordan is already an IE MBA student — this is a perfect opportunity to represent Niah casually to the admissions team and prospective candidates who might become future MBA founders. Admissions staff have wide networks. One conversation here could lead to Niah being recommended to every IE-affiliated founder for the next 2 years.</div>
+    <div class="event-tags">
+      <span class="tag founder">Founders</span>
+      <span class="tag b2b">B2B</span>
+      <span class="tag tech">MBA/IE</span>
+    </div>
+    <div class="event-score">
+      <span class="score-pill hot">🔥 3 DAYS AWAY — IE edge</span>
+      <span style="color:var(--muted);font-size:12px;margin-left:8px;">→ Jordan has instant credibility as current MBA student. Walk in, talk to 5 people, leave an impression.</span>
+    </div>
+  </div>
+
+  <div class="event-card">
+    <div class="event-top">
+      <div class="event-name"><a href="https://www.meetup.com/madrid-professionals-network/" target="_blank">Business Networking | PNM July</a></div>
+      <span class="event-price price-free">Free</span>
+    </div>
+    <div class="event-meta">
+      <div class="event-meta-item">📅 <strong>Monday, July 6, 2026</strong> · 7:15–11:00 PM</div>
+      <div class="event-meta-item">📍 <strong>11 Nudos Madrid, Madrid</strong></div>
+      <div class="event-meta-item">👥 <strong>Professionals & Entrepreneurs Network Madrid</strong></div>
+    </div>
+    <div class="event-desc">Monthly networking event specifically for Entrepreneurs, Freelancers, Solopreneurs, and Creators. 7:15 PM start means evening format — dinner-adjacent networking. 11 Nudos Madrid is a well-known networking venue. 7,000+ member community. The July event is 12 days away. PNM runs these monthly so even if you miss July, August 3 is the next one.</div>
+    <div class="event-tags">
+      <span class="tag founder">Founders</span>
+      <span class="tag b2b">B2B</span>
+    </div>
+    <div class="event-score">
+      <span class="score-pill good">✓ Good — entrepreneurs + solopreneurs ICP match</span>
+      <span style="color:var(--muted);font-size:12px;margin-left:8px;">→ Direct ICP match for Niah. First of back-to-back months (Jul 6 + Aug 3).</span>
+    </div>
+  </div>
+
+  <div class="event-card">
+    <div class="event-top">
+      <div class="event-name"><a href="https://www.founderslive.com/events-list/madrid-2026-07" target="_blank">Founders Live Madrid</a></div>
+      <span class="tag" style="background:rgba(59,130,246,0.15);color:var(--accent);">Pitch Comp</span>
+    </div>
+    <div class="event-meta">
+      <div class="event-meta-item">📅 <strong>Wednesday, July 8, 2026</strong> · 9:00 AM–12:00 PM</div>
+      <div class="event-meta-item">📍 <strong>The Bridge | Digital Talent Accelerator, 1 Plaza Pablo Ruiz Picasso, Madrid</strong></div>
+      <div class="event-meta-item">👥 <strong>Founders Live · Global</strong></div>
+    </div>
+    <div class="event-desc">Founders Live is a global pitch competition format — 5-minute pitches, audience votes, winners advance to regional then global finals. Morning slot (9 AM) is unusual for networking events but means serious, high-intent attendees. Format: pitches + audience networking + winner selection. The prize package includes Front Row membership, Backstage community access, and $1M+ in startup credits. The Madrid chapter draws 150–300 founders, investors, and tech professionals. English and Spanish. Location is The Bridge accelerator space near Santiago Bernabéu — prime Madrid location.</div>
+    <div class="event-tags">
+      <span class="tag founder">Founders</span>
+      <span class="tag invest">Investors</span>
+      <span class="tag tech">Tech</span>
+    </div>
+    <div class="event-score">
+      <span class="score-pill good">✓ High value — pitch comp + investor presence</span>
+      <span style="color:var(--muted);font-size:12px;margin-left:8px;">→ 2 days after PNM July. Both are free. Back-to-back Madrid events in same week.</span>
+    </div>
+  </div>
+
+  <div class="event-card">
+    <div class="event-top">
+      <div class="event-name"><a href="https://www.meetup.com/madrid-professionals-network/" target="_blank">Business Networking | PNM August — Rooftop Radisson RED Atocha</a></div>
+      <span class="event-price price-free">Free</span>
+    </div>
+    <div class="event-meta">
+      <div class="event-meta-item">📅 <strong>Monday, August 3, 2026</strong> · 7:15 PM</div>
+      <div class="event-meta-item">📍 <strong>Radisson RED Hotel, Atocha, Madrid</strong></div>
+      <div class="event-meta-item">👥 <strong>PNM ( Professionals & Entrepreneurs Network Madrid)</strong></div>
+    </div>
+    <div class="event-desc">Monthly rooftop networking at the Radisson RED Atocha. Upscale venue, international crowd, evening format. August in Madrid is quieter but the rooftop location is a draw. Good for meeting international expats and remote workers who moved to Madrid. PNM events consistently draw 50–150 people.</div>
+    <div class="event-tags">
+      <span class="tag founder">Founders</span>
+      <span class="tag b2b">B2B</span>
+    </div>
+    <div class="event-score">
+      <span class="score-pill maybe">◐ Solid — rooftop, international expat crowd</span>
+      <span style="color:var(--muted);font-size:12px;margin-left:8px;">→ August = quieter month but venue quality is high. Good if you want to be in a room with decision-makers.</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- GAP NOTE -->
+<div class="gap-note">
+  <strong>⚠️ The Summer Gap:</strong> After August 3, there are no confirmed major B2B/tech events until October 1 (Madrid Tech Job Fair). That's 59 days with nothing. Use this dead zone to: (1) follow up with everyone met at IE Admissions Day + PNM July + Founders Live, (2) reach out to South Summit 2026 attendees on LinkedIn, (3) prep your October event strategy, (4) finalize Niah demo materials.
+</div>
+
+<!-- OCTOBER+ EVENTS -->
+<div class="section">
+  <h2><span class="icon">📆</span> October–November 2026 (Confirmed)</h2>
+
+  <div class="event-card">
+    <div class="event-top">
+      <div class="event-name"><a href="https://techmeetups.com/event/madrid-tech-job-fair-feria-de-empleo-de-tecnologia-de-madrid-2026/" target="_blank">Madrid Tech Job Fair — Autumn 2026</a></div>
+      <span class="event-price price-free">Free</span>
+    </div>
+    <div class="event-meta">
+      <div class="event-meta-item">📅 <strong>Thursday, October 1, 2026</strong></div>
+      <div class="event-meta-item">📍 <strong>Madrid</strong></div>
+      <div class="event-meta-item">👥 <strong>TechMeetups</strong></div>
+    </div>
+    <div class="event-desc">Twice-yearly tech job fair in Madrid. TechMeetups runs these across Europe. Past editions have drawn 300–500+ attendees including founders, tech professionals, and recruiters. The autumn edition is larger than spring. Format: employer booths + networking. Tech professionals = potential Niah users for team event coordination. Lower B2B decision-maker density than Founders Live but high volume.</div>
+    <div class="event-tags">
+      <span class="tag tech">Tech</span>
+      <span class="tag founder">Founders</span>
+      <span class="tag b2b">B2B</span>
+    </div>
+    <div class="event-score">
+      <span class="score-pill good">✓ High volume — calendar it now</span>
+    </div>
+  </div>
+
+  <div class="event-card">
+    <div class="event-top">
+      <div class="event-name"><a href="https://www.meetingsint.com/conferences/entrepreneursmeet" target="_blank">3rd Annual Entrepreneurs Meet 2026</a></div>
+      <span class="event-price price-paid">€150–600</span>
+    </div>
+    <div class="event-meta">
+      <div class="event-meta-item">📅 <strong>October 5–6, 2026</strong> · 9:30 AM</div>
+      <div class="event-meta-item">📍 <strong>Madrid, Spain</strong></div>
+      <div class="event-meta-item">👥 <strong>MeetingsIn.com / ENFA</strong></div>
+    </div>
+    <div class="event-desc">Two-day international entrepreneurship conference. ~10,000+ attendees. Covers the full founder cycle: building, growing, investing. Speakers include VCs, successful founders, and ecosystem players. €150–600 ticket price means C-suite / decision-maker audience. Format: keynotes + panels + networking. This is the October event with the highest B2B decision-maker density. If Niah has a paid tier, this room is full of people who can afford it.</div>
+    <div class="event-tags">
+      <span class="tag founder">Founders</span>
+      <span class="tag invest">Investors</span>
+      <span class="tag b2b">B2B</span>
+    </div>
+    <div class="event-score">
+      <span class="score-pill good">✓ Premium ICP — paid conference, decision-makers</span>
+      <span style="color:var(--muted);font-size:12px;margin-left:8px;">→ 4 days after Tech Job Fair. Both October. IE connection could get student discount.</span>
+    </div>
+  </div>
+
+  <div class="event-card">
+    <div class="event-top">
+      <div class="event-name"><a href="https://www.horizondeeptech.com/" target="_blank">Horizon Deep Tech Summit 2026</a></div>
+      <span class="event-price price-free">Free</span>
+    </div>
+    <div class="event-meta">
+      <div class="event-meta-item">📅 <strong>November 10–12, 2026</strong></div>
+      <div class="event-meta-item">📍 <strong>Madrid</strong></div>
+      <div class="event-meta-item">👥 <strong>Horizon Events</strong></div>
+    </div>
+    <div class="event-desc">Three-day deep tech conference. Covers AI, biotech, robotics, space, climate tech. Free registration. Past summits have drawn serious R&D professionals, PhDs, and tech founders. The audience skews technical but includes business development people. Good for meeting AI-forward founders and researchers who might use Niah for their team offsites and hackathons.</div>
     <div class="event-tags">
       <span class="tag ai">AI</span>
+      <span class="tag tech">Deep Tech</span>
       <span class="tag founder">Founders</span>
-      <span class="tag tech">Tech</span>
-      <span class="tag b2b">B2B</span>
     </div>
     <div class="event-score">
-      <span class="score-pill hot">🔥 Best near-term opportunity</span>
-      <span style="color:var(--muted);font-size:12px;margin-left:8px;">→ 2 days away. RSVP now and introduce yourself.</span>
+      <span class="score-pill maybe">◐ Niche — deep tech focus, technical audience</span>
     </div>
   </div>
 
-  <div class="event-card" style="border-color: rgba(245,158,11,0.4);">
+</div>
+
+<!-- SOUTH SUMMIT AFTERMATH (PAST) -->
+<div class="section">
+  <h2><span class="icon">🔁</span> Post-Event Opportunity — South Summit Madrid 2026 (June 3–5)</h2>
+
+  <div class="event-card past">
     <div class="event-top">
-      <div class="event-name"><a href="https://lu.ma/v5a2ugyu" target="_blank">OKX x CryptoDays – Trading Tour 2025 | Madrid</a></div>
-      <span class="event-price price-free">Free</span>
+      <div class="event-name"><a href="https://southsummit.io/e/madrid/en" target="_blank">South Summit Madrid 2026</a></div>
+      <span class="event-price price-paid">€329+</span>
     </div>
     <div class="event-meta">
-      <div class="event-meta-item">📅 <strong>September 12, 2025</strong> 16:30–20:00</div>
-      <div class="event-meta-item">📍 <strong>Madrid</strong></div>
-      <div class="event-meta-item">👥 <strong>Crypto Days + OKX</strong></div>
+      <div class="event-meta-item">📅 <strong>June 3–5, 2026</strong> · Already happened</div>
+      <div class="event-meta-item">📍 <strong>La Nave, Calle Cifuentes 5, Madrid</strong></div>
+      <div class="event-meta-item">👥 <strong>South Summit · IE Foundation</strong></div>
     </div>
-    <div class="event-desc">CryptoDays is one of the most active event organizers in Madrid's Web3/tech scene. The OKX Trading Tour brings their brand and attendees to Madrid. Past CryptoDays events (Jan 2025 kickoff: 200+ attendees, Santito Madrid) show they draw a strong international, English-dominant, early-adopter crowd. OKX partnership means corporate budget, decent marketing, and a quality venue. Format: practical crypto trading education + networking. Attendees are crypto-curious founders, developers, and investors.</div>
-    <div class="event-tags">
-      <span class="tag crypto">Crypto/Web3</span>
-      <span class="tag tech">Tech</span>
-      <span class="tag founder">Founders</span>
-      <span class="tag b2b">B2B</span>
-    </div>
-    <div class="event-score">
-      <span class="score-pill good">✓ Strong opportunity — September start</span>
-      <span style="color:var(--muted);font-size:12px;margin-left:8px;">→ International crowd. English-friendly. Calendar it now.</span>
-    </div>
-  </div>
-
-  <div class="event-card">
-    <div class="event-top">
-      <div class="event-name"><a href="https://www.startupgrind.com/events/details/startup-grind-madrid-presents-construir-crecer-invertir-el-ciclo-completo-del-founder/" target="_blank">Startup Grind Madrid: Construir, Crecer, Invertir — El Ciclo Completo del Founder</a></div>
-      <span class="event-price price-paid">€6</span>
-    </div>
-    <div class="event-meta">
-      <div class="event-meta-item">📅 <strong>September 18, 2025</strong> 18:00–21:00</div>
-      <div class="event-meta-item">📍 <strong>Aticco María De Molina, Madrid</strong></div>
-      <div class="event-meta-item">👥 <strong>Micaela Villalobos / Startup Grind Madrid</strong></div>
-    </div>
-    <div class="event-desc">"¡Volvemos después del verano con más fuerza que nunca!" — they're explicitly framing this as the post-summer re-launch. This is Startup Grind Madrid's flagship autumn event. Aticco is a well-known coworking space in Madrid's business district. €6 covers costs. Format: talks + networking. They consistently sell out (mentioned "varios sold outs" in recent events). Attendees: founders, early-stage entrepreneurs, some investors. Strong Spanish startup ecosystem presence.</div>
+    <div class="event-desc">Spain's #1 startup/VC event. 14 editions. 141 countries represented. 10,000+ attendees. June 3–5, 2026 just ended — 19 days ago. The entire Madrid startup/tech ecosystem was in the room. Investors, accelerators, corporate innovation teams, and founders. This is the single best event to leverage RIGHT NOW because: (1) everyone who attended is still processing what happened, (2) conversations are fresh in memory, (3) follow-up emails get responses because "I was at South Summit too" is an instant conversation starter. Jordan should: search LinkedIn for people who posted about South Summit Madrid 2026, connect with founders who pitched, and reach out to IE-affiliated attendees.</div>
     <div class="event-tags">
       <span class="tag founder">Founders</span>
-      <span class="tag tech">Tech</span>
+      <span class="tag invest">Investors</span>
       <span class="tag b2b">B2B</span>
-      <span class="tag growth">Growth</span>
+      <span class="tag past">Past Event</span>
     </div>
     <div class="event-score">
-      <span class="score-pill good">✓ High value — sold out history, autumn opener</span>
-      <span style="color:var(--muted);font-size:12px;margin-left:8px;">→ RSVP early. 6 days after CryptoDays — back-to-back weeks.</span>
+      <span class="score-pill past">◐ Past — but NOW is the window to follow up</span>
+      <span style="color:var(--muted);font-size:12px;margin-left:8px;">→ LinkedIn search: "South Summit Madrid 2026". Every person who attended is a warm lead today.</span>
     </div>
   </div>
-
 </div>
 
 <!-- RECURRING GROUPS -->
 <div class="section">
-  <h2><span class="icon">🔄</span> Recurring Groups — Watch These Year-Round</h2>
+  <h2><span class="icon">🔄</span> Recurring Groups — Join Now, Events Hit Your Inbox</h2>
   <div class="recurring-grid">
 
     <div class="recurring-card">
+      <div class="recurring-name">Professionals & Entrepreneurs Network Madrid</div>
+      <div class="recurring-type">Monthly Networking · 8,000+ members</div>
+      <div class="recurring-desc">Runs every first Monday of the month. Entrepreneurs, freelancers, solopreneurs, creators. Free. Venues vary (11 Nudos, Radisson RED rooftop). Best regular B2B networking in Madrid. ICP match: founders who run their own companies.</div>
+      <a class="recurring-link" href="https://www.meetup.com/madrid-professionals-network/" target="_blank">Join group →</a>
+    </div>
+
+    <div class="recurring-card">
       <div class="recurring-name">ProductTank Madrid</div>
-      <div class="recurring-type">Product Management</div>
-      <div class="recurring-desc">Madrid chapter of Mind the Product. Monthly talks + networking. Strong PM attendance, good ICP for Niah (PMs book team events). Free. English-friendly.</div>
+      <div class="recurring-type">Product Management · Mind the Product</div>
+      <div class="recurring-desc">Madrid chapter of Mind the Product. Monthly talks + Q&A. Strong PM attendance. PMs are budget holders — if Niah has a team/company tier, PMs are your buyer. Free. English-friendly.</div>
       <a class="recurring-link" href="https://www.meetup.com/ProductTank-Madrid/" target="_blank">Join group →</a>
     </div>
 
     <div class="recurring-card">
       <div class="recurring-name">Madrid AI Developers Group</div>
       <div class="recurring-type">AI / Machine Learning</div>
-      <div class="recurring-desc">AI/ML engineers and data scientists. Technical crowd but growing into AI-founder territory. Recurring monthly meetups.</div>
+      <div class="recurring-desc">AI/ML engineers and data scientists. Growing into AI-founder territory. Technical audience but many are building their own products. Good for AI-forward connections.</div>
       <a class="recurring-link" href="https://www.meetup.com/madrid-ai-developers-group/" target="_blank">Join group →</a>
     </div>
 
     <div class="recurring-card">
-      <div class="recurring-name">Madrid IT Brunch</div>
-      <div class="recurring-type">Tech Networking</div>
-      <div class="recurring-desc">Casual tech networking over brunch. Low-pressure, relationship-building format. Good for introverted founders. Free, casual venue.</div>
-      <a class="recurring-link" href="https://www.meetup.com/madrid-it-brunch/" target="_blank">Join group →</a>
+      <div class="recurring-name">Founders Live Madrid</div>
+      <div class="recurring-type">Pitch Competition · Global</div>
+      <div class="recurring-desc">Global pitch competition with a Madrid chapter. 3–4 events per year. July 8 is the next one. Format: 5-minute founder pitches + audience networking. Strong founder + some investor attendance. High-energy room. Spanish + English.</div>
+      <a class="recurring-link" href="https://www.founderslive.com/events-list/madrid-2026-07" target="_blank">RSVP July 8 →</a>
     </div>
 
     <div class="recurring-card">
-      <div class="recurring-name">Madrid Professionals Network</div>
-      <div class="recurring-type">General Networking</div>
-      <div class="recurring-desc">7,000+ members. Broad professional networking. Mixed industries. Lower ICP precision but massive reach. Good for general B2B connections.</div>
-      <a class="recurring-link" href="https://www.meetup.com/madrid-professionals-network/" target="_blank">Join group →</a>
-    </div>
-
-    <div class="recurring-card">
-      <div class="recurring-name">Madrid Startup Network</div>
-      <div class="recurring-type">Startups</div>
-      <div class="recurring-desc">Dedicated startup community. Founders, early-stage companies, some angels. Recurring events, varying formats.</div>
-      <a class="recurring-link" href="https://www.meetup.com/madrid-startup-network/" target="_blank">Join group →</a>
+      <div class="recurring-name">Startup Grind Madrid</div>
+      <div class="recurring-type">Global Startup Community</div>
+      <div class="recurring-desc">Monthly events with talks from founders + networking. Strong Madrid chapter. Past speakers include Y Combinator alumni and local unicorn founders. Sold-out history. Follow for announcements.</div>
+      <a class="recurring-link" href="https://www.startupgrind.com/madrid/" target="_blank">Follow →</a>
     </div>
 
   </div>
 </div>
 
-<!-- SUMMER CONTEXT -->
-<div class="summer-note">
-  <strong>🇪🇸 Madrid Summer Reality:</strong> July and August are notoriously quiet in Madrid's professional scene. Many companies run skeleton crews, expats leave for vacation, and startup events drop significantly. September is when the city "re-opens" professionally — which is why the September 12 and September 18 events are perfectly timed. <strong>Use July–August to prepare</strong>: update your Niah pitch, build outreach lists, and plan your September event strategy.
-</div>
-
 <!-- ACTION PLAN -->
 <div class="section">
-  <h2><span class="icon">🎯</span> Niah Action Plan — Jun 24 Onwards</h2>
+  <h2><span class="icon">🎯</span> Action Plan — June 24, 2026</h2>
   <div class="recs-table">
     <div class="recs-row">
       <div class="recs-priority p1">P1</div>
       <div class="recs-info">
-        <div class="recs-name">AI Builder Co-working launch — June 26 (2 days!)</div>
-        <div class="recs-why">Fresh community launching online. Ground-floor opportunity to get Niah embedded before they pick a competitor. 30-sec pitch + demo ready.</div>
+        <div class="recs-name">IE MBA Admissions Day — June 27 (3 days)</div>
+        <div class="recs-why">Jordan's home turf. Admissions staff have massive networks. One right conversation here = Niah recommended to every future IE-affiliated founder. Go as a current student, not a seller.</div>
       </div>
-      <div class="recs-date">Jun 26</div>
-      <div class="recs-link"><a href="https://lu.ma/xcs2yski" target="_blank">RSVP →</a></div>
+      <div class="recs-date">Sat Jun 27</div>
+      <div class="recs-link"><a href="https://events.ie.edu/event/ie-mba-admissions-day-madrid-20260505143054" target="_blank">RSVP free →</a></div>
     </div>
     <div class="recs-row">
       <div class="recs-priority p1">P1</div>
       <div class="recs-info">
-        <div class="recs-name">Calendar block: Sep 12 (CryptoDays) + Sep 18 (Startup Grind)</div>
-        <div class="recs-why">Back-to-back weeks to open autumn. Both events in Madrid, 6 days apart. Hit both — they're complementary crowds.</div>
+        <div class="recs-name">LinkedIn outreach — South Summit 2026 attendees NOW</div>
+        <div class="recs-why">South Summit ended June 5 (19 days ago). Everyone who attended is a warm lead right now. "I was at South Summit too, great connecting" = instant rapport. Search: "South Summit Madrid 2026".</div>
       </div>
-      <div class="recs-date">Sep 12 + 18</div>
-      <div class="recs-link"><a href="https://lu.ma/v5a2ugyu" target="_blank">RSVP →</a></div>
+      <div class="recs-date">This week</div>
+      <div class="recs-link"><a href="https://www.linkedin.com" target="_blank">Search LinkedIn →</a></div>
+    </div>
+    <div class="recs-row">
+      <div class="recs-priority p1">P1</div>
+      <div class="recs-info">
+        <div class="recs-name">PNM July (Jul 6) + Founders Live Madrid (Jul 8) — same week</div>
+        <div class="recs-why">Two events in 48 hours. PNM draws entrepreneurs/solopreneurs. Founders Live adds investors. Both are free. This is the highest-value consecutive event window in H2 2026 so far.</div>
+      </div>
+      <div class="recs-date">Jul 6 + 8</div>
+      <div class="recs-link"><a href="https://www.meetup.com/madrid-professionals-network/" target="_blank">RSVP both →</a></div>
     </div>
     <div class="recs-row">
       <div class="recs-priority p2">P2</div>
       <div class="recs-info">
-        <div class="recs-name">Watch recurring Meetup groups for new September dates</div>
-        <div class="recs-why">ProductTank, Madrid AI Devs, IT Brunch — all post-summer re-launch events will drop in August. Join their groups now so you're notified.</div>
+        <div class="recs-name">PNM August (Aug 3) — rooftop networking</div>
+        <div class="recs-why">August is quiet but rooftop venue quality is high. International expat crowd. Worth one evening if you're building a contact list for September.</div>
       </div>
-      <div class="recs-date">Aug–Sep</div>
-      <div class="recs-link"><a href="https://www.meetup.com/ProductTank-Madrid/" target="_blank">Join →</a></div>
+      <div class="recs-date">Mon Aug 3</div>
+      <div class="recs-link"><a href="https://www.meetup.com/madrid-professionals-network/" target="_blank">RSVP →</a></div>
     </div>
     <div class="recs-row">
       <div class="recs-priority p2">P2</div>
       <div class="recs-info">
-        <div class="recs-name">Apply for South Summit 2026 startup competition</div>
-        <div class="recs-why">Next South Summit is 2026 (2025 already happened June 4–6). Applications open months in advance. IE connection = advantage. Apply for pitch competition.</div>
+        <div class="recs-name">Oct 1 (Tech Job Fair) + Oct 5–6 (Entrepreneurs Meet) — back-to-back</div>
+        <div class="recs-why">October opens with volume (Tech Job Fair, 500+ people) then pivots to premium (Entrepreneurs Meet, €150+ ticket, C-suite density). Both are free to attend Tech Job Fair. Consider IE discount for Entrepreneurs Meet.</div>
       </div>
-      <div class="recs-date">2026 — apply now</div>
-      <div class="recs-link"><a href="https://southsummit.io" target="_blank">southsummit.io →</a></div>
+      <div class="recs-date">Oct 1–6</div>
+      <div class="recs-link"><a href="https://techmeetups.com/event/madrid-tech-job-fair-feria-de-empleo-de-tecnologia-de-madrid-2026/" target="_blank">Calendar now →</a></div>
+    </div>
+    <div class="recs-row">
+      <div class="recs-priority p2">P2</div>
+      <div class="recs-info">
+        <div class="recs-name">Join all 5 recurring groups on Meetup.com NOW</div>
+        <div class="recs-why">Once joined, event announcements hit your inbox automatically. September re-launch events will be posted by August. First to know = first to act. Do this today.</div>
+      </div>
+      <div class="recs-date">Today</div>
+      <div class="recs-link"><a href="https://www.meetup.com/ProductTank-Madrid/" target="_blank">Join all →</a></div>
     </div>
     <div class="recs-row">
       <div class="recs-priority p3">P3</div>
       <div class="recs-info">
-        <div class="recs-name">July–August: prep mode. Update pitch + build outreach list.</div>
-        <div class="recs-why">Use the quiet months to: finalize Niah demo, build a target contact list for September events, draft LinkedIn outreach messages.</div>
+        <div class="recs-name">July–August: Build the contact list, prep Oct strategy</div>
+        <div class="recs-why">The gap between Aug 3 and Oct 1 is 59 days. Use it to: (1) follow up with everyone met so far, (2) build Niah pitch for in-person delivery, (3) research October event speakers and attendees提前.</div>
       </div>
       <div class="recs-date">Jul–Aug</div>
-      <div class="recs-link"><a href="https://www.linkedin.com" target="_blank">Prep →</a></div>
+      <div class="recs-link"><a href="https://www.linkedin.com" target="_blank">Start outreach →</a></div>
     </div>
   </div>
 </div>
@@ -391,81 +478,60 @@
   <h2><span class="icon">💡</span> Key Insights for Niah</h2>
 
   <div class="insight-box">
-    <div class="insight-title">September 2025 is Niah's Real Launch Window</div>
-    <div class="insight-text">The two confirmed events (Sep 12 + Sep 18) are perfectly timed for Niah's autumn push. Madrid's professional scene wakes up after summer in September — events fill fast, energy is high, people are ready to network. The AI Builder Co-working launch (June 26) is a bonus ground-floor opportunity. If Niah has a pitch ready, the 2-day window is gold.</div>
+    <div class="insight-title">South Summit Aftermath = Best Warm Outreach Window Right Now</div>
+    <div class="insight-text">South Summit Madrid 2026 ended June 3–5. Everyone who attended is still in "post-event energy" — they're connecting on LinkedIn, posting about it, following up. Jordan should search "South Summit Madrid 2026" on LinkedIn TODAY and send connection requests with a personal note mentioning Niah. This window closes in 2–3 weeks as memories fade. Don't wait for October events — the warm leads are here right now.</div>
   </div>
 
   <div class="insight-box">
-    <div class="insight-title">July–August = Silent Months. Use Them.</div>
-    <div class="insight-text">Madrid essentially shuts down in August. Most events pause. Founders and professionals go on vacation. DON'T plan to attend events in July–August. Instead: use this dead zone to prep. Update the Niah pitch for in-person delivery, build your outreach sequence, research the organizers of the September events, and reach out to attendees提前 (in advance) on LinkedIn before the events happen.</div>
+    <div class="insight-title">IE MBA Admissions Day — Jordan's Biggest Unfair Advantage</div>
+    <div class="insight-text">Jordan is an IE MBA student. The admissions day is 3 days away. This is not a generic networking event — Jordan IS part of the community. The admissions team has relationships with every IE-affiliated founder, investor, and corporate innovator. One genuine conversation with a staff member could result in Niah being recommended at every future IE event for years. Walk in curious, walk out with a contact who can open doors.</div>
   </div>
 
   <div class="insight-box">
-    <div class="insight-title">Crypto/Web3 Crowd = Unexpected B2B Fit</div>
-    <div class="insight-text">CryptoDays events draw 200–400 people, international, English-dominant, comfortable with digital products and online transactions. They're early adopters — exactly the profile that might use an online event networking tool like Niah. The Sep 12 OKX x CryptoDays event is worth blocking out.</div>
+    <div class="insight-title">July 6 + July 8 — The Best Back-to-Back of H2 2026</div>
+    <div class="insight-text">PNM July (entrepreneurs/solopreneurs) on Monday, Founders Live (founders + investors) on Wednesday. Both are free, both are in Madrid, both are within 48 hours. The combination is powerful: PNM gives you the room full of solo founders who need team event tools. Founders Live puts you in the same room as investors who can write checks or make introductions. Strategy: meet 5–10 people at PNM, reference the conversations at Founders Live.</div>
   </div>
 
   <div class="insight-box">
-    <div class="insight-title">Startup Grind = Most Founder-Dense Regular Event</div>
-    <div class="insight-title" style="font-size:13px;color:var(--muted);font-weight:400;margin-top:4px;">September 18: "Construir, Crecer, Invertir"</div>
-    <div class="insight-text">Startup Grind Madrid's sold-out history means high intent. The tagline "full founder cycle" (build, grow, invest) signals attendees are active and engaged. €6 ticket = low barrier but committed audience. This is a good event to hand out Niah cards or demo on someone's phone.</div>
+    <div class="insight-title">October Is Packed — But the Summer Gap Is Real</div>
+    <div class="insight-text">Oct 1 (Tech Job Fair) + Oct 5–6 (Entrepreneurs Meet) + Nov 10–12 (Deep Tech Summit) = strong Q4 pipeline. But there's nothing confirmed between Aug 3 and Oct 1 — 59 days. This is a FEATURE, not a bug: use the quiet months to build your outreach list, finalize Niah's in-person pitch, and reach out提前 to October event speakers and attendees on LinkedIn before the events happen.</div>
   </div>
 
   <div class="insight-box">
-    <div class="insight-title">South Summit 2025 Already Happened (June 4–6)</div>
-    <div class="insight-text">Confirmed: South Summit Madrid 2025 took place June 4–6 at La Nave. The next South Summit is 2026. If you want to exhibit or pitch at South Summit, the application window for 2026 will open by late 2025. Use the IE University connection — Jordan has an unfair advantage here. Follow southsummit.io for application dates.</div>
+    <div class="insight-title">PNM Is the Most Reliable Event Cadence in Madrid</div>
+    <div class="insight-text">Professionals & Entrepreneurs Network runs every first Monday of the month. That's 6 events per year, indefinitely. The group has 8,000+ members, events are free, and the ICP is direct: entrepreneurs, solopreneurs, creators. Join the Meetup group and you'll never miss an event. The July + August editions are the ones to hit in the next 6 weeks.</div>
   </div>
 
   <div class="insight-box">
-    <div class="insight-title">The Recurring Groups Are Your Long-Term Pipeline</div>
-    <div class="insight-text">ProductTank, Madrid AI Devs, IT Brunch — these groups run events every 1–2 months. Join all of them on Meetup.com NOW so their announcements hit your inbox. When they post their September re-launch events, you'll know before the public does. That's first-mover advantage for Niah outreach.</div>
+    <div class="insight-title">Founders Live Pitch Format = Conversation Starter</div>
+    <div class="insight-text">July 8 is a pitch competition — 9 AM start, 3 hours. The format naturally creates networking breaks between pitches. As an attendee (not a pitcher), Jordan's job is to be in the room during breaks, introduce himself to the person next to him, and reference what they just watched. "That last pitch was interesting — are you a founder too?" = instant conversation. Don't pitch at this event unless Niah is genuinely ready to compete.</div>
   </div>
 
 </div>
 
-<!-- ONGOING MONITORING -->
+<!-- PLATFORM GUIDE -->
 <div class="section">
-  <h2><span class="icon">🔁</span> Ongoing Monitoring Checklist</h2>
-  <div class="recs-table">
-    <div class="recs-row">
-      <div class="recs-priority p1">🔴</div>
-      <div class="recs-info">
-        <div class="recs-name">Luma — "Madrid" search every Monday</div>
-        <div class="recs-why">lu.ma/madrid has new events weekly. Set a recurring calendar reminder to check every Monday morning.</div>
-      </div>
-      <div class="recs-link"><a href="https://lu.ma/madrid" target="_blank">lu.ma/madrid →</a></div>
+  <h2><span class="icon">🌐</span> Where to Find Events — Platform Guide</h2>
+  <div class="platform-grid">
+    <div class="platform-card">
+      <div class="platform-name">Meetup.com</div>
+      <div class="platform-desc">Best for recurring groups. Join a group once, get all future events emailed. Join: PNM, ProductTank, AI Devs, Startup Grind.</div>
+      <a class="platform-url" href="https://meetup.com/madrid-tech-meetup-group/" target="_blank">meetup.com →</a>
     </div>
-    <div class="recs-row">
-      <div class="recs-priority p1">🔴</div>
-      <div class="recs-info">
-        <div class="recs-name">Meetup.com — join all 5 recurring groups</div>
-        <div class="recs-why">Once you join a Meetup group, event notifications go to your email automatically. Do this for ProductTank, AI Devs, IT Brunch, Madrid Professionals, Madrid Startup Network.</div>
-      </div>
-      <div class="recs-link"><a href="https://www.meetup.com/ProductTank-Madrid/" target="_blank">Join all →</a></div>
+    <div class="platform-card">
+      <div class="platform-name">Luma</div>
+      <div class="platform-desc">Best for tech/AI/specialized events. Submit your own event for free. Check lu.ma/madrid weekly.</div>
+      <a class="platform-url" href="https://lu.ma/madrid" target="_blank">lu.ma/madrid →</a>
     </div>
-    <div class="recs-row">
-      <div class="recs-priority p2">🟡</div>
-      <div class="recs-info">
-        <div class="recs-name">Startup Grind Madrid — follow for Sep 18 updates</div>
-        <div class="recs-why">They post speaker lineups and details closer to the date. Follow them on LinkedIn for any changes to the format.</div>
-      </div>
-      <div class="recs-link"><a href="https://www.startupgrind.com/madrid/" target="_blank">Follow →</a></div>
+    <div class="platform-card">
+      <div class="platform-name">Startup Grind</div>
+      <div class="platform-desc">Global founder community with a strong Madrid chapter. Monthly events. Speaker format + networking.</div>
+      <a class="platform-url" href="https://www.startupgrind.com/madrid/" target="_blank">startupgrind.com/madrid →</a>
     </div>
-    <div class="recs-row">
-      <div class="recs-priority p2">🟡</div>
-      <div class="recs-info">
-        <div class="recs-name">South Summit 2026 — watch for competition applications</div>
-        <div class="recs-why">Applications for the 2026 startup competition will open by late 2025. Don't miss it — IE connection is Jordan's advantage.</div>
-      </div>
-      <div class="recs-link"><a href="https://southsummit.io" target="_blank">Apply →</a></div>
-    </div>
-    <div class="recs-row">
-      <div class="recs-priority p3">🟢</div>
-      <div class="recs-info">
-        <div class="recs-name">IE University events calendar</div>
-        <div class="recs-why">IE runs its own startup/entrepreneurship events that are free for MBA students. Jordan has free access. Great warm audience.</div>
-      </div>
-      <div class="recs-link"><a href="https://www.ie.edu/events/" target="_blank">ie.edu/events →</a></div>
+    <div class="platform-card">
+      <div class="platform-name">South Summit</div>
+      <div class="platform-desc">Spain's biggest startup/VC event. 2026 edition just happened (June 3–5). Next is 2027. Apply for startup competition when it opens.</div>
+      <a class="platform-url" href="https://southsummit.io" target="_blank">southsummit.io →</a>
     </div>
   </div>
 </div>

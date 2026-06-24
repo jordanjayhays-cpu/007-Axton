@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Niah — Event Intelligence · Madrid 2025-2026</title>
+<title>Niah — Event Intelligence · Madrid · June 24, 2025+</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   :root {
@@ -18,63 +18,51 @@
     --yellow: #f59e0b;
     --yellow-dim: rgba(245,158,11,0.15);
     --red: #ef4444;
+    --red-dim: rgba(239,68,68,0.15);
     --purple: #8b5cf6;
     --text: #e0e6ed;
     --muted: #6b7a90;
-    --tag-bg: rgba(100,116,139,0.2);
   }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 0 0 80px; }
   a { color: var(--accent); text-decoration: none; }
   a:hover { text-decoration: underline; }
 
   /* BACK BUTTON */
-  .back-btn { position: fixed; bottom: 24px; left: 24px; z-index: 99999; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; font-weight: 600; color: var(--text); box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+  .back-btn { position: fixed; bottom: 24px; left: 24px; z-index: 99999; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 13px; font-weight: 600; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
   .back-btn a { color: var(--text); display: flex; align-items: center; gap: 6px; }
   .back-btn:hover { border-color: var(--accent); }
 
-  /* HEADER */
   header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 28px 24px; max-width: 1100px; margin: 0 auto; }
   .badge { display: inline-block; background: var(--accent-dim); color: var(--accent); font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
   h1 { font-size: 26px; font-weight: 700; color: #f0f0f0; margin-bottom: 6px; }
   .subtitle { color: var(--muted); font-size: 14px; }
   .meta-row { display: flex; gap: 24px; margin-top: 16px; flex-wrap: wrap; }
-  .meta-item { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); }
-  .meta-item .val { font-weight: 600; color: var(--text); }
+  .meta-item { font-size: 13px; color: var(--muted); }
+  .meta-item .val { font-weight: 700; color: var(--text); }
 
-  /* MAIN */
   main { max-width: 1100px; margin: 0 auto; padding: 28px 24px; }
 
-  /* SCORE */
+  /* SECTION */
+  .section { margin-bottom: 40px; }
+  h2 { font-size: 16px; font-weight: 700; color: #f0f0f0; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  h2 .icon { font-size: 18px; }
+
+  /* ALERT BANNER */
+  .alert { background: var(--red-dim); border: 1px solid rgba(239,68,68,0.3); border-radius: 12px; padding: 16px 20px; margin-bottom: 28px; }
+  .alert-title { font-size: 14px; font-weight: 700; color: #f87171; margin-bottom: 6px; }
+  .alert-text { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+  /* SCORE BANNER */
   .score-banner { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px 24px; margin-bottom: 28px; display: flex; gap: 32px; align-items: center; flex-wrap: wrap; }
   .score-title { font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
-  .score-value { font-size: 36px; font-weight: 700; color: var(--green); }
+  .score-value { font-size: 36px; font-weight: 700; color: var(--yellow); }
   .score-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
   .score-breakdown { display: flex; gap: 20px; flex-wrap: wrap; }
   .score-item { text-align: center; }
   .score-item .num { font-size: 20px; font-weight: 700; }
   .score-item .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
 
-  /* SECTION */
-  h2 { font-size: 16px; font-weight: 700; color: #f0f0f0; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
-  h2 .icon { font-size: 18px; }
-  .section { margin-bottom: 36px; }
-
-  /* TIER BANNERS */
-  .tier { border-radius: 12px; padding: 14px 18px; margin-bottom: 14px; display: flex; align-items: center; gap: 12px; }
-  .tier.high { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); }
-  .tier.mid { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.3); }
-  .tier.low { background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.3); }
-  .tier-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-  .tier.high .tier-dot { background: #ef4444; }
-  .tier.mid .tier-dot { background: #f59e0b; }
-  .tier.low .tier-dot { background: #3b82f6; }
-  .tier-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; flex-shrink: 0; }
-  .tier.high .tier-label { color: #ef4444; }
-  .tier.mid .tier-label { color: #f59e0b; }
-  .tier.low .tier-label { color: #3b82f6; }
-  .tier-name { font-size: 15px; font-weight: 600; color: #f0f0f0; flex: 1; }
-
-  /* EVENT CARDS */
+  /* EVENT CARD */
   .event-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; margin-bottom: 12px; transition: border-color 0.15s; }
   .event-card:hover { border-color: var(--accent); }
   .event-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 8px; flex-wrap: wrap; }
@@ -84,38 +72,40 @@
   .event-price { font-size: 13px; font-weight: 700; padding: 3px 10px; border-radius: 6px; }
   .price-free { background: var(--green-dim); color: var(--green); }
   .price-paid { background: var(--yellow-dim); color: var(--yellow); }
-  .price-niche { background: rgba(139,92,246,0.15); color: var(--purple); }
+  .price-niche { background: rgba(139,92,246,0.15); color: #a78bfa; }
   .event-meta { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 8px; }
   .event-meta-item { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 4px; }
   .event-meta-item strong { color: var(--text); }
   .event-desc { font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 10px; }
-  .event-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .event-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
   .tag { font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 600; }
-  .tag.b2b { background: var(--green-dim); color: var(--green); }
-  .tag.tech { background: var(--accent-dim); color: var(--accent); }
   .tag.ai { background: rgba(139,92,246,0.15); color: #a78bfa; }
-  .tag.product { background: rgba(236,72,153,0.15); color: #f472b6; }
+  .tag.tech { background: var(--accent-dim); color: var(--accent); }
+  .tag.founder { background: rgba(239,68,68,0.1); color: #f87171; }
+  .tag.b2b { background: var(--green-dim); color: var(--green); }
   .tag.invest { background: var(--yellow-dim); color: var(--yellow); }
   .tag.crypto { background: rgba(245,158,11,0.1); color: #f59e0b; }
-  .tag.web3 { background: rgba(139,92,246,0.15); color: #a78bfa; }
+  .tag.product { background: rgba(236,72,153,0.15); color: #f472b6; }
   .tag.diaspora { background: rgba(16,185,129,0.15); color: #10b981; }
-  .tag.founder { background: rgba(239,68,68,0.1); color: #f87171; }
   .tag.growth { background: rgba(59,130,246,0.15); color: #60a5fa; }
-  .event-score { display: flex; align-items: center; gap: 6px; margin-top: 8px; font-size: 12px; }
+  .event-score { display: flex; align-items: center; gap: 6px; font-size: 12px; }
   .score-pill { padding: 2px 8px; border-radius: 4px; font-weight: 700; }
   .score-pill.hot { background: rgba(239,68,68,0.15); color: #ef4444; }
   .score-pill.good { background: var(--green-dim); color: var(--green); }
   .score-pill.maybe { background: var(--yellow-dim); color: var(--yellow); }
-  .score-pill.low { background: var(--tag-bg); color: #94a3b8; }
+  .score-pill.past { background: var(--tag-bg); color: #94a3b8; }
+  .tag-bg { background: rgba(100,116,139,0.2); color: #94a3b8; }
 
-  /* PLATFORM SECTION */
-  .platform-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-bottom: 24px; }
-  .platform-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
-  .platform-name { font-size: 15px; font-weight: 700; color: #f0f0f0; margin-bottom: 6px; }
-  .platform-desc { font-size: 12px; color: var(--muted); line-height: 1.4; }
-  .platform-url { font-size: 11px; color: var(--accent); margin-top: 8px; display: block; }
+  /* RECURRING CARDS */
+  .recurring-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+  .recurring-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; }
+  .recurring-name { font-size: 14px; font-weight: 600; color: #f0f0f0; margin-bottom: 4px; }
+  .recurring-type { font-size: 12px; color: var(--accent); margin-bottom: 6px; }
+  .recurring-desc { font-size: 12px; color: var(--muted); line-height: 1.4; margin-bottom: 8px; }
+  .recurring-link { font-size: 12px; font-weight: 600; color: var(--accent); }
+  .recurring-link:hover { text-decoration: underline; }
 
-  /* RECS TABLE */
+  /* ACTION TABLE */
   .recs-table { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
   .recs-row { display: flex; align-items: center; padding: 14px 18px; border-bottom: 1px solid var(--border); gap: 12px; }
   .recs-row:last-child { border-bottom: none; }
@@ -128,20 +118,28 @@
   .recs-name { font-size: 14px; font-weight: 600; color: #f0f0f0; }
   .recs-why { font-size: 12px; color: var(--muted); margin-top: 2px; }
   .recs-date { font-size: 12px; color: var(--muted); white-space: nowrap; }
-  .recs-link { white-space: nowrap; }
-  .recs-link a { font-size: 12px; font-weight: 600; padding: 5px 10px; border-radius: 6px; background: rgba(59,130,246,0.1); color: var(--accent); }
+  .recs-link a { font-size: 12px; font-weight: 600; padding: 5px 10px; border-radius: 6px; background: rgba(59,130,246,0.1); color: var(--accent); white-space: nowrap; }
 
-  /* INSIGHTS */
+  /* INSIGHT BOX */
   .insight-box { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; margin-bottom: 12px; }
   .insight-title { font-size: 14px; font-weight: 700; color: #f0f0f0; margin-bottom: 8px; }
   .insight-text { font-size: 13px; color: var(--muted); line-height: 1.6; }
 
-  /* MOBILE */
+  /* PLATFORM CARDS */
+  .platform-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+  .platform-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+  .platform-name { font-size: 15px; font-weight: 700; color: #f0f0f0; margin-bottom: 6px; }
+  .platform-desc { font-size: 12px; color: var(--muted); line-height: 1.4; }
+  .platform-url { font-size: 11px; color: var(--accent); margin-top: 8px; display: block; }
+
+  /* SUMMER NOTE */
+  .summer-note { background: var(--yellow-dim); border: 1px solid rgba(245,158,11,0.3); border-radius: 10px; padding: 14px 16px; margin-bottom: 20px; font-size: 13px; color: var(--muted); line-height: 1.5; }
+
   @media (max-width: 600px) {
-    .score-banner { flex-direction: column; align-items: flex-start; }
     .recs-row { flex-wrap: wrap; }
     .recs-date { width: 100%; }
     .event-top { flex-direction: column; }
+    .score-banner { flex-direction: column; align-items: flex-start; }
   }
 </style>
 </head>
@@ -150,489 +148,240 @@
 <div class="back-btn"><a href="https://neurodashboards.com/niah-dashboard.html">← Back to Niah Dashboard</a></div>
 
 <header>
-  <div class="badge">Niah · Event Intelligence</div>
+  <div class="badge">Niah · Event Intelligence · Updated Jun 25, 2025</div>
   <h1>Madrid B2B Events Radar</h1>
-  <p class="subtitle">Scraped from Luma, Meetup.com, South Summit & Eventbrite · June 2025</p>
+  <p class="subtitle">Events from June 24, 2025 onwards · Luma, Meetup.com, Startup Grind, direct scraping</p>
   <div class="meta-row">
-    <div class="meta-item"><span class="val">23</span> events found</div>
-    <div class="meta-item"><span class="val">4</span> platforms scanned</div>
-    <div class="meta-item"><span class="val">~8</span> actionable events</div>
-    <div class="meta-item"><span>Updated:</span> <span class="val">June 25, 2025</span></div>
+    <div class="meta-item"><span class="val">3</span> confirmed events (Jun 24+)</div>
+    <div class="meta-item"><span class="val">5</span> recurring groups</div>
+    <div class="meta-item"><span class="val">Major gap:</span> Jul–Aug Madrid summer shutdown</div>
+    <div class="meta-item">Next major event: <span class="val">Sep 12</span></div>
   </div>
 </header>
 
 <main>
 
-<!-- SCORE OVERVIEW -->
+<!-- ⚠️ PAST EVENTS WARNING -->
+<div class="alert">
+  <div class="alert-title">⚠️ Events below this point already happened — left for reference only</div>
+  <div class="alert-text">
+    South Summit Madrid 2025 (June 4–6) · CreateWith_ Maker Meetup (June 2) · Ladies in Product MAD (June 5) — all already past as of June 24, 2025.
+  </div>
+</div>
+
+<!-- SCORE -->
 <div class="score-banner">
   <div>
-    <div class="score-title">Niah Opportunity Score</div>
-    <div class="score-value">8.4 / 10</div>
-    <div class="score-sub">Madrid is strong for B2B networking events, especially tech/startup scene</div>
+    <div class="score-title">Niah Opportunity Score — H2 2025</div>
+    <div class="score-value">6.2 / 10</div>
+    <div class="score-sub">September is the real start. Summer (Jul–Aug) is dead in Madrid. Plan now, execute in September.</div>
   </div>
   <div class="score-breakdown">
-    <div class="score-item"><div class="num" style="color:#ef4444;">High</div><div class="label">Tech Events</div></div>
-    <div class="score-item"><div class="num" style="color:#f59e0b;">Medium</div><div class="label">VC/Funding</div></div>
-    <div class="score-item"><div class="num" style="color:#10b981;">High</div><div class="label">Founder Density</div></div>
-    <div class="score-item"><div class="num" style="color:#3b82f6;">Medium</div><div class="label">Corporate B2B</div></div>
+    <div class="score-item"><div class="num" style="color:#ef4444;">Low</div><div class="label">Jun 24–30</div></div>
+    <div class="score-item"><div class="num" style="color:#94a3b8;">Dead</div><div class="label">July–August</div></div>
+    <div class="score-item"><div class="num" style="color:#f59e0b;">Medium</div><div class="label">September</div></div>
+    <div class="score-item"><div class="num" style="color:#10b981;">High</div><div class="label">Oct–Dec</div></div>
   </div>
 </div>
 
 <!-- PLATFORM OVERVIEW -->
 <div class="section">
-  <h2><span class="icon">🌐</span> Event Platforms</h2>
+  <h2><span class="icon">🌐</span> Event Platforms to Monitor</h2>
   <div class="platform-grid">
     <div class="platform-card">
       <div class="platform-name">Luma</div>
-      <div class="platform-desc">Best for tech, startup, AI, Web3 events. Most active Madrid community. Low barrier to submit events.</div>
-      <a class="platform-url" href="https://lu.ma" target="_blank">lu.ma</a>
+      <div class="platform-desc">Best for tech/AI startup events. Most active Madrid community. Submit events for free. Check weekly.</div>
+      <a class="platform-url" href="https://lu.ma/madrid" target="_blank">lu.ma/madrid →</a>
     </div>
     <div class="platform-card">
       <div class="platform-name">Meetup.com</div>
-      <div class="platform-desc">Best for professional communities — ProductTank, AI Devs, IT Brunch. Recurring events, consistent attendance.</div>
-      <a class="platform-url" href="https://meetup.com" target="_blank">meetup.com</a>
+      <div class="platform-desc">Recurring professional communities — ProductTank, AI Devs, IT Brunch. Join groups to get event notifications.</div>
+      <a class="platform-url" href="https://meetup.com/madrid-tech-meetup-group/" target="_blank">meetup.com →</a>
+    </div>
+    <div class="platform-card">
+      <div class="platform-name">Startup Grind</div>
+      <div class="platform-desc">Global founder/tech community with strong Madrid chapter. September 18 event confirmed. Recurring.</div>
+      <a class="platform-url" href="https://www.startupgrind.com/madrid/" target="_blank">startupgrind.com/madrid →</a>
     </div>
     <div class="platform-card">
       <div class="platform-name">South Summit</div>
-      <div class="platform-desc">Spain's biggest startup VC event. Oct 2025-2026. 500+ VCs, 3000+ attendees. Premium B2B networking.</div>
-      <a class="platform-url" href="https://southsummit.io" target="_blank">southsummit.io</a>
-    </div>
-    <div class="platform-card">
-      <div class="platform-name">Eventbrite</div>
-      <div class="platform-desc">Wider range — corporate, conferences, paid workshops. Good for B2B service providers and enterprise events.</div>
-      <a class="platform-url" href="https://eventbrite.com" target="_blank">eventbrite.com</a>
+      <div class="platform-desc">Spain's #1 startup/VC event. 2025 edition already happened (June 4–6). Next is 2026. Apply for competition.</div>
+      <a class="platform-url" href="https://southsummit.io" target="_blank">southsummit.io →</a>
     </div>
   </div>
 </div>
 
-<!-- TOP ACTIONABLE EVENTS -->
+<!-- CONFIRMED EVENTS: JUN 24+ -->
 <div class="section">
-  <h2><span class="icon">🔥</span> Top Actionable Events for Niah</h2>
-
-  <div class="tier high">
-    <div class="tier-dot"></div>
-    <div class="tier-label">Tier 1 — Must Attend</div>
-    <div class="tier-name">Highest priority: mass founder/tech attendance + English-friendly</div>
-  </div>
+  <h2><span class="icon">📅</span> Confirmed Events — June 24, 2025 Onwards</h2>
 
   <div class="event-card">
     <div class="event-top">
-      <div class="event-name"><a href="https://lu.ma/l8tryivb" target="_blank">CreateWith_ Maker Meetup: create, build & automate with AI</a></div>
-      <span class="event-price price-free">Free</span>
-    </div>
-    <div class="event-meta">
-      <div class="event-meta-item">📅 <strong>June 2, 2025</strong> 18:00–20:30</div>
-      <div class="event-meta-item">📍 <strong>Madrid International Lab</strong></div>
-      <div class="event-meta-item">👥 <strong>CreateWith_ Maker Meetups Madrid</strong></div>
-    </div>
-    <div class="event-desc">AI builders, makers, entrepreneurs. Structured for networking + learning. English-friendly international crowd. Great for meeting early-stage founders and developers who want to build products.</div>
-    <div class="event-tags">
-      <span class="tag ai">AI</span>
-      <span class="tag tech">Tech</span>
-      <span class="tag founder">Founders</span>
-      <span class="tag b2b">B2B</span>
-    </div>
-    <div class="event-score">
-      <span class="score-pill hot">🔥 Hot Lead</span>
-      <span style="color:var(--muted);font-size:12px;">→ Decision-makers + early builders. Niah's sweet spot.</span>
-    </div>
-  </div>
-
-  <div class="event-card">
-    <div class="event-top">
-      <div class="event-name"><a href="https://lu.ma/60fm7w0z" target="_blank">Ladies in Product MAD — June 2025, Session #2</a></div>
-      <span class="event-price price-free">Free</span>
-    </div>
-    <div class="event-meta">
-      <div class="event-meta-item">📅 <strong>June 5, 2025</strong> 19:00–21:00</div>
-      <div class="event-meta-item">📍 <strong>Madrid</strong></div>
-      <div class="event-meta-item">👥 <strong>Ladies in Product</strong></div>
-    </div>
-    <div class="event-desc">Product managers, tech leads, entrepreneurs. Women in tech networking. English-friendly. Great ICP: decision-makers, PMs at companies, people with budget authority.</div>
-    <div class="event-tags">
-      <span class="tag product">Product</span>
-      <span class="tag tech">Tech</span>
-      <span class="tag b2b">B2B</span>
-    </div>
-    <div class="event-score">
-      <span class="score-pill hot">🔥 Hot Lead</span>
-      <span style="color:var(--muted);font-size:12px;">→ PMs = budget holders for team events = Niah customers</span>
-    </div>
-  </div>
-
-  <div class="event-card">
-    <div class="event-top">
-      <div class="event-name"><a href="https://lu.ma/ydobbm72" target="_blank">Cañas A La Madrileña XIII — Google for Startups</a></div>
-      <span class="event-price price-paid">€8</span>
-    </div>
-    <div class="event-meta">
-      <div class="event-meta-item">📅 <strong>April 3, 2025</strong> 19:00–21:30</div>
-      <div class="event-meta-item">📍 <strong>Google for Startups Campus Madrid</strong></div>
-      <div class="event-meta-item">👥 <strong>Cañas a la Madrileña</strong></div>
-    </div>
-    <div class="event-desc">Startup founders, developers, tech entrepreneurs. Google's credibility. Spanish-heavy but tech scene is international. Already happened but recurs monthly — track for next edition.</div>
-    <div class="event-tags">
-      <span class="tag tech">Tech</span>
-      <span class="tag founder">Founders</span>
-      <span class="tag growth">Growth</span>
-    </div>
-    <div class="event-score">
-      <span class="score-pill good">✓ Good</span>
-      <span style="color:var(--muted);font-size:12px;">→ Next edition: watch lu.ma for recurring dates</span>
-    </div>
-  </div>
-
-  <div class="event-card">
-    <div class="event-top">
-      <div class="event-name"><a href="https://www.southsummit.io/e/madrid/en" target="_blank">South Summit Madrid 2025</a></div>
-      <span class="event-price price-niche">€500+</span>
-    </div>
-    <div class="event-meta">
-      <div class="event-meta-item">📅 <strong>October 2025</strong> (3-day flagship)</div>
-      <div class="event-meta-item">📍 <strong>Madrid</strong></div>
-      <div class="event-meta-item">👥 <strong>South Summit / Spain Startup</strong></div>
-    </div>
-    <div class="event-desc">Spain's #1 startup- VC conference. 500+ investors, 3000+ attendees, 100+ countries. Major B2B networking. Founders, C-level, investors. MUST be there. IE University connection is strong.</div>
-    <div class="event-tags">
-      <span class="tag invest">VC/Investor</span>
-      <span class="tag founder">Founders</span>
-      <span class="tag b2b">B2B</span>
-      <span class="tag growth">Growth</span>
-    </div>
-    <div class="event-score">
-      <span class="score-pill hot">🔥🔥 #1 Priority</span>
-      <span style="color:var(--muted);font-size:12px;">→ Apply for pitch competition or volunteer for access</span>
-    </div>
-  </div>
-
-  <div class="tier mid">
-    <div class="tier-dot"></div>
-    <div class="tier-label">Tier 2 — High Value</div>
-    <div class="tier-name">Strong ICP fit, recurring, good networking format</div>
-  </div>
-
-  <div class="event-card">
-    <div class="event-top">
-      <div class="event-name"><a href="https://lu.ma/2025-march-madrid" target="_blank">Madrid Meetup — n8n Community (Automation/AI)</a></div>
-      <span class="event-price price-free">Free</span>
-    </div>
-    <div class="event-meta">
-      <div class="event-meta-item">📅 <strong>March 20, 2025</strong> 18:00–20:00</div>
-      <div class="event-meta-item">📍 <strong>Madrid</strong></div>
-      <div class="event-meta-item">👥 <strong>n8n Community Events</strong></div>
-    </div>
-    <div class="event-desc">Tech/sautomation crowd. n8n is a workflow automation tool — these attendees are ops-minded, tech-savvy, often running their own things. Recurring event series.</div>
-    <div class="event-tags">
-      <span class="tag ai">AI</span>
-      <span class="tag tech">Tech</span>
-      <span class="tag growth">Ops/Growth</span>
-    </div>
-    <div class="event-score">
-      <span class="score-pill good">✓ Good</span>
-      <span style="color:var(--muted);font-size:12px;">→ Recurring — next date likely Q3 2025, check lu.ma</span>
-    </div>
-  </div>
-
-  <div class="event-card">
-    <div class="event-top">
-      <div class="event-name"><a href="https://lu.ma/xcs2yski" target="_blank">Madrid | AI Builder Co-working launch</a></div>
+      <div class="event-name"><a href="https://lu.ma/xcs2yski" target="_blank">AI Builder Co-working launch</a></div>
       <span class="event-price price-free">Free</span>
     </div>
     <div class="event-meta">
       <div class="event-meta-item">📅 <strong>June 26, 2025</strong> 17:20–20:00</div>
-      <div class="event-meta-item">📍 <strong>Online + Madrid</strong></div>
+      <div class="event-meta-item">📍 <strong>Online Event</strong></div>
       <div class="event-meta-item">👥 <strong>Carlos Vecina</strong></div>
     </div>
-    <div class="event-desc">AI founders and builders community launching in Madrid. Focus on people building AI products. Strong founder/entrepreneur crowd. Good ICP for Niah's networking angle.</div>
+    <div class="event-desc">Brand new AI builder/entrepreneur community launching in Madrid. Focus on people actively building AI products. First event is online — future sessions likely in-person in Madrid. Great ICP: founders, developers, AI enthusiasts. This is the community launch so there's an opportunity to get in at the ground floor before they pick a regular venue or platform.</div>
     <div class="event-tags">
       <span class="tag ai">AI</span>
       <span class="tag founder">Founders</span>
+      <span class="tag tech">Tech</span>
       <span class="tag b2b">B2B</span>
     </div>
     <div class="event-score">
-      <span class="score-pill good">✓ Good</span>
-      <span style="color:var(--muted);font-size:12px;">→ Fresh community = easier early adoption for Niah</span>
+      <span class="score-pill hot">🔥 Best near-term opportunity</span>
+      <span style="color:var(--muted);font-size:12px;margin-left:8px;">→ 2 days away. RSVP now and introduce yourself.</span>
     </div>
   </div>
 
-  <div class="event-card">
+  <div class="event-card" style="border-color: rgba(245,158,11,0.4);">
     <div class="event-top">
-      <div class="event-name"><a href="https://lu.ma/wqqqnk5s" target="_blank">Kickoff 2025: MADRID WEB3 + AI ECOSYSTEM</a></div>
+      <div class="event-name"><a href="https://lu.ma/v5a2ugyu" target="_blank">OKX x CryptoDays – Trading Tour 2025 | Madrid</a></div>
       <span class="event-price price-free">Free</span>
     </div>
     <div class="event-meta">
-      <div class="event-meta-item">📅 <strong>Jan 28, 2025</strong> 19:00–22:00</div>
-      <div class="event-meta-item">📍 <strong>Santito Madrid</strong></div>
-      <div class="event-meta-item">👥 <strong>Crypto Days + Offchain Madrid</strong></div>
+      <div class="event-meta-item">📅 <strong>September 12, 2025</strong> 16:30–20:00</div>
+      <div class="event-meta-item">📍 <strong>Madrid</strong></div>
+      <div class="event-meta-item">👥 <strong>Crypto Days + OKX</strong></div>
     </div>
-    <div class="event-desc">Crypto/Web3 + AI crossover. International crowd, English-dominant. Co-hosted with Offchain Madrid. Niche but high-energy networking. Good for crypto-curious founders.</div>
+    <div class="event-desc">CryptoDays is one of the most active event organizers in Madrid's Web3/tech scene. The OKX Trading Tour brings their brand and attendees to Madrid. Past CryptoDays events (Jan 2025 kickoff: 200+ attendees, Santito Madrid) show they draw a strong international, English-dominant, early-adopter crowd. OKX partnership means corporate budget, decent marketing, and a quality venue. Format: practical crypto trading education + networking. Attendees are crypto-curious founders, developers, and investors.</div>
     <div class="event-tags">
       <span class="tag crypto">Crypto/Web3</span>
-      <span class="tag ai">AI</span>
+      <span class="tag tech">Tech</span>
       <span class="tag founder">Founders</span>
+      <span class="tag b2b">B2B</span>
     </div>
     <div class="event-score">
-      <span class="score-pill maybe">◎ Niche</span>
-      <span style="color:var(--muted);font-size:12px;">→ Next CryptoDays: Sept 12, 2025 (lu.ma/v5a2ugyu)</span>
+      <span class="score-pill good">✓ Strong opportunity — September start</span>
+      <span style="color:var(--muted);font-size:12px;margin-left:8px;">→ International crowd. English-friendly. Calendar it now.</span>
     </div>
   </div>
 
   <div class="event-card">
     <div class="event-top">
-      <div class="event-name"><a href="https://lu.ma/vcgjjxna" target="_blank">Leading Cyber Ladies: Evento presencial — IA & Ciberseguridad</a></div>
-      <span class="event-price price-free">Free</span>
+      <div class="event-name"><a href="https://www.startupgrind.com/events/details/startup-grind-madrid-presents-construir-crecer-invertir-el-ciclo-completo-del-founder/" target="_blank">Startup Grind Madrid: Construir, Crecer, Invertir — El Ciclo Completo del Founder</a></div>
+      <span class="event-price price-paid">€6</span>
     </div>
     <div class="event-meta">
-      <div class="event-meta-item">📅 <strong>Feb 18, 2025</strong> 17:00–19:30</div>
-      <div class="event-meta-item">📍 <strong>BT España HQ, Madrid</strong></div>
-      <div class="event-meta-item">👥 <strong>Keren Elazari + BT España</strong></div>
+      <div class="event-meta-item">📅 <strong>September 18, 2025</strong> 18:00–21:00</div>
+      <div class="event-meta-item">📍 <strong>Aticco María De Molina, Madrid</strong></div>
+      <div class="event-meta-item">👥 <strong>Micaela Villalobos / Startup Grind Madrid</strong></div>
     </div>
-    <div class="event-desc">Women in cybersecurity + AI. BT España venue. Tech decision-makers, security leads. Great ICP for B2B. Recurring events — next one likely Q3/Q4 2025.</div>
+    <div class="event-desc">"¡Volvemos después del verano con más fuerza que nunca!" — they're explicitly framing this as the post-summer re-launch. This is Startup Grind Madrid's flagship autumn event. Aticco is a well-known coworking space in Madrid's business district. €6 covers costs. Format: talks + networking. They consistently sell out (mentioned "varios sold outs" in recent events). Attendees: founders, early-stage entrepreneurs, some investors. Strong Spanish startup ecosystem presence.</div>
     <div class="event-tags">
-      <span class="tag ai">AI</span>
+      <span class="tag founder">Founders</span>
       <span class="tag tech">Tech</span>
       <span class="tag b2b">B2B</span>
+      <span class="tag growth">Growth</span>
     </div>
     <div class="event-score">
-      <span class="score-pill good">✓ Good</span>
-      <span style="color:var(--muted);font-size:12px;">→ Watch for next edition — follow Leading Cyber Ladies on LinkedIn</span>
-    </div>
-  </div>
-
-  <div class="event-card">
-    <div class="event-top">
-      <div class="event-name"><a href="https://lu.ma/zoh5pimt" target="_blank">MeetUp IPN — Italian Professional Network, Madrid</a></div>
-      <span class="event-price price-paid">€15</span>
-    </div>
-    <div class="event-meta">
-      <div class="event-meta-item">📅 <strong>April 10, 2025</strong> 19:00–21:00</div>
-      <div class="event-meta-item">📍 <strong>Gatto Matto, C. de Lope de Vega</strong></div>
-      <div class="event-meta-item">👥 <strong>Italian Professional Network</strong></div>
-    </div>
-    <div class="event-desc">Italian expats in Madrid. Professionals, entrepreneurs. Italian networking communities are well-organized and tight-knit. Good for diaspora networking model research.</div>
-    <div class="event-tags">
-      <span class="tag diaspora">Diaspora</span>
-      <span class="tag b2b">B2B</span>
-      <span class="tag growth">Networking</span>
-    </div>
-    <div class="event-score">
-      <span class="score-pill maybe">◎ Insight</span>
-      <span style="color:var(--muted);font-size:12px;">→ Study the model + connect with IPN founders for partnership</span>
-    </div>
-  </div>
-
-  <div class="event-card">
-    <div class="event-top">
-      <div class="event-name"><a href="https://lu.ma/rl2664bu" target="_blank">Conquer Finance Convention 2025</a></div>
-      <span class="event-price price-paid">€40</span>
-    </div>
-    <div class="event-meta">
-      <div class="event-meta-item">📅 <strong>March 22, 2025</strong> 10:00–20:00</div>
-      <div class="event-meta-item">📍 <strong>Madrid</strong></div>
-      <div class="event-meta-item">👥 <strong>Felix Fuertes / Conquer Finance</strong></div>
-    </div>
-    <div class="event-desc">Finance professionals, fintech founders. Spain's finance community. Good for financial services B2B connections. Paid event = higher intent attendees.</div>
-    <div class="event-tags">
-      <span class="tag invest">Finance</span>
-      <span class="tag b2b">B2B</span>
-      <span class="tag growth">Professional</span>
-    </div>
-    <div class="event-score">
-      <span class="score-pill maybe">◎ Wait & Watch</span>
-      <span style="color:var(--muted);font-size:12px;">→ Next edition likely 2026 — follow Conquer Finance</span>
-    </div>
-  </div>
-
-  <div class="event-card">
-    <div class="event-top">
-      <div class="event-name"><a href="https://lu.ma/7oxel7dr" target="_blank">Unity Homes Diaspora Investment Meetup — Madrid Edition</a></div>
-      <span class="event-price price-free">Free</span>
-    </div>
-    <div class="event-meta">
-      <div class="event-meta-item">📅 <strong>April 13, 2025</strong> 12:00–15:00</div>
-      <div class="event-meta-item">📍 <strong>Nairobi Restaurant, Madrid</strong></div>
-      <div class="event-meta-item">👥 <strong>Ivy Muhia / Unity Homes</strong></div>
-    </div>
-    <div class="event-desc">Diaspora investment networking. Kenyans in Madrid. diaspora networking model = direct competitor insight for Niah. Watch how they structure the community and monetize.</div>
-    <div class="event-tags">
-      <span class="tag diaspora">Diaspora</span>
-      <span class="tag invest">Investment</span>
-      <span class="tag growth">Networking</span>
-    </div>
-    <div class="event-score">
-      <span class="score-pill maybe">◎ Intel</span>
-      <span style="color:var(--muted);font-size:12px;">→ Study diaspora networking mechanics + potential partner</span>
-    </div>
-  </div>
-
-  <div class="tier low">
-    <div class="tier-dot"></div>
-    <div class="tier-label">Tier 3 — Secondary / Monitor</div>
-    <div class="tier-name">Recurring or regional, good to track</div>
-  </div>
-
-  <div class="event-card">
-    <div class="event-top">
-      <div class="event-name"><a href="https://www.meetup.com/ProductTank-Madrid/" target="_blank">ProductTank Madrid</a></div>
-      <span class="event-price price-free">Free</span>
-    </div>
-    <div class="event-meta">
-      <div class="event-meta-item">📅 <strong>Recurring — Monthly</strong></div>
-      <div class="event-meta-item">📍 <strong>Madrid</strong></div>
-      <div class="event-meta-item">👥 <strong>ProductTank / Mind the Product</strong></div>
-    </div>
-    <div class="event-desc">One of the biggest product management communities globally. Madrid chapter holds regular meetups with talks + networking. Strong attendance, good for PM connections.</div>
-    <div class="event-tags">
-      <span class="tag product">Product</span>
-      <span class="tag tech">Tech</span>
-      <span class="tag b2b">B2B</span>
-    </div>
-    <div class="event-score">
-      <span class="score-pill good">✓ Recurring</span>
-      <span style="color:var(--muted);font-size:12px;">→ Join meetup group, watch for next event</span>
-    </div>
-  </div>
-
-  <div class="event-card">
-    <div class="event-top">
-      <div class="event-name"><a href="https://www.meetup.com/madrid-ai-developers-group/" target="_blank">Madrid AI Developers Group</a></div>
-      <span class="event-price price-free">Free</span>
-    </div>
-    <div class="event-meta">
-      <div class="event-meta-item">📅 <strong>Recurring</strong></div>
-      <div class="event-meta-item">📍 <strong>Madrid</strong></div>
-      <div class="event-meta-item">👥 <strong>AI Devs Madrid</strong></div>
-    </div>
-    <div class="event-desc">AI/ML developers, data scientists. Technical audience. Less B2B-decision-maker focused but high-quality tech networking.</div>
-    <div class="event-tags">
-      <span class="tag ai">AI</span>
-      <span class="tag tech">Tech</span>
-    </div>
-    <div class="event-score">
-      <span class="score-pill maybe">◎ Technical</span>
-      <span style="color:var(--muted);font-size:12px;">→ Good for AI founder connections</span>
-    </div>
-  </div>
-
-  <div class="event-card">
-    <div class="event-top">
-      <div class="event-name"><a href="https://www.meetup.com/madrid-professionals-network/" target="_blank">Madrid Professionals & Entrepreneurs Network (+7,000 members)</a></div>
-      <span class="event-price price-free">Free</span>
-    </div>
-    <div class="event-meta">
-      <div class="event-meta-item">📅 <strong>Recurring</strong></div>
-      <div class="event-meta-item">📍 <strong>Madrid</strong></div>
-      <div class="event-meta-item">👥 <strong>Madrid Professionals Network</strong></div>
-    </div>
-    <div class="event-desc">7,000+ members. General professional networking. Broad audience, mixed industries. Lower ICP precision but massive reach.</div>
-    <div class="event-tags">
-      <span class="tag b2b">B2B</span>
-      <span class="tag growth">Networking</span>
-    </div>
-    <div class="event-score">
-      <span class="score-pill low">○ Low Priority</span>
-      <span style="color:var(--muted);font-size:12px;">→ Too broad for Niah's B2B focus</span>
-    </div>
-  </div>
-
-  <div class="event-card">
-    <div class="event-top">
-      <div class="event-name"><a href="https://www.meetup.com/madrid-it-brunch/" target="_blank">Madrid Tech Brunch</a></div>
-      <span class="event-price price-free">Free</span>
-    </div>
-    <div class="event-meta">
-      <div class="event-meta-item">📅 <strong>Recurring — Casual</strong></div>
-      <div class="event-meta-item">📍 <strong>Madrid cafés/restaurants</strong></div>
-      <div class="event-meta-item">👥 <strong>Madrid IT Brunch</strong></div>
-    </div>
-    <div class="event-desc">Casual tech networking over brunch. Low-pressure, relationship-building format. Good for introverted founders/devs. Casual = less transactional.</div>
-    <div class="event-tags">
-      <span class="tag tech">Tech</span>
-      <span class="tag growth">Networking</span>
-    </div>
-    <div class="event-score">
-      <span class="score-pill maybe">◎ Casual</span>
-      <span style="color:var(--muted);font-size:12px;">→ Low-pressure outreach format worth piloting for Niah</span>
+      <span class="score-pill good">✓ High value — sold out history, autumn opener</span>
+      <span style="color:var(--muted);font-size:12px;margin-left:8px;">→ RSVP early. 6 days after CryptoDays — back-to-back weeks.</span>
     </div>
   </div>
 
 </div>
 
+<!-- RECURRING GROUPS -->
+<div class="section">
+  <h2><span class="icon">🔄</span> Recurring Groups — Watch These Year-Round</h2>
+  <div class="recurring-grid">
+
+    <div class="recurring-card">
+      <div class="recurring-name">ProductTank Madrid</div>
+      <div class="recurring-type">Product Management</div>
+      <div class="recurring-desc">Madrid chapter of Mind the Product. Monthly talks + networking. Strong PM attendance, good ICP for Niah (PMs book team events). Free. English-friendly.</div>
+      <a class="recurring-link" href="https://www.meetup.com/ProductTank-Madrid/" target="_blank">Join group →</a>
+    </div>
+
+    <div class="recurring-card">
+      <div class="recurring-name">Madrid AI Developers Group</div>
+      <div class="recurring-type">AI / Machine Learning</div>
+      <div class="recurring-desc">AI/ML engineers and data scientists. Technical crowd but growing into AI-founder territory. Recurring monthly meetups.</div>
+      <a class="recurring-link" href="https://www.meetup.com/madrid-ai-developers-group/" target="_blank">Join group →</a>
+    </div>
+
+    <div class="recurring-card">
+      <div class="recurring-name">Madrid IT Brunch</div>
+      <div class="recurring-type">Tech Networking</div>
+      <div class="recurring-desc">Casual tech networking over brunch. Low-pressure, relationship-building format. Good for introverted founders. Free, casual venue.</div>
+      <a class="recurring-link" href="https://www.meetup.com/madrid-it-brunch/" target="_blank">Join group →</a>
+    </div>
+
+    <div class="recurring-card">
+      <div class="recurring-name">Madrid Professionals Network</div>
+      <div class="recurring-type">General Networking</div>
+      <div class="recurring-desc">7,000+ members. Broad professional networking. Mixed industries. Lower ICP precision but massive reach. Good for general B2B connections.</div>
+      <a class="recurring-link" href="https://www.meetup.com/madrid-professionals-network/" target="_blank">Join group →</a>
+    </div>
+
+    <div class="recurring-card">
+      <div class="recurring-name">Madrid Startup Network</div>
+      <div class="recurring-type">Startups</div>
+      <div class="recurring-desc">Dedicated startup community. Founders, early-stage companies, some angels. Recurring events, varying formats.</div>
+      <a class="recurring-link" href="https://www.meetup.com/madrid-startup-network/" target="_blank">Join group →</a>
+    </div>
+
+  </div>
+</div>
+
+<!-- SUMMER CONTEXT -->
+<div class="summer-note">
+  <strong>🇪🇸 Madrid Summer Reality:</strong> July and August are notoriously quiet in Madrid's professional scene. Many companies run skeleton crews, expats leave for vacation, and startup events drop significantly. September is when the city "re-opens" professionally — which is why the September 12 and September 18 events are perfectly timed. <strong>Use July–August to prepare</strong>: update your Niah pitch, build outreach lists, and plan your September event strategy.
+</div>
+
 <!-- ACTION PLAN -->
 <div class="section">
-  <h2><span class="icon">🎯</span> Niah Action Plan</h2>
+  <h2><span class="icon">🎯</span> Niah Action Plan — Jun 24 Onwards</h2>
   <div class="recs-table">
     <div class="recs-row">
       <div class="recs-priority p1">P1</div>
       <div class="recs-info">
-        <div class="recs-name">CreateWith_ Maker Meetup — June 2</div>
-        <div class="recs-why">AI founders/builders = Niah's ICP. English-friendly. Free. Go with a clear 30-sec pitch and demo.</div>
+        <div class="recs-name">AI Builder Co-working launch — June 26 (2 days!)</div>
+        <div class="recs-why">Fresh community launching online. Ground-floor opportunity to get Niah embedded before they pick a competitor. 30-sec pitch + demo ready.</div>
       </div>
-      <div class="recs-date">Jun 2, 2025</div>
-      <div class="recs-link"><a href="https://lu.ma/l8tryivb" target="_blank">RSVP →</a></div>
-    </div>
-    <div class="recs-row">
-      <div class="recs-priority p1">P1</div>
-      <div class="recs-info">
-        <div class="recs-name">Ladies in Product Madrid — June 5</div>
-        <div class="recs-why">PMs = budget holders. Women in tech = underserved. Offer Niah for team offsites/retreats.</div>
-      </div>
-      <div class="recs-date">Jun 5, 2025</div>
-      <div class="recs-link"><a href="https://lu.ma/60fm7w0z" target="_blank">RSVP →</a></div>
-    </div>
-    <div class="recs-row">
-      <div class="recs-priority p1">P1</div>
-      <div class="recs-info">
-        <div class="recs-name">AI Builder Co-working launch — June 26</div>
-        <div class="recs-why">Fresh community = easy early adoption. Position Niah as their go-to networking tool from day 1.</div>
-      </div>
-      <div class="recs-date">Jun 26, 2025</div>
+      <div class="recs-date">Jun 26</div>
       <div class="recs-link"><a href="https://lu.ma/xcs2yski" target="_blank">RSVP →</a></div>
     </div>
     <div class="recs-row">
       <div class="recs-priority p1">P1</div>
       <div class="recs-info">
-        <div class="recs-name">South Summit Madrid 2025 — October</div>
-        <div class="recs-why">Spain's biggest. Apply to pitch. Volunteer if rejected. IE connection is a advantage. Can't miss this.</div>
+        <div class="recs-name">Calendar block: Sep 12 (CryptoDays) + Sep 18 (Startup Grind)</div>
+        <div class="recs-why">Back-to-back weeks to open autumn. Both events in Madrid, 6 days apart. Hit both — they're complementary crowds.</div>
       </div>
-      <div class="recs-date">Oct 2025</div>
-      <div class="recs-link"><a href="https://www.southsummit.io/e/madrid/en" target="_blank">Apply →</a></div>
+      <div class="recs-date">Sep 12 + 18</div>
+      <div class="recs-link"><a href="https://lu.ma/v5a2ugyu" target="_blank">RSVP →</a></div>
     </div>
     <div class="recs-row">
       <div class="recs-priority p2">P2</div>
       <div class="recs-info">
-        <div class="recs-name">Watch n8n Madrid Meetup for next date</div>
-        <div class="recs-why">Ops/automation crowd. Understand their community format. Likely Q3 2025.</div>
+        <div class="recs-name">Watch recurring Meetup groups for new September dates</div>
+        <div class="recs-why">ProductTank, Madrid AI Devs, IT Brunch — all post-summer re-launch events will drop in August. Join their groups now so you're notified.</div>
       </div>
-      <div class="recs-date">Q3 2025</div>
-      <div class="recs-link"><a href="https://lu.ma/2025-march-madrid" target="_blank">Track →</a></div>
-    </div>
-    <div class="recs-row">
-      <div class="recs-priority p2">P2</div>
-      <div class="recs-info">
-        <div class="recs-name">Watch Leading Cyber Ladies for next edition</div>
-        <div class="recs-why">High-value ICP (cybersecurity + AI). Follow Keren Elazari on LinkedIn. BT España venue = corporate credibility.</div>
-      </div>
-      <div class="recs-date">Q3/Q4 2025</div>
-      <div class="recs-link"><a href="https://lu.ma/vcgjjxna" target="_blank">Track →</a></div>
-    </div>
-    <div class="recs-row">
-      <div class="recs-priority p2">P2</div>
-      <div class="recs-info">
-        <div class="recs-name">ProductTank Madrid — join group + watch next event</div>
-        <div class="recs-why">Mind the Product brand = global. Madrid chapter = strong PM attendance. Recurring, free.</div>
-      </div>
-      <div class="recs-date">Monthly</div>
+      <div class="recs-date">Aug–Sep</div>
       <div class="recs-link"><a href="https://www.meetup.com/ProductTank-Madrid/" target="_blank">Join →</a></div>
+    </div>
+    <div class="recs-row">
+      <div class="recs-priority p2">P2</div>
+      <div class="recs-info">
+        <div class="recs-name">Apply for South Summit 2026 startup competition</div>
+        <div class="recs-why">Next South Summit is 2026 (2025 already happened June 4–6). Applications open months in advance. IE connection = advantage. Apply for pitch competition.</div>
+      </div>
+      <div class="recs-date">2026 — apply now</div>
+      <div class="recs-link"><a href="https://southsummit.io" target="_blank">southsummit.io →</a></div>
     </div>
     <div class="recs-row">
       <div class="recs-priority p3">P3</div>
       <div class="recs-info">
-        <div class="recs-name">Italian Professional Network (IPN) — reach out to founders</div>
-        <div class="recs-why">Diaspora networking model = direct Niah reference. Study their format. Potential partnership.</div>
+        <div class="recs-name">July–August: prep mode. Update pitch + build outreach list.</div>
+        <div class="recs-why">Use the quiet months to: finalize Niah demo, build a target contact list for September events, draft LinkedIn outreach messages.</div>
       </div>
-      <div class="recs-date">Ongoing</div>
-      <div class="recs-link"><a href="https://lu.ma/zoh5pimt" target="_blank">Connect →</a></div>
+      <div class="recs-date">Jul–Aug</div>
+      <div class="recs-link"><a href="https://www.linkedin.com" target="_blank">Prep →</a></div>
     </div>
   </div>
 </div>
@@ -640,57 +389,73 @@
 <!-- KEY INSIGHTS -->
 <div class="section">
   <h2><span class="icon">💡</span> Key Insights for Niah</h2>
+
   <div class="insight-box">
-    <div class="insight-title">The AI Founder Wave is NOW (June 2025)</div>
-    <div class="insight-text">Three AI-founder community launches in Madrid in June 2025 alone: CreateWith_, AI Builder Co-working, plus ongoing CryptoDays AI crossover. These communities are brand new = not locked into existing tools. Niah's window is right now to get embedded before they pick a competitor.</div>
+    <div class="insight-title">September 2025 is Niah's Real Launch Window</div>
+    <div class="insight-text">The two confirmed events (Sep 12 + Sep 18) are perfectly timed for Niah's autumn push. Madrid's professional scene wakes up after summer in September — events fill fast, energy is high, people are ready to network. The AI Builder Co-working launch (June 26) is a bonus ground-floor opportunity. If Niah has a pitch ready, the 2-day window is gold.</div>
   </div>
+
   <div class="insight-box">
-    <div class="insight-title">South Summit is the Flagship (October)</div>
-    <div class="insight-text">South Summit Madrid 2025 is THE B2B networking event of the year in Spain. IE University's connection to it is Jordan's unfair advantage. Apply for pitch competition. Even getting a table/booth is worth it. 500+ investors, thousands of founders — if Niah launches publicly there, it's a multiplier. Start planning NOW — applications close early.</div>
+    <div class="insight-title">July–August = Silent Months. Use Them.</div>
+    <div class="insight-text">Madrid essentially shuts down in August. Most events pause. Founders and professionals go on vacation. DON'T plan to attend events in July–August. Instead: use this dead zone to prep. Update the Niah pitch for in-person delivery, build your outreach sequence, research the organizers of the September events, and reach out to attendees提前 (in advance) on LinkedIn before the events happen.</div>
   </div>
-  <div class="insight-box">
-    <div class="insight-title">Product People = Niah's Best Customer</div>
-    <div class="insight-text">ProductTank, Ladies in Product, Product Leads — PMs keep recurring team events, offsites, cross-company collaborations. They have budget authority and pain around the exact problem Niah solves. These communities are organized, tight, and English-friendly. Start with them.</div>
-  </div>
-  <div class="insight-box">
-    <div class="insight-title">Niche Diaspora Model = Direct Intel</div>
-    <div class="insight-text">Unity Homes (Kenyans in Madrid), IPN (Italians in Madrid) — both run tight diaspora professional networks with paid events and WhatsApp communities. These are running the playbook Niah wants to build. Study them, reach out to founders, potentially co-promote.</div>
-  </div>
-  <div class="insight-box">
-    <div class="insight-title">Luma > Meetup > Eventbrite for Niah</div>
-    <div class="insight-text">Luma is the best platform for tech/startup events in Madrid — easier to submit, cleaner event pages, better for reaching AI/crypto/Web3 founders. Meetup is better for recurring professional communities. Eventbrite skews consumer/corporate. Focus Luma for outreach, Meetup for community building.</div>
-  </div>
+
   <div class="insight-box">
     <div class="insight-title">Crypto/Web3 Crowd = Unexpected B2B Fit</div>
-    <div class="insight-text">CryptoDays and Offchain Madrid events draw 200-400 people for Web3+AI nights. These attendees are international, English-dominant, early adopters, and comfortable transacting online — exactly Niah's online event networking angle. The Sept 12 CryptoDays event (lu.ma/v5a2ugyu) is worth attending.</div>
+    <div class="insight-text">CryptoDays events draw 200–400 people, international, English-dominant, comfortable with digital products and online transactions. They're early adopters — exactly the profile that might use an online event networking tool like Niah. The Sep 12 OKX x CryptoDays event is worth blocking out.</div>
   </div>
+
+  <div class="insight-box">
+    <div class="insight-title">Startup Grind = Most Founder-Dense Regular Event</div>
+    <div class="insight-title" style="font-size:13px;color:var(--muted);font-weight:400;margin-top:4px;">September 18: "Construir, Crecer, Invertir"</div>
+    <div class="insight-text">Startup Grind Madrid's sold-out history means high intent. The tagline "full founder cycle" (build, grow, invest) signals attendees are active and engaged. €6 ticket = low barrier but committed audience. This is a good event to hand out Niah cards or demo on someone's phone.</div>
+  </div>
+
+  <div class="insight-box">
+    <div class="insight-title">South Summit 2025 Already Happened (June 4–6)</div>
+    <div class="insight-text">Confirmed: South Summit Madrid 2025 took place June 4–6 at La Nave. The next South Summit is 2026. If you want to exhibit or pitch at South Summit, the application window for 2026 will open by late 2025. Use the IE University connection — Jordan has an unfair advantage here. Follow southsummit.io for application dates.</div>
+  </div>
+
+  <div class="insight-box">
+    <div class="insight-title">The Recurring Groups Are Your Long-Term Pipeline</div>
+    <div class="insight-text">ProductTank, Madrid AI Devs, IT Brunch — these groups run events every 1–2 months. Join all of them on Meetup.com NOW so their announcements hit your inbox. When they post their September re-launch events, you'll know before the public does. That's first-mover advantage for Niah outreach.</div>
+  </div>
+
 </div>
 
 <!-- ONGOING MONITORING -->
 <div class="section">
-  <h2><span class="icon">🔁</span> Ongoing Monitoring</h2>
+  <h2><span class="icon">🔁</span> Ongoing Monitoring Checklist</h2>
   <div class="recs-table">
     <div class="recs-row">
       <div class="recs-priority p1">🔴</div>
       <div class="recs-info">
-        <div class="recs-name">Luma — "Madrid" search, filter by: AI, Tech, Startups, Product</div>
-        <div class="recs-why">Refresh weekly. New events drop constantly. Join the event's community page when you RSVP.</div>
+        <div class="recs-name">Luma — "Madrid" search every Monday</div>
+        <div class="recs-why">lu.ma/madrid has new events weekly. Set a recurring calendar reminder to check every Monday morning.</div>
       </div>
-      <div class="recs-link"><a href="https://lu.ma/search?q=madrid&type=events" target="_blank">lu.ma/search →</a></div>
-    </div>
-    <div class="recs-row">
-      <div class="recs-priority p2">🟡</div>
-      <div class="recs-info">
-        <div class="recs-name">Meetup — Madrid Tech, Product, AI groups</div>
-        <div class="recs-why">Join all relevant groups so events appear in your notifications. Refresh monthly.</div>
-      </div>
-      <div class="recs-link"><a href="https://www.meetup.com/find/es--madrid/tech/" target="_blank">meetup.com →</a></div>
+      <div class="recs-link"><a href="https://lu.ma/madrid" target="_blank">lu.ma/madrid →</a></div>
     </div>
     <div class="recs-row">
       <div class="recs-priority p1">🔴</div>
       <div class="recs-info">
-        <div class="recs-name">South Summit — apply for pitch competition ASAP</div>
-        <div class="recs-why">Applications close early. IE connection = advantage. Don't miss the deadline.</div>
+        <div class="recs-name">Meetup.com — join all 5 recurring groups</div>
+        <div class="recs-why">Once you join a Meetup group, event notifications go to your email automatically. Do this for ProductTank, AI Devs, IT Brunch, Madrid Professionals, Madrid Startup Network.</div>
+      </div>
+      <div class="recs-link"><a href="https://www.meetup.com/ProductTank-Madrid/" target="_blank">Join all →</a></div>
+    </div>
+    <div class="recs-row">
+      <div class="recs-priority p2">🟡</div>
+      <div class="recs-info">
+        <div class="recs-name">Startup Grind Madrid — follow for Sep 18 updates</div>
+        <div class="recs-why">They post speaker lineups and details closer to the date. Follow them on LinkedIn for any changes to the format.</div>
+      </div>
+      <div class="recs-link"><a href="https://www.startupgrind.com/madrid/" target="_blank">Follow →</a></div>
+    </div>
+    <div class="recs-row">
+      <div class="recs-priority p2">🟡</div>
+      <div class="recs-info">
+        <div class="recs-name">South Summit 2026 — watch for competition applications</div>
+        <div class="recs-why">Applications for the 2026 startup competition will open by late 2025. Don't miss it — IE connection is Jordan's advantage.</div>
       </div>
       <div class="recs-link"><a href="https://southsummit.io" target="_blank">Apply →</a></div>
     </div>
@@ -698,7 +463,7 @@
       <div class="recs-priority p3">🟢</div>
       <div class="recs-info">
         <div class="recs-name">IE University events calendar</div>
-        <div class="recs-why">MBA and startup community events. IE alumni network is a major distribution channel for Niah.</div>
+        <div class="recs-why">IE runs its own startup/entrepreneurship events that are free for MBA students. Jordan has free access. Great warm audience.</div>
       </div>
       <div class="recs-link"><a href="https://www.ie.edu/events/" target="_blank">ie.edu/events →</a></div>
     </div>

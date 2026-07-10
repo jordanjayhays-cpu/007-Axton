@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Massage Club — Madrid Studios</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+:root {
+  --v: #030306; --d: #060609; --s: #0b0b10; --s2: #101018;
+  --b: #18182a; --b2: #222236; --g: #00ff88; --gg: rgba(0,255,136,0.07);
+  --g2: rgba(0,255,136,0.15); --g3: rgba(0,255,136,0.04); --txt: #b8b8cc; --txt2: #505068; --txt3: #303048;
+  --accent: #6366f1; --a2: rgba(99,102,241,0.1);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', sans-serif; background: var(--v); color: var(--txt); min-height: 100vh; overflow-x: hidden; }
+@keyframes fa { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pu { 0%,100%{opacity:1} 50%{opacity:0.15} }
+@keyframes sh { 0%,100%{transform:scaleX(1)} 50%{transform:scaleX(0.96)} }
+@keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* ── NAV ── */
+.n {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  height: 58px; display: flex; align-items: center; padding: 0 32px; gap: 28px;
+  background: rgba(3,3,6,0.94); backdrop-filter: blur(24px); border-bottom: 1px solid var(--b);
+}
+.l { font-family: 'Space Mono', monospace; font-size: 0.72rem; font-weight: 700; letter-spacing: 5px; color: var(--g); text-transform: uppercase; }
+.na { display: flex; gap: 2px; margin-left: 16px; }
+.na a { padding: 5px 11px; border-radius: 5px; font-size: 0.7rem; color: var(--txt3); text-decoration: none; transition: .15s; font-family: 'Space Mono', monospace; letter-spacing: 0.4px; }
+.na a:hover { color: var(--txt2); }
+.na a.ac { color: var(--g); background: var(--gg); }
+.nr { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+.pl { display: flex; align-items: center; gap: 6px; background: var(--s); border: 1px solid var(--b); padding: 5px 11px; border-radius: 50px; font-family: 'Space Mono', monospace; font-size: 0.55rem; letter-spacing: 1px; color: var(--txt2); }
+.pd { width: 5px; height: 5px; border-radius: 50%; background: var(--g); animation: pu 2s infinite; }
+.bt { background: var(--g); color: #000; border: none; padding: 7px 16px; border-radius: 5px; font-family: 'Space Mono', monospace; font-size: 0.62rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; }
+.bt:hover { box-shadow: 0 0 24px rgba(0,255,136,0.4); }
+
+/* ── HERO ── */
+.h {
+  min-height: 60vh; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; position: relative; padding: 120px 32px 60px; overflow: hidden;
+}
+.hbg { position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 40% at 50% 40%, rgba(0,255,136,0.045) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 30% at 30% 80%, rgba(99,102,241,0.025) 0%, transparent 40%),
+    var(--v);
+}
+.ht { text-align: center; z-index: 1; max-width: 700px; }
+.heb { font-family: 'Space Mono', monospace; font-size: 0.58rem; letter-spacing: 5px; color: var(--g); text-transform: uppercase; margin-bottom: 10px; animation: fa 0.6s ease; }
+.htit { font-size: clamp(2rem, 5vw, 3.8rem); font-weight: 700; color: #fff; line-height: 1.0; margin-bottom: 12px; animation: fa 0.6s 0.1s backwards; }
+.htit span { color: var(--g); }
+.hsub { font-size: 0.9rem; color: var(--txt2); max-width: 500px; margin: 0 auto 28px; line-height: 1.6; animation: fa 0.6s 0.2s backwards; }
+
+/* ── STATS ── */
+.stats { display: flex; gap: 24px; justify-content: center; margin-bottom: 32px; animation: fa 0.6s 0.3s backwards; }
+.stat { background: var(--s); border: 1px solid var(--b); border-radius: 10px; padding: 14px 24px; text-align: center; }
+.stat-n { font-family: 'Space Mono', monospace; font-size: 1.6rem; font-weight: 700; color: #fff; }
+.stat-l { font-family: 'Space Mono', monospace; font-size: 0.5rem; letter-spacing: 2px; color: var(--txt3); text-transform: uppercase; margin-top: 2px; }
+
+/* ── SEARCH & FILTER ── */
+.bar {
+  width: 100%; max-width: 900px; z-index: 1; display: flex; gap: 10px;
+  flex-wrap: wrap; align-items: center; animation: fa 0.6s 0.4s backwards;
+}
+.search-wrap { flex: 1; min-width: 220px; position: relative; }
+.si {
+  width: 100%; background: var(--s); border: 1px solid var(--b2); border-radius: 8px;
+  padding: 10px 14px 10px 38px; color: var(--txt); font-family: 'Inter', sans-serif;
+  font-size: 0.82rem; outline: none; transition: border-color 0.2s;
+}
+.si:focus { border-color: var(--g); }
+.si::placeholder { color: var(--txt3); }
+.search-icon { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); font-size: 0.8rem; }
+select.si {
+  -webkit-appearance: none; appearance: none; cursor: pointer;
+  padding-right: 30px; min-width: 140px;
+}
+select.si2 {
+  -webkit-appearance: none; appearance: none; cursor: pointer;
+  background: var(--s); border: 1px solid var(--b2); border-radius: 8px;
+  padding: 10px 30px 10px 14px; color: var(--txt); font-family: 'Inter', sans-serif;
+  font-size: 0.82rem; outline: none; transition: border-color 0.2s;
+}
+select.si2:focus { border-color: var(--g); }
+select.si2 option { background: var(--s); }
+.filter-wrap { position: relative; }
+.filter-arrow { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--txt2); font-size: 0.5rem; }
+
+/* ── STUDIO GRID ── */
+.main { max-width: 1100px; margin: 0 auto; padding: 0 32px 80px; }
+.section-label {
+  font-family: 'Space Mono', monospace; font-size: 0.52rem; letter-spacing: 4px;
+  color: var(--txt3); text-transform: uppercase; margin: 40px 0 20px;
+}
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+.card {
+  background: var(--s); border: 1px solid var(--b); border-radius: 12px;
+  padding: 18px; cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden;
+  animation: fa 0.4s backwards;
+}
+.card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, var(--gg) 0%, transparent 60%); opacity: 0; transition: opacity 0.2s; }
+.card:hover { border-color: var(--b2); transform: translateY(-2px); }
+.card:hover::before { opacity: 1; }
+.card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+.card-name { font-size: 0.88rem; font-weight: 600; color: #fff; line-height: 1.3; flex: 1; padding-right: 8px; }
+.card-price {
+  font-family: 'Space Mono', monospace; font-size: 0.75rem; font-weight: 700;
+  color: var(--g); white-space: nowrap; background: var(--gg); padding: 3px 8px;
+  border-radius: 4px; border: 1px solid var(--g2);
+}
+.card-addr { font-size: 0.68rem; color: var(--txt2); margin-bottom: 8px; display: flex; align-items: center; gap: 4px; }
+.card-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 10px; }
+.tag {
+  font-family: 'Space Mono', monospace; font-size: 0.48rem; letter-spacing: 1px;
+  text-transform: uppercase; padding: 3px 7px; border-radius: 4px;
+  background: var(--b); color: var(--txt2); border: 1px solid var(--b2);
+}
+.tag.thai { background: rgba(245,158,11,0.08); color: #f59e0b; border-color: rgba(245,158,11,0.2); }
+.tag.spa { background: rgba(99,102,241,0.08); color: #818cf8; border-color: rgba(99,102,241,0.2); }
+.tag.fisio { background: rgba(14,165,233,0.08); color: #38bdf8; border-color: rgba(14,165,233,0.2); }
+.tag.hotel { background: rgba(168,85,247,0.08); color: #c084fc; border-color: rgba(168,85,247,0.2); }
+.tag.hammam { background: rgba(20,184,166,0.08); color: #2dd4bf; border-color: rgba(20,184,166,0.2); }
+.tag.boutique { background: rgba(236,72,153,0.08); color: #f472b6; border-color: rgba(236,72,153,0.2); }
+.tag.chain { background: rgba(234,179,8,0.08); color: #facc15; border-color: rgba(234,179,8,0.2); }
+.tag.oriental { background: rgba(249,115,22,0.08); color: #fb923c; border-color: rgba(249,115,22,0.2); }
+.card-bottom { display: flex; gap: 6px; border-top: 1px solid var(--b); padding-top: 10px; margin-top: 2px; }
+.card-svc {
+  font-family: 'Space Mono', monospace; font-size: 0.52rem; color: var(--txt3);
+  display: flex; align-items: center; gap: 3px;
+}
+.card-svc span { color: var(--txt2); }
+.card-count {
+  margin-left: auto; font-family: 'Space Mono', monospace; font-size: 0.52rem;
+  color: var(--g); background: var(--gg); padding: 2px 7px; border-radius: 4px;
+}
+
+/* ── MODAL ── */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 2000; background: rgba(3,3,6,0.85);
+  backdrop-filter: blur(12px); display: flex; align-items: flex-end;
+  justify-content: center; animation: fadeIn 0.2s ease; overflow-y: auto;
+  padding: 20px;
+}
+.modal {
+  background: var(--d); border: 1px solid var(--b2); border-radius: 16px;
+  width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto;
+  animation: slideUp 0.3s ease; margin: auto;
+}
+.modal-header {
+  padding: 24px; border-bottom: 1px solid var(--b); position: sticky; top: 0;
+  background: var(--d); z-index: 1; display: flex; justify-content: space-between; align-items: flex-start;
+}
+.modal-title { font-size: 1.1rem; font-weight: 700; color: #fff; margin-bottom: 4px; }
+.modal-meta { font-size: 0.72rem; color: var(--txt2); display: flex; gap: 12px; flex-wrap: wrap; }
+.modal-meta span { display: flex; align-items: center; gap: 4px; }
+.modal-close {
+  background: var(--s); border: 1px solid var(--b2); color: var(--txt);
+  width: 30px; height: 30px; border-radius: 6px; cursor: pointer; font-size: 0.9rem;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-left: 12px;
+}
+.modal-close:hover { border-color: var(--g); color: var(--g); }
+.modal-body { padding: 20px 24px 32px; }
+.svc-section { margin-bottom: 20px; }
+.svc-section-title {
+  font-family: 'Space Mono', monospace; font-size: 0.55rem; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--txt3); margin-bottom: 10px; padding-bottom: 6px;
+  border-bottom: 1px solid var(--b);
+}
+.svc-item {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+.svc-item:last-child { border-bottom: none; }
+.svc-name { font-size: 0.8rem; color: #fff; flex: 1; padding-right: 12px; }
+.svc-desc { font-size: 0.65rem; color: var(--txt3); width: 100%; margin-top: 2px; }
+.svc-info { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+.svc-price { font-family: 'Space Mono', monospace; font-size: 0.78rem; font-weight: 700; color: var(--g); }
+.svc-dur { font-family: 'Space Mono', monospace; font-size: 0.52rem; color: var(--txt3); }
+.no-price { font-family: 'Space Mono', monospace; font-size: 0.62rem; color: var(--txt3); }
+
+/* ── LOADING ── */
+.loading { text-align: center; padding: 60px; color: var(--txt3); font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 2px; }
+.loading-dot { display: inline-block; width: 6px; height: 6px; background: var(--g); border-radius: 50%; animation: pu 1s infinite; margin-left: 4px; }
+.no-results { text-align: center; padding: 60px; color: var(--txt3); font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 2px; }
+
+/* ── TYPE BADGE COLORS ── */
+.badge-thai { background: rgba(245,158,11,0.1); color: #f59e0b; border: 1px solid rgba(245,158,11,0.25); }
+.badge-spa { background: rgba(99,102,241,0.1); color: #818cf8; border: 1px solid rgba(99,102,241,0.25); }
+.badge-fisio { background: rgba(14,165,233,0.1); color: #38bdf8; border: 1px solid rgba(14,165,233,0.25); }
+.badge-hotel { background: rgba(168,85,247,0.1); color: #c084fc; border: 1px solid rgba(168,85,247,0.25); }
+.badge-hammam { background: rgba(20,184,166,0.1); color: #2dd4bf; border: 1px solid rgba(20,184,166,0.25); }
+.badge-boutique { background: rgba(236,72,153,0.1); color: #f472b6; border: 1px solid rgba(236,72,153,0.25); }
+.badge-chain { background: rgba(234,179,8,0.1); color: #facc15; border: 1px solid rgba(234,179,8,0.25); }
+.badge-oriental { background: rgba(249,115,22,0.1); color: #fb923c; border: 1px solid rgba(249,115,22,0.25); }
+.badge-default { background: var(--b); color: var(--txt2); border: 1px solid var(--b2); }
+
+/* ── FOOTER ── */
+.footer { border-top: 1px solid var(--b); padding: 24px 32px; text-align: center; font-family: 'Space Mono', monospace; font-size: 0.52rem; color: var(--txt3); letter-spacing: 2px; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="n">
+  <div class="l">Massage Club</div>
+  <div class="na">
+    <a href="#" class="ac">Studios</a>
+    <a href="https://neurodashboards.com/survey-studio.html" target="_blank">Partner Survey</a>
+  </div>
+  <div class="nr">
+    <div class="pl"><div class="pd"></div> LIVE</div>
+    <span style="font-family:'Space Mono',monospace;font-size:0.55rem;color:var(--txt3)">Madrid, Spain</span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="h">
+  <div class="hbg"></div>
+  <div class="ht">
+    <div class="heb">Massage Club · Madrid</div>
+    <div class="htit">Every Studio.<br><span>Every Service.</span></div>
+    <div class="hsub">The complete menu of Madrid's best massage studios — every technique, every price, every neighborhood.</div>
+    <div class="stats" id="stats">
+      <div class="stat"><div class="stat-n" id="stat-studios">—</div><div class="stat-l">Studios</div></div>
+      <div class="stat"><div class="stat-n" id="stat-services">—</div><div class="stat-l">Services</div></div>
+      <div class="stat"><div class="stat-n" id="stat-neighborhoods">—</div><div class="stat-l">Neighborhoods</div></div>
+      <div class="stat"><div class="stat-n" id="stat-types">—</div><div class="stat-l">Types</div></div>
+    </div>
+    <div class="bar">
+      <div class="search-wrap">
+        <span class="search-icon">⌕</span>
+        <input class="si" id="searchInput" placeholder="Search studios..." type="text">
+      </div>
+      <div class="filter-wrap">
+        <select class="si2" id="neighborhoodFilter">
+          <option value="">All Neighborhoods</option>
+        </select>
+        <span class="filter-arrow">▼</span>
+      </div>
+      <div class="filter-wrap">
+        <select class="si2" id="typeFilter">
+          <option value="">All Types</option>
+        </select>
+        <span class="filter-arrow">▼</span>
+      </div>
+      <div class="filter-wrap">
+        <select class="si2" id="priceFilter">
+          <option value="">All Prices</option>
+          <option value="0-40">Under €40/hr</option>
+          <option value="40-60">€40–60/hr</option>
+          <option value="60-80">€60–80/hr</option>
+          <option value="80-999">€80+/hr</option>
+        </select>
+        <span class="filter-arrow">▼</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- GRID -->
+<div class="main">
+  <div class="section-label" id="resultsLabel">All Studios</div>
+  <div id="loading" class="loading">LOADING STUDIOS<span class="loading-dot"></span></div>
+  <div class="grid" id="grid" style="display:none"></div>
+  <div id="noResults" class="no-results" style="display:none">No studios match your filters</div>
+</div>
+
+<div class="footer">Massage Club · Supabase Live · Updated continuously</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" style="display:none" onclick="closeModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="modalTitle"></div>
+        <div class="modal-meta" id="modalMeta"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+// Supabase config
+const SB_URL = 'https://jglftdstrowwckwqmpue.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpnbGZ0ZHN0cm93d2Nrd3FtcHVlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYxMTI1MTYsImV4cCI6MjA2MTY4ODUxNn0.Ky6ELB9F_t_8Q0E7P9F0FvVQ4l8kRn8vJ3oWS3s3pO8';
+
+let allStudios = [];
+let allServices = {};
+
+async function querySupabase(table, params = '') {
+  const url = `${SB_URL}/rest/v1/${table}?${params}`;
+  const r = await fetch(url, {
+    headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}` }
+  });
+  return r.json();
+}
+
+function getTypeClass(type) {
+  if (!type) return 'badge-default';
+  const t = type.toLowerCase();
+  if (t.includes('thai') || t.includes('tailand')) return 'badge-thai';
+  if (t.includes('spa') || t.includes('hammam') || t.includes('bath')) return 'badge-spa';
+  if (t.includes('fisio') || t.includes('physio') || t.includes('deport')) return 'badge-fisio';
+  if (t.includes('hotel') || t.includes('luxury') || t.includes('5*')) return 'badge-hotel';
+  if (t.includes('hammam') || t.includes('arab')) return 'badge-hammam';
+  if (t.includes('boutique') || t.includes('organic')) return 'badge-boutique';
+  if (t.includes('chain') || t.includes('franchise')) return 'badge-chain';
+  if (t.includes('oriental') || t.includes('chinese') || t.includes('ayurved')) return 'badge-oriental';
+  return 'badge-default';
+}
+
+function tagClass(type) {
+  if (!type) return '';
+  const t = type.toLowerCase();
+  if (t.includes('thai') || t.includes('tailand')) return 'thai';
+  if (t.includes('spa') || t.includes('hammam') || t.includes('bath') || t.includes('arab')) return 'spa';
+  if (t.includes('fisio') || t.includes('physio') || t.includes('deport')) return 'fisio';
+  if (t.includes('hotel') || t.includes('luxury') || t.includes('5*')) return 'hotel';
+  if (t.includes('hammam')) return 'hammam';
+  if (t.includes('boutique') || t.includes('organic')) return 'boutique';
+  if (t.includes('chain')) return 'chain';
+  if (t.includes('oriental') || t.includes('chinese') || t.includes('ayurved')) return 'oriental';
+  return '';
+}
+
+function formatPrice(p) {
+  if (p == null) return null;
+  return '€' + parseFloat(p).toFixed(0);
+}
+
+function formatDur(d) {
+  if (!d) return '';
+  return d + 'min';
+}
+
+function neighborhoodShort(addr) {
+  if (!addr) return '';
+  const n = ['Salamanca', 'Chamberí', 'Chamartín', 'Retiro', 'La Latina', 'Centro', 'Tetuán', 'Moncloa', 'Arganzuela', 'Moratalaz', 'Carabanchel', 'Vallecas', 'Pozuelo'];
+  for (const nb of n) {
+    if (addr.toLowerCase().includes(nb.toLowerCase())) return nb;
+  }
+  return addr.split(',')[0] || '';
+}
+
+async function init() {
+  try {
+    // Fetch all studios
+    const studios = await querySupabase('partners', 'select=*&order=business_name.asc');
+    allStudios = studios.filter(s => s.business_name);
+
+    // Fetch all services
+    const svcs = await querySupabase('partner_services', 'select=*&order=name.asc');
+    for (const s of svcs) {
+      if (!allServices[s.partner_id]) allServices[s.partner_id] = [];
+      allServices[s.partner_id].push(s);
+    }
+
+    // Populate filters
+    const neighborhoods = [...new Set(allStudios.map(s => s.neighborhood).filter(Boolean))].sort();
+    const types = [...new Set(allStudios.map(s => s.type).filter(Boolean))].sort();
+    const selN = document.getElementById('neighborhoodFilter');
+    const selT = document.getElementById('typeFilter');
+    neighborhoods.forEach(n => selN.innerHTML += `<option value="${n}">${n}</option>`);
+    types.forEach(t => selT.innerHTML += `<option value="${t}">${t}</option>`);
+
+    // Stats
+    const svcCount = Object.values(allServices).reduce((a, v) => a + v.length, 0);
+    const nbCount = neighborhoods.length;
+    document.getElementById('stat-studios').textContent = allStudios.length;
+    document.getElementById('stat-services').textContent = svcCount;
+    document.getElementById('stat-neighborhoods').textContent = nbCount;
+    document.getElementById('stat-types').textContent = types.length;
+
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('grid').style.display = 'grid';
+    renderCards();
+
+    // Filters
+    document.getElementById('searchInput').addEventListener('input', renderCards);
+    document.getElementById('neighborhoodFilter').addEventListener('change', renderCards);
+    document.getElementById('typeFilter').addEventListener('change', renderCards);
+    document.getElementById('priceFilter').addEventListener('change', renderCards);
+
+  } catch(e) {
+    document.getElementById('loading').innerHTML = 'ERROR LOADING DATA: ' + e.message;
+    console.error(e);
+  }
+}
+
+function getFiltered() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const nb = document.getElementById('neighborhoodFilter').value;
+  const tp = document.getElementById('typeFilter').value;
+  const pr = document.getElementById('priceFilter').value;
+  const [pMin, pMax] = pr ? pr.split('-').map(Number) : [0, 99999];
+
+  return allStudios.filter(s => {
+    if (q && !s.business_name.toLowerCase().includes(q) && !(s.address || '').toLowerCase().includes(q)) return false;
+    if (nb && s.neighborhood !== nb) return false;
+    if (tp && s.type !== tp) return false;
+    if (s.price_from != null) {
+      if (s.price_from < pMin || s.price_from > pMax) return false;
+    }
+    return true;
+  });
+}
+
+function renderCards() {
+  const filtered = getFiltered();
+  const grid = document.getElementById('grid');
+  const noRes = document.getElementById('noResults');
+  const label = document.getElementById('resultsLabel');
+  label.textContent = filtered.length === allStudios.length ? 'All Studios' : `${filtered.length} Studios`;
+  label.textContent += ` · ${Object.values(allServices).reduce((a,v)=>a+v.length,0)} services`;
+
+  if (filtered.length === 0) {
+    grid.style.display = 'none';
+    noRes.style.display = 'block';
+    return;
+  }
+  grid.style.display = 'grid';
+  noRes.style.display = 'none';
+
+  grid.innerHTML = filtered.map((s, i) => {
+    const svcs = allServices[s.id] || [];
+    const priceLabel = s.price_from ? `from €${s.price_from}` : '€??';
+    const nb = s.neighborhood || neighborhoodShort(s.address) || 'Madrid';
+    const tc = tagClass(s.type);
+    const tcLabel = s.type || 'Wellness';
+    const topSvcs = svcs.slice(0, 3).map(sv => `<div class="card-svc">${tag(sv.type)}${sv.name.length > 22 ? sv.name.slice(0,22)+'…' : sv.name}</div>`).join('');
+    return `
+      <div class="card" onclick="openModal('${s.id}')" style="animation-delay:${i * 0.03}s">
+        <div class="card-top">
+          <div class="card-name">${s.business_name}</div>
+          <div class="card-price">${priceLabel}<span style="font-size:0.5rem;color:var(--txt3);font-weight:400">/hr</span></div>
+        </div>
+        <div class="card-addr">◈ ${s.address || nb}</div>
+        <div class="card-tags">
+          <span class="tag ${tc}">${tcLabel}</span>
+          ${nb !== s.type ? `<span class="tag">${nb}</span>` : ''}
+        </div>
+        <div class="card-bottom">
+          ${topSvcs}
+          <span class="card-count">${svcs.length} svcs</span>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function tag(type) {
+  if (!type) return '';
+  return `<span class="tag ${tagClass(type)}" style="margin-right:4px">${type}</span>`;
+}
+
+function openModal(id) {
+  const s = allStudios.find(s => s.id === id);
+  if (!s) return;
+  const svcs = allServices[s.id] || [];
+
+  document.getElementById('modalTitle').textContent = s.business_name;
+  const nb = s.neighborhood || neighborhoodShort(s.address) || 'Madrid';
+  document.getElementById('modalMeta').innerHTML = `
+    <span>◈ ${s.address || nb}</span>
+    <span>${s.price_from ? 'from €'+s.price_from+'/hr' : ''}</span>
+    <span class="tag ${tagClass(s.type)}">${s.type || 'Wellness'}</span>
+  `;
+
+  // Group services by type
+  const groups = {};
+  for (const svc of svcs) {
+    const g = svc.type || 'Other';
+    if (!groups[g]) groups[g] = [];
+    groups[g].push(svc);
+  }
+
+  let html = '';
+  for (const [gName, gSvcs] of Object.entries(groups)) {
+    html += `<div class="svc-section">
+      <div class="svc-section-title">${gName} (${gSvcs.length})</div>
+      ${gSvcs.map(sv => `
+        <div class="svc-item">
+          <div>
+            <div class="svc-name">${sv.name}</div>
+            ${sv.description ? `<div class="svc-desc">${sv.description.slice(0,100)}${sv.description.length > 100 ? '…' : ''}</div>` : ''}
+          </div>
+          <div class="svc-info">
+            ${sv.price != null ? `<div class="svc-price">€${parseFloat(sv.price).toFixed(0)}</div>` : `<div class="no-price">Price on request</div>`}
+            ${sv.duration ? `<div class="svc-dur">${sv.duration}min</div>` : ''}
+          </div>
+        </div>
+      `).join('')}
+    </div>`;
+  }
+
+  if (!html) html = '<div class="loading">No services loaded yet</div>';
+  document.getElementById('modalBody').innerHTML = html;
+  document.getElementById('modalOverlay').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(e) {
+  if (e && e.target !== e.currentTarget) return;
+  document.getElementById('modalOverlay').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+// Close modal on Escape
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+init();
+</script>
+</body>
+</html>

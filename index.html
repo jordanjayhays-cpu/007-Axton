@@ -1,712 +1,733 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mission Control — Jordan</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root {
-            --bg: #fafafa;
-            --surface: #ffffff;
-            --card: #ffffff;
-            --border: #e5e5e5;
-            --text: #111111;
-            --muted: #666666;
-            --dim: #999999;
-            --green: #16a34a;
-            --amber: #d97706;
-            --red: #dc2626;
-            --blue: #2563eb;
-            --purple: #7c3aed;
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            padding: 0;
-            line-height: 1.5;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mission Control — Jordan</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+:root {
+  --v: #030306; --d: #060609; --s: #0b0b10; --s2: #101018;
+  --b: #18182a; --b2: #222236; --g: #00ff88; --gg: rgba(0,255,136,0.07);
+  --g2: rgba(0,255,136,0.15); --txt: #b8b8cc; --txt2: #505068; --txt3: #303048;
+  --blue: #6366f1; --bl: rgba(99,102,241,0.1);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', sans-serif; background: var(--v); color: var(--txt); min-height: 100vh; }
+@keyframes fa { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pu { 0%,100%{opacity:1} 50%{opacity:0.15} }
 
-        /* HEADER */
-        .header {
-            background: var(--surface);
-            border-bottom: 1px solid var(--border);
-            padding: 16px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        .logo {
-            font-size: 1rem;
-            font-weight: 800;
-            letter-spacing: -0.01em;
-        }
-        .logo span { color: var(--green); }
-        .header-right { font-size: 0.72rem; color: var(--muted); }
+/* ── NAV ── */
+.n {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  height: 58px; display: flex; align-items: center; padding: 0 32px; gap: 24px;
+  background: rgba(3,3,6,0.94); backdrop-filter: blur(24px); border-bottom: 1px solid var(--b);
+}
+.l { font-family: 'Space Mono', monospace; font-size: 0.72rem; font-weight: 700; letter-spacing: 4px; color: var(--g); text-transform: uppercase; }
+.na { display: flex; gap: 2px; margin-left: 8px; }
+.na a, .na button {
+  padding: 5px 12px; border-radius: 6px; font-size: 0.68rem; color: var(--txt3);
+  text-decoration: none; background: none; border: none; cursor: pointer;
+  font-family: 'Space Mono', monospace; letter-spacing: 0.3px; transition: .15s;
+}
+.na a:hover, .na button:hover { color: var(--txt2); }
+.na a.ac, .na button.ac { color: var(--g); background: var(--gg); }
+.nr { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+.pl { display: flex; align-items: center; gap: 6px; background: var(--s); border: 1px solid var(--b); padding: 5px 12px; border-radius: 50px; font-family: 'Space Mono', monospace; font-size: 0.52rem; letter-spacing: 1px; color: var(--txt2); }
+.pd { width: 5px; height: 5px; border-radius: 50%; background: var(--g); animation: pu 2s infinite; }
 
-        /* MAIN */
-        .main { max-width: 680px; margin: 0 auto; padding: 20px 16px 60px; }
+/* ── PAGE LAYOUT ── */
+.page { display: none; padding-top: 58px; min-height: 100vh; }
+.page.active { display: block; }
 
-        /* SECTION */
-        .section {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 12px;
-        }
-        .section-title {
-            font-size: 0.7rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: var(--muted);
-            margin-bottom: 12px;
-        }
+/* ── HERO ── */
+.h {
+  min-height: 52vh; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; position: relative; padding: 80px 32px 50px; overflow: hidden;
+}
+.hbg { position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 40% at 50% 40%, rgba(0,255,136,0.04) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 30% at 70% 80%, rgba(99,102,241,0.03) 0%, transparent 40%),
+    var(--v);
+}
+.h { z-index: 1; text-align: center; }
+.heb { font-family: 'Space Mono', monospace; font-size: 0.58rem; letter-spacing: 5px; color: var(--g); text-transform: uppercase; margin-bottom: 10px; animation: fa 0.6s ease; }
+.htit { font-size: clamp(2rem, 5vw, 3.4rem); font-weight: 700; color: #fff; line-height: 1.05; margin-bottom: 12px; animation: fa 0.6s 0.1s backwards; }
+.htit span { color: var(--g); }
+.hsub { font-size: 0.88rem; color: var(--txt2); max-width: 500px; margin: 0 auto 28px; line-height: 1.6; animation: fa 0.6s 0.2s backwards; }
 
-        /* WORK LOG */
-        .log-item {
-            display: flex;
-            gap: 10px;
-            padding: 10px 0;
-            border-bottom: 1px solid var(--border);
-        }
-        .log-item:last-child { border-bottom: none; }
-        .log-date { font-size: 0.68rem; color: var(--dim); width: 52px; flex-shrink: 0; padding-top: 1px; }
-        .log-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
-        .log-dot.green { background: var(--green); }
-        .log-dot.amber { background: var(--amber); }
-        .log-dot.blue { background: var(--blue); }
-        .log-content { flex: 1; }
-        .log-title { font-size: 0.8rem; font-weight: 600; }
-        .log-meta { font-size: 0.68rem; color: var(--muted); }
-        .log-tag { font-size: 0.58rem; font-weight: 700; padding: 2px 7px; border-radius: 4px; flex-shrink: 0; align-self: flex-start; margin-top: 1px; }
-        .tag-hermes { background: rgba(22,163,74,0.1); color: var(--green); }
-        .tag-axton { background: rgba(124,58,237,0.1); color: var(--purple); }
-        .tag-jordan { background: rgba(37,99,235,0.1); color: var(--blue); }
+/* ── STATS BAR ── */
+.stats { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; animation: fa 0.6s 0.3s backwards; }
+.stat { background: var(--s); border: 1px solid var(--b); border-radius: 10px; padding: 12px 20px; text-align: center; min-width: 100px; }
+.stat-n { font-family: 'Space Mono', monospace; font-size: 1.5rem; font-weight: 700; color: #fff; }
+.stat-l { font-family: 'Space Mono', monospace; font-size: 0.48rem; letter-spacing: 2px; color: var(--txt3); text-transform: uppercase; margin-top: 2px; }
 
-        /* PROJECTS */
-        .project-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 0;
-            border-bottom: 1px solid var(--border);
-        }
-        .project-item:last-child { border-bottom: none; }
-        .project-icon { font-size: 1rem; width: 24px; text-align: center; }
-        .project-info { flex: 1; }
-        .project-name { font-size: 0.82rem; font-weight: 700; }
-        .project-desc { font-size: 0.68rem; color: var(--muted); }
-        .status-pill { font-size: 0.6rem; font-weight: 700; padding: 2px 8px; border-radius: 20px; white-space: nowrap; }
-        .s-active { background: rgba(22,163,74,0.1); color: var(--green); }
-        .s-waiting { background: rgba(217,119,6,0.1); color: var(--amber); }
-        .s-blocked { background: rgba(220,38,38,0.1); color: var(--red); }
-        .s-done { background: rgba(153,153,153,0.1); color: var(--dim); }
+/* ── MAIN CONTENT ── */
+.main { max-width: 1100px; margin: 0 auto; padding: 0 32px 80px; }
+.section-label {
+  font-family: 'Space Mono', monospace; font-size: 0.52rem; letter-spacing: 4px;
+  color: var(--txt3); text-transform: uppercase; margin: 40px 0 16px;
+}
 
-        /* TASKS */
-        .task-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px;
-            background: var(--bg);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            margin-bottom: 6px;
-            cursor: pointer;
-            user-select: none;
-        }
-        .task-item:last-child { margin-bottom: 0; }
-        .task-check {
-            width: 22px;
-            height: 22px;
-            border-radius: 6px;
-            border: 2px solid var(--dim);
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.7rem;
-            transition: all 0.15s;
-        }
-        .task-check.done { background: var(--green); border-color: var(--green); color: white; }
-        .task-body { flex: 1; }
-        .task-text { font-size: 0.82rem; font-weight: 500; }
-        .task-text.done { text-decoration: line-through; color: var(--dim); }
-        .task-meta { font-size: 0.66rem; color: var(--muted); }
-        .task-pri { font-size: 0.58rem; font-weight: 800; text-transform: uppercase; padding: 2px 7px; border-radius: 4px; letter-spacing: 0.05em; }
-        .pri-h { background: rgba(220,38,38,0.1); color: var(--red); }
-        .pri-m { background: rgba(217,119,6,0.1); color: var(--amber); }
-        .pri-l { background: rgba(153,153,153,0.1); color: var(--dim); }
+/* ── PROJECT CARDS GRID ── */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+.card {
+  background: var(--s); border: 1px solid var(--b); border-radius: 12px;
+  padding: 18px; cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden;
+  animation: fa 0.4s backwards; text-decoration: none; color: inherit; display: block;
+}
+.card:hover { border-color: var(--b2); transform: translateY(-2px); }
+.card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, var(--gg) 0%, transparent 60%); opacity: 0; transition: opacity 0.2s; }
+.card:hover::before { opacity: 1; }
+.card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+.card-name { font-size: 0.88rem; font-weight: 600; color: #fff; line-height: 1.3; flex: 1; padding-right: 8px; }
+.card-badge {
+  font-family: 'Space Mono', monospace; font-size: 0.48rem; letter-spacing: 1px;
+  text-transform: uppercase; padding: 3px 8px; border-radius: 4px; flex-shrink: 0;
+}
+.badge-live { background: var(--gg); color: var(--g); border: 1px solid var(--g2); }
+.badge-build { background: var(--bl); color: var(--blue); border: 1px solid rgba(99,102,241,0.25); }
+.badge-idea { background: rgba(255,255,255,0.04); color: var(--txt2); border: 1px solid var(--b2); }
+.card-desc { font-size: 0.72rem; color: var(--txt2); line-height: 1.5; margin-bottom: 12px; }
+.card-meta { font-family: 'Space Mono', monospace; font-size: 0.52rem; color: var(--txt3); display: flex; gap: 12px; flex-wrap: wrap; }
+.card-meta span { display: flex; align-items: center; gap: 4px; }
 
-        /* CRONS */
-        .cron-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 9px 0;
-            border-bottom: 1px solid var(--border);
-        }
-        .cron-item:last-child { border-bottom: none; }
-        .cron-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-        .cron-dot.on { background: var(--green); }
-        .cron-dot.off { background: var(--dim); }
-        .cron-body { flex: 1; }
-        .cron-name { font-size: 0.8rem; font-weight: 600; }
-        .cron-meta { font-size: 0.65rem; color: var(--muted); }
-        .cron-time { font-size: 0.65rem; color: var(--dim); white-space: nowrap; }
+/* ── MASSAGE CLUB PAGE ── */
+.search-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 24px; }
+.search-wrap { flex: 1; min-width: 200px; position: relative; }
+.si {
+  width: 100%; background: var(--s); border: 1px solid var(--b2); border-radius: 8px;
+  padding: 10px 14px 10px 38px; color: var(--txt); font-family: 'Inter', sans-serif;
+  font-size: 0.82rem; outline: none; transition: border-color 0.2s; box-sizing: border-box;
+}
+.si:focus { border-color: var(--g); }
+.si::placeholder { color: var(--txt3); }
+.search-icon { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); font-size: 0.8rem; color: var(--txt3); }
+select.si2 {
+  -webkit-appearance: none; appearance: none; cursor: pointer;
+  background: var(--s); border: 1px solid var(--b2); border-radius: 8px;
+  padding: 10px 30px 10px 14px; color: var(--txt); font-family: 'Inter', sans-serif;
+  font-size: 0.82rem; outline: none; transition: border-color 0.2s;
+}
+select.si2:focus { border-color: var(--g); }
+select.si2 option { background: var(--s); }
+.filter-wrap { position: relative; }
+.filter-arrow { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--txt2); font-size: 0.5rem; }
 
-        /* BLOCKERS */
-        .blocker-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 9px 0;
-            border-bottom: 1px solid var(--border);
-        }
-        .blocker-item:last-child { border-bottom: none; }
-        .blocker-icon { font-size: 0.85rem; }
-        .blocker-body { flex: 1; }
-        .blocker-name { font-size: 0.8rem; font-weight: 700; }
-        .blocker-reason { font-size: 0.65rem; color: var(--muted); }
-        .blocker-item.resolved { opacity: 0.5; }
-        .blocker-item.resolved .blocker-name { text-decoration: line-through; }
+/* ── STUDIO GRID ── */
+.sgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 14px; }
+.scard {
+  background: var(--s); border: 1px solid var(--b); border-radius: 12px;
+  padding: 16px; cursor: pointer; transition: all 0.2s; animation: fa 0.4s backwards;
+}
+.scard:hover { border-color: var(--b2); transform: translateY(-2px); }
+.sc-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; }
+.sc-name { font-size: 0.85rem; font-weight: 600; color: #fff; flex: 1; padding-right: 8px; }
+.sc-price { font-family: 'Space Mono', monospace; font-size: 0.72rem; font-weight: 700; color: var(--g); white-space: nowrap; background: var(--gg); padding: 2px 7px; border-radius: 4px; border: 1px solid var(--g2); }
+.sc-addr { font-size: 0.65rem; color: var(--txt2); margin-bottom: 8px; display: flex; align-items: center; gap: 4px; }
+.sc-tags { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 8px; }
+.tag {
+  font-family: 'Space Mono', monospace; font-size: 0.46rem; letter-spacing: 1px;
+  text-transform: uppercase; padding: 2px 6px; border-radius: 4px;
+  background: var(--b); color: var(--txt2); border: 1px solid var(--b2);
+}
+.tag.thai { background: rgba(245,158,11,0.08); color: #f59e0b; border-color: rgba(245,158,11,0.2); }
+.tag.spa { background: rgba(99,102,241,0.08); color: #818cf8; border-color: rgba(99,102,241,0.2); }
+.tag.fisio { background: rgba(14,165,233,0.08); color: #38bdf8; border-color: rgba(14,165,233,0.2); }
+.tag.hotel { background: rgba(168,85,247,0.08); color: #c084fc; border-color: rgba(168,85,247,0.2); }
+.tag.hammam { background: rgba(20,184,166,0.08); color: #2dd4bf; border-color: rgba(20,184,166,0.2); }
+.tag.boutique { background: rgba(236,72,153,0.08); color: #f472b6; border-color: rgba(236,72,153,0.2); }
+.sc-count { margin-left: auto; font-family: 'Space Mono', monospace; font-size: 0.5rem; color: var(--g); background: var(--gg); padding: 2px 6px; border-radius: 4px; }
 
-        /* ACTION BUTTONS */
-        .action-grid { display: flex; flex-direction: column; gap: 6px; }
-        .action-btn {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 14px;
-            background: var(--bg);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: var(--text);
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.12s;
-            font-family: inherit;
-            width: 100%;
-            text-align: left;
-        }
-        .action-btn:hover { background: var(--border); }
-        .action-btn:active { transform: scale(0.98); }
-        .action-icon { font-size: 0.9rem; width: 20px; text-align: center; }
-        .action-arrow { margin-left: auto; color: var(--dim); font-size: 0.75rem; }
+/* ── MODAL ── */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 2000; background: rgba(3,3,6,0.85);
+  backdrop-filter: blur(12px); display: flex; align-items: flex-end;
+  justify-content: center; animation: fadeIn 0.2s ease; overflow-y: auto; padding: 20px;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.modal {
+  background: var(--d); border: 1px solid var(--b2); border-radius: 16px;
+  width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto;
+  animation: slideUp 0.3s ease; margin: auto;
+}
+.modal-header {
+  padding: 22px 24px; border-bottom: 1px solid var(--b); position: sticky; top: 0;
+  background: var(--d); z-index: 1; display: flex; justify-content: space-between; align-items: flex-start;
+}
+.modal-title { font-size: 1.05rem; font-weight: 700; color: #fff; margin-bottom: 4px; }
+.modal-meta { font-size: 0.7rem; color: var(--txt2); display: flex; gap: 10px; flex-wrap: wrap; }
+.modal-meta span { display: flex; align-items: center; gap: 4px; }
+.modal-close {
+  background: var(--s); border: 1px solid var(--b2); color: var(--txt);
+  width: 28px; height: 28px; border-radius: 6px; cursor: pointer; font-size: 0.85rem;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-left: 12px;
+}
+.modal-close:hover { border-color: var(--g); color: var(--g); }
+.modal-body { padding: 18px 24px 32px; }
+.svc-section { margin-bottom: 18px; }
+.svc-section-title {
+  font-family: 'Space Mono', monospace; font-size: 0.52rem; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--txt3); margin-bottom: 8px; padding-bottom: 6px;
+  border-bottom: 1px solid var(--b);
+}
+.svc-item {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+.svc-item:last-child { border-bottom: none; }
+.svc-name { font-size: 0.78rem; color: #fff; flex: 1; padding-right: 12px; }
+.svc-info { display: flex; flex-direction: column; align-items: flex-end; gap: 1px; }
+.svc-price { font-family: 'Space Mono', monospace; font-size: 0.75rem; font-weight: 700; color: var(--g); }
+.svc-dur { font-family: 'Space Mono', monospace; font-size: 0.5rem; color: var(--txt3); }
+.no-price { font-family: 'Space Mono', monospace; font-size: 0.6rem; color: var(--txt3); }
+.loading { text-align: center; padding: 40px; color: var(--txt3); font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 2px; }
+.loading-dot { display: inline-block; width: 6px; height: 6px; background: var(--g); border-radius: 50%; animation: pu 1s infinite; margin-left: 4px; }
+.no-results { text-align: center; padding: 40px; color: var(--txt3); font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 2px; }
 
-        /* STATUS BAR */
-        .status-bar {
-            background: var(--green);
-            color: white;
-            font-size: 0.68rem;
-            font-weight: 700;
-            padding: 6px 12px;
-            text-align: center;
-            letter-spacing: 0.03em;
-        }
+/* ── ACTIVITY FEED ── */
+.feed { max-width: 700px; }
+.feed-item {
+  display: flex; gap: 14px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+  animation: fa 0.4s backwards;
+}
+.feed-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+.dot-g { background: var(--g); }
+.dot-b { background: var(--blue); }
+.dot-y { background: #facc15; }
+.dot-r { background: #f87171; }
+.feed-body { flex: 1; }
+.feed-agent { font-family: 'Space Mono', monospace; font-size: 0.58rem; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 2px; }
+.agent-hermes { color: var(--g); }
+.agent-jordan { color: #60a5fa; }
+.agent-claude { color: #a78bfa; }
+.feed-title { font-size: 0.8rem; font-weight: 600; color: #fff; margin-bottom: 3px; }
+.feed-body-text { font-size: 0.72rem; color: var(--txt2); line-height: 1.5; margin-bottom: 4px; }
+.feed-time { font-family: 'Space Mono', monospace; font-size: 0.52rem; color: var(--txt3); }
+.feed-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 4px; }
+.ftag { font-family: 'Space Mono', monospace; font-size: 0.46rem; letter-spacing: 1px; text-transform: uppercase; padding: 2px 6px; border-radius: 3px; background: var(--b); color: var(--txt2); border: 1px solid var(--b2); }
 
-        /* DIVIDER */
-        hr { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+/* ── QUICK ACTIONS ── */
+.actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+.btn {
+  padding: 9px 18px; border-radius: 8px; font-family: 'Space Mono', monospace;
+  font-size: 0.62rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+  cursor: pointer; border: none; transition: .2s; display: inline-flex; align-items: center; gap: 6px; text-decoration: none;
+}
+.btn-g { background: var(--g); color: #000; }
+.btn-g:hover { box-shadow: 0 0 20px rgba(0,255,136,0.35); }
+.btn-o { background: var(--s2); color: var(--txt); border: 1px solid var(--b2); }
+.btn-o:hover { border-color: var(--g); color: var(--g); }
 
-        /* COMPLETED */
-        .completed-toggle {
-            font-size: 0.72rem;
-            color: var(--muted);
-            cursor: pointer;
-            padding: 8px 0;
-        }
-        .completed-list { display: none; margin-top: 6px; }
-        .completed-list.show { display: block; }
-        .task-item.done-task { opacity: 0.55; }
-    </style>
+/* ── FOOTER ── */
+.footer { border-top: 1px solid var(--b); padding: 24px 32px; text-align: center; font-family: 'Space Mono', monospace; font-size: 0.52rem; color: var(--txt3); letter-spacing: 2px; }
+
+/* ── TYPE BADGES ── */
+.badge-thai { background: rgba(245,158,11,0.1); color: #f59e0b; border: 1px solid rgba(245,158,11,0.25); }
+.badge-spa { background: rgba(99,102,241,0.1); color: #818cf8; border: 1px solid rgba(99,102,241,0.25); }
+.badge-fisio { background: rgba(14,165,233,0.1); color: #38bdf8; border: 1px solid rgba(14,165,233,0.25); }
+.badge-hotel { background: rgba(168,85,247,0.1); color: #c084fc; border: 1px solid rgba(168,85,247,0.25); }
+.badge-hammam { background: rgba(20,184,166,0.1); color: #2dd4bf; border: 1px solid rgba(20,184,166,0.25); }
+.badge-boutique { background: rgba(236,72,153,0.1); color: #f472b6; border: 1px solid rgba(236,72,153,0.25); }
+.badge-chain { background: rgba(234,179,8,0.1); color: #facc15; border: 1px solid rgba(234,179,8,0.25); }
+.badge-oriental { background: rgba(249,115,22,0.1); color: #fb923c; border: 1px solid rgba(249,115,22,0.25); }
+.badge-default { background: var(--b); color: var(--txt2); border: 1px solid var(--b2); }
+
+@media (max-width: 600px) {
+  .stats { gap: 10px; }
+  .stat { padding: 10px 14px; min-width: 80px; }
+  .stat-n { font-size: 1.2rem; }
+  .na { display: none; }
+  .n { padding: 0 16px; gap: 8px; }
+  .grid { grid-template-columns: 1fr; }
+  .sgrid { grid-template-columns: 1fr; }
+  .main { padding: 0 16px 60px; }
+  .h { padding: 60px 16px 40px; }
+}
+</style>
 </head>
 <body>
 
-<!-- STATUS BAR -->
-<div class="status-bar" id="status-bar">● All systems operational · Hermes 007 active</div>
+<!-- NAV -->
+<nav class="n">
+  <div class="l">Mission Control</div>
+  <div class="na">
+    <a href="#" class="ac" onclick="showPage('launch', this)">🚀 Launchpad</a>
+    <a href="#" onclick="showPage('massage', this)">💆 Massage Club</a>
+    <a href="#" onclick="showPage('activity', this)">📡 Activity</a>
+  </div>
+  <div class="nr">
+    <div class="pl"><div class="pd"></div> LIVE</div>
+    <span style="font-family:'Space Mono',monospace;font-size:0.5rem;color:var(--txt3)">neurodashboards.com</span>
+  </div>
+</nav>
 
-<!-- HEADER -->
-<div class="header">
-    <div class="logo">Mission<span>Control</span></div>
-    <div class="header-right">
-        <span id="clock"></span> · <span id="date"></span>
+<!-- ═══ LAUNCHPAD ═══ -->
+<div class="page active" id="page-launch">
+  <div class="h">
+    <div class="hbg"></div>
+    <div class="h">
+      <div class="heb">Mission Control</div>
+      <div class="htit">Jordan's <span>Operating System</span></div>
+      <div class="hsub">All projects, live data, one dashboard. Built and maintained by Hermes + Claude.</div>
+      <div class="stats">
+        <div class="stat"><div class="stat-n">8</div><div class="stat-l">Projects</div></div>
+        <div class="stat"><div class="stat-n">37</div><div class="stat-l">Studios</div></div>
+        <div class="stat"><div class="stat-n">158</div><div class="stat-l">Services</div></div>
+        <div class="stat"><div class="stat-n">3</div><div class="stat-l">Agents</div></div>
+      </div>
+      <div class="actions" style="margin-top:24px">
+        <a href="overnight-builds/massage-club-dashboard.html" target="_blank" class="btn btn-g">💆 Massage Club →</a>
+        <a href="niah/dashboards/niah-dashboard.html" target="_blank" class="btn btn-o">📅 Niah →</a>
+        <a href="neurotech/dashboards/neurotech-dashboard.html" target="_blank" class="btn btn-o">🧠 Neurotech →</a>
+      </div>
     </div>
+  </div>
+
+  <div class="main">
+    <div class="section-label">Live Projects</div>
+    <div class="grid" id="projectGrid"></div>
+
+    <div class="section-label" style="margin-top:48px">Recent Activity</div>
+    <div class="feed" id="recentFeed"></div>
+  </div>
 </div>
 
-<!-- MAIN -->
-<div class="main">
-
-    <!-- WORK LOG -->
-    <div class="section">
-        <div class="section-title">What We've Done</div>
-        <div class="log-item">
-            <div class="log-date">May 16</div>
-            <div class="log-dot green"></div>
-            <div class="log-content">
-                <div class="log-title">Neurotech non-US → US market report built</div>
-                <div class="log-meta">MindMaze · Synchron · CoMind · Zander Labs · Kandu Health · 12+ companies</div>
-            </div>
-            <div class="log-tag tag-hermes">HERMES</div>
+<!-- ═══ MASSAGE CLUB ═══ -->
+<div class="page" id="page-massage">
+  <div class="h">
+    <div class="hbg"></div>
+    <div class="h">
+      <div class="heb">Massage Club · Madrid</div>
+      <div class="htit">Every Studio.<br><span>Every Service.</span></div>
+      <div class="stats" style="margin-bottom:20px">
+        <div class="stat"><div class="stat-n" id="mc-studios">—</div><div class="stat-l">Studios</div></div>
+        <div class="stat"><div class="stat-n" id="mc-services">—</div><div class="stat-l">Services</div></div>
+        <div class="stat"><div class="stat-n" id="mc-priced">—</div><div class="stat-l">Priced</div></div>
+        <div class="stat"><div class="stat-n" id="mc-min">—</div><div class="stat-l">From</div></div>
+      </div>
+      <div class="search-bar">
+        <div class="search-wrap">
+          <span class="search-icon">⌕</span>
+          <input class="si" id="mc-search" placeholder="Search studios..." oninput="renderMassageCards()">
         </div>
-        <div class="log-item">
-            <div class="log-date">May 16</div>
-            <div class="log-dot green"></div>
-            <div class="log-content">
-                <div class="log-title">Memory restored — Honcho key replaced + 21 facts backfilled</div>
-                <div class="log-meta">Projects · workspace · Notion DBs · PISCO · Harvard cases · API keys</div>
-            </div>
-            <div class="log-tag tag-hermes">HERMES</div>
+        <div class="filter-wrap">
+          <select class="si2" id="mc-type" onchange="renderMassageCards()">
+            <option value="">All Types</option>
+          </select>
+          <span class="filter-arrow">▼</span>
         </div>
-        <div class="log-item">
-            <div class="log-date">May 16</div>
-            <div class="log-dot green"></div>
-            <div class="log-content">
-                <div class="log-title">The Passage — 50 new philosophical concepts added (86 total)</div>
-                <div class="log-meta">Tabbed by region: East Asia · Europe · South Asia · Africa · Middle East · Americas · Pacific</div>
-            </div>
-            <div class="log-tag tag-hermes">HERMES</div>
+        <div class="filter-wrap">
+          <select class="si2" id="mc-price" onchange="renderMassageCards()">
+            <option value="">All Prices</option>
+            <option value="0-40">Under €40/hr</option>
+            <option value="40-60">€40–60/hr</option>
+            <option value="60-999">€60+/hr</option>
+          </select>
+          <span class="filter-arrow">▼</span>
         </div>
-        <div class="log-item">
-            <div class="log-date">May 14</div>
-            <div class="log-dot amber"></div>
-            <div class="log-content">
-                <div class="log-title">PISCO CRM — 50+ European companies loaded</div>
-                <div class="log-meta">Transport/logistics · Meat processing · Construction · Hospitality</div>
-            </div>
-            <div class="log-tag tag-hermes">HERMES</div>
-        </div>
-        <div class="log-item">
-            <div class="log-date">May 14</div>
-            <div class="log-dot amber"></div>
-            <div class="log-content">
-                <div class="log-title">City Match Quiz rebuilt — adaptive version</div>
-                <div class="log-meta">60+ variables · Madrid market context</div>
-            </div>
-            <div class="log-tag tag-hermes">HERMES</div>
-        </div>
-        <div class="log-item">
-            <div class="log-date">May 12</div>
-            <div class="log-dot blue"></div>
-            <div class="log-content">
-                <div class="log-title">Niah South Summit setup — Tally + Mailchimp + Squarespace + Zapier</div>
-                <div class="log-meta">Phase 1 manual first · automation added after live working</div>
-            </div>
-            <div class="log-tag tag-jordan">JORDAN</div>
-        </div>
-        <div class="log-item">
-            <div class="log-date">May 11</div>
-            <div class="log-dot amber"></div>
-            <div class="log-content">
-                <div class="log-title">Workspace organized — MAP.md + project folders</div>
-                <div class="log-meta">PISCO · Massage Club · Niah · Neurotech · MBA structured</div>
-            </div>
-            <div class="log-tag tag-hermes">HERMES</div>
-        </div>
+      </div>
     </div>
+  </div>
 
-    <!-- PROJECTS -->
-    <div class="section">
-        <div class="section-title">Projects</div>
-        <div class="project-item">
-            <div class="project-icon">🧠</div>
-            <div class="project-info">
-                <div class="project-name">Neurotech Intelligence</div>
-                <div class="project-desc">80+ companies tracked · non-US → US report live · videos planned</div>
-            </div>
-            <div class="status-pill s-active">Active</div>
-        </div>
-        <div class="project-item">
-            <div class="project-icon">📦</div>
-            <div class="project-info">
-                <div class="project-name">PISCO Pipeline</div>
-                <div class="project-desc">50+ European companies · transport/logistics/meat/construction</div>
-            </div>
-            <div class="status-pill s-waiting">Waiting on email tool</div>
-        </div>
-        <div class="project-item">
-            <div class="project-icon">💆</div>
-            <div class="project-info">
-                <div class="project-name">Massage Pass / Massage Club</div>
-                <div class="project-desc">Madrid therapist marketplace · Supabase backend</div>
-            </div>
-            <div class="status-pill s-active">Active</div>
-        </div>
-        <div class="project-item">
-            <div class="project-icon">🤝</div>
-            <div class="project-info">
-                <div class="project-name">Niah — South Summit</div>
-                <div class="project-desc">B2B event networking · Tally + Mailchimp + Squarespace</div>
-            </div>
-            <div class="status-pill s-active">Active</div>
-        </div>
-        <div class="project-item">
-            <div class="project-icon">🎓</div>
-            <div class="project-info">
-                <div class="project-name">Harvard MBA Simulation</div>
-                <div class="project-desc">W21312 · R1101C · 325031 · GSCM strategy cases</div>
-            </div>
-            <div class="status-pill s-waiting">Needs prep</div>
-        </div>
-        <div class="project-item">
-            <div class="project-icon">🎵</div>
-            <div class="project-info">
-                <div class="project-name">PK Music</div>
-                <div class="project-desc">ProfileStack MVP · music releases</div>
-            </div>
-            <div class="status-pill s-blocked">Blocked</div>
-        </div>
+  <div class="main">
+    <div class="sgrid" id="mc-loading">
+      <div class="loading" style="grid-column:1/-1">LOADING STUDIOS<span class="loading-dot"></span></div>
     </div>
+    <div class="sgrid" id="mc-grid" style="display:none"></div>
+  </div>
+</div>
 
-    <!-- DASHBOARDS -->
-    <div class="section">
-        <div class="section-title">All Dashboards</div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-            <a class="action-btn" href="the-passage.html" style="text-decoration:none; padding:12px;">
-                <span style="font-size:1.1rem;">🧠</span><br>
-                <span style="font-size:0.72rem;font-weight:700;">The Passage</span><br>
-                <span style="font-size:0.6rem;color:#666;">Philosophy</span>
-            </a>
-            <a class="action-btn" href="neurotech/dashboards/neurotech-dashboard.html" style="text-decoration:none; padding:12px;">
-                <span style="font-size:1.1rem;">🧠</span><br>
-                <span style="font-size:0.72rem;font-weight:700;">Neurotech</span><br>
-                <span style="font-size:0.6rem;color:#666;">Companies</span>
-            </a>
-            <a class="action-btn" href="pisco-dashboard.html" style="text-decoration:none; padding:12px;">
-                <span style="font-size:1.1rem;">📦</span><br>
-                <span style="font-size:0.72rem;font-weight:700;">PISCO</span><br>
-                <span style="font-size:0.6rem;color:#666;">Pipeline</span>
-            </a>
-            <a class="action-btn" href="niah/dashboards/niah-dashboard.html" style="text-decoration:none; padding:12px;">
-                <span style="font-size:1.1rem;">🤝</span><br>
-                <span style="font-size:0.72rem;font-weight:700;">Niah</span><br>
-                <span style="font-size:0.6rem;color:#666;">Events</span>
-            </a>
-            <a class="action-btn" href="overnight-builds/massage-pass-landing.html" style="text-decoration:none; padding:12px;">
-                <span style="font-size:1.1rem;">💆</span><br>
-                <span style="font-size:0.72rem;font-weight:700;">Massage Pass</span><br>
-                <span style="font-size:0.6rem;color:#666;">Landing</span>
-            </a>
-            <a class="action-btn" href="city-quiz/city-match-quiz-v2.html" style="text-decoration:none; padding:12px;">
-                <span style="font-size:1.1rem;">🏙️</span><br>
-                <span style="font-size:0.72rem;font-weight:700;">City Quiz</span><br>
-                <span style="font-size:0.6rem;color:#666;">v2</span>
-            </a>
-            <a class="action-btn" href="harvard-simulation-quiz.html" style="text-decoration:none; padding:12px;">
-                <span style="font-size:1.1rem;">🎓</span><br>
-                <span style="font-size:0.72rem;font-weight:700;">Harvard Sim</span><br>
-                <span style="font-size:0.6rem;color:#666;">Quiz</span>
-            </a>
-            <a class="action-btn" href="hermes-factory.html" style="text-decoration:none; padding:12px;">
-                <span style="font-size:1.1rem;">🤖</span><br>
-                <span style="font-size:0.72rem;font-weight:700;">Hermes</span><br>
-                <span style="font-size:0.6rem;color:#666;">Factory</span>
-            </a>
-        </div>
+<!-- ═══ ACTIVITY ═══ -->
+<div class="page" id="page-activity">
+  <div class="h" style="min-height:auto;padding:80px 32px 30px">
+    <div class="hbg"></div>
+    <div class="h">
+      <div class="heb">Shared Brain</div>
+      <div class="htit">Activity <span>Feed</span></div>
+      <div class="hsub">Live from the brain — messages, builds, decisions from Hermes + Claude + Jordan.</div>
     </div>
-
-    <!-- TASKS -->
-    <div class="section">
-        <div class="section-title">Tasks — tap to check off</div>
-        <div class="task-item" onclick="toggleTask('t1')">
-            <div class="task-check" id="t1"></div>
-            <div class="task-body">
-                <div class="task-text" id="t1-text">DM Rachel King on LinkedIn — Massage Club intro</div>
-                <div class="task-meta">Neurotech founder · BCI startup · PISCO lead</div>
-            </div>
-            <div class="task-pri pri-h">HIGH</div>
-        </div>
-        <div class="task-item" onclick="toggleTask('t2')">
-            <div class="task-check" id="t2"></div>
-            <div class="task-body">
-                <div class="task-text" id="t2-text">DM Victor Presa on LinkedIn — Madrid market</div>
-                <div class="task-meta">Strategic contact · Madrid</div>
-            </div>
-            <div class="task-pri pri-h">HIGH</div>
-        </div>
-        <div class="task-item" onclick="toggleTask('t3')">
-            <div class="task-check" id="t3"></div>
-            <div class="task-body">
-                <div class="task-text" id="t3-text">WhatsApp Javier Estrada — Mallorca lead</div>
-                <div class="task-meta">Warm lead · Mallorca market</div>
-            </div>
-            <div class="task-pri pri-h">HIGH</div>
-        </div>
-        <div class="task-item" onclick="toggleTask('t4')">
-            <div class="task-check" id="t4"></div>
-            <div class="task-body">
-                <div class="task-text" id="t4-text">Send 10 PISCO cold emails</div>
-                <div class="task-meta">Waiting on email tool — SendGrid / Apollo / Instantly</div>
-            </div>
-            <div class="task-pri pri-m">MED</div>
-        </div>
-        <div class="task-item" onclick="toggleTask('t5')">
-            <div class="task-check" id="t5"></div>
-            <div class="task-body">
-                <div class="task-text" id="t5-text">Post ProfileStack on X/LinkedIn</div>
-                <div class="task-meta">MVP ready to publish</div>
-            </div>
-            <div class="task-pri pri-m">MED</div>
-        </div>
-        <div class="task-item" onclick="toggleTask('t6')">
-            <div class="task-check" id="t6"></div>
-            <div class="task-body">
-                <div class="task-text" id="t6-text">Decide COMARE ICP</div>
-                <div class="task-meta">Pharmacies · Restaurants · Medical · Gyms — pick one</div>
-            </div>
-            <div class="task-pri pri-m">MED</div>
-        </div>
-        <div class="task-item" onclick="toggleTask('t7')">
-            <div class="task-check" id="t7"></div>
-            <div class="task-body">
-                <div class="task-text" id="t7-text">Write Neurotech Video 1 script</div>
-                <div class="task-meta">"The New Space Race" · thumbnail ready</div>
-            </div>
-            <div class="task-pri pri-l">LOW</div>
-        </div>
-        <div class="task-item" onclick="toggleTask('t8')">
-            <div class="task-check" id="t8"></div>
-            <div class="task-body">
-                <div class="task-text" id="t8-text">Buy massagepass.com domain</div>
-                <div class="task-meta">~$10 · easy win</div>
-            </div>
-            <div class="task-pri pri-l">LOW</div>
-        </div>
-
-        <div class="completed-toggle" onclick="toggleCompleted()">✓ Completed (tap to show)</div>
-        <div class="completed-list" id="completed-list">
-            <div class="task-item done-task">
-                <div class="task-check done">✓</div>
-                <div class="task-body">
-                    <div class="task-text done">Memory fixed — Honcho key replaced + backfilled 21 facts</div>
-                    <div class="task-meta">May 16</div>
-                </div>
-            </div>
-            <div class="task-item done-task">
-                <div class="task-check done">✓</div>
-                <div class="task-body">
-                    <div class="task-text done">The Passage — added 50 new concepts (86 total)</div>
-                    <div class="task-meta">May 16</div>
-                </div>
-            </div>
-            <div class="task-item done-task">
-                <div class="task-check done">✓</div>
-                <div class="task-body">
-                    <div class="task-text done">Niah South Summit setup</div>
-                    <div class="task-meta">May 12</div>
-                </div>
-            </div>
-            <div class="task-item done-task">
-                <div class="task-check done">✓</div>
-                <div class="task-body">
-                    <div class="task-text done">Workspace organized</div>
-                    <div class="task-meta">May 11</div>
-                </div>
-            </div>
-            <div class="task-item done-task">
-                <div class="task-check done">✓</div>
-                <div class="task-body">
-                    <div class="task-text done">City Match Quiz rebuilt</div>
-                    <div class="task-meta">May 14</div>
-                </div>
-            </div>
-        </div>
+  </div>
+  <div class="main" style="padding-top:10px">
+    <div class="feed" id="activityFeed">
+      <div class="loading">LOADING<span class="loading-dot"></span></div>
     </div>
+  </div>
+</div>
 
-    <!-- CRON JOBS -->
-    <div class="section">
-        <div class="section-title">Scheduled Crons (live from Hermes)</div>
-        <div class="cron-item">
-            <div class="cron-dot on"></div>
-            <div class="cron-body">
-                <div class="cron-name">Self-Improvement Research</div>
-                <div class="cron-meta">Skills: research-pipelines · Next: May 17 07:00</div>
-            </div>
-            <div class="cron-time">7:00 AM</div>
-        </div>
-        <div class="cron-item">
-            <div class="cron-dot on"></div>
-            <div class="cron-body">
-                <div class="cron-name">Neurotech: Non-US → US Market</div>
-                <div class="cron-meta">Skills: research-pipelines, neurotech · Next: May 16 08:00</div>
-            </div>
-            <div class="cron-time">8:00 AM</div>
-        </div>
-        <div class="cron-item">
-            <div class="cron-dot on"></div>
-            <div class="cron-body">
-                <div class="cron-name">Madrid Massage Leads — Daily Scout</div>
-                <div class="cron-meta">Facebook/Forum · Last run: May 15 09:02 ✓</div>
-            </div>
-            <div class="cron-time">9:00 AM</div>
-        </div>
-        <div class="cron-item">
-            <div class="cron-dot on"></div>
-            <div class="cron-body">
-                <div class="cron-name">Neurotech Dashboard — Daily Refresh</div>
-                <div class="cron-meta">Skills: last30days-research · Last run: May 15 10:01 ✓</div>
-            </div>
-            <div class="cron-time">10:00 AM</div>
-        </div>
-        <div class="cron-item">
-            <div class="cron-dot on"></div>
-            <div class="cron-body">
-                <div class="cron-name">Neurotech Funding — Daily Research</div>
-                <div class="cron-meta">Skills: last30days-research · Last run: May 15 08:05 ✓</div>
-            </div>
-            <div class="cron-time">8:00 AM</div>
-        </div>
-        <div class="cron-item">
-            <div class="cron-dot on"></div>
-            <div class="cron-body">
-                <div class="cron-name">Philosophical Songhooks</div>
-                <div class="cron-meta">Skills: research · Next: May 18 10:00</div>
-            </div>
-            <div class="cron-time">Sun 10AM</div>
-        </div>
-        <div class="cron-item">
-            <div class="cron-dot on"></div>
-            <div class="cron-body">
-                <div class="cron-name">Neurotech Weekly Dashboard Update</div>
-                <div class="cron-meta">Script: neurotech-weekly-update.py · Next: May 18 09:00</div>
-            </div>
-            <div class="cron-time">Mon 9AM</div>
-        </div>
+<div class="footer">Mission Control · Supabase Live · Updated continuously</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" style="display:none" onclick="closeModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="modalTitle"></div>
+        <div class="modal-meta" id="modalMeta"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
-
-    <!-- BLOCKERS -->
-    <div class="section">
-        <div class="section-title">Blockers</div>
-        <div class="blocker-item">
-            <div class="blocker-icon">📧</div>
-            <div class="blocker-body">
-                <div class="blocker-name">Email sending tool</div>
-                <div class="blocker-reason">PISCO outreach blocked · SendGrid / Apollo / Instantly</div>
-            </div>
-        </div>
-        <div class="blocker-item">
-            <div class="blocker-icon">🔑</div>
-            <div class="blocker-body">
-                <div class="blocker-name">Vercel API Token</div>
-                <div class="blocker-reason">Custom app deployment blocked</div>
-            </div>
-        </div>
-        <div class="blocker-item">
-            <div class="blocker-icon">🔑</div>
-            <div class="blocker-body">
-                <div class="blocker-name">Notion API Key</div>
-                <div class="blocker-reason">PISCO CRM · COMARE pipeline · MASSAGE-PASS sync blocked</div>
-            </div>
-        </div>
-        <div class="blocker-item">
-            <div class="blocker-icon">🔑</div>
-            <div class="blocker-body">
-                <div class="blocker-name">Supabase service_role key</div>
-                <div class="blocker-reason">Massage Club bookings pipeline</div>
-            </div>
-        </div>
-        <div class="blocker-item">
-            <div class="blocker-icon">🎵</div>
-            <div class="blocker-body">
-                <div class="blocker-name">DistroKid account</div>
-                <div class="blocker-reason">PK Music releases blocked</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ACTIONS -->
-    <div class="section">
-        <div class="section-title">Actions — tap to run</div>
-        <div class="action-grid">
-            <a class="action-btn" href="https://t.me/JordanHaysBot?text=Status">
-                <span class="action-icon">⚡</span>
-                Ask Hermes — What's happening?
-                <span class="action-arrow">→</span>
-            </a>
-            <a class="action-btn" href="https://t.me/JordanHaysBot?text=Tasks">
-                <span class="action-icon">✅</span>
-                List all tasks
-                <span class="action-arrow">→</span>
-            </a>
-            <a class="action-btn" href="https://t.me/JordanHaysBot?text=Run%20Neurotech%20scan%20now">
-                <span class="action-icon">🔄</span>
-                Run Neurotech scan now
-                <span class="action-arrow">→</span>
-            </a>
-            <a class="action-btn" href="https://t.me/JordanHaysBot?text=New%20lead">
-                <span class="action-icon">📋</span>
-                Add new PISCO lead
-                <span class="action-arrow">→</span>
-            </a>
-            <a class="action-btn" href="https://t.me/JordanHaysBot?text=PISCO%20CRM%20status">
-                <span class="action-icon">📦</span>
-                PISCO CRM status
-                <span class="action-arrow">→</span>
-            </a>
-            <a class="action-btn" href="https://t.me/JordanHaysBot?text=Decide">
-                <span class="action-icon">🔮</span>
-                What should I decide next?
-                <span class="action-arrow">→</span>
-            </a>
-            <a class="action-btn" href="https://t.me/JordanHaysBot?text=Pause%20cron%209am">
-                <span class="action-icon">⏸</span>
-                Pause 9am cron
-                <span class="action-arrow">→</span>
-            </a>
-            <a class="action-btn" href="https://t.me/JordanHaysBot?text=Resume%20cron%209am">
-                <span class="action-icon">▶</span>
-                Resume 9am cron
-                <span class="action-arrow">→</span>
-            </a>
-        </div>
-    </div>
-
+    <div class="modal-body" id="modalBody"></div>
+  </div>
 </div>
 
 <script>
-    // Clock
-    function updateClock() {
-        const now = new Date();
-        document.getElementById('clock').textContent = now.toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit', hour12:false});
-        document.getElementById('date').textContent = now.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'});
-    }
-    updateClock();
-    setInterval(updateClock, 1000);
+// ── DATA ──────────────────────────────────────────────
+const SB_URL = 'https://jglftdstrowwckwqmpue.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpnbGZ0ZHN0cm93d2Nrd3FtcHVlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYxMTI1MTYsImV4cCI6MjA2MTY4ODUxNn0.Ky6ELB9F_t_8Q0E7P9F0FvVQ4l8kRn8vJ3oWS3s3pO8';
 
-    // Task toggle — SAVES to localStorage
-    function toggleTask(id) {
-        const check = document.getElementById(id);
-        const text = document.getElementById(id + '-text');
-        const isDone = check.classList.toggle('done');
-        if (text) text.classList.toggle('done', isDone);
-        localStorage.setItem('mc_task_' + id, isDone ? 'done' : '');
-    }
+// Shared Brain (read via different project)
+const BRAIN_URL = 'https://dprdnrgjkzgfgtcsguuq.supabase.co/rest/v1';
+const BRAIN_KEY = 'sb_publishable_2nHGCg116tDqkVDqyWPhvg_2TG2ZtoA';
 
-    // Restore task states on load
-    ['t1','t2','t3','t4','t5','t6','t7','t8'].forEach(id => {
-        if (localStorage.getItem('mc_task_' + id) === 'done') {
-            const check = document.getElementById(id);
-            const text = document.getElementById(id + '-text');
-            if (check) check.classList.add('done');
-            if (text) text.classList.add('done');
-        }
-    });
+let allStudios = [];
+let allServices = {};
+let brainEntries = [];
 
-    // Show/hide completed
-    function toggleCompleted() {
-        const list = document.getElementById('completed-list');
-        const toggle = document.querySelector('.completed-toggle');
-        list.classList.toggle('show');
-        toggle.textContent = list.classList.contains('show') ? '✓ Completed (tap to hide)' : '✓ Completed (tap to show)';
+// ── PROJECTS ──────────────────────────────────────────
+const PROJECTS = [
+  {
+    name: '💆 Massage Club',
+    desc: 'Subscription model for unlimited massages at 37 Madrid studios. 158 services, real-time menus, Supabase-powered.',
+    badge: 'live',
+    url: 'overnight-builds/massage-club-dashboard.html',
+    meta: ['37 studios', '158 services', '€26–80/hr'],
+    tags: ['VENTURE', 'MADRAID']
+  },
+  {
+    name: '🧠 Neurotech Intelligence',
+    desc: 'YouTube content business tracking — competitor analysis, ICP scoring, lead generation for neurotech companies.',
+    badge: 'live',
+    url: 'neurotech/dashboards/neurotech-dashboard.html',
+    meta: ['YouTube pipeline', '12 competitors', 'Leads active'],
+    tags: ['VENTURE', 'CONTENT']
+  },
+  {
+    name: '📅 Niah',
+    desc: 'B2B event networking product for Madrid. Dashboard tracks qualified leads, outreach status, event pipeline.',
+    badge: 'live',
+    url: 'niah/dashboards/niah-dashboard.html',
+    meta: ['Madrid B2B', 'Event leads', 'Active pipeline'],
+    tags: ['VENTURE', 'B2B']
+  },
+  {
+    name: '🏨 PISCO',
+    desc: 'EU hotel revenue management. LinkedIn outreach, Lithuania logistics, decision-maker targeting.',
+    badge: 'build',
+    url: 'pisco-dashboard.html',
+    meta: ['EU market entry', 'LinkedIn DMs', 'Logistics'],
+    tags: ['VENTURE', 'HOTEL']
+  },
+  {
+    name: '🏝️ New Bali',
+    desc: 'Philippine islands → YouTube content → curated coliving for digital nomads. Pre-launch: landing page + scripts done.',
+    badge: 'build',
+    url: null,
+    meta: ['Philippines', 'Coliving', 'Pre-launch'],
+    tags: ['VENTURE', 'NOMADS']
+  },
+  {
+    name: '📊 ORION',
+    desc: 'Financial models — FCF and lighting models (Excel + generators). Core financial infrastructure.',
+    badge: 'idea',
+    url: null,
+    meta: ['FCF models', 'Lighting models'],
+    tags: ['INFRA', 'FINANCE']
+  },
+  {
+    name: '💊 COMARE',
+    desc: 'Competitor landscape, ICP scoring, pharmacy outreach intelligence. Healthcare market research.',
+    badge: 'idea',
+    url: null,
+    meta: ['Pharma outreach', 'ICP scoring'],
+    tags: ['VENTURE', 'HEALTH']
+  },
+  {
+    name: '🎓 Harvard Case Prep',
+    desc: 'MBA case simulation practice — framework drills, timing practice, peer comparison.',
+    badge: 'live',
+    url: 'harvard-simulation-quiz.html',
+    meta: ['Case practice', 'Framework drills'],
+    tags: ['EDUCATION', 'MBA']
+  },
+  {
+    name: '🌍 City Match Quiz',
+    desc: 'Adaptive quiz matching users to ideal cities based on lifestyle, cost, work, weather preferences.',
+    badge: 'live',
+    url: 'city-quiz/city-match-quiz-v2.html',
+    meta: ['City matching', 'Lifestyle fit'],
+    tags: ['TOOL', 'QUIZ']
+  },
+  {
+    name: '🤖 Hermes Agent',
+    desc: 'Jordan\'s autonomous AI agent. Telegram-native, Supabase memory, GitHub sync, Shared Brain integration.',
+    badge: 'live',
+    url: 'hermes-factory.html',
+    meta: ['Autonomous agent', 'Madrid-based'],
+    tags: ['INFRA', 'AI']
+  },
+  {
+    name: '🧊 Conscious / Transitus',
+    desc: 'Consciousness-as-a-service concept. The Passage — "the pod" landing page live.',
+    badge: 'build',
+    url: 'conscious.html',
+    meta: ['Neurotech', 'Consciousness'],
+    tags: ['VENTURE', 'NEURO']
+  },
+  {
+    name: '📋 Survey Studio',
+    desc: 'Partner onboarding survey for new studios to join Massage Club. Live at neurodashboards.com.',
+    badge: 'live',
+    url: 'survey-studio.html',
+    meta: ['Partner onboarding', 'Live form'],
+    tags: ['TOOL', 'MASSAGE']
+  },
+];
+
+// ── HELPERS ───────────────────────────────────────────
+function badgeClass(b) {
+  if (b === 'live') return 'badge-live';
+  if (b === 'build') return 'badge-build';
+  return 'badge-idea';
+}
+
+function tagClass(type) {
+  if (!type) return '';
+  const t = type.toLowerCase();
+  if (t.includes('thai')) return 'thai';
+  if (t.includes('spa') || t.includes('hammam') || t.includes('bath')) return 'spa';
+  if (t.includes('fisio') || t.includes('deport') || t.includes('sport')) return 'fisio';
+  if (t.includes('hotel') || t.includes('luxury')) return 'hotel';
+  if (t.includes('hammam') || t.includes('arab')) return 'hammam';
+  if (t.includes('boutique') || t.includes('organic')) return 'boutique';
+  return '';
+}
+
+function timeAgo(dateStr) {
+  const now = new Date();
+  const d = new Date(dateStr);
+  const diff = Math.floor((now - d) / 1000);
+  if (diff < 60) return `${diff}s ago`;
+  if (diff < 3600) return `${Math.floor(diff/60)}m ago`;
+  if (diff < 86400) return `${Math.floor(diff/3600)}h ago`;
+  return `${Math.floor(diff/86400)}d ago`;
+}
+
+// ── PAGE NAVIGATION ────────────────────────────────────
+function showPage(name, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.na a').forEach(a => a.classList.remove('ac'));
+  document.getElementById('page-' + name).classList.add('active');
+  if (el) el.classList.add('ac');
+  window.scrollTo(0, 0);
+}
+
+// ── SUPABASE ───────────────────────────────────────────
+async function querySupabase(table, params = '') {
+  const url = `${SB_URL}/rest/v1/${table}?${params}`;
+  const r = await fetch(url, {
+    headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}` }
+  });
+  return r.json();
+}
+
+// ── LAUNCHPAD: PROJECTS + RECENT ───────────────────────
+function renderProjects() {
+  const grid = document.getElementById('projectGrid');
+  grid.innerHTML = PROJECTS.map((p, i) => `
+    <a class="card" href="${p.url || '#'}" target="_blank" style="animation-delay:${i * 0.04}s; ${!p.url ? 'opacity:0.7;cursor:default' : ''}">
+      <div class="card-top">
+        <div class="card-name">${p.name}</div>
+        <span class="card-badge ${badgeClass(p.badge)}">${p.badge.toUpperCase()}</span>
+      </div>
+      <div class="card-desc">${p.desc}</div>
+      <div class="card-meta">
+        ${p.meta.map(m => `<span>◈ ${m}</span>`).join('')}
+      </div>
+      ${p.tags.length ? `<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:8px">
+        ${p.tags.map(t => `<span class="tag">${t}</span>`).join('')}
+      </div>` : ''}
+    </a>
+  `).join('');
+}
+
+// ── MASSAGE CLUB ────────────────────────────────────────
+async function initMassage() {
+  try {
+    const studios = await querySupabase('partners', 'select=*&order=business_name.asc');
+    const svcs = await querySupabase('partner_services', 'select=*&order=name.asc');
+    allStudios = studios.filter(s => s.business_name);
+    for (const s of svcs) {
+      if (!allServices[s.partner_id]) allServices[s.partner_id] = [];
+      allServices[s.partner_id].push(s);
     }
+    const priced = Object.values(allServices).flat().filter(s => s.price != null).length;
+    document.getElementById('mc-studios').textContent = allStudios.length;
+    document.getElementById('mc-services').textContent = Object.values(allServices).reduce((a,v)=>a+v.length,0);
+    document.getElementById('mc-priced').textContent = priced;
+    const minP = Math.min(...allStudios.filter(s=>s.price_from).map(s=>s.price_from));
+    document.getElementById('mc-min').textContent = '€' + minP + '/hr';
+    // Populate type filter
+    const types = [...new Set(Object.values(allServices).flat().map(s=>s.type).filter(Boolean))].sort();
+    const selT = document.getElementById('mc-type');
+    types.forEach(t => selT.innerHTML += `<option value="${t}">${t}</option>`);
+    document.getElementById('mc-loading').style.display = 'none';
+    document.getElementById('mc-grid').style.display = 'grid';
+    renderMassageCards();
+  } catch(e) {
+    document.getElementById('mc-loading').innerHTML = '<div class="loading" style="grid-column:1/-1">ERROR: ' + e.message + '</div>';
+  }
+}
+
+function getMassageFilters() {
+  const q = document.getElementById('mc-search').value.toLowerCase();
+  const tp = document.getElementById('mc-type').value;
+  const pr = document.getElementById('mc-price').value;
+  const [pMin, pMax] = pr ? pr.split('-').map(Number) : [0, 99999];
+  return { q, tp, pMin, pMax };
+}
+
+function getFilteredStudios() {
+  const { q, tp, pMin, pMax } = getMassageFilters();
+  return allStudios.filter(s => {
+    if (q && !s.business_name.toLowerCase().includes(q) && !(s.address||'').toLowerCase().includes(q)) return false;
+    if (s.price_from != null && (s.price_from < pMin || s.price_from > pMax)) return false;
+    if (tp) {
+      const svcs = allServices[s.id] || [];
+      if (!svcs.some(sv => sv.type === tp)) return false;
+    }
+    return true;
+  });
+}
+
+function renderMassageCards() {
+  const filtered = getFilteredStudios();
+  const grid = document.getElementById('mc-grid');
+  if (filtered.length === 0) {
+    grid.style.display = 'none';
+    grid.innerHTML = '<div class="no-results" style="grid-column:1/-1">No studios match</div>';
+    return;
+  }
+  grid.style.display = 'grid';
+  grid.innerHTML = filtered.map((s, i) => {
+    const svcs = allServices[s.id] || [];
+    const priceLabel = s.price_from ? `€${s.price_from}` : '€?';
+    const topTypes = [...new Set(svcs.map(sv=>sv.type).filter(Boolean))].slice(0,3);
+    return `
+      <div class="scard" onclick="openMassageModal('${s.id}')" style="animation-delay:${i*0.03}s">
+        <div class="sc-top">
+          <div class="sc-name">${s.business_name}</div>
+          <div class="sc-price">${priceLabel}<span style="font-size:0.45rem;color:var(--txt3);font-weight:400">/hr</span></div>
+        </div>
+        <div class="sc-addr">◈ ${s.address || 'Madrid'}</div>
+        <div class="sc-tags">
+          ${topTypes.map(t => `<span class="tag ${tagClass(t)}">${t}</span>`).join('')}
+        </div>
+        <div style="display:flex;align-items:center;gap:6px">
+          <span style="font-family:'Space Mono',monospace;font-size:0.52rem;color:var(--txt3)">${svcs.length} services</span>
+          ${s.phone ? `<span class="sc-count">${s.phone}</span>` : ''}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function openMassageModal(id) {
+  const s = allStudios.find(s => s.id === id);
+  if (!s) return;
+  const svcs = allServices[s.id] || [];
+  document.getElementById('modalTitle').textContent = s.business_name;
+  document.getElementById('modalMeta').innerHTML = `
+    <span>◈ ${s.address || 'Madrid'}</span>
+    ${s.price_from ? `<span>€${s.price_from}/hr</span>` : ''}
+    ${s.phone ? `<span>${s.phone}</span>` : ''}
+    ${s.website ? `<span><a href="${s.website}" target="_blank" style="color:var(--blue)">Website ↗</a></span>` : ''}
+  `;
+  const groups = {};
+  for (const svc of svcs) {
+    const g = svc.type || 'Other';
+    if (!groups[g]) groups[g] = [];
+    groups[g].push(svc);
+  }
+  let html = '';
+  for (const [gName, gSvcs] of Object.entries(groups)) {
+    html += `<div class="svc-section">
+      <div class="svc-section-title">${gName} (${gSvcs.length})</div>
+      ${gSvcs.map(sv => `
+        <div class="svc-item">
+          <div class="svc-name">${sv.name}</div>
+          <div class="svc-info">
+            ${sv.price != null ? `<div class="svc-price">€${parseFloat(sv.price).toFixed(0)}</div>` : `<div class="no-price">Price on request</div>`}
+            ${sv.duration ? `<div class="svc-dur">${sv.duration}min</div>` : ''}
+          </div>
+        </div>
+      `).join('')}
+    </div>`;
+  }
+  if (!html) html = '<div class="loading">No services loaded</div>';
+  document.getElementById('modalBody').innerHTML = html;
+  document.getElementById('modalOverlay').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+// ── ACTIVITY FEED ──────────────────────────────────────
+async function loadActivity() {
+  try {
+    const url = `${BRAIN_URL}/hermes_entries?order=created_at.desc&limit=20&select=agent,type,body,title,tags,created_at`;
+    const r = await fetch(url, { headers: { 'apikey': BRAIN_KEY, 'Authorization': `Bearer ${BRAIN_KEY}` } });
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    brainEntries = await r.json();
+    renderActivity();
+  } catch(e) {
+    document.getElementById('activityFeed').innerHTML = `
+      <div style="padding:40px 0;text-align:center;font-family:'Space Mono',monospace;font-size:0.7rem;color:var(--txt3)">
+        Activity feed unavailable (${e.message})<br>
+        <span style="font-size:0.6rem;margin-top:8px;display:block">Shared Brain: neurodashboards.com/hermes-hub.html</span>
+      </div>`;
+  }
+}
+
+function renderActivity() {
+  const feed = document.getElementById('activityFeed');
+  const agentColors = { hermes: 'agent-hermes', jordan: 'agent-jordan', claude: 'agent-claude' };
+  const dotColors = { hermes: 'dot-g', jordan: 'dot-b', claude: 'dot-b', task: 'dot-y', link: 'dot-g', log: 'dot-g', message: 'dot-y', status: 'dot-y' };
+  feed.innerHTML = brainEntries.map((e, i) => {
+    const ac = agentColors[e.agent] || '';
+    const dc = dotColors[e.type] || 'dot-y';
+    const tags = (e.tags || []).map(t => `<span class="ftag">${t}</span>`).join('');
+    const body = e.body ? `<div class="feed-body-text">${e.body.length > 160 ? e.body.slice(0,160)+'…' : e.body}</div>` : '';
+    const title = e.title ? `<div class="feed-title">${e.title}</div>` : '';
+    return `
+      <div class="feed-item" style="animation-delay:${i*0.04}s">
+        <div class="feed-dot ${dc}"></div>
+        <div class="feed-body">
+          <div class="feed-agent ${ac}">${e.agent}</div>
+          ${title}
+          ${body}
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+            <span class="feed-time">${timeAgo(e.created_at)}</span>
+            ${tags}
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ── MODAL ─────────────────────────────────────────────
+function closeModal(e) {
+  if (e && e.target !== e.currentTarget) return;
+  document.getElementById('modalOverlay').style.display = 'none';
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// ── INIT ──────────────────────────────────────────────
+renderProjects();
+initMassage();
+loadActivity();
 </script>
 </body>
 </html>

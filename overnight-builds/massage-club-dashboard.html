@@ -5,7 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Massage Club — Madrid Studios</title>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <style>
+    /* ── MAP ── */
+    #mapView { display: none; position: fixed; top: 58px; left: 0; right: 0; bottom: 0; z-index: 5; }
+    #map { width: 100%; height: 100%; background: var(--v); }
+    .leaflet-popup-content-wrapper { background: var(--s2); color: var(--txt); border-radius: 8px; border: 1px solid var(--b2); box-shadow: 0 8px 32px rgba(0,0,0,0.5); }
+    .leaflet-popup-tip { background: var(--s2); }
+    .leaflet-popup-content { margin: 12px 16px; font-family: 'Inter', sans-serif; }
+    .leaflet-popup-content b { color: #fff; font-size: 0.85rem; display: block; margin-bottom: 4px; }
+    .leaflet-popup-content span { font-size: 0.75rem; color: var(--txt2); }
+    .leaflet-popup-content a { color: var(--g); font-size: 0.72rem; text-decoration: none; display: inline-block; margin-top: 4px; }
+    .map-legend { position: absolute; bottom: 20px; left: 20px; z-index: 1000; background: rgba(3,3,6,0.9); border: 1px solid var(--b2); border-radius: 8px; padding: 10px 14px; font-family: 'Space Mono', monospace; font-size: 0.55rem; color: var(--txt2); }
+    .map-legend span { margin-right: 12px; }
+    .map-legend span::before { content: ''; display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; vertical-align: middle; }
+    .map-legend .ex::before { background: var(--g); }
+    .map-legend .nw::before { background: var(--accent); }
+  </style>
 :root {
   --v: #030306; --d: #060609; --s: #0b0b10; --s2: #101018;
   --b: #18182a; --b2: #222236; --g: #00ff88; --gg: rgba(0,255,136,0.07);
@@ -207,7 +224,8 @@ select.si2 option { background: var(--s); }
 <nav class="n">
   <div class="l">Massage Club</div>
   <div class="na">
-    <a href="#" class="ac">Studios</a>
+    <a href="#" class="ac" onclick="showTab('studios')">Studios</a>
+    <a href="#" onclick="showTab('map')">Map</a>
     <a href="https://neurodashboards.com/survey-studio.html" target="_blank">Partner Survey</a>
   </div>
   <div class="nr">
@@ -261,11 +279,20 @@ select.si2 option { background: var(--s); }
 </div>
 
 <!-- GRID -->
-<div class="main">
+<div class="main" id="studiosView">
   <div class="section-label" id="resultsLabel">All Studios</div>
   <div id="loading" class="loading">LOADING STUDIOS<span class="loading-dot"></span></div>
   <div class="grid" id="grid" style="display:none"></div>
   <div id="noResults" class="no-results" style="display:none">No studios match your filters</div>
+</div>
+
+<!-- MAP -->
+<div id="mapView">
+  <div id="map"></div>
+  <div class="map-legend">
+    <span class="ex">Existing</span>
+    <span class="nw">New</span>
+  </div>
 </div>
 
 <div class="footer">Massage Club · Supabase Live · Updated continuously</div>
@@ -380,6 +407,9 @@ async function init() {
     document.getElementById('grid').style.display = 'grid';
     renderCards();
 
+    // Initialize map
+    initMap();
+
     // Filters
     document.getElementById('searchInput').addEventListener('input', renderCards);
     document.getElementById('neighborhoodFilter').addEventListener('change', renderCards);
@@ -389,6 +419,69 @@ async function init() {
   } catch(e) {
     document.getElementById('loading').innerHTML = 'ERROR LOADING DATA: ' + e.message;
     console.error(e);
+  }
+}
+
+// ── TAB SWITCHING ──
+var map = null;
+var markers = [];
+
+function showTab(tab) {
+  const navLinks = document.querySelectorAll('.na a');
+  navLinks.forEach(a => a.classList.remove('ac'));
+  const studiosView = document.getElementById('studiosView');
+  const mapView = document.getElementById('mapView');
+
+  if (tab === 'map') {
+    document.querySelector('.na a:nth-child(2)').classList.add('ac');
+    studiosView.style.display = 'none';
+    mapView.style.display = 'block';
+    if (map) map.invalidateSize();
+  } else {
+    document.querySelector('.na a:first-child').classList.add('ac');
+    studiosView.style.display = 'block';
+    mapView.style.display = 'none';
+  }
+}
+
+// ── MAP ──
+function initMap() {
+  if (!map) {
+    map = L.map('map').setView([40.4168, -3.7038], 13);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; OpenStreetMap &copy; CARTO',
+      maxZoom: 19
+    }).addTo(map);
+  }
+  addMarkers();
+}
+
+function addMarkers() {
+  // Clear existing
+  markers.forEach(m => map.removeLayer(m));
+  markers = [];
+
+  allStudios.forEach(s => {
+    if (!s.latitude || !s.longitude) return;
+    const price = s.price_from ? '€' + parseFloat(s.price_from).toFixed(0) + '/hr' : 'Price on request';
+    const svcCount = allServices[s.id] ? allServices[s.id].length : 0;
+    const markerColor = s.status === 'new' ? '#6366f1' : '#00ff88';
+
+    const icon = L.divIcon({
+      className: 'custom-marker',
+      html: `<div style="background:${markerColor};width:10px;height:10px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 8px ${markerColor}66"></div>`,
+      iconSize: [14, 14],
+      iconAnchor: [7, 7]
+    });
+
+    const m = L.marker([s.latitude, s.longitude], { icon }).addTo(map);
+    m.bindPopup(`<b>${s.business_name}</b><span>${price} · ${svcCount} services</span><a href="javascript:openModal('${s.id}')">View details →</a>`);
+    markers.push(m);
+  });
+
+  if (markers.length > 0) {
+    const group = L.featureGroup(markers);
+    map.fitBounds(group.getBounds().pad(0.1));
   }
 }
 

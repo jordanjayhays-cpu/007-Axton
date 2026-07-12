@@ -6,221 +6,183 @@
   <title>Massage Club · Studio Outreach</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f2ee; color: #1a1a1a; min-height: 100vh; padding: 24px; }
-    .wrap { max-width: 900px; margin: 0 auto; }
-    header { margin-bottom: 28px; }
-    h1 { font-size: 26px; font-weight: 700; margin-bottom: 4px; }
-    .subtitle { color: #888; font-size: 14px; }
-    .meta { display: flex; gap: 20px; margin-top: 10px; font-size: 13px; color: #888; }
-    .meta strong { color: #1a1a1a; }
-    .note { background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 12px; padding: 14px 18px; margin-bottom: 24px; font-size: 13px; color: #92400e; line-height: 1.5; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f0f0f; color: #f5f5f5; min-height: 100vh; }
+    .wrap { max-width: 900px; margin: 0 auto; padding: 24px 16px 80px; }
+
+    .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; gap: 16px; flex-wrap: wrap; }
+    .header h1 { font-size: 22px; font-weight: 700; color: #fff; }
+    .header p { font-size: 13px; color: #888; margin-top: 2px; }
+    .counter { text-align: right; }
+    .counter .num { font-size: 36px; font-weight: 800; color: #25D366; line-height: 1; }
+    .counter .label { font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 0.05em; }
+
     .search-row { margin-bottom: 16px; }
-    .search-input { width: 100%; max-width: 360px; padding: 10px 16px; border: 1.5px solid #d8d2ca; border-radius: 12px; font-size: 14px; background: white; }
-    .search-input:focus { outline: none; border-color: #c9a84c; }
-    .count-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; font-size: 13px; color: #666; }
-    .count-bar .num { font-weight: 700; color: #1a1a1a; }
-    .count-bar .sent-num { color: #16a34a; font-weight: 700; }
-    .studio { display: flex; align-items: center; gap: 12px; background: white; border-radius: 16px; padding: 16px 20px; margin-bottom: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); flex-wrap: wrap; }
-    .studio-info { flex: 1; min-width: 0; }
-    .studio-name { font-weight: 600; font-size: 15px; display: flex; align-items: center; gap: 8px; }
-    .studio-addr { font-size: 12px; color: #888; margin-top: 2px; }
-    .badge { font-size: 10px; padding: 3px 8px; border-radius: 20px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
-    .badge-active { background: #dcfce7; color: #166534; }
-    .badge-pending { background: #fef3c7; color: #92400e; }
-    .wa-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background: #25D366; color: white; border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; flex-shrink: 0; transition: background 0.15s; }
-    .wa-btn:hover { background: #1da851; }
-    .wa-btn svg { width: 18px; height: 18px; }
-    .done-btn { background: none; border: 1px solid #d0cbc4; border-radius: 8px; padding: 8px 14px; font-size: 12px; color: #888; cursor: pointer; flex-shrink: 0; }
-    .done-btn:hover { border-color: #25D366; color: #25D366; }
-    .empty { text-align: center; padding: 60px; color: #888; font-size: 15px; }
-    .all-done-banner { background: #dcfce7; border-radius: 12px; padding: 16px 20px; margin-bottom: 20px; color: #166534; font-weight: 600; text-align: center; }
+    .search { width: 100%; padding: 12px 16px; background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 12px; color: #f5f5f5; font-size: 15px; outline: none; transition: border-color 0.2s; }
+    .search:focus { border-color: #25D366; }
+    .search::placeholder { color: #555; }
+
+    .stats { display: flex; gap: 16px; margin-bottom: 20px; font-size: 13px; color: #666; }
+    .stats span { display: flex; align-items: center; gap: 5px; }
+
+    .empty { text-align: center; padding: 60px 20px; color: #555; font-size: 15px; }
+    .empty 🎉 { font-size: 40px; display: block; margin-bottom: 12px; }
+
+    .studio { background: #161616; border: 1px solid #222; border-radius: 14px; padding: 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; transition: border-color 0.15s; }
+    .studio:hover { border-color: #333; }
+    .studio.sent { opacity: 0.45; }
+
+    .info { flex: 1; min-width: 0; }
+    .name { font-size: 15px; font-weight: 600; color: #eee; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .addr { font-size: 12px; color: #555; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .badges { display: flex; gap: 6px; margin-top: 6px; }
+    .badge { font-size: 10px; padding: 2px 8px; border-radius: 20px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+    .badge-active { background: #0a2e15; color: #25D366; }
+    .badge-pending { background: #2e200a; color: #f5a623; }
+
+    .wa-btn { display: flex; align-items: center; gap: 7px; padding: 10px 18px; background: #25D366; color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; text-decoration: none; white-space: nowrap; transition: background 0.15s, transform 0.1s; flex-shrink: 0; }
+    .wa-btn:hover { background: #1da851; transform: translateY(-1px); }
+    .wa-btn:active { transform: translateY(0); }
+    .wa-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+    .done-btn { padding: 8px 14px; background: transparent; color: #444; border: 1px solid #2a2a2a; border-radius: 8px; font-size: 13px; cursor: pointer; white-space: nowrap; flex-shrink: 0; transition: all 0.15s; }
+    .done-btn:hover { color: #25D366; border-color: #25D366; }
+    .done-btn.marked { color: #25D366; border-color: #25D366; background: #0a2e15; }
+
+    .no-phone { padding: 8px 14px; color: #444; font-size: 13px; border: 1px dashed #2a2a2a; border-radius: 8px; flex-shrink: 0; cursor: not-allowed; }
+
+    .section-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #444; margin: 20px 0 10px; font-weight: 600; }
+
     @media (max-width: 600px) {
-      .studio { flex-direction: column; align-items: flex-start; }
-      .wa-btn, .done-btn { width: 100%; justify-content: center; }
+      .studio { flex-wrap: wrap; }
+      .done-btn { order: 3; }
     }
   </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <h1>📱 Massage Club · Studio Outreach</h1>
-    <p class="subtitle">One click → WhatsApp opens with pre-filled message → send to studio owner</p>
-    <div class="meta">
-      <span><strong id="total-num">—</strong> studios</span>
-      <span><strong id="phone-num">—</strong> with WhatsApp</span>
-      <span><strong id="pending-num">—</strong> pending</span>
-    </div>
-  </header>
-
-  <div class="note">
-    <strong>How it works:</strong> Click WhatsApp — it opens with a pre-filled Spanish pitch and the survey link personalized for that studio. Mark "Done" after you send so you never double-message.
-  </div>
-
-  <div class="search-row">
-    <input type="text" class="search-input" id="search" placeholder="Search studios…">
-  </div>
-
-  <div class="count-bar">
-    <span><span class="sent-num" id="done-count">0</span> sent</span>
-    <span>·</span>
-    <span><span class="num" id="remaining-count">—</span> remaining</span>
-    <span>·</span>
-    <button onclick="markAllDone()" style="background:none;border:none;color:#888;font-size:13px;cursor:pointer;text-decoration:underline">Mark all done</button>
-    <span>·</span>
-    <a href="https://wa.me/34613633545?text=hola" target="_blank" style="color:#25D366;font-size:13px;text-decoration:none;font-weight:600">Test WhatsApp ↗</a>
-  </div>
-
-  <div id="list"></div>
-</div>
+<div class="wrap" id="app">Loading…</div>
 
 <script>
-// ─── CONFIG ───────────────────────────────────────────────────────────────
-const SURVEY_URL = 'https://your-massage-pass-o5fo.vercel.app/survey/studios';
-const MSG_TPL = (name) => `¡Hola! 👋
+const MASSAGE_URL = "https://jglftdstrowwckwqmpue.supabase.co";
+const MASSAGE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpnZGZ0ZHN0cm93d2NrdXdxcHVlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzYxMjQ4MDAsImV4cCI6MjA1MTcwMDgwMH0.MnjpGfslbLNJCTiOOPrlNPFDT45FkDwlH1PERhRjQzU";
+const SURVEY_URL = "https://your-massage-pass-o5fo.vercel.app/survey/studios";
+const DONE_KEY = "mc_outreach_v1_done";
 
-Somos Massage Club — una app que reúne a los mejores estudios de masaje de Madrid en un solo lugar.
+const MSG_TPL = (name) =>
+  `¡Hola! 👋 Somos Massage Club — una app que reúne a los mejores estudios de masaje de Madrid en un solo lugar. Estamos creando una red de studios partners para ofrecer a los clientes reserva directa, disponibilidad en tiempo real y más clientes nuevos. ¿Te gustaría aparecer en la plataforma? Takes solo 2 minutos: 👉 ${SURVEY_URL}?utm_source=whatsapp&utm_campaign=studio_outreach&utm_content=${encodeURIComponent(name)}\n\nUn saludo,\nDaniel — Massage Club`;
 
-Estamos creando una red de studios partners para ofrecer a los clientes reserva directa, disponibilidad en tiempo real y más clientes nuevos para你们.
-
-¿Te gustaría aparecer en la plataforma? Takes solo 2 minutos:
-
-👉 ${SURVEY_URL}?utm_source=whatsapp&utm_campaign=studio_outreach&utm_content=${encodeURIComponent(name)}
-
-Un saludo,
-Daniel — Massage Club`;
-
-// ─── STUDIO DATA ─────────────────────────────────────────────────────────
-const STUDIOS = [
-  {id:'x01',name:'Aura Thai Touch',phone:'+34613633545',address:'Madrid',status:'active'},
-  {id:'x02',name:'Beldon Wellness Madrid',phone:'+3491000004',address:'Madrid',status:'active'},
-  {id:'x03',name:'Bienestar. Centro de Masajes',phone:'+3491000006',address:'Madrid',status:'active'},
-  {id:'x04',name:'Centro EXEM',phone:'+3491000005',address:'Madrid',status:'active'},
-  {id:'x05',name:'Centro Fisio Natural',phone:'+34913029900',address:'C/ Bravo Murillo 85, Madrid',status:'active'},
-  {id:'x06',name:'Centro Wellness Point',phone:'+34915763344',address:'C/ Serrano 45, Madrid',status:'active'},
-  {id:'x07',name:'El Masaje de tu Vida',phone:'+34617969163',address:'Madrid',status:'active'},
-  {id:'x08',name:'Fisio Line Centro',phone:'+34915216699',address:'C/ Preciados 9, Madrid',status:'active'},
-  {id:'x09',name:'Fisiomarket Chamberí',phone:'+34616519872',address:'Madrid',status:'active'},
-  {id:'x10',name:'FisioZen Madrid',phone:'+34913661144',address:'C/ Reyes 5, Madrid',status:'active'},
-  {id:'x11',name:'Hiromi Wellness',phone:'+34619824154',address:'Madrid',status:'active'},
-  {id:'x12',name:'Marte Universo',phone:'+34616849713',address:'Madrid',status:'active'},
-  {id:'x13',name:'Masajes Oriente',phone:'+34915227788',address:'C/ Hortaleza 78, Madrid',status:'active'},
-  {id:'x14',name:'Masajes Torrelodones',phone:'+34918691671',address:'Torrelodones, Madrid',status:'active'},
-  {id:'x15',name:'Meta Reflex',phone:'+34606541200',address:'Madrid',status:'active'},
-  {id:'x16',name:'Mohanad Center',phone:'+34617836751',address:'Madrid',status:'active'},
-  {id:'x17',name:'Naqsh Studio',phone:'+34616537051',address:'Madrid',status:'active'},
-  {id:'x18',name:'Natural Health Center',phone:'+34617810783',address:'Madrid',status:'active'},
-  {id:'x19',name:'Pasion Fitness Center',phone:'+34613131338',address:'Madrid',status:'active'},
-  {id:'x20',name:'Relax Nature Center',phone:'+34617375853',address:'Madrid',status:'active'},
-  {id:'x21',name:'Sama Wellness Center',phone:'+34613772920',address:'Madrid',status:'active'},
-  {id:'x22',name:'Shenti Centro de Masajes',phone:'+34617682259',address:'Madrid',status:'active'},
-  {id:'x23',name:'Spaxion Madrid',phone:'+34615257536',address:'Madrid',status:'active'},
-  {id:'x24',name:'Spazio Wellness',phone:'+34618211792',address:'Madrid',status:'active'},
-  {id:'x25',name:'Teranga Espai',phone:'+34614338847',address:'Madrid',status:'active'},
-  {id:'x26',name:'Thai Erandio',phone:'+34617629426',address:'Erandio, Bizkaia',status:'active'},
-  {id:'x27',name:'Thai Live Yoga',phone:'+34618318543',address:'Madrid',status:'active'},
-  {id:'x28',name:'Thai Massage Spain',phone:'+34605440921',address:'Madrid',status:'active'},
-  {id:'x29',name:'Tu MasaSuite',phone:'+34613070271',address:'Madrid',status:'active'},
-  {id:'x30',name:'Wellness Madrid',phone:'+34609971496',address:'Madrid',status:'active'},
-  {id:'x31',name:'Xina Masaje',phone:'+34619948525',address:'Madrid',status:'active'},
-  {id:'x32',name:'Zen Light Centro',phone:'+34616257519',address:'Madrid',status:'active'},
-  {id:'x33',name:'FisioCare Chamberi',phone:'+34913265566',address:'C/ Tellez 22, Madrid',status:'pending'},
-  {id:'x34',name:'Centro Relax Salamanca',phone:'+34914352266',address:'C/ Nunez de Balboa 32, Madrid',status:'pending'},
-  {id:'x35',name:'FisioPro Chamberi',phone:'+34914478833',address:'C/ Ponzano 14, Madrid',status:'pending'},
-  {id:'x36',name:'MasajesPlus Lavapies',phone:'+34915394411',address:'C/ Lavapies 28, Madrid',status:'pending'},
-  {id:'x37',name:'FisioMax Madrid',phone:'+34915574411',address:'C/ Alberto Aguilera 31, Madrid',status:'pending'},
-  {id:'x38',name:'FisioExpert',phone:'+34915210033',address:'C/ San Bernardo 61, Madrid',status:'pending'},
-  {id:'x39',name:'FisioHub Madrid',phone:'+34915223366',address:'C/ Esparteros 11, Madrid',status:'pending'},
-  {id:'x40',name:'FisioPoint Chamberi',phone:'+34914477799',address:'C/ Fuencarral 95, Madrid',status:'pending'},
-  {id:'x41',name:'FisioCore',phone:'+34915398833',address:'C/ Garnacha 19, Madrid',status:'pending'},
-  {id:'x42',name:'FisioFamily Madrid',phone:'+34914412232',address:'C/ Fuencarral 137, Madrid',status:'pending'},
-  {id:'x43',name:'FisioVilla',phone:'+34915741166',address:'C/ Ibiza 33, Madrid',status:'pending'},
-  {id:'x44',name:'FisioAlma',phone:'+34915229900',address:'C/ Alcala 82, Madrid',status:'pending'},
-  {id:'x45',name:'FisioLibre',phone:'+34914472211',address:'C/ Fuencarral 72, Madrid',status:'pending'},
-  {id:'x46',name:'FisioCenter',phone:'+34915423300',address:'C/ Mayor 18, Madrid',status:'pending'},
-  {id:'x47',name:'Spa Tempo',phone:'+34915214455',address:'C/ Fuencarral 58, Madrid',status:'pending'},
-  {id:'x48',name:'FisioFlow',phone:'+34915032244',address:'C/ Lista 44, Madrid',status:'pending'},
-  {id:'x49',name:'FisioMadin',phone:'+34915211122',address:'C/ Valverde 12, Madrid',status:'pending'},
-  {id:'x50',name:'FisioFamily Chamberi',phone:'+34914458822',address:'Madrid',status:'pending'},
-  {id:'x51',name:'Centro Fisio y Masaje',phone:'+34914476544',address:'Madrid',status:'pending'},
-  {id:'x52',name:'FisioNatural Chamberi',phone:'+34914339911',address:'Madrid',status:'pending'},
-  {id:'x53',name:'Wellness Point Chamberi',phone:'+34914423456',address:'Madrid',status:'pending'},
-  {id:'x54',name:'FisioPro精品',phone:'+34915557666',address:'Madrid',status:'pending'},
-  {id:'x55',name:'Masajes Relax Madrid',phone:'+34915327654',address:'Madrid',status:'pending'},
-  {id:'x56',name:'FisioSpa Madrid',phone:'+34914221888',address:'Madrid',status:'pending'},
-  {id:'x57',name:'Centro Masaje Natural',phone:'+34914398822',address:'Madrid',status:'pending'},
-  {id:'x58',name:'Relax Point Chamberi',phone:'+34914451777',address:'Madrid',status:'pending'},
-  {id:'x59',name:'FisioZone Madrid',phone:'+34915232811',address:'Madrid',status:'pending'},
-  {id:'x60',name:'FisioMad',phone:'+34914412345',address:'Madrid',status:'pending'},
-  {id:'x61',name:'Centro Wellness',phone:'+34915557666',address:'Madrid',status:'pending'},
-  {id:'x62',name:'Masajes Plaza',phone:'+34915214455',address:'Madrid',status:'pending'},
-];
-
-// ─── STATE ───────────────────────────────────────────────────────────────
-const DONE_KEY = 'mc_outreach_v1_done';
-let doneSet = new Set(JSON.parse(localStorage.getItem(DONE_KEY) || '[]'));
-
-function save() {
-  localStorage.setItem(DONE_KEY, JSON.stringify([...doneSet]));
-}
-
-// ─── WHATSAPP ────────────────────────────────────────────────────────────
 function waURL(phone, name) {
-  const num = (phone || '').replace(/\s/g, '').replace(/^00/, '+');
-  const msg = MSG_TPL(name);
-  return `https://wa.me/${num.replace(/^\+/, '')}?text=${encodeURIComponent(msg)}`;
+  if (!phone) return null;
+  const num = phone.replace(/\s/g, "").replace(/^00/, "+");
+  return `https://wa.me/${num.replace(/^\+/, "")}?text=${encodeURIComponent(MSG_TPL(name))}`;
 }
 
-// ─── RENDER ──────────────────────────────────────────────────────────────
-function render(filter = '') {
-  const q = filter.toLowerCase();
-  const remaining = STUDIOS.filter(s => !doneSet.has(s.id) && (!q || s.name.toLowerCase().includes(q) || (s.address||'').toLowerCase().includes(q)));
+const WA_SVG = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.478 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.06 6.988 2.943a9.84 9.84 0 012.893 6.807c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`;
 
-  document.getElementById('total-num').textContent = STUDIOS.length;
-  document.getElementById('phone-num').textContent = STUDIOS.filter(s => s.phone).length;
-  document.getElementById('pending-num').textContent = STUDIOS.filter(s => s.status === 'pending').length;
-  document.getElementById('done-count').textContent = doneSet.size;
-  document.getElementById('remaining-count').textContent = remaining.length;
+let studios = [];
+let doneSet = new Set();
+let filter = "";
 
-  const list = document.getElementById('list');
+function render() {
+  const app = document.getElementById("app");
+  const pending = studios.filter(s => s.status === "pending");
+  const active = studios.filter(s => s.status === "active");
+  const unseen = studios.filter(s => !doneSet.has(s.id) && (s.business_name.toLowerCase().includes(filter.toLowerCase()) || (s.address || "").toLowerCase().includes(filter.toLowerCase())));
+  const sent = studios.filter(s => doneSet.has(s.id));
 
-  if (remaining.length === 0) {
-    list.innerHTML = '<div class="all-done-banner">🎉 All done! Every studio has been contacted.</div>';
-    return;
+  let html = `
+    <div class="header">
+      <div>
+        <h1>📲 Studio Outreach</h1>
+        <p>One tap → WhatsApp opens with pre-filled message</p>
+      </div>
+      <div class="counter">
+        <div class="num">${doneSet.size}</div>
+        <div class="label">sent / ${studios.length}</div>
+      </div>
+    </div>
+
+    <div class="search-row">
+      <input class="search" placeholder="Search studios…" value="${filter.replace(/"/g, '&quot;')}" oninput="filter=this.value; render()" />
+    </div>
+
+    <div class="stats">
+      <span>🟢 ${active.length} active</span>
+      <span>🟡 ${pending.length} pending</span>
+      <span>${unseen.length} showing</span>
+      ${sent.length ? `<span style="margin-left:auto">✓ ${sent.length} sent</span>` : ""}
+    </div>
+  `;
+
+  if (studios.length === 0) {
+    html += `<div class="empty">Loading studios…</div>`;
+  } else if (unseen.length === 0) {
+    html += `<div class="empty"><span style="font-size:40px">🎉</span>All done! Every studio has been contacted.</div>`;
+  } else {
+    html += unseen.map(s => {
+      const url = waURL(s.phone, s.business_name);
+      return `
+        <div class="studio">
+          <div class="info">
+            <div class="name">${s.business_name}</div>
+            <div class="addr">${s.address || "—"}</div>
+            <div class="badges">
+              <span class="badge ${s.status === "active" ? "badge-active" : "badge-pending"}">${s.status}</span>
+              ${!s.phone ? "<span class='badge' style='background:#1a0a0a;color:#e55;'>no phone</span>" : ""}
+            </div>
+          </div>
+          ${url
+            ? `<a class="wa-btn" href="${url}" target="_blank" rel="noopener noreferrer" onclick="setTimeout(()=>markDone('${s.id}'),2000)">${WA_SVG} WhatsApp</a>`
+            : `<span class="no-phone">no phone</span>`
+          }
+          <button class="done-btn ${doneSet.has(s.id) ? "marked" : ""}" onclick="markDone('${s.id}')">✓ Done</button>
+        </div>
+      `;
+    }).join("");
   }
 
-  list.innerHTML = remaining.map(s => {
-    const badge = s.status === 'active' ? 'badge-active' : 'badge-pending';
-    const label = s.status === 'active' ? 'Active' : 'Pending';
-    return `<div class="studio">
-      <div class="studio-info">
-        <div class="studio-name">${s.name} <span class="badge ${badge}">${label}</span></div>
-        <div class="studio-addr">${s.address || '—'}</div>
+  if (sent.length > 0 && filter) {
+    html += `<div class="section-title">Sent (${sent.length})</div>`;
+    html += sent.slice(0, 5).map(s => `
+      <div class="studio sent">
+        <div class="info">
+          <div class="name">${s.business_name}</div>
+          <div class="addr">${s.address || "—"}</div>
+        </div>
+        <button class="done-btn marked" onclick="unmarkDone('${s.id}')">↩ Undo</button>
       </div>
-      <a class="wa-btn" href="${waURL(s.phone, s.name)}" target="_blank" onclick="setTimeout(() => markDone('${s.id}'), 2000)">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.478 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.06 6.988 2.943a9.84 9.84 0 012.893 6.807c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        WhatsApp
-      </a>
-      <button class="done-btn" onclick="markDone('${s.id}')">✓ Done</button>
-    </div>`;
-  }).join('');
+    `).join("");
+  }
+
+  app.innerHTML = html;
 }
 
 function markDone(id) {
   doneSet.add(id);
-  save();
-  render(document.getElementById('search').value);
+  localStorage.setItem(DONE_KEY, JSON.stringify([...doneSet]));
+  render();
 }
 
-function markAllDone() {
-  if (!confirm('Mark ALL remaining studios as done?')) return;
-  STUDIOS.forEach(s => doneSet.add(s.id));
-  save();
-  render('');
+function unmarkDone(id) {
+  doneSet.delete(id);
+  localStorage.setItem(DONE_KEY, JSON.stringify([...doneSet]));
+  render();
 }
 
-document.getElementById('search').addEventListener('input', e => render(e.target.value));
+async function init() {
+  doneSet = new Set(JSON.parse(localStorage.getItem(DONE_KEY) || "[]"));
+  try {
+    const r = await fetch(\`\${MASSAGE_URL}/rest/v1/partners?select=id,business_name,address,phone,status&order=business_name.asc\`, {
+      headers: { apikey: MASSAGE_KEY, Authorization: \`Bearer \${MASSAGE_KEY}\` }
+    });
+    studios = await r.json();
+  } catch(e) {
+    document.getElementById("app").innerHTML = \`<div class="empty">Failed to load studios. Refresh to retry.<br><br><small>\${e.message}</small></div>\`;
+    return;
+  }
+  render();
+}
 
-render();
+init();
 </script>
 </body>
 </html>

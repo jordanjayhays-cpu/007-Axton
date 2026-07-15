@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Massage Club · Pricing Model</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #0a0a0f; color: #e2e8f0; padding: 40px 20px; }
+.container { max-width: 900px; margin: 0 auto; }
+h1 { color: #f8fafc; font-size: 28px; margin-bottom: 6px; }
+.tagline { color: #64748b; font-size: 15px; margin-bottom: 36px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 40px; }
+.card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 24px; position: relative; }
+.card.popular { border-color: #38bdf8; box-shadow: 0 0 20px rgba(56,189,248,0.08); }
+.popular-badge { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: #38bdf8; color: #0a0a0f; font-size: 10px; font-weight: 800; padding: 3px 10px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.05em; }
+.tier { font-size: 13px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+.price { font-size: 42px; font-weight: 800; color: #f8fafc; }
+.price span { font-size: 16px; color: #64748b; font-weight: 400; }
+.desc { color: #64748b; font-size: 13px; margin: 12px 0 16px; line-height: 1.5; }
+.features { list-style: none; }
+.features li { color: #d1d5db; font-size: 13px; padding: 5px 0; border-bottom: 1px solid #1f2937; display: flex; gap: 8px; }
+.features li::before { content: '✓'; color: #22c55e; font-weight: 700; flex-shrink: 0; }
+.features li:last-child { border-bottom: none; }
+.cta { display: block; background: #1f2937; color: #94a3b8; text-align: center; padding: 10px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 600; margin-top: 14px; transition: all 0.2s; }
+.cta:hover { background: #374151; color: #f9fafb; }
+.popular .cta { background: #38bdf8; color: #0a0a0f; }
+.popular .cta:hover { background: #0ea5e9; }
+section { margin-bottom: 40px; }
+h2 { color: #f1f5f9; font-size: 18px; margin-bottom: 16px; border-bottom: 1px solid #1f2937; padding-bottom: 8px; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { text-align: left; padding: 8px 12px; color: #475569; border-bottom: 1px solid #1f2937; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; }
+td { padding: 8px 12px; border-bottom: 1px solid #161b26; color: #d1d5db; }
+tr:hover td { background: #111827; }
+.highlight { color: #38bdf8; font-weight: 600; }
+.ok { color: #22c55e; }
+.warn { color: #fbbf24; }
+</style>
+</head>
+<body>
+<div class="container">
+<h1>Massage Club · Pricing Model</h1>
+<p class="tagline">3 subscription tiers for Madrid customers · Studio commission structure</p>
+
+<div class="grid">
+  <!-- ESSENTIAL -->
+  <div class="card">
+    <div class="tier">Essential</div>
+    <div class="price">€26<span>/month</span></div>
+    <p class="desc">Unlimited access to 40+ studios. 2 Massajes Relajantes per month.</p>
+    <ul class="features">
+      <li>2 Masajes Relajantes (60min) per month</li>
+      <li>40+ partner studios across Madrid</li>
+      <li>Book via app · same-day available</li>
+      <li>Valid at all partner locations</li>
+      <li>Session credits roll over (max 2)</li>
+    </ul>
+    <a class="cta" href="#">Get Essential</a>
+  </div>
+
+  <!-- ACTIVE — POPULAR -->
+  <div class="card popular">
+    <div class="popular-badge">Most Popular</div>
+    <div class="tier">Active</div>
+    <div class="price">€49<span>/month</span></div>
+    <p class="desc">Everything in Essential, plus therapy & sports massage. For people who use it.</p>
+    <ul class="features">
+      <li>4 sessions per month (any type)</li>
+      <li>All service types: Relax, Therapeutic, Sports</li>
+      <li>60+ studios · premium locations included</li>
+      <li>Priority booking window</li>
+      <li>Session credits roll over (max 4)</li>
+    </ul>
+    <a class="cta" href="#">Get Active</a>
+  </div>
+
+  <!-- PREMIUM -->
+  <div class="card">
+    <div class="tier">Premium</div>
+    <div class="price">€89<span>/month</span></div>
+    <p class="desc">Full network access · couples sessions · hammam & spa rituals.</p>
+    <ul class="features">
+      <li>Unlimited sessions per month</li>
+      <li>All service types including Couples, Hammam</li>
+      <li>60+ studios · all premium included</li>
+      <li>Bring a guest (1x/month, couples sessions)</li>
+      <li>Advance booking priority · no restrictions</li>
+    </ul>
+    <a class="cta" href="#">Get Premium</a>
+  </div>
+</div>
+
+<section>
+<h2>Revenue Model (B2B: Studio Commission)</h2>
+<p style="color:#64748b;font-size:13px;margin-bottom:14px">Jordan's take: Massage Club charges members monthly. Studios get bookings at zero acquisition cost. We take a commission on each session.</p>
+<table>
+<thead><tr><th>Tier</th><th>Member pays</th><th>Studio receives</th><th>MC commission</th><th>Margins</th></tr></thead>
+<tbody>
+<tr>
+  <td>Essential</td>
+  <td>€26/mo</td>
+  <td>€25/session</td>
+  <td>~30% per session</td>
+  <td><span class="ok">✓ Healthy</span></td>
+</tr>
+<tr>
+  <td>Active</td>
+  <td>€49/mo</td>
+  <td>€35/session</td>
+  <td>~35% per session</td>
+  <td><span class="ok">✓ Strong</span></td>
+</tr>
+<tr>
+  <td>Premium</td>
+  <td>€89/mo</td>
+  <td>€40/session</td>
+  <td>~40% per session</td>
+  <td><span class="ok">✓ Premium</span></td>
+</tr>
+</tbody>
+</table>
+</section>
+
+<section>
+<h2>Unit Economics</h2>
+<table>
+<thead><tr><th>Metric</th><th>Value</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td>Target subscribers (Yr 1)</td><td class="highlight">200 members</td><td>@ €35 avg = €84K ARR</td></tr>
+<tr><td>Break-even</td><td>~80 active members</td><td>Covers platform + ops costs</td></tr>
+<tr><td>Sessions/month (active user)</td><td>3.5 sessions</td><td>Industry benchmark</td></tr>
+<tr><td>Studio acquisition cost</td><td>€0</td><td>Organic outreach via WhatsApp</td></tr>
+<tr><td>Customer acquisition (organic)</td><td>€0–5</td><td>Referrals, Instagram, word of mouth</td></tr>
+<tr><td>Churn benchmark</td><td>&lt;5%/month</td><td>Focus on habit formation</td></tr>
+<tr><td>Studios needed for network effect</td><td class="highlight">40+</td><td>Currently: 58 onboarded · 0 active</td></tr>
+</tbody>
+</table>
+</section>
+
+<section>
+<h2>Next Steps to Revenue</h2>
+<table>
+<thead><tr><th>Step</th><th>Owner</th><th>Status</th></tr></thead>
+<tbody>
+<tr><td>Onboard 10 pilot studios (active, calendar connected)</td><td>Jordan/Claude</td><td><span class="warn">⚠ Pending — need survey responses first</span></td></tr>
+<tr><td>Get 50 survey responses (qualify studios)</td><td>Claude</td><td><span class="warn">⚠ In progress</span></td></tr>
+<tr><td>Connect booking system / Stripe</td><td>Hermes</td><td>Pending</td></tr>
+<tr><td>Launch subscription page</td><td>Hermes</td><td>Pending (blocked on copy)</td></tr>
+<tr><td>First 25 paying members</td><td>Jordan</td><td>Goal: Aug 2026</td></tr>
+</tbody>
+</table>
+</section>
+
+</div>
+</body>
+</html>

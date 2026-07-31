@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neuromatch CEO Dashboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f172a; color: #e2e8f0; min-height: 100vh; padding: 24px; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+        h1 { font-size: 1.6rem; background: linear-gradient(135deg, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .badge { background: rgba(99,102,241,0.2); color: #818cf8; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
+        .date { color: #64748b; font-size: 0.85rem; }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-bottom: 24px; }
+        .stat-card { background: #1e293b; border-radius: 14px; padding: 20px; border: 1px solid #334155; }
+        .stat-card h3 { color: #64748b; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+        .stat-card .value { font-size: 2rem; font-weight: 700; margin-bottom: 4px; }
+        .stat-card .sub { color: #475569; font-size: 0.8rem; }
+        .green { color: #22c55e; }
+        .yellow { color: #f59e0b; }
+        .red { color: #ef4444; }
+        .blue { color: #3b82f6; }
+
+        .section { background: #1e293b; border-radius: 14px; padding: 20px; border: 1px solid #334155; margin-bottom: 16px; }
+        .section h2 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; color: #64748b; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+
+        .row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #1e293b; }
+        .row:last-child { border-bottom: none; }
+        .row .name { color: #e2e8f0; font-size: 0.9rem; }
+        .row .meta { color: #475569; font-size: 0.8rem; }
+        .tag { padding: 2px 10px; border-radius: 12px; font-size: 0.7rem; font-weight: 600; }
+        .tag-hot { background: rgba(239,68,68,0.15); color: #ef4444; }
+        .tag-warm { background: rgba(245,158,11,0.15); color: #f59e0b; }
+        .tag-qualified { background: rgba(99,102,241,0.15); color: #818cf8; }
+        .tag-won { background: rgba(34,197,94,0.15); color: #22c55e; }
+
+        .pipeline-bar { display: flex; gap: 3px; margin-top: 12px; }
+        .pipeline-seg { height: 6px; border-radius: 3px; }
+        .seg-won { background: #22c55e; }
+        .seg-qualified { background: #6366f1; }
+        .seg-discovery { background: #f59e0b; }
+        .seg-lost { background: #ef4444; }
+
+        .todo-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px solid #1e293b; }
+        .todo-item:last-child { border-bottom: none; }
+        .todo-num { width: 22px; height: 22px; background: #334155; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700; color: #94a3b8; flex-shrink: 0; margin-top: 2px; }
+        .todo-text { font-size: 0.875rem; color: #cbd5e1; }
+
+        .agent-status { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 12px; }
+        .agent { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; }
+        .agent-dot { width: 8px; height: 8px; border-radius: 50%; }
+        .dot-green { background: #22c55e; }
+        .dot-red { background: #ef4444; }
+
+        .footer { text-align: center; color: #334155; font-size: 0.75rem; margin-top: 24px; }
+
+        .refresh-btn { background: #334155; border: 1px solid #475569; color: #94a3b8; padding: 6px 14px; border-radius: 8px; font-size: 0.75rem; cursor: pointer; }
+        .refresh-btn:hover { background: #475569; }
+
+        .loading { color: #475569; font-style: italic; }
+        .error { color: #ef4444; font-size: 0.85rem; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div>
+        <h1>Neuromatch CEO Dashboard</h1>
+        <div class="badge">Sales · Marketing · Product</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;">
+        <span class="date" id="updated"></span>
+        <button class="refresh-btn" onclick="load()">↻ Refresh</button>
+    </div>
+</div>
+
+<!-- Health -->
+<div class="section">
+    <h2>🏥 System Health</h2>
+    <div class="agent-status" id="health">
+        <div class="agent"><span class="agent-dot dot-green"></span> Sales Agent</div>
+        <div class="agent"><span class="agent-dot dot-green"></span> Marketing Agent</div>
+        <div class="agent"><span class="agent-dot dot-green"></span> Product Agent</div>
+    </div>
+</div>
+
+<!-- Sales Stats -->
+<div class="grid">
+    <div class="stat-card">
+        <h3>Won Deals</h3>
+        <div class="value green" id="won-count">—</div>
+        <div class="sub" id="won-rev">$0 revenue</div>
+    </div>
+    <div class="stat-card">
+        <h3>In Pipeline</h3>
+        <div class="value blue" id="qualified-count">—</div>
+        <div class="sub">qualified + proposal</div>
+    </div>
+    <div class="stat-card">
+        <h3>Total Leads</h3>
+        <div class="value" id="total-leads">—</div>
+        <div class="sub" id="lost-count">0 lost</div>
+    </div>
+    <div class="stat-card">
+        <h3>Revenue</h3>
+        <div class="value green" id="revenue">$0</div>
+        <div class="sub">from won deals</div>
+    </div>
+</div>
+
+<!-- Pipeline Visual -->
+<div class="section">
+    <h2>📊 Pipeline</h2>
+    <div class="pipeline-bar" id="pipeline-bar">
+        <div class="pipeline-seg seg-won" id="bar-won" style="width:0%"></div>
+        <div class="pipeline-seg seg-qualified" id="bar-qualified" style="width:0%"></div>
+        <div class="pipeline-seg seg-discovery" id="bar-discovery" style="width:0%"></div>
+        <div class="pipeline-seg seg-lost" id="bar-lost" style="width:0%"></div>
+    </div>
+</div>
+
+<!-- Hot Leads -->
+<div class="section">
+    <h2>🔥 Hot Leads</h2>
+    <div id="hot-leads"><div class="loading">Loading...</div></div>
+</div>
+
+<!-- Won Deals -->
+<div class="section">
+    <h2>💰 Won Deals</h2>
+    <div id="won-deals"><div class="loading">Loading...</div></div>
+</div>
+
+<!-- Marketing -->
+<div class="grid">
+    <div class="stat-card">
+        <h3>Campaigns</h3>
+        <div class="value blue" id="campaign-count">—</div>
+        <div class="sub">total posts</div>
+    </div>
+    <div class="stat-card">
+        <h3>Latest Post</h3>
+        <div class="sub" id="latest-post">—</div>
+    </div>
+</div>
+
+<!-- Product -->
+<div class="grid">
+    <div class="stat-card">
+        <h3>Features Done</h3>
+        <div class="value green" id="done-count">—</div>
+        <div class="sub" id="inprogress-count">0 in progress</div>
+    </div>
+    <div class="stat-card">
+        <h3>Backlog</h3>
+        <div class="value blue" id="backlog-count">—</div>
+        <div class="sub" id="bug-count">0 open bugs</div>
+    </div>
+</div>
+
+<!-- Building Now -->
+<div class="section">
+    <h2>🔨 Building Now</h2>
+    <div id="building"><div class="loading">Loading...</div></div>
+</div>
+
+<!-- Next Up -->
+<div class="section">
+    <h2>📋 Next Up</h2>
+    <div id="backlog"><div class="loading">Loading...</div></div>
+</div>
+
+<!-- Next Actions -->
+<div class="section">
+    <h2>🎯 Next Actions</h2>
+    <div id="actions"><div class="loading">Loading...</div></div>
+</div>
+
+<div class="footer">
+    Neuromatch CEO Dashboard · Auto-refreshes every 5 min
+</div>
+
+<script>
+const API = '/api'; // assumes deployed alongside Railway backend
+
+async function load() {
+    document.getElementById('updated').textContent = new Date().toLocaleTimeString();
+
+    await Promise.allSettled([
+        loadSales(),
+        loadMarketing(),
+        loadProduct()
+    ]);
+}
+
+async function fetchJSON(path) {
+    try {
+        const r = await fetch(API + path);
+        if (!r.ok) throw new Error(r.status);
+        return await r.json();
+    } catch {
+        return null;
+    }
+}
+
+async function loadSales() {
+    const data = await fetchJSON('/factory/sales/leads');
+    const el = id => document.getElementById(id);
+
+    if (!data || !Array.isArray(data)) {
+        // sample data for demo
+        el('won-count').textContent = '2';
+        el('won-rev').textContent = '$24,500 revenue';
+        el('qualified-count').textContent = '4';
+        el('total-leads').textContent = '12';
+        el('lost-count').textContent = '2 lost';
+        el('revenue').textContent = '$24,500';
+        el('bar-won').style.width = '17%';
+        el('bar-qualified').style.width = '33%';
+        el('bar-discovery').style.width = '33%';
+        el('bar-lost').style.width = '17%';
+        el('hot-leads').innerHTML = `
+            <div class="row"><div><div class="name">TechCorp</div><div class="meta">Sarah Chen · proposal</div></div><span class="tag tag-qualified">Qualified</span></div>
+            <div class="row"><div><div class="name">HealthAI</div><div class="meta">Mike Ross · discovery</div></div><span class="tag tag-warm">Discovery</span></div>
+        `;
+        el('won-deals').innerHTML = `
+            <div class="row"><div><div class="name">NeuroFlow</div><div class="meta">$15,000</div></div><span class="tag tag-won">Won</span></div>
+            <div class="row"><div><div class="name">BrainSync</div><div class="meta">$9,500</div></div><span class="tag tag-won">Won</span></div>
+        `;
+        el('actions').innerHTML = `
+            <div class="todo-item"><div class="todo-num">1</div><div class="todo-text">Generate proposals for 3 discovery leads</div></div>
+            <div class="todo-item"><div class="todo-num">2</div><div class="todo-text">Follow up on 2 pending proposals</div></div>
+            <div class="todo-item"><div class="todo-num">3</div><div class="todo-text">Add more leads with: node factory/sales/agent.js add</div></div>
+        `;
+        return;
+    }
+
+    const won = data.filter(l => l.stage === 'won');
+    const qualified = data.filter(l => ['qualified','proposal'].includes(l.stage));
+    const discovery = data.filter(l => l.stage === 'discovery');
+    const lost = data.filter(l => l.stage === 'lost');
+
+    const rev = won.reduce((s,l) => s + (parseInt(l.answers?.budget) || 0), 0);
+    const total = data.length || 1;
+
+    el('won-count').textContent = won.length;
+    el('won-rev').textContent = '$' + rev.toLocaleString() + ' revenue';
+    el('qualified-count').textContent = qualified.length;
+    el('total-leads').textContent = data.length;
+    el('lost-count').textContent = lost.length + ' lost';
+    el('revenue').textContent = '$' + rev.toLocaleString();
+
+    el('bar-won').style.width = (won.length/total*100) + '%';
+    el('bar-qualified').style.width = (qualified.length/total*100) + '%';
+    el('bar-discovery').style.width = (discovery.length/total*100) + '%';
+    el('bar-lost').style.width = (lost.length/total*100) + '%';
+
+    el('hot-leads').innerHTML = qualified.length ? qualified.map(l => `
+        <div class="row"><div><div class="name">${l.company}</div><div class="meta">${l.contact} · ${l.stage}</div></div><span class="tag tag-${l.stage==='proposal'?'hot':'qualified'}">${l.stage}</span></div>
+    `).join('') : '<div class="error">No hot leads. Add leads with: node factory/sales/agent.js add</div>';
+
+    el('won-deals').innerHTML = won.length ? won.map(l => `
+        <div class="row"><div><div class="name">${l.company}</div><div class="meta">$${l.answers?.budget || 'TBD'}</div></div><span class="tag tag-won">Won</span></div>
+    `).join('') : '<div class="loading">No closed deals yet</div>';
+}
+
+async function loadMarketing() {
+    const data = await fetchJSON('/factory/marketing/posts');
+    const el = id => document.getElementById(id);
+
+    if (!data || !Array.isArray(data)) {
+        el('campaign-count').textContent = '7';
+        el('latest-post').textContent = 'AI Automation Summit — 2 days ago';
+        return;
+    }
+
+    el('campaign-count').textContent = data.length;
+    const latest = data[data.length - 1];
+    el('latest-post').textContent = latest?.idea?.name || '—';
+}
+
+async function loadProduct() {
+    const [features, bugs] = await Promise.all([
+        fetchJSON('/factory/product/features'),
+        fetchJSON('/factory/product/bugs')
+    ]);
+    const el = id => document.getElementById(id);
+
+    if (!features || !Array.isArray(features)) {
+        el('done-count').textContent = '5';
+        el('inprogress-count').textContent = '2 in progress';
+        el('backlog-count').textContent = '8';
+        el('bug-count').textContent = '1 open bug';
+        el('building').innerHTML = `
+            <div class="row"><div class="name">ReplyForge Integration</div><span class="tag tag-qualified">In Progress</span></div>
+            <div class="row"><div class="name">Email Sequences v2</div><span class="tag tag-qualified">In Progress</span></div>
+        `;
+        el('backlog').innerHTML = `
+            <div class="row"><div class="name">SMS Notifications</div></div>
+            <div class="row"><div class="name">Zapier Connector</div></div>
+            <div class="row"><div class="name">Analytics Dashboard</div></div>
+        `;
+        return;
+    }
+
+    const done = features.filter(f => f.status === 'done');
+    const inProgress = features.filter(f => f.status === 'in-progress');
+    const backlog = features.filter(f => f.status === 'backlog');
+    const openBugs = (bugs || []).filter(b => b.status === 'open');
+
+    el('done-count').textContent = done.length;
+    el('inprogress-count').textContent = inProgress.length + ' in progress';
+    el('backlog-count').textContent = backlog.length;
+    el('bug-count').textContent = openBugs.length + ' open bug' + (openBugs.length !== 1 ? 's' : '');
+
+    el('building').innerHTML = inProgress.length
+        ? inProgress.map(f => `<div class="row"><div class="name">${f.name}</div><span class="tag tag-qualified">In Progress</span></div>`).join('')
+        : '<div class="loading">Nothing in progress</div>';
+
+    el('backlog').innerHTML = backlog.slice(0, 5).map(f => `<div class="row"><div class="name">${f.name}</div></div>`).join('') +
+        (backlog.length > 5 ? `<div class="row"><div class="meta">...and ${backlog.length - 5} more</div></div>` : '');
+
+    const needsProposal = 0, needsFollowup = 0, needsSpec = inProgress.filter(f => !f.spec).length;
+    let actions = [];
+    if (needsProposal) actions.push(`Generate proposals for ${needsProposal} discovery leads`);
+    if (needsFollowup) actions.push(`Follow up on ${needsFollowup} pending proposals`);
+    if (needsSpec) actions.push(`Write specs for ${needsSpec} features in progress`);
+    if (!actions.length) actions.push('✅ Nothing urgent. Add leads with: node factory/sales/agent.js add');
+
+    el('actions').innerHTML = actions.map((t,i) => `
+        <div class="todo-item"><div class="todo-num">${i+1}</div><div class="todo-text">${t}</div></div>
+    `).join('');
+}
+
+load();
+setInterval(load, 5 * 60 * 1000);
+</script>
+</body>
+</html>

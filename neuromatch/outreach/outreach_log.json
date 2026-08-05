@@ -1,1 +1,25 @@
-[]
+[
+  {
+    "name": "Gestala",
+    "country": "CN",
+    "flag": "\ud83c\udde8\ud83c\uddf3",
+    "funding": "$21M (seed)",
+    "round": "Seed",
+    "date_raised": "2026-03",
+    "product": "Brain-computer interface",
+    "us_market_signal": "None confirmed \u2014 China-based, likely CN/Asia focus initially",
+    "ceo": null,
+    "linkedin": null,
+    "email": null,
+    "source": "TechCrunch (March 2026)",
+    "day_added": "2026-08-05",
+    "last_contacted": "2026-08-05",
+    "day": 0,
+    "status": "active",
+    "email_body": null,
+    "linkedin_dm": null,
+    "subject_line": null,
+    "sent_date": null,
+    "notes": "Added Aug 5 from research. BCI from China \u2014 need to verify US expansion signal before outreach."
+  }
+]

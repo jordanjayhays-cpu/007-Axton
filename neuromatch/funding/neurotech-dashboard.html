@@ -61,7 +61,7 @@
         <div class="badge">Funding · Hiring · Milestones</div>
     </div>
     <div>
-        <span class="date" id="updated">Last updated: Aug 5, 2026 10:00 AM</span>
+        <span class="date" id="updated">August 06, 2026 08:00 AM</span>
     </div>
 </div>
 
@@ -191,9 +191,9 @@ function render(data) {
         : '<div class="row"><div class="name" style="color:#475569">No new partnerships today</div></div>';
 }
 
-// Updated data — 2026-08-05 10:00 AM — No new deals found; timestamp refresh only
+// Updated data — 2026-08-06 08:00 AM — Morning scan: Gestala $21M (China), $1.2B+ neurotech 2026 confirmed
 const defaultData = {
-    alert: "Aug 5, 2026 — Morning scan complete. Substack #59 (Aug 3) current. No new deals found. Last full scan: Aug 3 (Notables #59), 2026.",
+    alert: "Aug 6, 2026 — Morning scan: Gestala (China) $21M ultrasound BCI; $1.2B+ neurotech funding confirmed in 2026 (Merge $250M+, BrainCo $280M, Science Corp $230M, Cognito $105M, Beacon $97M, Axoft $55M, Nervonik $52.5M). BCI funding tracking $1.75B/12mo.",
     companies: [
         {name: "Flourish", description: "NeuroAI company; CTRL-labs founder Thomas Reardon; $500M Bezos at $2.5B valuation", valuation: "$2.5B (Jun 2026)", tag: "new"},
         {name: "Merge Labs", description: "Sam Altman's BCI startup; $252M seed led by OpenAI — largest single seed in neurotech history", valuation: "$252M seed (Jan 2026)", tag: "new"},
@@ -244,6 +244,11 @@ const defaultData = {
         {company: "Precision Neuroscience", title: "Business Dev / Clinical roles", signal: "OK", type: "business", link: "https://www.precisionneuro.io/careers"}
     ],
     deals: [
+        // Aug 6, 2026 — Morning scan — $1.2B in 4mo confirmed (Aspire Life Sciences)
+        {company: "BrainCo Inc", round: "Funding", amount: "$280M — non-invasive BCI/EEG (2026)"},
+        {company: "Axoft", round: "Series A", amount: "$55M — neural interfaces (2026)"},
+        {company: "Nervonik", round: "Series B", amount: "$52.5M — neurotech platform (2026)"},
+        {company: "Gestala", round: "Seed", amount: "$21M — China ultrasound BCI (Apr 2026)"},
         // Updated Jul 6, 2026 — Google News RSS scan — NEW ADDITIONS
         {company: "Science Corp", round: "Funding", amount: "$230M — brain implant launch (Mar 5, 2026)"},
         {company: "Cognito Therapeutics", round: "Funding", amount: "$105M — Alzheimer's neurotechnology platform (Mar 5, 2026)"},
@@ -273,6 +278,8 @@ const defaultData = {
         {company: "Medtronic", round: "Acquisition", amount: "$650M (SPR)"}
     ],
     newEntrants: [
+        // Aug 6, 2026 — Morning scan
+        {name: "Gestala", focus: "China ultrasound BCI startup; $21M raised just 2 months after launching; mental health, PTSD, stroke rehab; also targeting Alzheimer's, Parkinson's (Apr 2026)"},
         // Updated Jul 16, 2026 — Notables #57 (Jun 15-30)
         {name: "Aleph Neuro", focus: "New ultrasound neuromodulation program (Jun 2026); non-invasive brain stimulation via focused ultrasound"},
         {name: "Lotus Neuro", focus: "Focused ultrasound for GBM/DIPG brain cancer; funded research teams opportunity for clinical centers (Jun 2026)"},

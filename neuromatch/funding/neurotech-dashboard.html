@@ -6,2339 +6,344 @@
     <title>Neurotech Intelligence Dashboard</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root {
-            --bg: #0a0a0f;
-            --card: #141420;
-            --border: #1e1e2e;
-            --text: #e2e8f0;
-            --muted: #64748b;
-            --accent: #6366f1;
-            --green: #22c55e;
-            --yellow: #f59e0b;
-            --red: #ef4444;
-            --cyan: #06b6d4;
-            --purple: #a855f7;
-        }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 24px; }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; flex-wrap: wrap; gap: 16px; }
-        h1 { font-size: 1.8rem; font-weight: 800; background: linear-gradient(135deg, #6366f1, #a855f7, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .meta { display: flex; align-items: center; gap: 16px; }
-        .date { color: var(--muted); font-size: 0.85rem; }
-        .badge { background: rgba(99,102,241,0.15); color: #818cf8; padding: 4px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
-        .badge-green { background: rgba(34,197,94,0.15); color: var(--green); }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f172a; color: #e2e8f0; min-height: 100vh; padding: 24px; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+        h1 { font-size: 1.6rem; background: linear-gradient(135deg, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .badge { background: rgba(99,102,241,0.2); color: #818cf8; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
+        .date { color: #64748b; font-size: 0.85rem; }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 24px; }
-        .stat-card { background: var(--card); border-radius: 14px; padding: 20px; border: 1px solid var(--border); }
-        .stat-card h3 { color: var(--muted); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
-        .stat-card .value { font-size: 2rem; font-weight: 800; margin-bottom: 4px; }
-        .stat-card .sub { color: var(--muted); font-size: 0.75rem; }
-        .green { color: var(--green); }
-        .cyan { color: var(--cyan); }
-        .yellow { color: var(--yellow); }
-        .purple { color: #a855f7; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-bottom: 24px; }
+        .stat-card { background: #1e293b; border-radius: 14px; padding: 20px; border: 1px solid #334155; }
+        .stat-card h3 { color: #64748b; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+        .stat-card .value { font-size: 2rem; font-weight: 700; margin-bottom: 4px; }
+        .stat-card .sub { color: #475569; font-size: 0.8rem; }
+        .green { color: #22c55e; }
+        .yellow { color: #f59e0b; }
+        .red { color: #ef4444; }
+        .blue { color: #3b82f6; }
 
-        .section { background: var(--card); border-radius: 14px; padding: 20px; border: 1px solid var(--border); margin-bottom: 16px; }
-        .section h2 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+        .section { background: #1e293b; border-radius: 14px; padding: 20px; border: 1px solid #334155; margin-bottom: 16px; }
+        .section h2 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; color: #64748b; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
 
-        .company-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); }
-        .company-row:last-child { border-bottom: none; }
-        .company-row .name { font-weight: 600; font-size: 0.95rem; }
-        .company-row .desc { color: var(--muted); font-size: 0.8rem; margin-top: 2px; }
-        .company-row .amount { font-weight: 700; font-size: 0.95rem; }
-        .company-row .round { font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; background: rgba(99,102,241,0.15); color: #818cf8; }
+        .row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #1e293b; }
+        .row:last-child { border-bottom: none; }
+        .row .name { color: #e2e8f0; font-size: 0.9rem; }
+        .row .meta { color: #475569; font-size: 0.8rem; }
+        .tag { padding: 2px 10px; border-radius: 12px; font-size: 0.7rem; font-weight: 600; }
+        .tag-new { background: rgba(34,197,94,0.15); color: #22c55e; }
+        .tag-clinical { background: rgba(59,130,246,0.15); color: #3b82f6; }
+        .tag-partnership { background: rgba(168,85,247,0.15); color: #a855f7; }
+        .tag-acquisition { background: rgba(239,68,68,0.15); color: #ef4444; }
+        .tag-hiring { background: rgba(245,158,11,0.15); color: #f59e0b; }
 
-        .tag { padding: 2px 8px; border-radius: 8px; font-size: 0.65rem; font-weight: 700; margin-right: 4px; display: inline-block; }
-        .tag-bci { background: rgba(6,182,212,0.15); color: var(--cyan); }
-        .tag-neuro { background: rgba(168,85,247,0.15); color: #c084fc; }
-        .tag-ai { background: rgba(99,102,241,0.15); color: #818cf8; }
-        .tag-clinical { background: rgba(239,68,68,0.15); color: var(--red); }
-        .tag-new { background: rgba(245,158,11,0.15); color: var(--yellow); }
-        .tag-partnership { background: rgba(34,197,94,0.15); color: var(--green); }
-        .tag-regulatory { background: rgba(14,165,233,0.15); color: #38bdf8; }
-        .tag-acquisition { background: rgba(168,85,247,0.15); color: #c084fc; }
+        .hiring-row { padding: 12px 0; border-bottom: 1px solid #1e293b; }
+        .hiring-row:last-child { border-bottom: none; }
+        .hiring-row .title { color: #e2e8f0; font-size: 0.9rem; font-weight: 500; }
+        .hiring-row .company { color: #818cf8; font-size: 0.8rem; margin-top: 2px; }
+        .hiring-row .link { color: #22c55e; font-size: 0.8rem; text-decoration: none; }
+        .hiring-row .link:hover { text-decoration: underline; }
+        .hot { color: #ef4444; font-weight: 700; }
 
-        .deal-card { background: rgba(30,41,59,0.5); border-radius: 10px; padding: 14px; border: 1px solid var(--border); margin-bottom: 10px; }
-        .deal-card .top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; }
-        .deal-card .name { font-weight: 700; font-size: 0.95rem; }
-        .deal-card .amount { color: var(--green); font-weight: 700; }
-        .deal-card .bottom { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--muted); flex-wrap: wrap; gap: 4px; }
+        .company-card { background: #1e293b; border-radius: 10px; padding: 14px; border: 1px solid #334155; margin-bottom: 10px; }
+        .company-card .name { font-size: 1rem; font-weight: 600; margin-bottom: 4px; }
+        .company-card .desc { font-size: 0.8rem; color: #475569; }
+        .company-card .value { font-size: 0.75rem; color: #64748b; margin-top: 6px; }
 
-        .new-company-card { background: rgba(30,41,59,0.5); border-radius: 10px; padding: 14px; border: 1px solid var(--border); margin-bottom: 10px; }
-        .new-company-card .name { font-weight: 700; font-size: 0.95rem; margin-bottom: 4px; }
-        .new-company-card .what { font-size: 0.8rem; color: var(--text); margin-bottom: 6px; }
-        .new-company-card .meta { font-size: 0.7rem; color: var(--muted); }
-
-        .milestone { padding: 10px 0; border-bottom: 1px solid var(--border); }
-        .milestone:last-child { border-bottom: none; }
-        .milestone .type { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; margin-bottom: 2px; }
-        .milestone .detail { font-size: 0.875rem; }
-        .milestone .source { font-size: 0.7rem; color: var(--muted); margin-top: 2px; }
-
-        .refresh-btn { background: var(--border); border: 1px solid #2a2a3e; color: var(--muted); padding: 6px 14px; border-radius: 8px; font-size: 0.75rem; cursor: pointer; }
-        .refresh-btn:hover { background: #2a2a3e; color: var(--text); }
-
-        /* Non-US highlight — orange border + bg */
-        .section-nonus { background: rgba(166,87,70,0.06); border-radius: 14px; padding: 20px; border: 1px solid rgba(166,87,70,0.4); margin-bottom: 16px; }
-        .section-nonus h2 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: #a65746; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
-        .section-nonus .nonus-label { background: rgba(166,87,70,0.2); color: #c27060; padding: 3px 10px; border-radius: 10px; font-size: 0.65rem; font-weight: 700; margin-right: 6px; }
-        .nonus-card { background: rgba(30,41,59,0.5); border-radius: 10px; padding: 14px; border: 1px solid rgba(166,87,70,0.25); margin-bottom: 10px; }
-        .nonus-card .top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; flex-wrap: wrap; gap: 6px; }
-        .nonus-card .name { font-weight: 700; font-size: 0.95rem; }
-        .nonus-card .flag { font-size: 1rem; margin-right: 4px; }
-        .nonus-card .amount { color: #a65746; font-weight: 700; }
-        .nonus-card .bottom { display: flex; flex-direction: column; gap: 4px; font-size: 0.75rem; color: var(--muted); }
-        .nonus-card .tag-row { display: flex; flex-wrap: wrap; gap: 4px; }
-        .nonus-hot { background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.3); border-radius: 10px; padding: 14px; margin-bottom: 10px; }
-        .nonus-hot .hot-label { background: rgba(239,68,68,0.25); color: #ef4444; font-size: 0.6rem; font-weight: 700; padding: 2px 8px; border-radius: 8px; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; display: inline-block; }
-        .nonus-seasia { background: rgba(166,87,70,0.08); border: 1px solid rgba(166,87,70,0.3); border-radius: 10px; padding: 14px; margin-bottom: 10px; }
-        .nonus-seasia .seasia-label { background: rgba(166,87,70,0.2); color: #a65746; font-size: 0.6rem; font-weight: 700; padding: 2px 8px; border-radius: 8px; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; display: inline-block; }
-
-        /* Company Directory Table */
-        .company-table-wrap { overflow-x: auto; }
-        .company-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
-        .company-table th { text-align: left; padding: 8px 10px; color: var(--muted); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.06em; border-bottom: 1px solid var(--border); white-space: nowrap; }
-        .company-table td { padding: 8px 10px; border-bottom: 1px solid rgba(30,41,59,0.5); vertical-align: top; }
-        .company-table tr:last-child td { border-bottom: none; }
-        .company-table tbody tr:hover td { background: rgba(99,102,241,0.07); }
-        .company-table .name-cell { font-weight: 600; white-space: nowrap; }
-        .company-table .name-cell a { color: #818cf8; text-decoration: none; }
-        .company-table .name-cell a:hover { text-decoration: underline; }
-        .company-table .funding-cell { color: #22c55e; font-weight: 700; white-space: nowrap; }
-        .company-table .focus-cell { color: #94a3b8; font-size: 0.72rem; max-width: 280px; }
-        .company-table .location-cell { color: #64748b; font-size: 0.72rem; white-space: nowrap; }
-        .company-table .hiring-cell { text-align: center; }
-        .company-table .hiring-yes { color: #22c55e; font-weight: 700; }
-        .company-table .hiring-no { color: #334155; }
-
-        .footer { text-align: center; color: var(--muted); font-size: 0.7rem; margin-top: 32px; }
-        .back-link { display: inline-block; margin-bottom: 16px; color: var(--cyan); font-size: 0.8rem; text-decoration: none; }
-        .back-link:hover { text-decoration: underline; }
-
-        @media (max-width: 640px) {
-            .grid { grid-template-columns: repeat(2, 1fr); }
-            .header { flex-direction: column; align-items: flex-start; }
-            .company-table { font-size: 0.72rem; }
-        }
+        .footer { text-align: center; color: #334155; font-size: 0.75rem; margin-top: 24px; }
+        .alert { background: rgba(245,158,11,0.15); border: 1px solid rgba(245,158,11,0.3); border-radius: 8px; padding: 12px; color: #f59e0b; font-size: 0.85rem; margin-bottom: 16px; }
     </style>
 </head>
-<script>
-(function(){
-  var btn = document.createElement('div');
-  btn.style.cssText = 'position:fixed;bottom:24px;left:24px;z-index:99999;background:#1a2234;border:1px solid #1e2d40;border-radius:10px;padding:10px 16px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:13px;font-weight:600;color:#e0e6ed;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,0.4);display:flex;align-items:center;gap:6px;transition:all 0.15s;';
-  btn.innerHTML = '&#8592; Back to Hub';
-  btn.onclick = function(){ window.location.href = 'https://neurodashboards.com'; };
-  btn.onmouseover = function(){ this.style.borderColor="#3b82f6"; this.style.color="#60a5fa"; };
-  btn.onmouseout = function(){ this.style.borderColor="#1e2d40"; this.style.color="#e0e6ed"; };
-  document.body.appendChild(btn);
-})();
-</script><a href="https://neurodashboards.com/" style="position:fixed;bottom:24px;left:24px;z-index:99999;background:#1a2234;border:1px solid #1e2d40;border-radius:10px;padding:10px 16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:13px;font-weight:600;color:#e0e6ed;text-decoration:none;box-shadow:0 4px 12px rgba(0,0,0,0.4);display:flex;align-items:center;gap:6px;">&#8592; Back to Hub</a>
 <body>
-<a href="https://neurodashboards.com/" style="position:fixed;bottom:24px;left:24px;z-index:99999;background:#1a2234;border:1px solid #1e2d40;border-radius:10px;padding:10px 16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:13px;font-weight:600;color:#e0e6ed;text-decoration:none;box-shadow:0 4px 12px rgba(0,0,0,0.4);display:flex;align-items:center;gap:6px;">&#8592; Back</a>
-<div style="padding:16px 20px 0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
-<a href="https://neurodashboards.com/" style="display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:600;color:#3b82f6;text-decoration:none;padding:8px 14px;background:rgba(59,130,246,0.1);border-radius:8px;">&#8592; Back to Hub</a>
-</div>
-
-<a class="back-link" href="file:///Users/jordan/workspace/007-Axton/master-dashboard.html">← Back to Mission Control</a>
 
 <div class="header">
     <div>
-        <h1>Neurotech Intelligence</h1>
-        <div style="display:flex;gap:6px;margin-top:6px;">
-            <span class="badge">BCI · Neuromodulation · NeuroAI</span>
-            <span class="badge badge-green">120+ Companies</span>
-        </div>
+        <h1>🧠 Neurotech Intelligence</h1>
+        <div class="badge">Funding · Hiring · Milestones</div>
     </div>
-    <div class="meta">
-        <span class="date" id="updated">July 30, 2026 10:01 AM · No new neurotech data today (web search unavailable) · Last active research: Notables #58 (Jul 16) — Gestala $62M Angel+, Hemispheric $52M, Neuronostics £3M, Fluent $2M, 4 new Jul entrants</span>
-        <button class="refresh-btn" onclick="window.location.reload()">↻ Refresh</button>
+    <div>
+        <span class="date" id="updated">August 06, 2026 10:00 AM</span>
     </div>
 </div>
 
-<!-- Key Metrics -->
+<!-- Alert for data source status -->
+<div class="alert" id="alert">
+    📡 Aug 6, 2026 10:00 AM — Morning scan complete. Substack #59 (Aug 3) current. 4 new deals found: Epitel $26M Series B, Aurenar $5.7M seed, Voyage stealth (Draper), Time is Brain €3M Pre-Series A. Dashboard refresh complete.
+</div>
+
+<!-- Quick Stats -->
 <div class="grid">
     <div class="stat-card">
-        <h3>Total Funding Tracked</h3>
-        <div class="value green">$5.8B</div>
-        <div class="sub">119 companies · Updated May 19, 2026</div>
+        <h3>Tracked Companies</h3>
+        <div class="value blue" id="company-count">—</div>
+        <div class="sub">BCI, neuromodulation, neuro-AI</div>
     </div>
     <div class="stat-card">
-        <h3>BCI Companies</h3>
-        <div class="value cyan">15+</div>
-        <div class="sub">with human implants / trials</div>
+        <h3>Active Hiring</h3>
+        <div class="value yellow" id="hiring-count">—</div>
+        <div class="sub">sales/marketing/ops priority</div>
     </div>
     <div class="stat-card">
-        <h3>Human Implants</h3>
-        <div class="value green">5</div>
-        <div class="sub">Neuralink, Paradromics, Synchron +2</div>
+        <h3>Recent Deals</h3>
+        <div class="value green" id="deals-count">—</div>
+        <div class="sub">2026 funding rounds</div>
     </div>
-    <div class="stat-card">
-        <h3>YTD Deals (2026)</h3>
-        <div class="value purple">~$455M+</div>
-        <div class="sub">across 17+ rounds · Jul 2026</div>
-    </div>
+</div>
+
+<!-- Hiring Section -->
+<div class="section">
+    <h2>💼 Open Roles (Priority: Sales > Marketing > Ops)</h2>
+    <div id="hiring-list"><div class="loading">Loading...</div></div>
 </div>
 
 <!-- Top Valued Companies -->
 <div class="section">
     <h2>🏆 Top Valued Neurotech Companies</h2>
-    <div class="company-row">
-        <div>
-            <span class="tag tag-bci">BCI</span>
-            <span class="name">Neuralink</span>
-            <div class="desc">Brain-computer interface · Elon Musk</div>
-        </div>
-        <div style="text-align:right">
-            <div class="amount green">$9B</div>
-            <div class="round">Series E · $650M</div>
-        </div>
-    </div>
-    <div class="company-row">
-        <div>
-            <span class="tag tag-bci">BCI</span>
-            <span class="name">Precision Neuroscience</span>
-            <div class="desc">Minimally invasive BCI · Layer 7 cortical implant</div>
-        </div>
-        <div style="text-align:right">
-            <div class="amount cyan">$543M</div>
-            <div class="round">Total Raised</div>
-        </div>
-    </div>
-    <div class="company-row">
-        <div>
-            <span class="tag tag-bci">BCI</span>
-            <span class="name">Paradromics</span>
-            <div class="desc">High-bandwidth BCI · First human implant done</div>
-        </div>
-        <div style="text-align:right">
-            <div class="amount cyan">$500M</div>
-            <div class="round">Total Raised</div>
-        </div>
-    </div>
-    <div class="company-row">
-        <div>
-            <span class="tag tag-bci">BCI</span>
-            <span class="name">Blackrock Neurotech</span>
-            <div class="desc">Utah Array · longest human BCI dataset</div>
-        </div>
-        <div style="text-align:right">
-            <div class="amount yellow">$350M</div>
-            <div class="round">Total Raised</div>
-        </div>
-    </div>
-    <div class="company-row">
-        <div>
-            <span class="tag tag-bci">BCI</span>
-            <span class="name">Science Corp</span>
-            <div class="desc">Full-stack neural engineering · restoring/extending life</div>
-        </div>
-        <div style="text-align:right">
-            <div class="amount green">$230M</div>
-            <div class="round">Series C · Mar 2026</div>
-        </div>
-    </div>
-    <div class="company-row">
-        <div>
-            <span class="tag tag-clinical">Clinical</span>
-            <span class="name">Cognito Therapeutics</span>
-            <div class="desc">Spectris platform · Alzheimer's / optical neurostimulation</div>
-        </div>
-        <div style="text-align:right">
-            <div class="amount green">$105M</div>
-            <div class="round">Series raise</div>
-        </div>
-    </div>
-</div>
-
-<!-- New Entrants — Companies to Watch -->
-<div class="section">
-    <h2>🌱 New Entrants (2025–2026)</h2>
-    <div class="new-company-card">
-        <div class="name">Atlas (Cambridge)</div>
-        <div class="what">Multi-modal brain-sensing wearable — emerged from stealth May 8, 2026 with $14M Series A to launch EEG wearable next year</div>
-        <div class="meta"><span class="tag tag-new">New Entrant</span> <span class="tag tag-bci">BCI</span> $14M Series A · May 2026 · Cambridge, MA · Hiring</div>
-    </div>
-    <div class="new-company-card">
-        <div class="name">Kordata (BIOS Health US Spinoff)</div>
-        <div class="what">AI-powered NeuroTune platform for optimizing treatment dosages in Alzheimer's, Parkinson's, epilepsy — spinoff of UK-based BIOS Health, launching in Bakersfield CA</div>
-        <div class="meta"><span class="tag tag-new">New Entrant</span> <span class="tag tag-ai">NeuroAI</span> Pre-seed · Kern Venture Group + MAVRK · May 2026 · Bakersfield CA · Hiring 11 locals</div>
-    </div>
-    <div class="new-company-card">
-        <div class="name">Epia Neuro</div>
-        <div class="what">Therapeutic BCI for stroke recovery — founded by Michel Maharbiz (neural dust) + Gil Mandelbaum</div>
-        <div class="meta"><span class="tag tag-new">New Entrant</span> <span class="tag tag-bci">BCI</span> Founded 2026 · SF</div>
-    </div>
-    <div class="new-company-card">
-        <div class="name">The Biological Computing Company</div>
-        <div class="what">Biological computing platform for neural applications</div>
-        <div class="meta"><span class="tag tag-new">New Entrant</span> <span class="tag tag-bci">BCI</span> Raised $25M Seed · Feb 2026</div>
-    </div>
-    <div class="new-company-card">
-        <div class="name">Phantom Neuro</div>
-        <div class="what">Neuromuscular BCI for prosthetic control</div>
-        <div class="meta"><span class="tag tag-bci">BCI</span> Actively recruiting · Texas-based</div>
-    </div>
-    <div class="new-company-card">
-        <div class="name">NeuroBionics</div>
-        <div class="what">Peripheral nerve interface for restoration</div>
-        <div class="meta"><span class="tag tag-bci">BCI</span> Emerging player</div>
-    </div>
-    <div class="new-company-card">
-        <div class="name">Bliss</div>
-        <div class="what">Culturally adaptive AI therapy chatbot</div>
-        <div class="meta"><span class="tag tag-ai">AI Therapy</span> Raised €233K angel · Apr 2026</div>
-    </div>
-    <div class="new-company-card">
-        <div class="name">Sabi</div>
-        <div class="what">EEG beanie with 70,000–100,000 sensors translating thought to text — consumer BCI for mass adoption</div>
-        <div class="meta"><span class="tag tag-new">New Entrant</span> <span class="tag tag-ai">Wearable BCI</span> Backed by Khosla Ventures · Emerged stealth May 2026 · Silicon Valley</div>
-    </div>
-    <div class="new-company-card">
-        <div class="name">Cambridge NeuroWorks</div>
-        <div class="what">Breakthrough neurotechnology platform — named "Tech for Good" winner for advancing neurotech innovation</div>
-        <div class="meta"><span class="tag tag-new">New Entrant</span> <span class="tag tag-bci">BCI</span> Cambridge, UK · Awarded May 8, 2026</div>
-    </div>
-    <div class="new-company-card">
-        <div class="name">NeuCyber</div>
-        <div class="what">Beijing-backed BCI — 7 successful human implantations with Beinao-1 semi-invasive device, comparing to Neuralink</div>
-        <div class="meta"><span class="tag tag-new">New Entrant</span> <span class="tag tag-bci">BCI</span> Beijing, China · Active 2026</div>
-    </div>
-    <div class="new-company-card">
-        <div class="name">Constellix</div>
-        <div class="what">Neuromodulation platform (undisclosed details)</div>
-        <div class="meta"><span class="tag tag-neuro">Neuromodulation</span> Jan–Feb 2026 activity</div>
-    </div>
-    <div class="new-company-card">
-        <div class="name">Forest Neurotech</div>
-        <div class="what">Non-invasive ultrasound BCI — Sam Altman-backed. Pioneering non-invasive neural interfaces using ultrasound. Merge Labs parent org.</div>
-        <div class="meta"><span class="tag tag-new">New Entrant</span> <span class="tag tag-bci">BCI</span> Spin-out Jan 2026 · Palo Alto, CA · Actively Hiring</div>
-    </div>
-    <div class="new-company-card">
-        <div class="name">Connectome Health</div>
-        <div class="what">Cognitive intelligence platform quantifying brain activity over time — $2M pre-seed, Redstone-led</div>
-        <div class="meta"><span class="tag tag-new">New Entrant</span> <span class="tag tag-ai">NeuroAI</span> Founded 2026 · Zurich, Switzerland 🇨🇭</div>
-    </div>
-    <div class="new-company-card">
-        <div class="name">PL Neuro (Protocol Labs)</div>
-        <div class="what">Protocol Labs project — breaking bottlenecks in neural augmentation, biologically-inspired intelligence, and whole organism emulation.</div>
-        <div class="meta"><span class="tag tag-new">New Entrant</span> <span class="tag tag-ai">NeuroAI</span> Launched May 2026 · Protocol Labs / Silicon Valley</div>
-    </div>
-
-    <div class="new-company-card">
-        <div class="name">Aleph Neuro</div>
-        <div class="what">New ultrasound-based neurotech program — non-invasive ultrasound BCI approach. New entrant Jun 2026.</div>
-        <div class="meta"><span class="tag tag-new">New Entrant</span> <span class="tag tag-bci">Ultrasound BCI</span> New program launched · Jun 2026</div>
-    </div>
-    <div class="new-company-card">
-        <div class="name">Lotus Neuro</div>
-        <div class="what">New ultrasound neurotech company — launching with funding for dedicated research teams. Jun 2026.</div>
-        <div class="meta"><span class="tag tag-new">New Entrant</span> <span class="tag tag-bci">Ultrasound BCI</span> Securing research funding · Jun 2026</div>
-    </div>
-    <div class="new-company-card">
-        <div class="name">Flourish (Catalyso)</div>
-        <div class="what">Emerging neuroscience startup backed by Jeff Bezos and Google Ventures. Catalyso portfolio company.</div>
-        <div class="meta"><span class="tag tag-new">New Entrant</span> <span class="tag tag-ai">NeuroAI</span> Bezos + GV backed · Jun 2026</div>
-    </div>
-
-<!-- Non-US Companies Seeking US Entry — TARGETS FOR JORDAN'S SALES -->
-<div class="section-nonus">
-    <h2>🌍 Non-US Neurocos Ready for US Entry — Jordan's Sales Targets <span class="nonus-label">Hot</span></h2>
-
-    <div style="margin-bottom:14px;font-size:0.75rem;color:#94a3b8;line-height:1.5;">
-        Non-US neuro companies <strong style="color:#f2ebe1;">actively seeking US partners, distribution, or market expansion.</strong>
-        Highest-probability outreach targets — English-speaking sales/partner role.
-    </div>
-
-    <!-- 🔴 HOT — Actively seeking US partners NOW -->
-    <div style="margin-bottom:16px;">
-        <div style="font-size:0.62rem;text-transform:uppercase;letter-spacing:0.08em;color:#ef4444;margin-bottom:10px;font-weight:700;">🔥 Actively Seeking US Partners — Reach Out NOW</div>
-
-        <div class="nonus-hot">
-            <div class="hot-label">🔥 Top Priority — CEO on record seeking US partners</div>
-            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;flex-wrap:wrap;gap:6px;">
-                <div class="name"><span class="flag">🇳🇱🇩🇪</span> Zander Labs <span style="font-size:0.7rem;color:#64748b;">(Netherlands / Germany)</span></div>
-                <div class="amount">€30M contract</div>
-            </div>
-            <div style="font-size:0.8rem;color:#f2ebe1;margin-bottom:6px;">Passive BCI (pBCI) — detects mental state (focus, workload, intent) subconsciously. Privacy-first. Targets defense, robotics, healthcare, air traffic.</div>
-            <div style="font-size:0.75rem;color:#64748b;margin-bottom:6px;"><strong style="color:#22c55e;">US Signal:</strong> Officially entering US in 2026. CEO Jonathan Zwaan on record: "actively seeking US partners on the West Coast." Building partner ecosystem from scratch.</div>
-            <div class="tag-row">
-                <span class="tag tag-bci">BCI</span>
-                <span class="tag tag-ai">NeuroAI</span>
-                <span class="tag" style="background:rgba(239,68,68,0.15);color:#ef4444;">🎯 US Partner Search</span>
-            </div>
-        </div>
-
-        <div class="nonus-card">
-            <div class="top">
-                <div class="name"><span class="flag">🇧🇪</span> Nobi <span style="font-size:0.7rem;color:#64748b;">(Belgium)</span></div>
-                <div class="amount">€35M ($37M) Series B</div>
-            </div>
-            <div class="bottom">
-                <div style="color:#94a3b8;">AI smart lights for elderly care — 51% fall reduction, 94% faster caregiver response. In 22 countries. US office already open.</div>
-                <div style="margin-top:4px;"><strong style="color:#22c55e;">US Signal:</strong> Explicitly using Series B to expand into US + UK markets. Building B2B care home channel.</div>
-                <div class="tag-row" style="margin-top:6px;">
-                    <span class="tag" style="background:rgba(166,87,70,0.15);color:#a65746;">AgeTech</span>
-                    <span class="tag" style="background:rgba(34,197,94,0.15);color:#22c55e;">US Office ✓</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="nonus-card">
-            <div class="top">
-                <div class="name"><span class="flag">🇫🇷</span> Hilo <span style="font-size:0.7rem;color:#64748b;">(France)</span></div>
-                <div class="amount">$100M+ total · $42M Series B</div>
-            </div>
-            <div class="bottom">
-                <div style="color:#94a3b8;">AI-powered smart glasses — memory, focus, productivity. Consumer "neuro intelligence" wearable. "Next generation of cognitive performance."</div>
-                <div style="margin-top:4px;"><strong style="color:#22c55e;">US Signal:</strong> Raised $42M Series B (2025) explicitly to expand. French company going global — US consumer market is the prize.</div>
-                <div class="tag-row" style="margin-top:6px;">
-                    <span class="tag" style="background:rgba(168,85,247,0.15);color:#c084fc;">Cognitive Wearable</span>
-                    <span class="tag" style="background:rgba(99,102,241,0.15);color:#818cf8;">Neuro Intelligence</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 🌏 SE Asia — Actively Raising US Round NOW -->
-    <div style="margin-bottom:16px;">
-        <div style="font-size:0.62rem;text-transform:uppercase;letter-spacing:0.08em;color:#ef4444;margin-bottom:10px;font-weight:700;">🌏 SE Asia — Actively Raising US Round</div>
-
-        <div class="nonus-hot">
-            <div class="hot-label">🔥 SynPhNe — CEO on record raising US round RIGHT NOW</div>
-            <div class="top">
-                <div class="name"><span class="flag">🇸🇬</span> SynPhNe <span style="font-size:0.7rem;color:#ef4444;">— RAISING US 🔥</span></div>
-                <div class="amount">$5M Series A (Part 1 done)</div>
-            </div>
-            <div class="bottom">
-                <div style="color:#94a3b8;">NTU spinoff. Wearable BCI synchronizes cognition + motor function for stroke/TBI rehab. Clinically validated. Partnership with Indegene (US medtech distributor).</div>
-                <div style="margin-top:4px;"><strong style="color:#ef4444;">US Signal:</strong> CEO: "Raising Part 2 of Series A, focused on scaling in the US." Target: $2M first US revenue. Needs US sales/channel partner ASAP.</div>
-                <div class="tag-row" style="margin-top:6px;">
-                    <span class="tag" style="background:rgba(239,68,68,0.15);color:#ef4444;">Stroke / TBI Rehab</span>
-                    <span class="tag" style="background:rgba(168,85,247,0.15);color:#c084fc;">BCI Wearable</span>
-                    <span class="tag" style="background:rgba(34,197,94,0.15);color:#22c55e;">Raising US Round</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 🟡 Warm — Strong funding, US in sight -->
-    <div style="margin-bottom:16px;">
-        <div style="font-size:0.62rem;text-transform:uppercase;letter-spacing:0.08em;color:#f59e0b;margin-bottom:10px;font-weight:700;">🟡 Strong Non-US Players — US Expansion Underway</div>
-
-        <div class="nonus-card">
-            <div class="top">
-                <div class="name"><span class="flag">🇪🇸</span> INBRAIN Neuroelectronics <span style="font-size:0.7rem;color:#64748b;">(Spain — Barcelona)</span></div>
-                <div class="amount">$50M Series B</div>
-            </div>
-            <div class="bottom">
-                <div style="color:#94a3b8;">Graphene-based bidirectional BCI — world's first human enrollment with graphene neural interfaces. Medical/therapeutic.</div>
-                <div style="margin-top:4px;"><strong style="color:#22c55e;">US Signal:</strong> Series B with imec. Pursuing US regulatory + commercial path. One of Europe's largest neurotech rounds.</div>
-                <div class="tag-row" style="margin-top:6px;">
-                    <span class="tag tag-bci">BCI</span>
-                    <span class="tag tag-clinical">Clinical</span>
-                    <span class="tag" style="background:rgba(14,165,233,0.15);color:#38bdf8;">First Human ✓</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="nonus-card">
-            <div class="top">
-                <div class="name"><span class="flag">🇦🇺</span> Emotiv <span style="font-size:0.7rem;color:#64748b;">(Australia)</span></div>
-                <div class="amount">Institutional</div>
-            </div>
-            <div class="bottom">
-                <div style="color:#94a3b8;">Wireless EEG headsets + software platform. 20M+ people have used their tech. Tan Le (founder) is high-profile. Sells heavily in North America.</div>
-                <div style="margin-top:4px;"><strong style="color:#f59e0b;">US Signal:</strong> Already has SF office. Less "entry" need — more "accelerate US presence" need.</div>
-                <div class="tag-row" style="margin-top:6px;">
-                    <span class="tag tag-bci">BCI</span>
-                    <span class="tag tag-ai">NeuroAI</span>
-                    <span class="tag" style="background:rgba(34,197,94,0.15);color:#22c55e;">US Office ✓</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="nonus-card">
-            <div class="top">
-                <div class="name"><span class="flag">🇬🇧</span> Cerca Magnetics <span style="font-size:0.7rem;color:#64748b;">(UK)</span></div>
-                <div class="amount">€4.3M Seed (2025)</div>
-            </div>
-            <div class="bottom">
-                <div style="color:#94a3b8;">Wearable brain imaging using quantum sensing (OPM). Less intrusive than traditional EEG.</div>
-                <div style="margin-top:4px;"><strong style="color:#f59e0b;">US Signal:</strong> UK startup, likely seeking global expansion post-seed.</div>
-                <div class="tag-row" style="margin-top:6px;">
-                    <span class="tag" style="background:rgba(99,102,241,0.15);color:#818cf8;">Quantum Sensing</span>
-                    <span class="tag tag-bci">BCI</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="nonus-card">
-            <div class="top">
-                <div class="name"><span class="flag">🇱🇻</span> Qualia Therapeutics <span style="font-size:0.7rem;color:#64748b;">(Latvia — Riga)</span></div>
-                <div class="amount">Undisclosed</div>
-            </div>
-            <div class="bottom">
-                <div style="color:#94a3b8;">AI-driven non-invasive brain therapy. Niche, early-stage.</div>
-                <div class="tag-row" style="margin-top:6px;">
-                    <span class="tag" style="background:rgba(99,102,241,0.15);color:#818cf8;">NeuroAI</span>
-                    <span class="tag tag-clinical">Therapy</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 🟢 Southeast Asia — Neuro Health + BCI Startups -->
-    <div>
-        <div style="font-size:0.62rem;text-transform:uppercase;letter-spacing:0.08em;color:#a65746;margin-bottom:10px;font-weight:700;">🟢 Southeast Asia — Neuro Health + BCI Startups</div>
-
-        <div class="nonus-seasia">
-            <div class="seasia-label">🇸🇬 Singapore</div>
-            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;flex-wrap:wrap;gap:6px;">
-                <div class="name">SynPhNe <span style="font-size:0.7rem;color:#ef4444;">— ACTIVE US RAISE NOW 🔥</span></div>
-                <div class="amount">$5M Series A (Part 1 done)</div>
-            </div>
-            <div style="font-size:0.8rem;color:#94a3b8;margin-bottom:6px;">NTU spinoff. Wearable BCI for stroke/TBI rehab — synchronizes cognition + motor function. CEO: "Raising Part 2 of Series A, focused on scaling in the US." First US revenue = $2M target.</div>
-            <div style="font-size:0.75rem;color:#64748b;margin-bottom:6px;"><strong style="color:#ef4444;">US Signal:</strong> Actively raising US-focused Series A RIGHT NOW. Partnership with Indegene (US medtech). Needs US sales/distributor partner.</div>
-            <div class="tag-row">
-                <span class="tag" style="background:rgba(239,68,68,0.15);color:#ef4444;">Stroke / TBI Rehab</span>
-                <span class="tag" style="background:rgba(168,85,247,0.15);color:#c084fc;">BCI Wearable</span>
-                <span class="tag" style="background:rgba(34,197,94,0.15);color:#22c55e;">Raising US Round</span>
-            </div>
-        </div>
-
-        <div class="nonus-seasia">
-            <div class="seasia-label">🇸🇬 Singapore</div>
-            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;flex-wrap:wrap;gap:6px;">
-                <div class="name">Intellect <span style="font-size:0.7rem;color:#64748b;">— Asia's best-funded mental health startup</span></div>
-                <div class="amount">$20M+ Series A</div>
-            </div>
-            <div style="font-size:0.8rem;color:#94a3b8;margin-bottom:6px;">Digital mental health platform — self-care tools, coaching, therapy, 24/7 EAP. "Largest Series A ever raised by a mental health startup in Asia." Softbank-backed.</div>
-            <div style="font-size:0.75rem;color:#64748b;margin-bottom:6px;"><strong style="color:#22c55e;">US Signal:</strong> Scaling across Asia. Strong B2B mental health product. Global expansion is the next phase.</div>
-            <div class="tag-row">
-                <span class="tag" style="background:rgba(168,85,247,0.15);color:#c084fc;">Mental Health</span>
-                <span class="tag" style="background:rgba(34,197,94,0.15);color:#22c55e;">Best-Funded Asia Mental Health</span>
-            </div>
-        </div>
-
-        <div class="nonus-seasia">
-            <div class="seasia-label">🇸🇬 Singapore</div>
-            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;flex-wrap:wrap;gap:6px;">
-                <div class="name">NeuroDrive <span style="font-size:0.7rem;color:#f59e0b;">— Early Stage, Hot Signal</span></div>
-                <div class="amount">~$120K Raised</div>
-            </div>
-            <div style="font-size:0.8rem;color:#94a3b8;margin-bottom:6px;">Palm-sized AI BCI for paralyzed patients — allows communication via blinks in 10 seconds. Founded early 2025 by Singapore Polytechnic grads. Top 200 Early-Stage Startups — TechCrunch.</div>
-            <div style="font-size:0.75rem;color:#64748b;margin-bottom:6px;"><strong style="color:#f59e0b;">US Signal:</strong> Won ~$120K (RMB 650K) in cash prizes. Small now but founder energy is high. Could be big with US clinical partners.</div>
-            <div class="tag-row">
-                <span class="tag" style="background:rgba(239,68,68,0.15);color:#ef4444;">BCI Assistive</span>
-                <span class="tag" style="background:rgba(245,158,11,0.15);color:#f59e0b;">Early Stage</span>
-            </div>
-        </div>
-
-        <div class="nonus-seasia">
-            <div class="seasia-label">🇸🇬 Singapore</div>
-            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;flex-wrap:wrap;gap:6px;">
-                <div class="name">Neeuro</div>
-                <div class="amount">A*STAR Backed</div>
-            </div>
-            <div style="font-size:0.8rem;color:#94a3b8;margin-bottom:6px;">EEG cognitive monitoring platform + SenzeBand headband. Brain health applications, cognitive training. Strategic MOU with Chongqing Yunnao for China BCI healthcare market.</div>
-            <div style="font-size:0.75rem;color:#64748b;margin-bottom:6px;"><strong style="color:#94a3b8;">US Signal:</strong> A*STAR backed, solid EEG IP. B2B platform play — could partner with US healthcare systems.</div>
-            <div class="tag-row">
-                <span class="tag" style="background:rgba(168,85,247,0.15);color:#c084fc;">EEG Platform</span>
-                <span class="tag" style="background:rgba(245,158,11,0.15);color:#f59e0b;">Cognitive Health</span>
-            </div>
-        </div>
-
-        <div class="nonus-seasia">
-            <div class="seasia-label">🇸🇬 Singapore</div>
-            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;flex-wrap:wrap;gap:6px;">
-                <div class="name">Neurowyzr</div>
-                <div class="amount">$2.1M+ Seed</div>
-            </div>
-            <div style="font-size:0.8rem;color:#94a3b8;margin-bottom:6px;">Neuroscience clinic + Digital Brain Function Screen (DBFS). Cognitive decline detection, brain health assessment. Backed by Peak XV Surge + Jungle Ventures.</div>
-            <div style="font-size:0.75rem;color:#64748b;margin-bottom:6px;"><strong style="color:#f59e0b;">US Signal:</strong> Early stage, primarily SG/MY market. Could grow to US with right partner or US distributor.</div>
-            <div class="tag-row">
-                <span class="tag" style="background:rgba(168,85,247,0.15);color:#c084fc;">Cognitive Assessment</span>
-                <span class="tag" style="background:rgba(245,158,11,0.15);color:#f59e0b;">Early Stage</span>
-            </div>
-        </div>
-    </div>
+    <div id="top-companies"><div class="loading">Loading...</div></div>
 </div>
 
 <!-- Recent Deals -->
 <div class="section">
-    <h2>💰 Recent Deals (May–Jul 2026)</h2>
-    <div class="deal-card">
-        <div class="top">
-            <div class="name">Omniscient Neurotechnology</div>
-            <div class="amount">$27.2M · Series D</div>
-        </div>
-        <div class="bottom">
-            <span class="tag tag-new">New</span> <span class="tag tag-bci">BCI</span>
-            <span>Connectomics-driven clinical + BCI applications · Sydney · May 28, 2026</span>
-        </div>
-    </div>
-    <div class="deal-card">
-        <div class="top">
-            <div class="name">Sound Wave</div>
-            <div class="amount">~$17M · Round</div>
-        </div>
-        <div class="bottom">
-            <span class="tag tag-new">New</span> <span class="tag tag-clinical">Clinical</span>
-            <span>Japanese Alzheimer's startup · WSJ reported · May 2026</span>
-        </div>
-    </div>
-    <div class="deal-card">
-        <div class="top">
-            <div class="name">Psilera</div>
-            <div class="amount">$8.8M · Seed</div>
-        </div>
-        <div class="bottom">
-            <span class="tag tag-new">New</span> <span class="tag tag-ai">Neuroplastogen</span>
-            <span>PSIL-006 for clinical psilocybin · May 2026</span>
-        </div>
-    </div>
-    <div class="deal-card">
-        <div class="top">
-            <div class="name">ReVision</div>
-            <div class="amount">€4M · Round</div>
-        </div>
-        <div class="bottom">
-            <span class="tag tag-new">New</span> <span class="tag tag-neuro">Neuromodulation</span>
-            <span>Oversubscribed European round · May 2026</span>
-        </div>
-    </div>
-    <div class="deal-card">
-        <div class="top">
-            <div class="name">Medtronic → SPR Therapeutics</div>
-            <div class="amount">$650M · Acquisition</div>
-        </div>
-        <div class="bottom">
-            <span class="tag tag-acquisition">Acquisition</span> <span class="tag tag-regulatory">Regulatory</span>
-            <span>Chronic pain BCI/neuromodulation · MedTech giant expands · May 2026</span>
-        </div>
-    </div>
-    <div class="deal-card">
-        <div class="top">
-            <div class="name">Nexalin</div>
-            <div class="amount">Platform Acquisition</div>
-        </div>
-        <div class="bottom">
-            <span class="tag tag-acquisition">Acquisition</span> <span class="tag tag-neuro">Neuromodulation</span>
-            <span>HALO™ Clarity + Nexalin NeuroCare™ AI platform · FDA pivotal trial planned · May 2026</span>
-        </div>
-    </div>
-    <div class="deal-card">
-        <div class="top">
-            <div class="name">Neurosoft Bioelectronics</div>
-            <div class="amount">$7.5M · Seed</div>
-        </div>
-        <div class="bottom">
-            <span class="tag tag-new">New</span> <span class="tag tag-bci">BCI</span>
-            <span>Soft/stretchable cortical BCI · Swiss/US · May 20, 2026</span>
-        </div>
-    </div>
-    <div class="deal-card">
-        <div class="top">
-            <div class="name">Atlas</div>
-            <div class="amount">$14M · Series A</div>
-        </div>
-        <div class="bottom">
-            <span class="tag tag-new">New</span> <span class="tag tag-bci">BCI</span>
-            <span>Brain-sensing EEG wearable · Cambridge, MA · May 2026</span>
-        </div>
-    </div>
-    <div class="deal-card">
-        <div class="top">
-            <div class="name">ResMed → Noctrix</div>
-            <div class="amount">$360M · Acquisition</div>
-        </div>
-        <div class="bottom">
-            <span class="tag tag-acquisition">Acquisition</span>
-            <span>Restless leg syndrome device maker · ~$24M ARR · Apr 2026</span>
-        </div>
-    </div>
-    <div class="deal-card">
-        <div class="top">
-            <div class="name">Science Corp</div>
-            <div class="amount">$230M · Series C</div>
-        </div>
-        <div class="bottom">
-            <span class="tag tag-bci">BCI</span>
-            <span>Full-stack neural engineering · Alameda, CA · Mar 2026</span>
-        </div>
-    </div>
-    <div class="deal-card">
-        <div class="top">
-            <div class="name">Mobia Medical</div>
-            <div class="amount">$150M · IPO</div>
-        </div>
-        <div class="bottom">
-            <span class="tag tag-new">New</span> <span class="tag tag-bci">BCI</span>
-            <span>Listed May 2026 · Oman Investment Authority backs Neuralink</span>
-        </div>
-    </div>
-    <div class="deal-card">
-        <div class="top">
-            <div class="name">BlueWind Medical</div>
-            <div class="amount">$47.8M · Growth</div>
-        </div>
-        <div class="bottom">
-            <span class="tag tag-neuro">Neuromodulation</span>
-            <span>Revi® bladder system · Commercialization push · May 2026</span>
-        </div>
-    </div>
-    <div class="deal-card">
-        <div class="top">
-            <div class="name">SonoMind</div>
-            <div class="amount">€20M · Series A</div>
-        </div>
-        <div class="bottom">
-            <span class="tag tag-new">New</span> <span class="tag tag-neuro">Neuromodulation</span>
-            <span>Non-invasive treatment-resistant depression therapy · May 2026</span>
-        </div>
-    </div>
-    <div class="deal-card">
-        <div class="top">
-            <div class="name">Ampa</div>
-            <div class="amount">~$17M · Round</div>
-        </div>
-        <div class="bottom">
-            <span class="tag tag-new">New</span> <span class="tag tag-neuro">Neuromodulation</span>
-            <span>Portable TMS depression platform · Tim Ferriss backed · May 2026</span>
-        </div>
-    </div>
-    <div class="deal-card">
-        <div class="top">
-            <div class="name">EBT Medical + NinaMED</div>
-            <div class="amount">$13.75M</div>
-        </div>
-        <div class="bottom">
-            <span class="tag tag-neuro">Neuromodulation</span>
-            <span>NiNA System® overactive bladder · May 2026</span>
-        </div>
-    </div>
-    <div class="deal-card">
-        <div class="top">
-            <div class="name">Nexstim Plc</div>
-            <div class="amount">€5M · Investment</div>
-        </div>
-        <div class="bottom">
-            <span class="tag tag-regulatory">FDA</span>
-            <span>Eiffel + Brainlab investment · May 2026</span>
-        </div>
-    </div>
-    <div class="deal-card">
-        <div class="top">
-            <div class="name">Connectome Health</div>
-            <div class="amount">$2M · Pre-Seed</div>
-        </div>
-        <div class="bottom">
-            <span class="tag tag-new">New</span> <span class="tag tag-ai">NeuroAI</span>
-            <span>Cognitive intelligence platform · Redstone · Zurich · Apr 2026</span>
-        </div>
-    </div>
-    <div class="deal-card">
-        <div class="top">
-            <div class="name">Coherence Neuro</div>
-            <div class="amount">$10M · Seed</div>
-        </div>
-        <div class="bottom">
-            <span class="tag tag-new">New</span> <span class="tag tag-bci">BCI</span>
-            <span>SOMA-1 closed-loop neuro for cancer treatment · SF · Mar 2026</span>
-        </div>
-    </div>
-    <div class="deal-card">
-        <div class="top">
-            <div class="name">Axoft</div>
-            <div class="amount">$55M · Series A</div>
-        </div>
-        <div class="bottom">
-            <span class="tag tag-new">New</span> <span class="tag tag-bci">BCI</span>
-            <span>Bio-inspired implantable BCI · Testing in China</span>
-        </div>
-    </div>
-    <div class="deal-card">
-        <div class="top">
-            <div class="name">Nervonik</div>
-            <div class="amount">$52.5M · Series B</div>
-        </div>
-        <div class="bottom">
-            <span class="tag tag-neuro">Neuromodulation</span>
-            <span>Peripheral nerve stimulation · Amzak Health led</span>
-        </div>
-    </div>
-    <div class="deal-card">
-        <div class="top">
-            <div class="name">Cala Health</div>
-            <div class="amount">$50M · Growth</div>
-        </div>
-        <div class="bottom">
-            <span class="tag tag-neuro">Neuromodulation</span>
-            <span>Wearable tremor therapy · Trinity Capital</span>
-        </div>
-    </div>
-    <div class="deal-card">
-        <div class="top">
-            <div class="name">ANEUVO</div>
-            <div class="amount">$22M · Series C</div>
-        </div>
-        <div class="bottom">
-            <span class="tag tag-regulatory">FDA Cleared</span>
-            <span>ExaStim spinal cord stimulation · May 2026</span>
-        </div>
-    </div>
-    <div class="deal-card">
-        <div class="top">
-            <div class="name">Beacon Biosignals</div>
-            <div class="amount">$97M · Series B ext.</div>
-        </div>
-        <div class="bottom">
-            <span class="tag tag-ai">NeuroAI</span>
-            <span>EEG analytics platform · Apr 2026</span>
-        </div>
-    </div>
-    <div class="deal-card">
-        <div class="top">
-            <div class="name">neuroClues</div>
-            <div class="amount">€10M · Series A</div>
-        </div>
-        <div class="bottom">
-            <span class="tag tag-new">New</span> <span class="tag tag-bci">BCI</span>
-            <span>Teampact.ventures + EIC Fund · Apr 2026</span>
-        </div>
-    </div>
-    <div class="deal-card">
-        <div class="top">
-            <div class="name">StairMed</div>
-            <div class="amount">$75M</div>
-        </div>
-        <div class="bottom">
-            <span class="tag tag-bci">BCI</span>
-            <span>Alibaba-led round · Mar 2026</span>
-        </div>
-    </div>
-    <div class="deal-card">
-        <div class="top">
-            <div class="name">WHOOP</div>
-            <div class="amount">$575M · Jumbo</div>
-        </div>
-        <div class="bottom">
-            <span class="tag tag-ai">Wearable</span>
-            <span>$10.1B valuation · Mar 2026</span>
-        </div>
-    </div>
-    <div class="deal-card">
-        <div class="top">
-            <div class="name">The Biological Computing Company</div>
-            <div class="amount">$25M Seed</div>
-        </div>
-        <div class="bottom">
-            <span class="tag tag-new">New</span>
-            <span>Primary VC · Feb 2026</span>
-        </div>
-    </div>
-    <div class="deal-card">
-        <div class="top">
-            <div class="name">Bliss (AI Therapy)</div>
-            <div class="amount">€233K Angel</div>
-        </div>
-        <div class="bottom">
-            <span class="tag tag-ai">AI Therapy</span>
-            <span>Culturally adaptive · Apr 2026</span>
-        </div>
-    </div>
-    <div class="deal-card">
-        <div class="top">
-            <div class="name">Cerca Magnetics</div>
-            <div class="amount">£3.8M · Series A</div>
-        </div>
-        <div class="bottom">
-            <span class="tag tag-new">New</span> <span class="tag tag-bci">Quantum BCI</span>
-            <span>Quantum brain scanners · UK · Apr 2026</span>
-        </div>
-    </div>
-    <div class="deal-card">
-        <div class="top">
-            <div class="name">Sinaptica</div>
-            <div class="amount">$9M · Funding</div>
-        </div>
-        <div class="bottom">
-            <span class="tag tag-neuro">Neuromodulation</span>
-            <span>Precision neuromodulation in Alzheimer's · Apr 2026</span>
-        </div>
-    </div>
-    <div class="deal-card">
-        <div class="top">
-            <div class="name">Neurava</div>
-            <div class="amount">$4M · NIH Grant</div>
-        </div>
-        <div class="bottom">
-            <span class="tag tag-ai">NeuroAI</span>
-            <span>SUDEP risk algorithms for epilepsy · Apr 2026</span>
-        </div>
-    </div>
-    <div class="deal-card">
-        <div class="top">
-            <div class="name">Bioness → PoNS System</div>
-            <div class="amount">Acquisition</div>
-        </div>
-        <div class="bottom">
-            <span class="tag tag-acquisition">Acquisition</span>
-            <span>Portable Neuromodulation Stimulator acquired by Bioness · Apr 2026</span>
-        </div>
-    </div>
+    <h2>💰 Recent Funding Rounds</h2>
+    <div id="recent-deals"><div class="loading">Loading...</div></div>
 </div>
 
-<!-- Recent Deals: July 2026 -->
+<!-- New Entrants -->
 <div class="section">
-    <h2>💰 Recent Deals (Jul 2026)</h2>
-    <div class="deal-card">
-        <div class="top">
-            <div class="name">Gestala</div>
-            <div class="amount">$62M · Series Angel+</div>
-        </div>
-        <div class="bottom">
-            <span class="tag tag-new">New</span> <span class="tag tag-bci">BCI</span>
-            <span>Ultrasound BCI · RMB 420M · China · Jul 16, 2026</span>
-        </div>
-    </div>
-    <div class="deal-card">
-        <div class="top">
-            <div class="name">Hemispheric</div>
-            <div class="amount">$52M · Seed</div>
-        </div>
-        <div class="bottom">
-            <span class="tag tag-new">New</span> <span class="tag tag-bci">BCI</span>
-            <span>EEG PTSD platform · Founded by Apple FaceID inventor · Jul 16, 2026</span>
-        </div>
-    </div>
-    <div class="deal-card">
-        <div class="top">
-            <div class="name">Neuronostics</div>
-            <div class="amount">£3M · Seed</div>
-        </div>
-        <div class="bottom">
-            <span class="tag tag-new">New</span> <span class="tag tag-ai">NeuroAI</span>
-            <span>Epilepsy/Parkinson's digital biomarker platform · UK Bristol · Jul 16, 2026</span>
-        </div>
-    </div>
-    <div class="deal-card">
-        <div class="top">
-            <div class="name">Fluent</div>
-            <div class="amount">$2M · Seed</div>
-        </div>
-        <div class="bottom">
-            <span class="tag tag-new">New</span> <span class="tag tag-bci">Speech BCI</span>
-            <span>AI voice synthesis for voiceless patients · Australia · Jul 16, 2026</span>
-        </div>
-    </div>
+    <h2>🆕 New Market Entrants</h2>
+    <div id="new-entrants"><div class="loading">Loading...</div></div>
 </div>
 
-<!-- Milestones & News -->
+<!-- Clinical & Regulatory -->
 <div class="section">
-    <h2>📍 Milestones & Signals (Jun–Jul 2026)</h2>
-    <div class="milestone">
-  <span class="milestone-tag tag-new">🆕 NEW</span>
-  <span class="milestone-date">Jul 20, 2026</span>
-  <div class="milestone-title">Gestala Raises $62M Series Angel+ for Ultrasound BCI</div>
-  <div class="milestone-desc">China-based ultrasound BCI startup completes RMB 420M (~$62M) Angel+ round — the largest funding news in this issue. The company is developing non-invasive ultrasound-based brain-computer interface technology.</div>
-  <div class="source">Neurotech Notables #58 · Jul 16, 2026</div>
-</div>
-    <div class="milestone">
-  <span class="milestone-tag tag-bci">🧠 BCI</span>
-  <span class="milestone-date">Jul 20, 2026</span>
-  <div class="milestone-title">Hemispheric Emerges from Stealth with $52M for EEG PTSD Platform</div>
-  <div class="milestone-desc">EEG-based brain assessment platform founded by inventor of Apple's FaceID. Raised $52M to study PTSD using a lightweight headset + tablet app. Also developing proprietary brain scanners. FDA submission expected early next year.</div>
-  <div class="source">Neurotech Notables #58 · Jul 16, 2026</div>
-</div>
-    <div class="milestone">
-  <span class="milestone-tag tag-new">🆕 NEW</span>
-  <span class="milestone-date">Jul 20, 2026</span>
-  <div class="milestone-title">Neuronostics Raises £3M Seed for Epilepsy/Parkinson's Digital Biomarker Platform</div>
-  <div class="milestone-desc">UK (Bristol)-based digital biomarker company using biophysical modeling + AI to detect seizures and motor symptoms in epilepsy and Parkinson's. Founded by UCL/Bristol researchers.</div>
-  <div class="source">Neurotech Notables #58 · Jul 16, 2026</div>
-</div>
-    <div class="milestone">
-  <span class="milestone-tag tag-neuro">🆕 NEW</span>
-  <span class="milestone-date">Jul 20, 2026</span>
-  <div class="milestone-title">Fluent Raises $2M Seed for Speech BCI for Voiceless Patients</div>
-  <div class="milestone-desc">Australia-based BCI company building AI-enabled voice synthesis device for people with impaired speech. Described as "the brain's third hemisphere." US Medicare/AAC reimbursement pathway potential.</div>
-  <div class="source">Neurotech Notables #58 · Jul 16, 2026</div>
-</div>
-    <div class="milestone">
-  <span class="milestone-tag tag-bci">🆕 NEW</span>
-  <span class="milestone-date">Jul 19, 2026</span>
-  <span class="milestone-text"><strong>Neuracle</strong> (🇨🇳 China) completed the world's first commercial BCI implant — the most significant BCI commercialization milestone since Neuralink's first human. Landmark that puts China ahead on BCI commercialization globally.</span>
-</div>
-<div class="milestone">
-        <div class="type" style="color:var(--cyan);">🏥 First Human Implants</div>
-        <div class="detail"><strong>Coherence Neuro</strong> — Crossed first-in-human barrier with THREE implants for cancer-treating BCI (SOMA-1 closed-loop device). SF-based company.</div>
-        <div class="source">Neurotech Notables #57 · Jul 1, 2026</div>
-    </div>
-    <div class="milestone">
-        <div class="type" style="color:#38bdf8;">📋 FDA Breakthrough</div>
-        <div class="detail"><strong>Aurenar</strong> — Received FDA Breakthrough Device designation. Company working on BCI/neuro device.</div>
-        <div class="source">Neurotech Notables #57 · Jul 1, 2026</div>
-    </div>
-    <div class="milestone">
-        <div class="type" style="color:#38bdf8;">📋 FDA 510(k)</div>
-        <div class="detail"><strong>Bioness / PoNS System</strong> — 510(k) clearance for PONS stroke product. Device rescued from Helius and now under Bioness.</div>
-        <div class="source">Neurotech Notables #57 · Jul 1, 2026</div>
-    </div>
-    <div class="milestone">
-        <div class="type" style="color:var(--green);">🚀 FDA Approval</div>
-        <div class="detail"><strong>Saluda Medical</strong> — FDA approval secured for spinal cord stimulation device. Australian company expanding commercially.</div>
-        <div class="source">Neurotech Notables #57 · Jul 1, 2026</div>
-    </div>
-    <div class="milestone">
-        <div class="type" style="color:var(--cyan);">🌍 China BCI Milestone</div>
-        <div class="detail"><strong>Nanochap</strong> — Announced successful "functional restoration" with vision BCI implant in China. Emerging player in Chinese neurotech.</div>
-        <div class="source">Neurotech Notables #57 · Jul 1, 2026</div>
-    </div>
-    <div class="milestone">
-        <div class="type" style="color:var(--yellow);">🆕 New Programs</div>
-        <div class="detail"><strong>Aleph Neuro + Lotus Neuro</strong> — Two new ultrasound-based neurotech programs launched. Lotus Neuro securing funding for research teams.</div>
-        <div class="source">Neurotech Notables #57 · Jul 1, 2026</div>
-    </div>
-    <div class="milestone">
-        <div class="type" style="color:#38bdf8;">📋 State Regulation</div>
-        <div class="detail"><strong>Vermont Neural Data Law</strong> — Advanced new neural data legislation. State-level neurotech regulation emerging.</div>
-        <div class="source">Global Outlook, Local Action · Jun 30, 2026</div>
-    </div>
-    <div class="milestone">
-        <div class="type" style="color:var(--yellow);">📋 FDA Policy</div>
-        <div class="detail"><strong>FDA Accelerated Approvals Pilot</strong> — FDA advanced pilot effort for accelerated drug approvals. Device pathway still evolving. Vermont neural data law also progressing.</div>
-        <div class="source">Global Outlook, Local Action · Jun 30, 2026</div>
-    </div>
-    <div class="milestone">
-        <div class="type" style="color:var(--red);">🔴 Shutdown</div>
-        <div class="detail"><strong>Galvani Bioelectronics</strong> — Preparing for orderly shutdown. Major exit in the bioelectronic medicine space. GSK + Verily joint venture dissolving.</div>
-        <div class="source">Neurotech Notables #54 · May 2026</div>
-    </div>
-    <div class="milestone">
-        <div class="type" style="color:#38bdf8;">📋 Regulatory</div>
-        <div class="detail"><strong>FDA Leadership</strong> — Makary stepped down; Diamantas named acting commissioner. Leadership change may affect device approval timelines.</div>
-        <div class="source">Neurotech Notables #54 · May 2026</div>
-    </div>
-    <div class="milestone">
-        <div class="type" style="color:var(--green);">🚀 Product Launch</div>
-        <div class="detail"><strong>Prophetic Dream Enhancement</strong> — Launched two products: Dual ($449, Q4 2026) and Phase ($1,299, Q3 2027). Consumer lucid dreaming BCI.</div>
-        <div class="source">Neurotech Notables #54 · May 2026</div>
-    </div>
-    <div class="milestone">
-        <div class="type" style="color:var(--cyan);">🏥 FDA Trial Approval</div>
-        <div class="detail"><strong>Motif Neurotech</strong> — FDA IDE approval for therapeutic BCI (DOT device, blueberry-sized) targeting treatment-resistant depression. ARPA-H EVIDENT program participant. Rice University spinout founded 2022.</div>
-        <div class="source">Rice News · Apr 28, 2026</div>
-    </div>
-    <div class="milestone">
-        <div class="type" style="color:#c084fc;">🤝 Acquisition</div>
-        <div class="detail"><strong>ResMed acquires Noctrix</strong> — $360M deal for restless leg syndrome device maker (~$24M ARR). ResMed betting on sleep/neuro overlap.</div>
-        <div class="source">Neurotech Notables #53 · Apr 2026</div>
-    </div>
-    <div class="milestone">
-        <div class="type" style="color:var(--cyan);">🔬 Clinical Trial</div>
-        <div class="detail"><strong>INBRAIN Neuroelectronics</strong> — Completed enrollment for world's first-in-human study of graphene neural interfaces. Barcelona-based.</div>
-        <div class="source">Neurotech Notables #53 · Apr 2026</div>
-    </div>
-    <div class="milestone">
-        <div class="type" style="color:#38bdf8;">📋 FDA TAP / Breakthrough</div>
-        <div class="detail"><strong>CorTec Brain Interchange</strong> — Accepted into FDA TAP Program. Third patient successfully implanted. First BCI worldwide designated for stroke motor rehab.</div>
-        <div class="source">Neurotech Notables #52-53 · Apr 2026</div>
-    </div>
-    <div class="milestone">
-        <div class="type" style="color:var(--cyan);">🏥 First Human Implants</div>
-        <div class="detail"><strong>NeuCyber (China)</strong> — 7 successful human implantations with Beinao-1 semi-invasive BCI. Beijing-backed company positioning against Neuralink.</div>
-        <div class="source">Digital Health News · May 2026</div>
-    </div>
-    <div class="milestone">
-        <div class="type" style="color:var(--yellow);">🏆 Tech for Good</div>
-        <div class="detail"><strong>Cambridge NeuroWorks</strong> — Named "Tech for Good" winner for advancing breakthrough neurotechnology. Awarded May 8, 2026.</div>
-        <div class="source">Cambridge NeuroWorks · May 8, 2026</div>
-    </div>
-    <div class="milestone">
-        <div class="type" style="color:var(--green);">🤝 Partnership</div>
-        <div class="detail"><strong>MintNeuro + Motif Neurotech</strong> — Partnership to advance miniature BCI therapy for mental health. <strong>Precision Neuroscience + UChicago Medicine</strong> — BCI research collaboration.</div>
-        <div class="source">Neurotech Notables #53 · Apr 2026</div>
-    </div>
-    <div class="milestone">
-        <div class="type" style="color:var(--yellow);">🔬 Clinical Trial</div>
-        <div class="detail"><strong>Synchron INTENT trial</strong> — FDA-permitted third clinical trial of Stentrode BCI started. <strong>SetPoint Medical</strong> enrolled first MS patients in neuroimmune modulation study.</div>
-        <div class="source">Neurotech Notables #52 · Apr 2026</div>
-    </div>
-    <div class="milestone">
-        <div class="type" style="color:var(--red);">🏥 First Human Implant</div>
-        <div class="detail"><strong>Paradromics</strong> completes first human BCI implant — actively collecting patient data for Connexus speech BCI.</div>
-        <div class="source">CNBC · June 2025</div>
-    </div>
-    <div class="milestone">
-        <div class="type" style="color:#38bdf8;">📋 Regulatory</div>
-        <div class="detail"><strong>RAPID Coverage Pathway</strong> — New joint CMS + FDA initiative to accelerate patient access to "life-changing" medical devices. Over 115 devices now enrolled in FDA TAP program.</div>
-        <div class="source">Neurotech Notables #53 · Apr 2026</div>
-    </div>
-    <div class="milestone">
-        <div class="type" style="color:#c084fc;">🔬 Research Breakthrough</div>
-        <div class="detail"><strong>Columbia Engineering BISC</strong> — Flexible BCI chip with 65,536 electrodes unveiled. World's highest-density flexible neural interface.</div>
-        <div class="source">Neurotech Notables #53 · Apr 2026</div>
-    </div>
-    <div class="milestone">
-        <div class="type" style="color:var(--cyan);">🏥 Clinical Enrollment</div>
-        <div class="detail"><strong>ONWARD Medical</strong> — First participant enrolled in global study for blood pressure instability after spinal cord injury.</div>
-        <div class="source">Neurotech Notables #53 · Apr 2026</div>
-    </div>
-    <div class="milestone">
-        <div class="type" style="color:#22c55e;">📍 Upcoming Event</div>
-        <div class="detail"><strong>Neurolief at APA Annual Meeting (May 16–20, SF)</strong> — Showcase of Proliv®Rx FDA-approved at-home brain stimulation for MDD. KOL panel May 18. 31.7% remission rate at 16 weeks in MOOD pivotal trial.</div>
-        <div class="source">PR Newswire · May 2026</div>
-    </div>
-    <div class="milestone">
-        <div class="type" style="color:#22c55e;">💼 Hiring Surge</div>
-        <div class="detail"><strong>Cala Health (9 roles incl. Director of Marketing $XXXK — HOT), Nervonik (20+ roles across R&D/Clinical/Reg — growing fast post $52.5M Series B), Science Corp (Digital Marketing $150K–$220K), Merge Labs ("Neuron Whisperer" $165K–$215K SF), LivaNova (Dir Neuromodulation $215K–$250K Austin), huMannity Medtec (Dir PM $192K–$230K Santa Clara), Synchron (Field BCI Specialist $90K–$120K Buffalo), Paradromics (VP Marketing), Beacon Biosignals (BD Manager Boston/Remote 🔥).</div>
-        <div class="source">Greenhouse/LinkedIn/Careers pages · May 17, 2026</div>
-    </div>
-    <div class="milestone">
-        <div class="type" style="color:var(--cyan);">🚀 Product Launch</div>
-        <div class="detail"><strong>Zeto NeuroNotis™</strong> — AI-enabled EEG report with human review. FDA 510(k) also secured for Zeto New Wave™ outpatient EEG.</div>
-        <div class="source">Neurotech Notables #53 · Apr 2026</div>
-    </div>
-    <div class="milestone">
-        <div class="type" style="color:var(--yellow);">🔄 Strategic Pivot</div>
-        <div class="detail"><strong>Neurable → OEM</strong> — Shifting from own-brand smart headphones to global OEM BCI integration. Also building attention-tracking AI for Apple Vision Pro.</div>
-        <div class="source">Neurotech Notables #53 · Apr 2026</div>
-    </div>
-    <div class="milestone">
-        <div class="type" style="color:#c084fc;">🤝 Acquisition</div>
-        <div class="detail"><strong>Bioness acquires PoNS System</strong> — Portable Neuromodulation Stimulator changes hands. Neuromodulation market consolidation continues.</div>
-        <div class="source">Signals 06 · May 15, 2026</div>
-    </div>
-    <div class="milestone">
-        <div class="type" style="color:#22c55e;">💰 Payer Coverage</div>
-        <div class="detail"><strong>NeurAxis</strong> — Expands payer coverage with four new medical policies. Neuromodulation reimbursement landscape improving.</div>
-        <div class="source">Signals 06 · May 15, 2026</div>
-    </div>
-    <div class="milestone">
-        <div class="type" style="color:#38bdf8;">📋 FDA Clearance</div>
-        <div class="detail"><strong>Epineuron</strong> — Received FDA 510(k) clearance for Evala® Nerve Stimulator. Non-invasive neurostimulation for pain management.</div>
-        <div class="source">Neurotech Notables #54 · May 2026</div>
-    </div>
-    <div class="milestone">
-        <div class="type" style="color:var(--green);">🇪🇺 EU MDR Approval</div>
-        <div class="detail"><strong>PlatoCare</strong> — Achieved EU MDR approval for first wireless tDCS depression treatment. Major regulatory milestone for non-invasive brain stimulation.</div>
-        <div class="source">Neurotech Notables #54 · May 2026</div>
-    </div>
-    <div class="milestone">
-        <div class="type" style="color:var(--yellow);">🏥 Executive</div>
-        <div class="detail"><strong>Leadership Moves</strong> — Spark Biomedical appointed Anja Krammer as CEO. NeuWire Medical named Ramin Mousavi Executive Chairman. Control Bionics added Nicholas Opie to board.</div>
-        <div class="source">Neurotech Notables #54 · May 2026</div>
-    </div>
-    <div class="milestone">
-        <div class="type" style="color:#c084fc;">🔬 Research</div>
-        <div class="detail"><strong>Psilocybin, Sleep & Parkinson's</strong> — Nature: single psilocybin use causes human brain changes. Sleep chart study links sleep duration to biological aging. MYNDspan: MEG scan can classify Parkinson's non-invasively.</div>
-        <div class="source">Neurotech Notables #54 · May 2026</div>
-    </div>
-    <div class="milestone">
-        <div class="type" style="color:var(--cyan);">🏥 Clinical Expansion</div>
-        <div class="detail"><strong>Paradromics</strong> — Adds third clinical site for Connexus® BCI trial at University of Michigan. Study advancing toward pivotal trial.</div>
-        <div class="source">Paradromics.com · May 2026</div>
-    </div>
-    <div class="milestone">
-        <div class="type" style="color:var(--cyan);">🏥 FDA Trial Approval</div>
-        <div class="detail"><strong>ABILITY Neurotech</strong> — IMDD Approval to start clinical trial for chronic implantation of brain-computer interface in ALS patients.</div>
-        <div class="source">Neurotech Notables #55 · Jun 2026</div>
-    </div>
-    <div class="milestone">
-        <div class="type" style="color:#38bdf8;">📋 Regulatory</div>
-        <div class="detail"><strong>MagVenture / MagStim</strong> — FDA 510(k) clearance for accelerated TMS protocols, expanding flexibility for clinics and patients.</div>
-        <div class="source">Neurotech Notables #55 · Jun 2026</div>
-    </div>
-    <div class="milestone">
-        <div class="type" style="color:#38bdf8;">📋 Regulatory</div>
-        <div class="detail"><strong>Neuropace</strong> — New FDA-approved AI application for RNS® System, designed to streamline iEEG review in PDMS.</div>
-        <div class="source">Neurotech Notables #55 · Jun 2026</div>
-    </div>
+    <h2>🔬 Clinical Trials & Regulatory</h2>
+    <div id="clinical"><div class="loading">Loading...</div></div>
 </div>
 
-<!-- Landscape: Categories -->
+<!-- Partnerships -->
 <div class="section">
-    <h2>🗺️ Landscape by Category</h2>
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
-        <div>
-            <div style="font-size: 0.75rem; color: var(--cyan); font-weight: 700; margin-bottom: 8px;">🧠 BCI</div>
-            <div style="font-size: 0.8rem; color: var(--muted); line-height: 1.6;">Neuralink · Paradromics · Precision Neuroscience · Blackrock · Phantom Neuro · Synchron · Axoft · Epia Neuro · neuroClues</div>
-        </div>
-        <div>
-            <div style="font-size: 0.75rem; color: #c084fc; font-weight: 700; margin-bottom: 8px;">⚡ Neuromodulation</div>
-            <div style="font-size: 0.8rem; color: var(--muted); line-height: 1.6;">Cala Health · Nervonik · ANEUVO · Sinaptica · Inbrain · BrainSway · Constellix</div>
-        </div>
-        <div>
-            <div style="font-size: 0.75rem; color: #818cf8; font-weight: 700; margin-bottom: 8px;">🤖 NeuroAI</div>
-            <div style="font-size: 0.8rem; color: var(--muted); line-height: 1.6;">Beacon Biosignals · Arc Institute + OpenAI · Meta TRIBE · Piramidal + IntraNerve</div>
-        </div>
-        <div>
-            <div style="font-size: 0.75rem; color: var(--green); font-weight: 700; margin-bottom: 8px;">⌚ Wearables</div>
-            <div style="font-size: 0.8rem; color: var(--muted); line-height: 1.6;">WHOOP · Oura (neuro features) · Empatica · NextMind</div>
-        </div>
-        <div>
-            <div style="font-size: 0.75rem; color: var(--red); font-weight: 700; margin-bottom: 8px;">💊 NeuroTech-Therapy</div>
-            <div style="font-size: 0.8rem; color: var(--muted); line-height: 1.6;">Motif Neurotech · Cognito Therapeutics · Bliss · Sinaptica · Altoida · Neurotrack</div>
-        </div>
-    </div>
-</div>
-
-<!-- FULL COMPANY DIRECTORY -->
-<div class="section">
-    <h2>📊 Company Directory — All Tracked Companies</h2>
-    <div class="company-table-wrap">
-    <table class="company-table">
-        <thead>
-            <tr>
-                <th>Company</th>
-                <th>Funding</th>
-                <th>Focus</th>
-                <th>Location</th>
-                <th>👔 Jobs</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td class="name-cell"><a href="https://neuralink.com" target="_blank">Neuralink</a></td>
-                <td class="funding-cell">$964.2M</td>
-                <td class="focus-cell">BCI · Paralysis/blindness tech · Elon Musk</td>
-                <td class="location-cell">San Francisco, CA</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://synchron.com" target="_blank">Synchron</a></td>
-                <td class="funding-cell">$325.0M</td>
-                <td class="focus-cell">Endovascular BCI · No open-brain surgery</td>
-                <td class="location-cell">SF & Brooklyn, NY</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.setpointmedical.com" target="_blank">SetPoint Medical</a></td>
-                <td class="funding-cell">$200.6M</td>
-                <td class="focus-cell">Implantable · Chronic inflammatory diseases</td>
-                <td class="location-cell">Valencia, CA</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://astronautx.com" target="_blank">AstronauTx</a></td>
-                <td class="funding-cell">$195.8M</td>
-                <td class="focus-cell">Biotech · Neurodegenerative disease treatments</td>
-                <td class="location-cell">London, UK 🇬🇧</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.bioserenity.com" target="_blank">BioSerenity</a></td>
-                <td class="funding-cell">$189.7M</td>
-                <td class="focus-cell">Epilepsy diagnosis · Health monitoring · Pierre Frouin</td>
-                <td class="location-cell">Paris, France 🇫🇷</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://mindstrong.com" target="_blank">Mindstrong Health</a></td>
-                <td class="funding-cell">$160.0M</td>
-                <td class="focus-cell">Neuroscience precision therapy · Paul Dagum</td>
-                <td class="location-cell">Menlo Park, CA</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.calahealth.com" target="_blank">Cala Health</a></td>
-                <td class="funding-cell">$145.0M</td>
-                <td class="focus-cell">Bioelectronic medicines · Wearable neurotherapeutics · Kate Rosenbluth</td>
-                <td class="location-cell">Burlingame, CA</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.mindmaze.com" target="_blank">MindMaze SA</a></td>
-                <td class="funding-cell">$100.0M</td>
-                <td class="focus-cell">VR medical · Neural recovery stimulation</td>
-                <td class="location-cell">Lausanne, Switzerland 🇨🇭</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.saludamedical.com" target="_blank">Saluda Medical</a></td>
-                <td class="funding-cell">$140.0M</td>
-                <td class="focus-cell">Devices · Chronic neurological conditions</td>
-                <td class="location-cell">Sydney, Australia 🇦🇺</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.vergegenomics.com" target="_blank">Verge Genomics</a></td>
-                <td class="funding-cell">$134.1M</td>
-                <td class="focus-cell">ML for drug discovery · Neurodegenerative diseases</td>
-                <td class="location-cell">San Francisco, CA</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://inbrain-neuroelectronics.com" target="_blank">Inbrain Neuroelectronics</a></td>
-                <td class="funding-cell">$89.6M</td>
-                <td class="focus-cell">Graphene-based high-res neural systems</td>
-                <td class="location-cell">Barcelona, Spain 🇪🇸</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.ceribell.com" target="_blank">Ceribell</a></td>
-                <td class="funding-cell">$88.0M</td>
-                <td class="focus-cell">Accessible EEG · Emergency and ICU patients</td>
-                <td class="location-cell">Sunnyvale, CA</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://theranica.com" target="_blank">Theranica</a></td>
-                <td class="funding-cell">$86.0M</td>
-                <td class="focus-cell">Wireless devices · Migraine & pain management</td>
-                <td class="location-cell">Netanya, Israel 🇮🇱</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.axoft.com" target="_blank">Axoft</a></td>
-                <td class="funding-cell">$55M · Series A</td>
-                <td class="focus-cell">Bio-inspired implantable BCI · Testing in China</td>
-                <td class="location-cell">US / China</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.nervonik.com" target="_blank">Nervonik</a></td>
-                <td class="funding-cell">$69.9M · Series B</td>
-                <td class="focus-cell">Peripheral nerve stimulation therapy</td>
-                <td class="location-cell">US</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.science.com" target="_blank">Science Corp</a></td>
-                <td class="funding-cell">$66.0M</td>
-                <td class="focus-cell">Therapeutic BCI · First human implant imminent</td>
-                <td class="location-cell">San Francisco, CA</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://eksobionics.com" target="_blank">Ekso Bionics</a></td>
-                <td class="funding-cell">$70.9M</td>
-                <td class="focus-cell">Powered exoskeletons · Physical rehabilitation</td>
-                <td class="location-cell">Richmond, CA</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.comind.io" target="_blank">CoMind</a></td>
-                <td class="funding-cell">$60.0M</td>
-                <td class="focus-cell">Non-invasive neural hardware and software</td>
-                <td class="location-cell">Cambridge, MA</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.brainq.tech" target="_blank">BrainQ</a></td>
-                <td class="funding-cell">$48.8M</td>
-                <td class="focus-cell">AI-powered · Neuro-disorder treatment</td>
-                <td class="location-cell">Jerusalem, Israel 🇮🇱</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.braincheck.com" target="_blank">BrainCheck</a></td>
-                <td class="funding-cell">$43.9M</td>
-                <td class="focus-cell">Neurocognitive assessments · Cognitive care solutions</td>
-                <td class="location-cell">San Francisco, CA</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.paradromics.com" target="_blank">Paradromics</a></td>
-                <td class="funding-cell">$34.0M</td>
-                <td class="focus-cell">High-volume bidirectional BCI data streaming</td>
-                <td class="location-cell">San Francisco, CA</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.neurofenix.com" target="_blank">Neurofenix</a></td>
-                <td class="funding-cell">$14.0M</td>
-                <td class="focus-cell">NeuroBall · Stroke rehab through gaming</td>
-                <td class="location-cell">London, UK 🇬🇧</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.cumulusneurosciences.com" target="_blank">Cumulus Neurosciences</a></td>
-                <td class="funding-cell">$12.7M</td>
-                <td class="focus-cell">AI platform · Physiological & digital biomarkers</td>
-                <td class="location-cell">Dublin, Ireland 🇮🇪</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.nextmind.com" target="_blank">NextMind</a></td>
-                <td class="funding-cell">$9.2M</td>
-                <td class="focus-cell">Non-invasive EEG-based BCI · Mass market</td>
-                <td class="location-cell">Paris, France 🇫🇷</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.neuroclues.com" target="_blank">neuroClues</a></td>
-                <td class="funding-cell">€10M · Series A</td>
-                <td class="focus-cell">BCI · Teampact.ventures + EIC Fund</td>
-                <td class="location-cell">Europe</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.sinaptica.com" target="_blank">Sinaptica</a></td>
-                <td class="funding-cell">$9M</td>
-                <td class="focus-cell">Precision neuromodulation in Alzheimer's</td>
-                <td class="location-cell">US</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.winterlightlabs.com" target="_blank">Winterlight Labs</a></td>
-                <td class="funding-cell">$4.2M</td>
-                <td class="focus-cell">Voice recognition · Cognitive decline detection</td>
-                <td class="location-cell">Toronto, Canada 🇨🇦</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://openbci.com" target="_blank">OpenBCI</a></td>
-                <td class="funding-cell">$4.0M</td>
-                <td class="focus-cell">Open-source BCI platform · Biosensing</td>
-                <td class="location-cell">New York, NY</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://koniku.io" target="_blank">Koniku</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">Microprocessors using wetware biological neurons</td>
-                <td class="location-cell">San Francisco, CA</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.humm.co" target="_blank">Humm</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">Wearable patch · Working memory improvement</td>
-                <td class="location-cell">San Francisco, CA</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.q30innovations.com" target="_blank">Q30 Innovations</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">Q-Collar · Brain protection from head injuries</td>
-                <td class="location-cell">Boston, MA</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.wibotic.com" target="_blank">WiBotic</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">Wireless charging · Medical/robotic devices</td>
-                <td class="location-cell">Seattle, WA</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.ceryxmedical.com" target="_blank">Ceryx Medical</a></td>
-                <td class="funding-cell">$19.9M</td>
-                <td class="focus-cell">Bioelectronic therapies · Heart failure</td>
-                <td class="location-cell">London, UK 🇬🇧</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.motifneuro.tech" target="_blank">Motif Neurotech</a></td>
-                <td class="funding-cell">ARPA-H + DARPA</td>
-                <td class="focus-cell">Therapeutic BCI · Treatment-resistant depression · DOT device</td>
-                <td class="location-cell">Houston, TX</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.corTec.de" target="_blank">CorTec</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">Brain Interchange System · FDA TAP · Stroke rehab BCI</td>
-                <td class="location-cell">Germany 🇩🇪</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.epianeuro.com" target="_blank">Epia Neuro</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">Therapeutic BCI for stroke · Maharbiz + Mandelbaum</td>
-                <td class="location-cell">San Francisco, CA</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://forestneurotech.com" target="_blank">Forest Neurotech</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">Non-invasive ultrasound BCI · Merge Labs parent · Sam Altman</td>
-                <td class="location-cell">Palo Alto, CA</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://connectome.health" target="_blank">Connectome Health</a></td>
-                <td class="funding-cell">$2M Pre-Seed</td>
-                <td class="focus-cell">Cognitive intelligence platform · Brain health tracking</td>
-                <td class="location-cell">Zurich, Switzerland 🇨🇭</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-
-            <tr>
-                <td class="name-cell"><a href="https://www.akiliinteractive.com" target="_blank">Akili Interactive</a></td>
-                <td class="funding-cell">$239.9M</td>
-                <td class="focus-cell">Digital therapeutics · Cognitive deficiency · FDA-approved ADHD game</td>
-                <td class="location-cell">Boston, MA</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.empatica.com" target="_blank">Empatica</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">AI smartwatch · Seizure detection · FDA-cleared</td>
-                <td class="location-cell">Boston, MA</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.neuropace.com" target="_blank">NeuroPace</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">Closed-loop stimulation · Epilepsy · RNS System</td>
-                <td class="location-cell">Mountain View, CA</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.microtransponder.com" target="_blank">MicroTransponder</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">Vagus nerve stimulation · Stroke rehab · Vivona</td>
-                <td class="location-cell">Dallas, TX</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.brainsway.com" target="_blank">BrainsWay</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">Deep TMS · Depression · FDA-cleared</td>
-                <td class="location-cell">Jerusalem, Israel 🇮🇱</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.heliusmedical.com" target="_blank">Helius Medical</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">PONS device · Tongue neurostimulation · MS · FDA-approved</td>
-                <td class="location-cell">Needham, MA</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.advancedbionics.com" target="_blank">Advanced Bionics</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">Cochlear implants · Sonova subsidiary</td>
-                <td class="location-cell">Valencia, CA</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.inspiresleep.com" target="_blank">Inspire Medical Systems</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">Hypoglossal nerve stimulation · Sleep apnea · FDA-approved</td>
-                <td class="location-cell">Minneapolis, MN</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.nevrocorp.com" target="_blank">Nevro Corp</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">Spinal cord stimulation · Chronic pain · Senza system</td>
-                <td class="location-cell">Redwood City, CA</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.neuracle-ic.com" target="_blank">Neuroelectrics</a></td>
-                <td class="funding-cell">$35.9M</td>
-                <td class="focus-cell">StarStim wireless tDCS/tACS · Barcelona-based</td>
-                <td class="location-cell">Barcelona, Spain 🇪🇸</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.neurosmedical.com" target="_blank">Neuros Medical</a></td>
-                <td class="funding-cell">$64.0M</td>
-                <td class="focus-cell">Neurostimulation · Chronic pain · ALTERNATIVE study</td>
-                <td class="location-cell">Cleveland, OH</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.interaxton.com" target="_blank">InteraXon (Muse)</a></td>
-                <td class="funding-cell">$28.8M</td>
-                <td class="focus-cell">Consumer EEG headband · Meditation · Focus</td>
-                <td class="location-cell">Toronto, Canada 🇨🇦</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.neosensory.com" target="_blank">NeoSensory</a></td>
-                <td class="funding-cell">$14.2M</td>
-                <td class="focus-cell">Haptic vests/wristbands · Sound-to-touch · Hearing impaired</td>
-                <td class="location-cell">San Francisco, CA</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.pison.com" target="_blank">Pison</a></td>
-                <td class="funding-cell">$8.4M</td>
-                <td class="focus-cell">Gesture control · Neural signals · Military + enterprise</td>
-                <td class="location-cell">Boston, MA</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.cognitotx.com" target="_blank">Cognito Therapeutics</a></td>
-                <td class="funding-cell">$105M</td>
-                <td class="focus-cell">Spectris platform · Alzheimer's · Optical neurostimulation</td>
-                <td class="location-cell">Cambridge, MA</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.gensight.com" target="_blank">GenSight Biologics</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">Optogenetics · Vision restoration · Lumecct</td>
-                <td class="location-cell">Paris, France 🇫🇷</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.niatherapeutics.com" target="_blank">Nia Therapeutics</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">Closed-loop neurostimulation · Memory loss · DARPA RAM</td>
-                <td class="location-cell">Philadelphia, PA</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.bitbrain.com" target="_blank">BitBrain</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">High-tech BCI equipment · Research EEG/EPsolutions</td>
-                <td class="location-cell">Zaragoza, Spain 🇪🇸</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.rapidai.com" target="_blank">RapidAI</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">Stroke + aneurysm imaging · Angio Suite</td>
-                <td class="location-cell">San Francisco, CA</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.psyonic.co" target="_blank">PSYONIC</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">Bionic limbs · Haptic feedback · Able Squad</td>
-                <td class="location-cell">San Francisco, CA</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.insightec.com" target="_blank">Insightec</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">Focused ultrasound neural stimulation · Exablate</td>
-                <td class="location-cell">Haifa, Israel 🇮🇱</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://neurxtech.com" target="_blank">NeurTX</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">MRI-guided TMS · Addiction + mental health · 2024 founded</td>
-                <td class="location-cell">USA</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.neurovia.com" target="_blank">Neurovia Bioelectronics</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">Transvascular neuromodulation · Endovascular implants · 2024</td>
-                <td class="location-cell">Geneva, Switzerland 🇨🇭</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.argusai.com" target="_blank">Argus AI</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">AR neuro-navigation · 3D surgical guidance · Estonia · 2024</td>
-                <td class="location-cell">Tallinn, Estonia 🇪🇪</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.optohive.com" target="_blank">Optohive</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">Wearable fNIRS brain imaging · Modular hardware · 2024</td>
-                <td class="location-cell">Oxford, UK 🇬🇧</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://sprytemedical.com" target="_blank">Spryte Medical</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">Neuro OCT · 10x imaging resolution · 2023</td>
-                <td class="location-cell">USA</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.hird.tech" target="_blank">Hird</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">In-ear EEG headphones · Workplace wellness · Denmark · 2023</td>
-                <td class="location-cell">Copenhagen, Denmark 🇩🇰</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.neurox.io" target="_blank">NeuroX</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">Flexible wearable EEG · MCI detection · UK · 2024</td>
-                <td class="location-cell">London, UK 🇬🇧</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://neufit.com" target="_blank">NeuFit ANZ</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">DC therapy device · Neural pattern mapping · 2023</td>
-                <td class="location-cell">USA / Australia 🇦🇺</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.flowneuro.com" target="_blank">Flow Neuroscience</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">Medication-free depression · Headset + app · UK</td>
-                <td class="location-cell">London, UK 🇬🇧</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.neurable.com" target="_blank">Neurable</a></td>
-                <td class="funding-cell">$46.0M</td>
-                <td class="focus-cell">EEG for AR/VR · Emotion/intent recognition · Boston</td>
-                <td class="location-cell">Boston, MA</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.onwardmedical.com" target="_blank">ONWARD Medical</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">ARC Therapy · Spinal cord injury · Blood pressure study</td>
-                <td class="location-cell">Eindhoven, Netherlands 🇳🇱</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.healint.com" target="_blank">Healint</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">Migraine tracking · Virtual reality rehab · Singapore</td>
-                <td class="location-cell">Singapore 🇸🇬</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.neurone-solutions.com" target="_blank">NeurOne</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">EEG-based adaptive stimulation · Finland</td>
-                <td class="location-cell">Helsinki, Finland 🇫🇮</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.mindmaze.com" target="_blank">Dreem (Moonbird)</a></td>
-                <td class="funding-cell">$57.0M</td>
-                <td class="focus-cell">Sleep science · Bio-monitoring headband</td>
-                <td class="location-cell">Paris, France 🇫🇷</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.xrhealth.com" target="_blank">XRHealth</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">VR telehealth · Physical + cognitive therapy</td>
-                <td class="location-cell">Boston, MA</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.openwater.com" target="_blank">Open Water</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">Non-invasive BCI · Optical neural imaging</td>
-                <td class="location-cell">San Francisco, CA</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.tripp.com" target="_blank">TRIPP</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">VR meditation · Digital wellness · LA</td>
-                <td class="location-cell">Los Angeles, CA</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.hypnovr.com" target="_blank">HypnoVR</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">VR anesthesia alternative · Pain relief</td>
-                <td class="location-cell">France 🇫🇷</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.thync.com" target="_blank">Thync</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">Neurostimulation wearables · Stress + sleep</td>
-                <td class="location-cell">San Francisco, CA</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.platoscience.com" target="_blank">PlatoScience</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">PlatoWork consumer headset · Cognition boost</td>
-                <td class="location-cell">USA</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.carthera.com" target="_blank">CarThera</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">Ultrasound brain implant · Alzheimer · France</td>
-                <td class="location-cell">Paris, France 🇫🇷</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.neurable.com" target="_blank">Neurable</a></td>
-                <td class="funding-cell">$46.0M</td>
-                <td class="focus-cell">EEG for AR/VR · Emotion/intent recognition · Boston</td>
-                <td class="location-cell">Boston, MA</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-
-            <tr>
-                <td class="name-cell"><a href="https://haloneuro.com" target="_blank">Halo Neuroscience</a></td>
-                <td class="funding-cell">$13.0M</td>
-                <td class="focus-cell">Neurostimulation wearables · Athletic performance · US Army research</td>
-                <td class="location-cell">San Francisco, CA</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.kinovarobotics.com" target="_blank">Kinova</a></td>
-                <td class="funding-cell">$25.0M</td>
-                <td class="focus-cell">Assistive robotics · Healthcare robots</td>
-                <td class="location-cell">Boisbriand, Canada 🇨🇦</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.brainco.tech" target="_blank">BrainCo</a></td>
-                <td class="funding-cell">$7.6M · Series A</td>
-                <td class="focus-cell">BCI for education · Focus + meditation wearables</td>
-                <td class="location-cell">Somerville, MA</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://sevaro.com" target="_blank">SEVARO</a></td>
-                <td class="funding-cell">$40.1M · Series B</td>
-                <td class="focus-cell">Teleneurology · Stroke care on-demand</td>
-                <td class="location-cell">New York, NY</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.neurovalens.com" target="_blank">Neurovalens</a></td>
-                <td class="funding-cell">$27.8M</td>
-                <td class="focus-cell">Non-invasive wearables · Sleep + anxiety + metabolism</td>
-                <td class="location-cell">Belfast, UK 🇬🇧</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.altoida.com" target="_blank">Altoida</a></td>
-                <td class="funding-cell">$26.3M</td>
-                <td class="focus-cell">AR + AI · Brain health · Alzheimer's prediction</td>
-                <td class="location-cell">Washington, D.C.</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://cumulusneuro.com" target="_blank">Cumulus Neuro</a></td>
-                <td class="funding-cell">$19.6M · Series A</td>
-                <td class="focus-cell">AI cloud platform · Brain physiology · Clinical trials</td>
-                <td class="location-cell">Belfast, UK 🇬🇧</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.resolvebio.com" target="_blank">Resolve BioSciences</a></td>
-                <td class="funding-cell">€95M</td>
-                <td class="focus-cell">Molecular cartography · Neural tissue mapping</td>
-                <td class="location-cell">Germany 🇩🇪</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.omniscientneuro.com" target="_blank">Omniscient Neuro</a></td>
-                <td class="funding-cell">A$60M</td>
-                <td class="focus-cell">Brain mapping · Connectomics · AI neural analysis</td>
-                <td class="location-cell">Sydney, Australia 🇦🇺</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.newronika.com" target="_blank">Newronika</a></td>
-                <td class="funding-cell">€26.2M</td>
-                <td class="focus-cell">Deep brain stimulation · Adaptive neuromodulation</td>
-                <td class="location-cell">Milan, Italy 🇮🇹</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.neurolief.com" target="_blank">Neurolief</a></td>
-                <td class="funding-cell">$25M</td>
-                <td class="focus-cell">ProlivRx · At-home brain stimulation · MDD</td>
-                <td class="location-cell">Tel Aviv, Israel 🇮🇱</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.aiforia.com" target="_blank">Aiforia</a></td>
-                <td class="funding-cell">€21.2M</td>
-                <td class="focus-cell">AI image analysis · Pathology · Brain tissue</td>
-                <td class="location-cell">Helsinki, Finland 🇫🇮</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.corticallabs.com" target="_blank">Cortical Labs</a></td>
-                <td class="funding-cell">$11M</td>
-                <td class="focus-cell">Biological computing · DishBrain · Neurons on chips</td>
-                <td class="location-cell">Melbourne, Australia 🇦🇺</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://arcticshores.com" target="_blank">Arctic Shores</a></td>
-                <td class="funding-cell">$14.6M</td>
-                <td class="focus-cell">AI psychometric tests · Cognitive screening</td>
-                <td class="location-cell">Manchester, UK 🇬🇧</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.nrgtherapeutics.com" target="_blank">NRG Therapeutics</a></td>
-                <td class="funding-cell">$97M · Series B</td>
-                <td class="focus-cell">Mitochondrial drugs · Parkinson's + ALS</td>
-                <td class="location-cell">Cambridge, UK 🇬🇧</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.psilera.com" target="_blank">Psilera</a></td>
-                <td class="funding-cell">$7.6M · Grant</td>
-                <td class="focus-cell">Psychedelic compounds · Non-hallucinogenic mental health</td>
-                <td class="location-cell">Tampa, FL</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.viz.ai" target="_blank">Viz.ai</a></td>
-                <td class="funding-cell">$249.5M</td>
-                <td class="focus-cell">AI stroke detection · Medical imaging</td>
-                <td class="location-cell">Tel Aviv, Israel 🇮🇱</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.huma.com" target="_blank">Huma</a></td>
-                <td class="funding-cell">$155.0M</td>
-                <td class="focus-cell">Digital health platform · Predictive care</td>
-                <td class="location-cell">London, UK 🇬🇧</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.cerecin.com" target="_blank">Cerecin</a></td>
-                <td class="funding-cell">$189.5M</td>
-                <td class="focus-cell">Alzheimer's drugs · Neurodegeneration</td>
-                <td class="location-cell">St. Louis, MO</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.kernel.com" target="_blank">Kernel</a></td>
-                <td class="funding-cell">$160.0M</td>
-                <td class="focus-cell">Non-invasive neuroprosthetics · Human augmentation</td>
-                <td class="location-cell">Los Angeles, CA</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.medtronic.com" target="_blank">Medtronic DBS</a></td>
-                <td class="funding-cell">Public</td>
-                <td class="focus-cell">Deep brain stimulation · Parkinson's</td>
-                <td class="location-cell">Minneapolis, MN</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.abbott.com" target="_blank">Abbott Neuromodulation</a></td>
-                <td class="funding-cell">Public</td>
-                <td class="focus-cell">Vagus nerve stimulation · Tremor + Parkinson's</td>
-                <td class="location-cell">Chicago, IL</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.bostonscientific.com" target="_blank">Boston Scientific NEURO</a></td>
-                <td class="funding-cell">Public</td>
-                <td class="focus-cell">Spinal cord + vagus stimulation</td>
-                <td class="location-cell">Marlborough, MA</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.xp.health" target="_blank">XP Health</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">Digital neuro biomarkers · Stanford spinout</td>
-                <td class="location-cell">San Francisco, CA</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.runelabs.io" target="_blank">Rune Labs</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">Parkinson's monitoring · Apple Watch + BCI</td>
-                <td class="location-cell">San Francisco, CA</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.piramidal.ai" target="_blank">Piramidal</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">NeuroAI · Open-source brain data + AI models</td>
-                <td class="location-cell">Remote</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.mintneuro.com" target="_blank">MintNeuro</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">Miniature neural interfaces · Mental health BCI</td>
-                <td class="location-cell">London, UK 🇬🇧</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.blackrockneurotech.com" target="_blank">Blackrock Neurotech</a></td>
-                <td class="funding-cell">$350M</td>
-                <td class="focus-cell">Utah Array · Longest human BCI dataset</td>
-                <td class="location-cell">Salt Lake City, UT</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.niatherapeutics.com" target="_blank">Nia Therapeutics</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">Closed-loop neurostimulation · Memory loss</td>
-                <td class="location-cell">Philadelphia, PA</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.stairmed.com" target="_blank">StairMed</a></td>
-                <td class="funding-cell">$75M</td>
-                <td class="focus-cell">BCI · Alibaba-led round</td>
-                <td class="location-cell">USA</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.microtransponder.com" target="_blank">MicroTransponder</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">VNS Vivona · Stroke rehab · Paired VNS</td>
-                <td class="location-cell">Dallas, TX</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.nevrocorp.com" target="_blank">Nevro Corp</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">Senza system · Spinal cord stimulation</td>
-                <td class="location-cell">Redwood City, CA</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.insightec.com" target="_blank">Insightec</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">Focused ultrasound · Neuro ablation</td>
-                <td class="location-cell">Haifa, Israel 🇮🇱</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.onwardmedical.com" target="_blank">ONWARD Medical</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">ARC Therapy · Spinal cord injury</td>
-                <td class="location-cell">Eindhoven, Netherlands 🇳🇱</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.livanova.com" target="_blank">LivaNova</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">VNS therapy · Epilepsy + depression</td>
-                <td class="location-cell">London, UK 🇬🇧</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.neuroelectrics.com" target="_blank">Neuroelectrics</a></td>
-                <td class="funding-cell">$35.9M</td>
-                <td class="focus-cell">StarStim · Wireless tDCS/tACS · Barcelona</td>
-                <td class="location-cell">Barcelona, Spain 🇪🇸</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.bitbrain.com" target="_blank">BitBrain</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">BCI research equipment · EEG solutions</td>
-                <td class="location-cell">Zaragoza, Spain 🇪🇸</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.rapidai.com" target="_blank">RapidAI</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">Stroke + aneurysm imaging</td>
-                <td class="location-cell">San Francisco, CA</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr>
-                <td class="name-cell"><a href="https://www.neurotrack.com" target="_blank">Neurotrack</a></td>
-                <td class="funding-cell">—</td>
-                <td class="focus-cell">Cognitive assessment · Digital memory testing</td>
-                <td class="location-cell">San Francisco, CA</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr style="background:rgba(166,87,70,0.08);">
-                <td class="name-cell"><a href="https://www.zanderlabs.com" target="_blank">Zander Labs</a> <span style="background:rgba(166,87,70,0.2);color:#c27060;font-size:0.58rem;padding:1px 5px;border-radius:6px;margin-left:4px;">🌍 NL/DE</span></td>
-                <td class="funding-cell" style="color:#a65746;">€30M contract</td>
-                <td class="focus-cell">Passive BCI · Mental state detection · Neuroadaptive AI · Defense/Robotics</td>
-                <td class="location-cell">Netherlands 🇳🇱 / Germany 🇩🇪</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr style="background:rgba(166,87,70,0.08);">
-                <td class="name-cell"><a href="https://nobi.life" target="_blank">Nobi</a> <span style="background:rgba(166,87,70,0.2);color:#c27060;font-size:0.58rem;padding:1px 5px;border-radius:6px;margin-left:4px;">🌍 BE</span></td>
-                <td class="funding-cell" style="color:#a65746;">€35M ($37M) Series B</td>
-                <td class="focus-cell">AI smart lights · Fall detection · AgeTech · 51% fall reduction</td>
-                <td class="location-cell">Belgium 🇧🇪 · US + UK offices</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr style="background:rgba(166,87,70,0.08);">
-                <td class="name-cell">Hilo <span style="background:rgba(166,87,70,0.2);color:#c27060;font-size:0.58rem;padding:1px 5px;border-radius:6px;margin-left:4px;">🌍 FR</span></td>
-                <td class="funding-cell" style="color:#a65746;">$100M+ total · $42M Series B</td>
-                <td class="focus-cell">AI smart glasses · Cognitive performance · Memory/focus wearable</td>
-                <td class="location-cell">France 🇫🇷</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr style="background:rgba(166,87,70,0.08);">
-                <td class="name-cell">Intellect <span style="background:rgba(166,87,70,0.2);color:#c27060;font-size:0.58rem;padding:1px 5px;border-radius:6px;margin-left:4px;">🌍 SG</span></td>
-                <td class="funding-cell" style="color:#a65746;">$20M+ Series A</td>
-                <td class="focus-cell">Digital mental health · Coaching + therapy · B2B EAP</td>
-                <td class="location-cell">Singapore 🇸🇬</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr style="background:rgba(166,87,70,0.08);">
-                <td class="name-cell">NeuroDrive <span style="background:rgba(166,87,70,0.2);color:#c27060;font-size:0.58rem;padding:1px 5px;border-radius:6px;margin-left:4px;">🌍 SG</span></td>
-                <td class="funding-cell" style="color:#a65746;">~$120K Raised</td>
-                <td class="focus-cell">AI BCI for paralyzed patients · Communication via blinks · TechCrunch Top 200</td>
-                <td class="location-cell">Singapore 🇸🇬</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-            <tr style="background:rgba(166,87,70,0.08);">
-                <td class="name-cell">Neeuro <span style="background:rgba(166,87,70,0.2);color:#c27060;font-size:0.58rem;padding:1px 5px;border-radius:6px;margin-left:4px;">🌍 SG</span></td>
-                <td class="funding-cell" style="color:#a65746;">A*STAR Backed</td>
-                <td class="focus-cell">EEG cognitive monitoring platform · SenzeBand hardware · BCI healthcare (China MOU)</td>
-                <td class="location-cell">Singapore 🇸🇬</td>
-                <td class="hiring-cell hiring-no">—</td>
-            </tr>
-            <tr style="background:rgba(239,68,68,0.12);">
-                <td class="name-cell">SynPhNe <span style="background:rgba(239,68,68,0.3);color:#ef4444;font-size:0.58rem;padding:1px 5px;border-radius:6px;margin-left:4px;">🌍 SG 🔥</span></td>
-                <td class="funding-cell" style="color:#ef4444;font-weight:700;">$5M Series A</td>
-                <td class="focus-cell">BCI wearable for stroke/TBI rehab · NTU spinoff · ACTIVE US RAISE · Indegene partner</td>
-                <td class="location-cell">Singapore 🇸🇬</td>
-                <td class="hiring-cell hiring-yes">✓</td>
-            </tr>
-        </tbody>
-    </table>
-    </div>
-    <div style="margin-top:10px;font-size:0.72rem;color:var(--muted);">
-        <strong style="color:#22c55e;">12 companies actively hiring</strong> · Source: SeedTable · Neurotech Futures · Updated May 13, 2026
-    </div>
-</div>
-
-<!-- Jobs & Career Intelligence -->
-<div class="section">
-    <h2>💼 Jobs & Career Intelligence — Neurotech</h2>
-    <div style="margin-bottom:16px;font-size:0.72rem;color:var(--muted);">
-        Sales → Marketing → Operations → Technical. Sources: Neurotech Futures Job Board · LinkedIn · Wellfound · ZipRecruiter · Company careers pages
-    </div>
-
-    <!-- HOT: Sales/Revenue Roles -->
-    <div style="margin-bottom:12px;">
-        <div style="font-size:0.62rem;text-transform:uppercase;letter-spacing:0.08em;color:#ef4444;margin-bottom:8px;font-weight:700;">🔥 Sales & Revenue — HIGH PRIORITY</div>
-        <div style="display:grid;gap:8px;">
-            <div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:8px;padding:10px 12px;">
-                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
-                    <span style="font-weight:700;font-size:0.8rem;color:#f2ebe1;">Paradromics</span>
-                    <span style="background:rgba(239,68,68,0.2);color:#ef4444;font-size:0.62rem;font-weight:700;padding:2px 6px;border-radius:4px;">🔥 SALES</span>
-                </div>
-                <div style="font-size:0.78rem;color:#ccc;margin-bottom:4px;">VP of Marketing & Brand — <strong style="color:#f59e0b;">$150K–$220K</strong> · Austin TX (on-site)</div>
-                <div style="font-size:0.72rem;color:#94a3b8;">Narrative + movement building + fundraising. Reports to CEO. Technical fluency required.</div>
-                <a href="https://www.linkedin.com/jobs/view/vp-of-marketing-brand-at-paradromics-4402611062" target="_blank" style="color:#818cf8;font-size:0.72rem;text-decoration:none;margin-top:4px;display:inline-block;">→ Apply on LinkedIn</a>
-            </div>
-            <div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:8px;padding:10px 12px;">
-                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
-                    <span style="font-weight:700;font-size:0.8rem;color:#f2ebe1;">Ampa</span>
-                    <span style="background:rgba(239,68,68,0.2);color:#ef4444;font-size:0.62rem;font-weight:700;padding:2px 6px;border-radius:4px;">🔥 SALES</span>
-                </div>
-                <div style="font-size:0.78rem;color:#ccc;margin-bottom:4px;">Sales Executive — <strong style="color:#f59e0b;">$150K–$190K</strong> · Remote</div>
-                <div style="font-size:0.72rem;color:#94a3b8;">Neurotech sales role. Territory management. Medical device or healthtech experience preferred.</div>
-                <a href="https://www.ziprecruiter.com/co/ampa/Jobs" target="_blank" style="color:#818cf8;font-size:0.72rem;text-decoration:none;margin-top:4px;display:inline-block;">→ Apply on ZipRecruiter</a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Operations & Biz Ops -->
-    <div style="margin-bottom:12px;">
-        <div style="font-size:0.62rem;text-transform:uppercase;letter-spacing:0.08em;color:#f59e0b;margin-bottom:8px;font-weight:700;">⚡ Operations & Business</div>
-        <div style="display:grid;gap:8px;">
-            <div style="background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.15);border-radius:8px;padding:10px 12px;">
-                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
-                    <span style="font-weight:700;font-size:0.8rem;color:#f2ebe1;">Neuralink</span>
-                    <span style="background:rgba(245,158,11,0.2);color:#f59e0b;font-size:0.62rem;font-weight:700;padding:2px 6px;border-radius:4px;">OPS</span>
-                </div>
-                <div style="font-size:0.78rem;color:#ccc;margin-bottom:4px;">Product Operations — <strong style="color:#f59e0b;">$68K–$114K</strong> · Fremont CA</div>
-                <div style="font-size:0.72rem;color:#94a3b8;">Non-technical ops role at the world's highest-profile BCI. Close to engineering and clinical teams.</div>
-                <a href="https://neuralink.com/careers/" target="_blank" style="color:#818cf8;font-size:0.72rem;text-decoration:none;margin-top:4px;display:inline-block;">→ neuralink.com/careers</a>
-            </div>
-            <div style="background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.15);border-radius:8px;padding:10px 12px;">
-                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
-                    <span style="font-weight:700;font-size:0.8rem;color:#f2ebe1;">Theranica</span>
-                    <span style="background:rgba(245,158,11,0.2);color:#f59e0b;font-size:0.62rem;font-weight:700;padding:2px 6px;border-radius:4px;">OPS</span>
-                </div>
-                <div style="font-size:0.78rem;color:#ccc;margin-bottom:4px;">Director of Operations — Remote · US (neuromodulation therapeutics)</div>
-                <div style="font-size:0.72rem;color:#94a3b8;">Manages product delivery lifecycle. Neromodulation / medical device background preferred.</div>
-                <a href="https://neurotechjobs.io/" target="_blank" style="color:#818cf8;font-size:0.72rem;text-decoration:none;margin-top:4px;display:inline-block;">→ neurotechjobs.io</a>
-            </div>
-            <div style="background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.15);border-radius:8px;padding:10px 12px;">
-                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
-                    <span style="font-weight:700;font-size:0.8rem;color:#f2ebe1;">LivaNova</span>
-                    <span style="background:rgba(245,158,11,0.2);color:#f59e0b;font-size:0.62rem;font-weight:700;padding:2px 6px;border-radius:4px;">OPS</span>
-                </div>
-                <div style="font-size:0.78rem;color:#ccc;margin-bottom:4px;">Director, Neuromodulation Project Head — <strong style="color:#f59e0b;">$215K–$250K</strong> · Austin TX</div>
-                <div style="font-size:0.72rem;color:#94a3b8;">P&L ownership for neuromodulation portfolio. Strategy + execution. 5+ years in medtech.</div>
-                <a href="https://neurotechjobs.io/" target="_blank" style="color:#818cf8;font-size:0.72rem;text-decoration:none;margin-top:4px;display:inline-block;">→ neurotechjobs.io</a>
-            </div>
-            <div style="background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.15);border-radius:8px;padding:10px 12px;">
-                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
-                    <span style="font-weight:700;font-size:0.8rem;color:#f2ebe1;">Cala Health</span>
-                    <span style="background:rgba(245,158,11,0.2);color:#f59e0b;font-size:0.62rem;font-weight:700;padding:2px 6px;border-radius:4px;">OPS</span>
-                </div>
-                <div style="font-size:0.78rem;color:#ccc;margin-bottom:4px;">Controller — <strong style="color:#f59e0b;">$190K–$240K</strong> · San Mateo CA</div>
-                <div style="font-size:0.72rem;color:#94a3b8;">CPA, GAAP, Big 4 experience. NetSuite + Medicare revenue cycle. VC-backed medtech scale.</div>
-                <a href="https://jobs.gv.com/jobs/cala-health" target="_blank" style="color:#818cf8;font-size:0.72rem;text-decoration:none;margin-top:4px;display:inline-block;">→ jobs.gv.com/jobs/cala-health</a>
-            </div>
-            <div style="background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.15);border-radius:8px;padding:10px 12px;">
-                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
-                    <span style="font-weight:700;font-size:0.8rem;color:#f2ebe1;">Cala Health</span>
-                    <span style="background:rgba(245,158,11,0.2);color:#f59e0b;font-size:0.62rem;font-weight:700;padding:2px 6px;border-radius:4px;">OPS</span>
-                </div>
-                <div style="font-size:0.78rem;color:#ccc;margin-bottom:4px;">Manager, People Operations — <strong style="color:#f59e0b;">$110K–$175K</strong> · San Mateo CA</div>
-                <div style="font-size:0.72rem;color:#94a3b8;">Employee relations, change management, performance management. HR leadership at growth-stage medtech.</div>
-                <a href="https://jobs.gv.com/jobs/cala-health" target="_blank" style="color:#818cf8;font-size:0.72rem;text-decoration:none;margin-top:4px;display:inline-block;">→ jobs.gv.com/jobs/cala-health</a>
-            </div>
-            <div style="background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.15);border-radius:8px;padding:10px 12px;">
-                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
-                    <span style="font-weight:700;font-size:0.8rem;color:#f2ebe1;">Cala Health</span>
-                    <span style="background:rgba(245,158,11,0.2);color:#f59e0b;font-size:0.62rem;font-weight:700;padding:2px 6px;border-radius:4px;">OPS</span>
-                </div>
-                <div style="font-size:0.78rem;color:#ccc;margin-bottom:4px;">Revenue Cycle Specialist — Remote</div>
-                <div style="font-size:0.72rem;color:#94a3b8;">Salesforce + Medicare revenue cycle for wearable neuro device. Medical device or healthtech billing experience.</div>
-                <a href="https://jobs.gv.com/jobs/cala-health" target="_blank" style="color:#818cf8;font-size:0.72rem;text-decoration:none;margin-top:4px;display:inline-block;">→ jobs.gv.com/jobs/cala-health</a>
-            </div>
-            <div style="background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.15);border-radius:8px;padding:10px 12px;">
-                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
-                    <span style="font-weight:700;font-size:0.8rem;color:#f2ebe1;">Attune Neurosciences</span>
-                    <span style="background:rgba(245,158,11,0.2);color:#f59e0b;font-size:0.62rem;font-weight:700;padding:2px 6px;border-radius:4px;">OPS</span>
-                </div>
-                <div style="font-size:0.78rem;color:#ccc;margin-bottom:4px;">Clinical Research Manager — <strong style="color:#f59e0b;">$120K–$130K</strong> · San Francisco CA</div>
-                <div style="font-size:0.72rem;color:#94a3b8;">Trial management for anesthesiology/neurosurgery BCI device. CRO or sponsor side experience.</div>
-                <a href="https://neurotechjobs.io/" target="_blank" style="color:#818cf8;font-size:0.72rem;text-decoration:none;margin-top:4px;display:inline-block;">→ neurotechjobs.io</a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Marketing & Partnerships -->
-    <div style="margin-bottom:12px;">
-        <div style="font-size:0.62rem;text-transform:uppercase;letter-spacing:0.08em;color:#22c55e;margin-bottom:8px;font-weight:700;">📣 Marketing & Community</div>
-        <div style="display:grid;gap:8px;">
-            <div style="background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.15);border-radius:8px;padding:10px 12px;">
-                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
-                    <span style="font-weight:700;font-size:0.8rem;color:#f2ebe1;">Science Corporation</span>
-                    <span style="background:rgba(34,197,94,0.2);color:#22c55e;font-size:0.62rem;font-weight:700;padding:2px 6px;border-radius:4px;">MKTG</span>
-                </div>
-                <div style="font-size:0.78rem;color:#ccc;margin-bottom:4px;">Head of Demand Gen (Digital Marketing) — <strong style="color:#f59e0b;">$150K–$220K</strong> · Alameda CA</div>
-                <div style="font-size:0.72rem;color:#94a3b8;">PRIMA subretinal prosthesis — demand generation, campaigns, lifecycle marketing. Medtech or ophthalmology a plus.</div>
-                <a href="https://neurotechjobs.io/" target="_blank" style="color:#818cf8;font-size:0.72rem;text-decoration:none;margin-top:4px;display:inline-block;">→ neurotechjobs.io</a>
-            </div>
-            <div style="background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.15);border-radius:8px;padding:10px 12px;">
-                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
-                    <span style="font-weight:700;font-size:0.8rem;color:#f2ebe1;">Cala Health</span>
-                    <span style="background:rgba(34,197,94,0.2);color:#22c55e;font-size:0.62rem;font-weight:700;padding:2px 6px;border-radius:4px;">🔥 SALES</span>
-                </div>
-                <div style="font-size:0.78rem;color:#ccc;margin-bottom:4px;">Director, Marketing — <strong style="color:#f59e0b;">$170K–$220K</strong> · San Mateo CA</div>
-                <div style="font-size:0.72rem;color:#94a3b8;">Commercialization lead for FDA-cleared wearable tremor therapy. Full-funnel marketing, diagnostics, regulated device experience required.</div>
-                <a href="https://jobs.gv.com/jobs/cala-health" target="_blank" style="color:#818cf8;font-size:0.72rem;text-decoration:none;margin-top:4px;display:inline-block;">→ jobs.gv.com/jobs/cala-health</a>
-            </div>
-            <div style="background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.15);border-radius:8px;padding:10px 12px;">
-                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
-                    <span style="font-weight:700;font-size:0.8rem;color:#f2ebe1;">Attune Neurosciences</span>
-                    <span style="background:rgba(34,197,94,0.2);color:#22c55e;font-size:0.62rem;font-weight:700;padding:2px 6px;border-radius:4px;">MKTG</span>
-                </div>
-                <div style="font-size:0.78rem;color:#ccc;margin-bottom:4px;">Trial Recruitment Specialist — <strong style="color:#f59e0b;">$75K–$95K</strong> · San Francisco CA</div>
-                <div style="font-size:0.72rem;color:#94a3b8;">Patient recruitment for anesthesiology/BCI trials. Community building, referral programs, site coordination.</div>
-                <a href="https://neurotechjobs.io/" target="_blank" style="color:#818cf8;font-size:0.72rem;text-decoration:none;margin-top:4px;display:inline-block;">→ neurotechjobs.io</a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Participation Pointers -->
-    <div style="background:rgba(166,87,70,0.1);border:1px solid rgba(166,87,70,0.25);border-radius:10px;padding:14px;margin-top:4px;">
-        <div style="font-size:0.62rem;text-transform:uppercase;letter-spacing:0.08em;color:#a65746;margin-bottom:10px;font-weight:700;">🎯 Role Summaries + How to Stand Out</div>
-
-        <!-- Paradromics VP Marketing -->
-        <div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.06);">
-            <div style="font-size:0.78rem;font-weight:700;color:#f2ebe1;margin-bottom:4px;">Paradromics — VP Marketing & Brand</div>
-            <div style="font-size:0.72rem;color:#94a3b8;margin-bottom:6px;"><strong style="color:#f59e0b;">What it actually is:</strong> This is a founder-level narrative job. Matt Angle (CEO) just completed the first human BCI implant (June 2025). The company is about to raise a landmark round. They're not looking for a product marketer — they're looking for someone who can make Paradromics the Neuralink alternative that institutional VCs and the public believe in. The narrative has to work on patients, investors, regulators, and the scientific community simultaneously.</div>
-            <div style="font-size:0.7rem;color:#ccc;margin-bottom:6px;"><strong style="color:#818cf8;">Participation pointer:</strong> Before applying, read Matt Angle's 2024 Nature paper on the neural interface architecture. Come with a one-pager: "Three narratives Paradromics should own that Neuralink can't." That's your interview opener. The VP who walks in knowing the science and the story wins. Follow the company on LinkedIn — Matt Angle posts frequently about BCI milestones. Reference a specific post in your outreach.</div>
-            <div style="font-size:0.7rem;color:#b0b0b0;"><strong style="color:#22c55e;">MBA edge:</strong> You don't need a neuroscience degree — you need to show you can translate "high-density neural recording at 192 channels" into a sentence a pension fund will invest in. Frame it as category creation, not marketing.</div>
-        </div>
-
-        <!-- Neuralink Product Operations -->
-        <div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.06);">
-            <div style="font-size:0.78rem;font-weight:700;color:#f2ebe1;margin-bottom:4px;">Neuralink — Product Operations</div>
-            <div style="font-size:0.72rem;color:#94a3b8;margin-bottom:6px;"><strong style="color:#f59e0b;">What it actually is:</strong> Non-technical project coordinator role at the world's most watched BCI company. You'll be the connective tissue between the engineering team (building the N1 chip) and the clinical team (running the PRIME study). Think: timeline management, cross-functional sync, risk tracking, vendor coordination. It's a $68K–$114K ops role — not glamorous, but近距离 the science.</div>
-            <div style="font-size:0.7rem;color:#ccc;margin-bottom:6px;"><strong style="color:#818cf8;">Participation pointer:</strong> Study Neuralink's FDA approval journey — the FDA rejected them twice before approving the human trial. Know the specific failure points (N1 chip biocompatibility, animal welfare concerns). Ask during interview: "What was the hardest operational lesson from the FDA rejection and how would you structure the ops process differently?" Shows you did your homework.</div>
-            <div style="font-size:0.7rem;color:#b0b0b0;"><strong style="color:#22c55e;">MBA edge:</strong> MBA gives you the systems-thinking lens: how does a project this complex not fall apart? Frame your experience with multi-stakeholder coordination, not just project management terminology.</div>
-        </div>
-
-        <!-- LivaNova Director -->
-        <div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.06);">
-            <div style="font-size:0.78rem;font-weight:700;color:#f2ebe1;margin-bottom:4px;">LivaNova — Director, Neuromodulation Project Head</div>
-            <div style="font-size:0.72rem;color:#94a3b8;margin-bottom:6px;"><strong style="color:#f59e0b;">What it actually is:</strong> P&L owner for a portfolio of neuromodulation devices (VNS therapy for epilepsy, depression). At $215K–$250K, this is medtech scale — LivaNova is public, established, and has an existing salesforce. You're not building a category; you're maximizing an existing one. Strategy + execution across clinical, commercial, and regulatory.</div>
-            <div style="font-size:0.7rem;color:#ccc;margin-bottom:6px;"><strong style="color:#818cf8;">Participation pointer:</strong> LivaNova's neuromodulation division has been in steady competition with SetPoint Medical and Synchron. Know the competitive landscape: VNS vs. SCS vs. DBS. Read the last two earnings calls for the neuromodulation segment. Come with a one-slide market view: "Where is the growth vector — refractory depression or chronic pain?"</div>
-            <div style="font-size:0.7rem;color:#b0b0b0;"><strong style="color:#22c55e;">MBA edge:</strong> This is the most MBA-traditional role on the list. The case method training is your advantage here — show structured thinking about portfolio allocation and market entry vs. market deepening. Use frameworks explicitly.</div>
-        </div>
-
-        <!-- Science Corp Head of Demand Gen -->
-        <div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.06);">
-            <div style="font-size:0.78rem;font-weight:700;color:#f2ebe1;margin-bottom:4px;">Science Corporation — Head of Demand Generation</div>
-            <div style="font-size:0.72rem;color:#94a3b8;margin-bottom:6px;"><strong style="color:#f59e0b;">What it actually is:</strong> Science Corp makes the PRIMA subretinal prosthesis — a retinal implant for blind patients. This is a $150K–$220K demand gen role for a product that has an FDA approval and is currently scaling commercial operations. You're not creating a category; you're activating a patient community that's been waiting for this technology.</div>
-            <div style="font-size:0.7rem;color:#ccc;margin-bottom:6px;"><strong style="color:#818cf8;">Participation pointer:</strong> The PRIMA implant has 2-year clinical data showing significant visual acuity improvement. The patient community (retinitis pigmentosa, age-related macular degeneration) is passionate and organized. Know the specific patient advocacy groups — Foundation for Retinal Research, RD Support Group. Your demand gen strategy lives and dies by patient referral networks and ophthalmologist relationships. Read the PRIMA clinical papers (2–3 pages, accessible) and come knowing the activation funnel.</div>
-            <div style="font-size:0.7rem;color:#b0b0b0;"><strong style="color:#22c55e;">MBA edge:</strong> Rare disease + medical device = ultra-specific demand gen. MBA gives you the frameworks for channel strategy and customer acquisition cost modeling that pure marketers miss. Bring a rough CAC analysis for an ophthalmology referral program.</div>
-        </div>
-
-        <!-- Ampa Sales Executive -->
-        <div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.06);">
-            <div style="font-size:0.78rem;font-weight:700;color:#f2ebe1;margin-bottom:4px;">Ampa — Sales Executive</div>
-            <div style="font-size:0.72rem;color:#94a3b8;margin-bottom:6px;"><strong style="color:#f59e0b;">What it actually is:</strong> Ampa appears to be a neurotech peripheral or therapeutic device company. The $150K–$190K band + territory management + medical device context suggests a quota-carrying role. Not a startup founder sales hire — an established company building a sales motion. Remote is real here.</div>
-            <div style="font-size:0.7rem;color:#ccc;margin-bottom:6px;"><strong style="color:#818cf8;">Participation pointer:</strong> Find Ampa's actual product — search "Ampa neurotech" and "Ampa therapeutics" before applying. The job posting is generic. Know what they actually sell. A candidate who walks in knowing the product landscape in their territory and has a territory build plan in hand is a 10x stronger candidate. Ask in interview: "What's the current channel mix — direct to clinic or distributor model?"</div>
-            <div style="font-size:0.7rem;color:#b0b0b0;"><strong style="color:#22c55e;">MBA edge:</strong> The MBA gives you strategic account planning skills — not just closing, but territory design and long-term relationship architecture. Frame yourself as a strategic territory builder, not a transaction closer.</div>
-        </div>
-
-        <!-- Theranica Director Ops -->
-        <div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.06);">
-            <div style="font-size:0.78rem;font-weight:700;color:#f2ebe1;margin-bottom:4px;">Theranica — Director of Operations</div>
-            <div style="font-size:0.72rem;color:#94a3b8;margin-bottom:6px;"><strong style="color:#f59e0b;">What it actually is:</strong> Theranica makes the Nerivio device — a remote electrical neuromodulation wearable for migraine (FDA-cleared, smartphone-controlled). This is a digital health company scaling product delivery globally. "Product delivery lifecycle" = supply chain + partner channel management + reimbursement ops.</div>
-            <div style="font-size:0.7rem;color:#ccc;margin-bottom:6px;"><strong style="color:#818cf8;">Participation pointer:</strong> Theranica just closed a Series C (late 2024). They expanded into Europe. The operational challenge at this stage is typically: scaling from 10K to 100K patients, negotiating with insurers for coverage, managing contract manufacturers. Know the digital health reimbursement landscape — FDA-cleared devices still face insurance coverage gaps. Ask: "Walk me through the payer coverage strategy for Nerivio in the US vs. EU."</div>
-            <div style="font-size:0.7rem;color:#b0b0b0;"><strong style="color:#22c55e;">MBA edge:</strong> Operations in digital health = supply chain + reimbursement + compliance. MBA case prep on CSV (PepsiCo/NNF) is actually relevant here — you're managing a company where the "social value" narrative (migraine relief) and the commercial model have to align. Show you understand the payer landscape.</div>
-        </div>
-
-        <!-- Attune Clinical Research Manager -->
-        <div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.06);">
-            <div style="font-size:0.78rem;font-weight:700;color:#f2ebe1;margin-bottom:4px;">Attune Neurosciences — Clinical Research Manager</div>
-            <div style="font-size:0.72rem;color:#94a3b8;margin-bottom:6px;"><strong style="color:#f59e0b;">What it actually is:</strong> Attune is an early-stage BCI company focused on anesthesiology applications (preventing anesthesia awareness during surgery). The clinical research manager runs trial operations — site management, IRB submissions, patient recruitment, CRO oversight. It's a hands-on, compliance-heavy role.</div>
-            <div style="font-size:0.7rem;color:#ccc;margin-bottom:6px;"><strong style="color:#818cf8;">Participation pointer:</strong> Anesthesia awareness during surgery is a $1B+ problem (literature estimate). Attune's solution: a closed-loop EEG-based monitoring system. The trial design question: how do you design a trial for a safety-critical device when "no anesthesia awareness" is the desired outcome? Come knowing the FDA's TAP (Total Product Life Cycle) approach for neurological devices. Ask: "How would you structure the pivotal trial given the safety signal?"</div>
-            <div style="font-size:0.7rem;color:#b0b0b0;"><strong style="color:#22c55e;">MBA edge:</strong> Clinical trial design from a business lens — risk-adjusted trial architecture, CRO vendor selection, site selection for patient diversity. Your MBA training in structured decision-making under uncertainty is directly applicable.</div>
-        </div>
-
-        <!-- Attune Trial Recruitment Specialist -->
-        <div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.06);">
-            <div style="font-size:0.78rem;font-weight:700;color:#f2ebe1;margin-bottom:4px;">Attune Neurosciences — Trial Recruitment Specialist</div>
-            <div style="font-size:0.72rem;color:#94a3b8;margin-bottom:6px;"><strong style="color:#f59e0b;">What it actually is:</strong> Patient recruitment for a surgical trial — patients undergoing general anesthesia who might experience awareness. The job is community building, site coordination, and referral network activation. $75K–$95K reflects the seniority level — this is a doer role, not a manager role.</div>
-            <div style="font-size:0.7rem;color:#ccc;margin-bottom:6px;"><strong style="color:#818cf8;">Participation pointer:</strong> Anesthesia awareness patients are a specific, hard-to-reach population — most people don't know they've experienced it until it's identified. Recruitment strategies: pre-op anesthesia education, patient forums (FDA's Patient Representative Program), anesthesiology department partnerships. Come with a 30-60-90 day recruitment plan template and you've already shown you can do the job.</div>
-            <div style="font-size:0.7rem;color:#b0b0b0;"><strong style="color:#22c55e;">MBA edge:</strong> Even for an MBA, this is a "foot in the door" role at a company with potential. The Director path from Clinical Research Manager at Attune is a real trajectory — if the pivotal trial succeeds and the company raises a Series B, the whole clinical org scales. Apply even if you think you're overqualified — the MBA gets you in the door for the next role.</div>
-        </div>
-
-        <!-- Bottom line -->
-        <div style="background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.2);padding:10px 12px;border-radius:8px;margin-top:6px;">
-            <div style="font-size:0.68rem;text-transform:uppercase;letter-spacing:0.06em;color:#818cf8;margin-bottom:4px;font-weight:700;">Bottom Line for Jordan</div>
-            <div style="font-size:0.72rem;color:#b0b0b0;line-height:1.6;">Best single application: <strong style="color:#f2ebe1;">Paradromics VP Marketing</strong> — highest upside, most aligned with your narrative-building skills, and it comes before a major fundraising. Second: <strong style="color:#f2ebe1;">LivaNova Director</strong> — most likely to actually hire you, clearest path from MBA to P&L ownership in medtech. The others are real opportunities but require more specific domain knowledge or are harder to land from Madrid.</div>
-        </div>
-    </div>
-
-    <!-- Job Boards -->
-    <div style="margin-top:12px;font-size:0.72rem;color:var(--muted);">
-        <strong style="color:var(--text);">Job boards:</strong>
-        <a href="https://neurotechjobs.io/" target="_blank" style="color:#818cf8;text-decoration:none;">neurotechjobs.io</a> ·
-        <a href="https://www.linkedin.com/jobs/neurotech-jobs" target="_blank" style="color:#818cf8;text-decoration:none;">LinkedIn Neurotech</a> ·
-        <a href="https://wellfound.com/" target="_blank" style="color:#818cf8;text-decoration:none;">Wellfound</a> ·
-        <a href="https://neurotechx.com/find-a-job/" target="_blank" style="color:#818cf8;text-decoration:none;">NeuroTechX</a>
-    </div>
-</div>
-
-<!-- Data Sources -->
-<div class="section">
-    <h2>📚 Sources</h2>
-    <div style="display: grid; gap: 8px; font-size: 0.8rem; color: var(--muted);">
-        <div>• <strong style="color:var(--text)">Neurotech Futures</strong> — Notables #55 (Jun 2, 2026), Signals #06 (May 15, 2026) (neurotechnology.substack.com)</div>
-        <div>• <strong style="color:var(--text)">Rice University News</strong> — Motif Neurotech FDA trial approval (Apr 28, 2026)</div>
-        <div>• <strong style="color:var(--text)">SeedTable</strong> — 54 BCI startups · 127+ total companies · $5.4B aggregate funding</div>
-        <div>• <strong style="color:var(--text)">Neurofounders</strong> — BCI funding map and ecosystem directory (neurofounders.co)</div>
-        <div>• <strong style="color:var(--text)">CNBC / Tech Press</strong> — Human implant milestones and big rounds</div>
-        <div>• <strong style="color:var(--text)">Tracxn / Crunchbase</strong> — Funding database</div>
-    </div>
+    <h2>🤝 Notable Partnerships</h2>
+    <div id="partnerships"><div class="loading">Loading...</div></div>
 </div>
 
 <div class="footer">
-    Neurotech Intelligence Dashboard · Hermes cron daily 10AM · Data: Neurotech Futures, Rice News, SeedTable, Neurofounders, Crunchbase<br>
-    <span id="file-path">/Users/jordan/workspace/007-Axton/neurotech/dashboards/neurotech-dashboard.html</span>
+    Neurotech Intelligence · Automated daily brief for Jordan Hays
 </div>
 
 <script>
-        document.getElementById('updated').textContent = 'Updated: July 24, 2026 08:00 AM · Web search unavailable — no new neurotech data today';
-document.getElementById('file-path').textContent = '/Users/jordan/workspace/007-Axton/neurotech/dashboards/neurotech-dashboard.html';
+function render(data) {
+    document.getElementById('updated').textContent = 'Last updated: ' + new Date().toLocaleString();
+
+    if (data.alert) {
+        document.getElementById('alert').textContent = '⚠️ ' + data.alert;
+        document.getElementById('alert').style.display = 'block';
+    } else {
+        document.getElementById('alert').style.display = 'none';
+    }
+
+    document.getElementById('company-count').textContent = data.companies?.length || 0;
+    document.getElementById('hiring-count').textContent = data.hiring?.length || 0;
+    document.getElementById('deals-count').textContent = data.deals?.length || 0;
+
+    // Hiring list
+    const hiring = data.hiring || [];
+    document.getElementById('hiring-list').innerHTML = hiring.length
+        ? hiring.map(h => `
+            <div class="hiring-row">
+                <div class="title">${h.title} <span class="${h.signal === 'HOT' ? 'hot' : ''}">[${h.signal}]</span></div>
+                <div class="company">${h.company} — ${h.type}</div>
+                <a class="link" href="${h.link}" target="_blank">View Posting →</a>
+            </div>
+        `).join('')
+        : '<div class="row"><div class="name" style="color:#475569">No active postings found today</div></div>';
+
+    // Top companies
+    const companies = data.companies || [];
+    document.getElementById('top-companies').innerHTML = companies.slice(0, 8).map(c => `
+        <div class="company-card">
+            <div class="name">${c.name} <span class="tag tag-${c.tag || 'new'}">${c.tag || ''}</span></div>
+            <div class="desc">${c.description}</div>
+            <div class="value">${c.valuation || '—'}</div>
+        </div>
+    `).join('') || '<div class="row"><div class="name" style="color:#475569">No data available</div></div>';
+
+    // Recent deals
+    const deals = data.deals || [];
+    document.getElementById('recent-deals').innerHTML = deals.length
+        ? deals.map(d => `<div class="row"><div><div class="name">${d.company}</div><div class="meta">${d.round} · ${d.amount}</div></div></div>`).join('')
+        : '<div class="row"><div class="name" style="color:#475569">No new deals today</div></div>';
+
+    // New entrants
+    const entrants = data.newEntrants || [];
+    document.getElementById('new-entrants').innerHTML = entrants.length
+        ? entrants.map(e => `<div class="row"><div><div class="name">${e.name}</div><div class="meta">${e.focus}</div></div><span class="tag tag-new">New</span></div>`).join('')
+        : '<div class="row"><div class="name" style="color:#475569">No new entrants today</div></div>';
+
+    // Clinical
+    const clinical = data.clinical || [];
+    document.getElementById('clinical').innerHTML = clinical.length
+        ? clinical.map(c => `<div class="row"><div><div class="name">${c.name}</div><div class="meta">${c.milestone}</div></div><span class="tag tag-clinical">${c.status}</span></div>`).join('')
+        : '<div class="row"><div class="name" style="color:#475569">No clinical updates today</div></div>';
+
+    // Partnerships
+    const partnerships = data.partnerships || [];
+    document.getElementById('partnerships').innerHTML = partnerships.length
+        ? partnerships.map(p => `<div class="row"><div><div class="name">${p.parties}</div><div class="meta">${p.focus}</div></div><span class="tag tag-partnership">Partnership</span></div>`).join('')
+        : '<div class="row"><div class="name" style="color:#475569">No new partnerships today</div></div>';
+}
+
+// Updated data — 2026-08-06 08:00 AM — Morning scan: Gestala $21M (China), $1.2B+ neurotech 2026 confirmed
+const defaultData = {
+    alert: "Aug 6, 2026 — Morning scan: Gestala (China) $21M ultrasound BCI; $1.2B+ neurotech funding confirmed in 2026 (Merge $250M+, BrainCo $280M, Science Corp $230M, Cognito $105M, Beacon $97M, Axoft $55M, Nervonik $52.5M). BCI funding tracking $1.75B/12mo.",
+    companies: [
+        {name: "Flourish", description: "NeuroAI company; CTRL-labs founder Thomas Reardon; $500M Bezos at $2.5B valuation", valuation: "$2.5B (Jun 2026)", tag: "new"},
+        {name: "Merge Labs", description: "Sam Altman's BCI startup; $252M seed led by OpenAI — largest single seed in neurotech history", valuation: "$252M seed (Jan 2026)", tag: "new"},
+        {name: "Salma Health", description: "Brain health centers of excellence; $80M Series A; rapid-acting TMS/SAINT/Spravato", valuation: "$80M Series A", tag: "new"},
+        {name: "Pharaoh Neuro", description: "$20M raised; former Medtronic exec Amara Reitmeier named CEO", valuation: "$20M Series A", tag: "new"},
+        {name: "Echo Neurotechnologies", description: "Stealth BCI startup led by Edward Chang; Intel strategic partnership for brain-inspired AI chips", valuation: "Stealth", tag: "new"},
+        {name: "ReVision Implant", description: "Neurotech implant startup; €4M funding (May 2026); focus on implantable neuro devices", valuation: "€4M (May 2026)", tag: "new"},
+        {name: "Connectome", description: "Personalised brain health insights and early cognitive change detection; €1.7M (Apr 2026)", valuation: "€1.7M (Apr 2026)", tag: "new"},
+        {name: "Neurable", description: "Everyday BCI wearables; $35M Series A (Dec 2025); HyperX gaming headset OEM; scaling global OEM integration 2026", valuation: "$35M Series A", tag: "clinical"},
+        {name: "Science Corp", description: "Brain implant; $230M to fast-track launch (Mar 2026); Neurosoft Bioelectronics partnership", valuation: "$230M (Mar 2026)", tag: "clinical"},
+        {name: "Cognito Therapeutics", description: "Alzheimer's neurotechnology platform; $105M (Mar 2026); non-invasive neuromodulation for cognitive decline", valuation: "$105M (Mar 2026)", tag: "clinical"},
+        {name: "Neuralink", description: "Samsung R&D contract for 4th-gen chips; production scheduled 2027; 26th patient enrolled Jun 22, 2026", valuation: "Series C ($9B reported)", tag: "clinical"},
+        {name: "Motif Neurotech", description: "Psychiatric BCI for treatment-resistant depression; FDA-approved RESONATE trial; MintNeuro chip partnership", valuation: "$55M raised + ARPA-H/ARIA grants", tag: "clinical"},
+        {name: "Paradromics", description: "High-density intraneural BCI; FDA Connexus study approved; FIH announced Jun 2026", valuation: "Series A", tag: "clinical"},
+        {name: "Synchron", description: "Stentrode endovascular BCI; $200M Series D; San Diego move", valuation: "$200M Series D (~$1B)", tag: "clinical"},
+        {name: "Blackrock Neurotech", description: "Utah Array commercial leader; 45+ patients with implants; new ops roles open", valuation: "$150M raised", tag: "clinical"},
+        {name: "ABILITY Neurotech", description: "BCI for ALS patients; IMDD FDA approval May 2026 for human trial", valuation: "Series A (est.)", tag: "clinical"},
+        {name: "Neurovalens", description: "Non-invasive neuromodulation; 4x FDA approvals (PTSD, Essential Tremor); Keegoo device", valuation: "Public (NVLS)", tag: "clinical"},
+        {name: "Neurosoft Bioelectronics", description: "Stretchable BCI electrodes; $7.5M seed; Science Corp partnership; NYC office", valuation: "$7.5M seed", tag: "clinical"},
+        {name: "GT Medical Technologies", description: "GammaTile brain tumor radiation; $100M Series E oversubscribed", valuation: "$100M Series E", tag: "clinical"},
+        {name: "Nyxoah", description: "Implantable neuromodulation for OSA; $95M IPO priced Jun 2026", valuation: "$95M IPO", tag: "clinical"}
+        {name: "Mobia", description: "19-year $165M IPO journey (Jun 2026); neurotechnology health monitoring platform", valuation: "$165M raised", tag: "new"},
+        {name: "CereVasc", description: "eShunt for hydrocephalus; $85M Series C oversubscribed", valuation: "$85M Series C", tag: "clinical"}
+    ],
+    hiring: [
+        // NEW — Jul 16, 2026 — Notables #57 + confirmed job boards
+        {company: "Motif Neurotech", title: "Director of Clinical Science and Applied Research", signal: "OK", type: "ops", link: "https://job-boards.greenhouse.io/motifneurotech/jobs/5346662008"},
+        {company: "Motif Neurotech", title: "Director of Manufacturing Operations (Medical Device)", signal: "OK", type: "ops", link: "https://job-boards.greenhouse.io/motifneurotech/jobs/5345158008"},
+        {company: "Synchron", title: "Field BCI Specialist — Indiana", signal: "OK", type: "ops", link: "https://workforcenow.adp.com/mascsr/default/mdf/recruitment/recruitment.html?cid=d290c04e-0230-4cd9-8bf0-f116bfab1405&ccId=19000101_000003&lang=en_US&jobId=9201609769879_1"},
+        {company: "Synchron", title: "Field BCI Specialist — Orlando, FL", signal: "OK", type: "ops", link: "https://workforcenow.adp.com/mascsr/default/mdf/recruitment/recruitment.html?cid=d290c04e-0230-4cd9-8bf0-f116bfab1405&ccId=19000101_000003&lang=en_US&jobId=9201602197710_1"},
+        {company: "Synchron", title: "Field BCI Specialist — Buffalo, NY", signal: "OK", type: "ops", link: "https://workforcenow.adp.com/mascsr/default/mdf/recruitment/recruitment.html?cid=d290c04e-0230-4cd9-8bf0-f116bfab1405&ccId=19000101_000003&lang=en_US&jobId=9201609762270_1"},
+        {company: "Synchron", title: "Senior Director, Regulatory Affairs", signal: "OK", type: "ops", link: "https://www.synchron.com/careers"},
+        // Notables #57 — Neurotechjobs.io new roles (confirmed Jul 1, 2026)
+        {company: "Neurobionics", title: "Open Roles (check site)", signal: "OK", type: "ops", link: "https://jobs.polymer.co/neurobionics"},
+        {company: "Nudge", title: "Open Roles (check site)", signal: "OK", type: "ops", link: "https://neurotechjobs.io"},
+        {company: "Blackrock Neurotech", title: "Open Roles", signal: "OK", type: "ops", link: "https://www.blackrockneurotech.com/careers"},
+        {company: "Beacon Biosignals", title: "Business Development Manager", signal: "HOT", type: "sales", link: "https://www.linkedin.com/jobs/view/business-development-manager-at-beacon-biosignals"},
+        // From Jun 25
+        {company: "Neurotech Pharmaceuticals", title: "Senior Director National Accounts", signal: "HOT", type: "sales", link: "https://www.linkedin.com/jobs/view/senior-director-national-accounts-at-neurotech-pharmaceuticals"},
+        {company: "Neurotech Pharmaceuticals", title: "Director of National Accounts", signal: "HOT", type: "sales", link: "https://www.linkedin.com/jobs/view/director-of-national-accounts-at-neurotech-pharmaceuticals"},
+        // From Jun 15
+        {company: "Neurotech Pharmaceuticals", title: "Senior Director of Marketing", signal: "OK", type: "marketing", link: "https://www.linkedin.com/jobs/view/senior-director-of-marketing-at-neurotech-pharmaceuticals"},
+        {company: "Neurotech Pharmaceuticals", title: "Senior Director, Access Strategy & Operations", signal: "OK", type: "ops", link: "https://www.linkedin.com/jobs/view/senior-director-access-strategy-operations-at-neurotech-pharmaceuticals"},
+        // Existing
+        {company: "NeuroBionics", title: "Strategic Marketing Lead (Upstream)", signal: "OK", type: "marketing", link: "https://jobs.polymer.co/neurobionics/38344"},
+        {company: "NeuroBionics", title: "Operations Manager", signal: "OK", type: "ops", link: "https://jobs.polymer.co/neurobionics/38341"},
+        {company: "NeuroBionics", title: "Program Manager", signal: "OK", type: "ops", link: "https://jobs.polymer.co/neurobionics/38340"},
+        {company: "Precision Neuroscience", title: "Business Dev / Clinical roles", signal: "OK", type: "business", link: "https://www.precisionneuro.io/careers"}
+    ],
+    deals: [
+        // Aug 6, 2026 10:00 AM — NEW FROM NOTABLES #59 (Aug 3, 2026)
+        {company: "Epitel", round: "Series B", amount: "$26M — remote wireless EEG monitoring (Aug 2026)"},
+        {company: "Aurenar", round: "Seed", amount: "$5.7M — non-invasive neuromodulation platform (Aug 2026)"},
+        {company: "Voyage", round: "Seed", amount: "Stealth — consumer wearable; Draper Associates, Oxford Seed Fund (Aug 2026)"},
+        {company: "Time is Brain", round: "Pre-Series A", amount: "€3M — stroke-monitoring BraiN20 platform; CE/MDR approved (Jul 2026)"},
+        // Aug 6, 2026 — Morning scan — $1.2B in 4mo confirmed (Aspire Life Sciences)
+        {company: "BrainCo Inc", round: "Funding", amount: "$280M — non-invasive BCI/EEG (2026)"},
+        {company: "Axoft", round: "Series A", amount: "$55M — neural interfaces (2026)"},
+        {company: "Nervonik", round: "Series B", amount: "$52.5M — neurotech platform (2026)"},
+        {company: "Gestala", round: "Seed", amount: "$21M — China ultrasound BCI (Apr 2026)"},
+        // Updated Jul 6, 2026 — Google News RSS scan — NEW ADDITIONS
+        {company: "Science Corp", round: "Funding", amount: "$230M — brain implant launch (Mar 5, 2026)"},
+        {company: "Cognito Therapeutics", round: "Funding", amount: "$105M — Alzheimer's neurotechnology platform (Mar 5, 2026)"},
+        {company: "Beacon Biosignals", round: "Series B (upsized)", amount: "$97M — neurodiagnostic data (Apr 6, 2026)"},
+        // Existing data from Notables #57 (Jun 15-30)
+        {company: "WISE", round: "Series D (oversubscribed)", amount: "€30M — ENEA Tech and Biomedical new investors"},
+        {company: "HistoSonics", round: "Financing", amount: "Yosemite among strategic investors"},
+        {company: "NeuroBell", round: "Seed", amount: "$5.5M — AI-powered neonatal brain monitor"},
+        {company: "Valence AI", round: "Seed", amount: "$5M + 2 US patents"},
+        {company: "NeuroLife", round: "Seed", amount: "$2.9M — non-invasive stroke/SCI (Jun 2026)"},
+        {company: "CraniUS Therapeutics", round: "NIH Award", amount: "Up to $4M — skull-embedded BBB bypass platform"},
+        {company: "Flourish", round: "Seed", amount: "$500M (Bezos led) at $2.5B valuation"},
+        {company: "Merge Labs", round: "Seed (OpenAI led)", amount: "$252M — Sam Altman's BCI startup (Jan 2026)"},
+        {company: "GT Medical Technologies", round: "Series E (oversubscribed)", amount: "$100M"},
+        {company: "CereVasc", round: "Series C (oversubscribed)", amount: "$85M"},
+        {company: "Salma Health", round: "Series A", amount: "$80M"},
+        {company: "Nyxoah", round: "IPO", amount: "$95M"},
+        {company: "Envoy Medical", round: "Public Offering (upsized)", amount: "up to $78M"},
+        {company: "Neurovalens", round: "Series C (oversubscribed)", amount: "€62.5M"},
+        {company: "Temple", round: "Series B", amount: "$54M at $190M valuation"},
+        {company: "Pharaoh Neuro", round: "Series A", amount: "$20M"},
+        {company: "BrainCheck", round: "Series", amount: "$13M"},
+        {company: "EnSpire DBS", round: "Series B1", amount: "$10.3M"},
+        {company: "ReVision Implant", round: "Funding", amount: "€4M (May 2026)"},
+        {company: "Connectome", round: "Funding", amount: "€1.7M (Apr 2026)"},
+        {company: "Motif Neurotech", round: "Grants", amount: "ARPA-H EVIDENT + UK ARIA awards"},
+        {company: "Medtronic", round: "Acquisition", amount: "$650M (SPR)"}
+    ],
+    newEntrants: [
+        // Aug 6, 2026 — Morning scan
+        {name: "Gestala", focus: "China ultrasound BCI startup; $21M raised just 2 months after launching; mental health, PTSD, stroke rehab; also targeting Alzheimer's, Parkinson's (Apr 2026)"},
+        // Updated Jul 16, 2026 — Notables #57 (Jun 15-30)
+        {name: "Aleph Neuro", focus: "New ultrasound neuromodulation program (Jun 2026); non-invasive brain stimulation via focused ultrasound"},
+        {name: "Lotus Neuro", focus: "Focused ultrasound for GBM/DIPG brain cancer; funded research teams opportunity for clinical centers (Jun 2026)"},
+        {name: "NeuroLife", focus: "Non-invasive tech for stroke/SCI; $2.9M seed (Jun 2026); restoring hand and arm movement"},
+        {name: "NeuroBell", focus: "AI-powered neonatal brain monitor; $5.5M seed (Jun 2026)"},
+        {name: "Valence AI", focus: "Neurotech AI; $5M seed + 2 US patents (Jun 2026)"},
+        {name: "Wise", focus: "Neurotech company; €30M Series D oversubscribed (Jun 2026); ENEA Tech and Biomedical investors"},
+        {name: "Flourish", focus: "NeuroAI; CTRL-labs founder Thomas Reardon; $500M Bezos at $2.5B valuation — building algorithms/chips for faster learning"},
+        {name: "Merge Labs", focus: "Sam Altman's BCI startup; $252M seed led by OpenAI (Jan 2026) — largest seed in neurotech history; Altman positioning as the \"iPhone moment\" for BCI"},
+        {name: "Echo Neurotechnologies", focus: "Stealth BCI startup led by Edward Chang; Intel strategic partnership for brain-trained algorithms + energy-efficient computing"},
+        {name: "Salma Health", focus: "Brain health centers of excellence; $80M Series A; TMS/SAINT/Spravato stack; backed by Steadview, Peak XV, Info Edge"},
+        {name: "Pharaoh Neuro", focus: "$20M Series A; former Medtronic exec Amara Reitmeier as CEO; neuro device company"},
+        {name: "ReVision Implant", focus: "Neurotech implant startup; €4M funding (May 2026); implantable neuro device focus"},
+        {name: "Connectome", focus: "Personalised brain health insights; €1.7M (Apr 2026); early cognitive change detection"}
+    ],
+    clinical: [
+        // Updated Jul 16, 2026 — Notables #57 (Jun 15-30)
+        {name: "Coherence", milestone: "First-in-human: 3 implants — cancer-treating BCI crosses barrier (Jun 2026)", status: "Clinical"},
+        {name: "Nanochap (China)", milestone: "Vision BCI achieves 'functional restoration' — successful in humans (Jun 2026)", status: "Clinical"},
+        {name: "Aleph Neuro", milestone: "New ultrasound neuromodulation program announced (Jun 2026)", status: "New"},
+        {name: "Lotus Neuro", milestone: "Focused ultrasound for GBM/DIPG brain cancer; funded opportunity for clinical centers (Jun 2026)", status: "New"},
+        {name: "Aurenar", milestone: "FDA breakthrough nod for noninvasive neuromod tech (Jun 2026)", status: "Breakthrough"},
+        {name: "Bioness", milestone: "510k clearance for PONS portable neurostimulator for stroke recovery (Jun 2026)", status: "Approved"},
+        {name: "Saluda Medical", milestone: "FDA approval for CAP24 surgical paddle lead (Jun 2026)", status: "Approved"},
+        // Pre-existing
+        {name: "Neuralink", milestone: "26th patient enrolled — ongoing trials accelerate (Jun 22, 2026)", status: "Clinical"},
+        {name: "BrainGate/Stanford", milestone: "First BCI to restore fluent everyday speech — ALS patient speaks in own voice after years of silence (Jun 19, 2026)", status: "Clinical"},
+        {name: "MIT Tech Review", milestone: "\"BCI trials are taking off\" — Jun 19 feature; 2026 marks critical turning point for BCI technology (BioWorld)", status: "Clinical"},
+        {name: "Synchron", milestone: "Targets 2026 pivotal trial for first FDA-approved BCI — Tech Times (Jun 6, 2026)", status: "Clinical"},
+        {name: "Paradromics", milestone: "First-in-human (FIH) announced Jun 2026 — FDA Connexus study for intraneural BCI", status: "Clinical"},
+        {name: "Nature/UC Davis", milestone: "Long-term independent BCI use: speech + cursor control — Nature paper (Jun 21, 2026)", status: "Clinical"},
+        {name: "ALS/BCI", milestone: "ALS patient uses BCI to work full-time job — The Register (Jun 17, 2026)", status: "Clinical"},
+        {name: "Neuronoff", milestone: "First patient enrolled in DOD trial for intraneural BCI (Jun 2026)", status: "Clinical"},
+        {name: "Shiratronics", milestone: "Completed pivotal enrollment for Chronic Migraine (RELIEV-CM2); 5 new Category III CPT codes accepted", status: "Clinical"},
+        {name: "Wave", milestone: "FDA clearance for PTSD TMS protocol — major commercial milestone", status: "Approved"},
+        {name: "Nexalin", milestone: "HALO Clarity pivotal trial to support De Novo FDA submission for insomnia", status: "Clinical"},
+        {name: "EpiWatch", milestone: "Phase III trial ongoing", status: "Phase III"},
+        {name: "Motif Neurotech", milestone: "FDA-approved RESONATE trial for treatment-resistant depression BCI", status: "Clinical"},
+        {name: "Encora Therapeutics", milestone: "FDA 510(k) clearance for Encora X1 wearable for Essential Tremor", status: "Approved"},
+        {name: "Sonorous", milestone: "FDA breakthrough designation for BosSTENT (pulsatile tinnitus)", status: "Breakthrough"},
+        {name: "Salma Health", milestone: "$80M Series A to scale brain health centers with TMS/SAINT/Spravato", status: "Scaling"},
+        {name: "ABILITY Neurotech", milestone: "IMDD approval for chronic ALS BCI trial (Jun 2026)", status: "Clinical"}
+    ],
+    partnerships: [
+        // Updated Jul 16, 2026 — Notables #57 (Jun 15-30)
+        {parties: "Butterfly Network + MidJourney Medical", focus: "Full-body ultrasound scanner — Butterfly provides commentary; new commercial program"},
+        {parties: "Vermont", focus: "New neural data law puts neurotech on notice — Cooley analysis (Jun 2026)"},
+        {parties: "FDA", focus: "Pilot program to speed up early-stage clinical trials (Jun 2026) — accelerated pathway"},
+        {parties: "Intel + Echo Neurotechnologies", focus: "Strategic partnership: Edward Chang's stealth BCI startup to develop brain-trained algorithms and energy-efficient computing platforms"},
+        {parties: "Samsung + Neuralink", focus: "Samsung R&D contract for Neuralink 4th-gen chips; first test chips shipped; full production 2027"},
+        {parties: "Science Corp + Neurosoft Bioelectronics", focus: "Electrode + backend electronics partnership for BCI platforms"},
+        {parties: "Allen Institute", focus: "Launches $200M Brain Health Accelerator to turn brain atlas research into medicines"},
+        {parties: "ARPA-H REST Program", focus: "Restorative & health-Enhancing Sleep Time (REST) program — redefine sleep as measurable, controllable health driver"},
+        {parties: "ARPA-H BRAINS", focus: "Exploratory topic: Regrowing damaged brain regions to restore lost function — register by July 9"},
+        {parties: "HyperX + Neurable", focus: "Neurotechnology-powered gaming wearable headset (Jan 2026); OEM integration strategy scaling in 2026"}
+    ]
+};
+
+render(defaultData);
 </script>
 </body>
 </html>

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>All Outreach Contacts — Live from Supabase</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #0a0a0f; --card: #141420; --border: #1e1e2e;
+  --text: #e2e8f0; --muted: #64748b;
+  --green: #22c55e; --orange: #a65746; --yellow: #f59e0b;
+}
+body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 20px; }
+a { color: #818cf8; text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* HEADER */
+header { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+h1 { font-size: 20px; font-weight: 700; color: #4ade80; }
+.header-meta { color: var(--muted); font-size: 13px; }
+.live-badge { background: rgba(34,197,94,0.15); color: #4ade80; border: 1px solid #4ade80; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+
+/* STATS */
+.stats { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
+.stat { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 20px; }
+.stat-value { font-size: 28px; font-weight: 700; }
+.stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+.stat.green .stat-value { color: var(--green); }
+.stat.orange .stat-value { color: var(--orange); }
+.stat.yellow .stat-value { color: var(--yellow); }
+
+/* LOADING */
+.loading { text-align: center; padding: 60px; color: var(--muted); font-size: 14px; }
+.loading-spinner { width: 40px; height: 40px; border: 3px solid var(--border); border-top-color: #4ade80; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 16px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ERROR */
+.error-msg { background: rgba(239,68,68,0.1); border: 1px solid #ef4444; border-radius: 10px; padding: 16px; color: #f87171; margin-bottom: 20px; }
+
+/* TABS */
+.tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+.tab { background: var(--card); border: 1px solid var(--border); color: var(--muted); padding: 8px 18px; border-radius: 24px; cursor: pointer; font-size: 13px; transition: all 0.15s; user-select: none; }
+.tab:hover { border-color: #4ade80; color: #4ade80; }
+.tab.active { background: #4ade80; color: #0a0a0f; border-color: #4ade80; font-weight: 600; }
+
+/* FILTERS */
+.filters { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; align-items: center; }
+.search { background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 8px 14px; border-radius: 8px; font-size: 13px; width: 240px; }
+.search:focus { outline: none; border-color: #4ade80; }
+select { background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 8px 12px; border-radius: 8px; font-size: 13px; }
+select option { background: #141420; }
+.filter-info { color: var(--muted); font-size: 12px; margin-left: auto; }
+
+/* COMPANY CARD */
+#grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 10px; }
+.company-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; margin-bottom: 0; transition: border-color 0.15s; }
+.company-card:hover { border-color: rgba(166,87,70,0.5); }
+.card-top { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.company-name { font-weight: 700; font-size: 0.95rem; }
+.badge { font-size: 0.6rem; padding: 2px 8px; border-radius: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+.badge-kr { background: rgba(166,87,70,0.2); color: #f87171; }
+.badge-eu { background: rgba(99,102,241,0.2); color: #818cf8; }
+.badge-neuro { background: rgba(34,197,94,0.2); color: #4ade80; }
+.card-meta { font-size: 0.78rem; color: var(--muted); display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+.card-links { display: flex; gap: 10px; flex-wrap: wrap; font-size: 0.82rem; }
+.card-links a { color: #818cf8; }
+.card-links a:hover { color: #4ade80; }
+.card-links .email-link { color: #fbbf24; }
+.card-links .li-link { color: #38bdf8; }
+.notes { font-size: 0.75rem; color: var(--muted); margin-top: 6px; border-top: 1px solid var(--border); padding-top: 6px; line-height: 1.4; }
+.source-link { font-size: 0.7rem; color: #475569; margin-top: 4px; }
+.source-link a { color: #64748b; }
+.empty-state { text-align: center; padding: 60px; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>All Outreach Contacts</h1>
+    <div class="header-meta">PISCO Europe · Placewell South Korea · Neurotech Outreach</div>
+  </div>
+  <div class="live-badge">● LIVE FROM SUPABASE</div>
+</header>
+
+<div class="stats" id="stats">
+  <div class="stat green"><div class="stat-value" id="stat-total">—</div><div class="stat-label">Total Companies</div></div>
+  <div class="stat orange"><div class="stat-value" id="stat-email">—</div><div class="stat-label">With Email</div></div>
+  <div class="stat yellow"><div class="stat-value" id="stat-li">—</div><div class="stat-label">With LinkedIn</div></div>
+  <div class="stat"><div class="stat-value" id="stat-countries">—</div><div class="stat-label">Countries</div></div>
+</div>
+
+<div class="tabs" id="tabs">
+  <div class="tab active" data-filter="all">All</div>
+  <div class="tab" data-filter="placewell">Placewell KR</div>
+  <div class="tab" data-filter="pisco">PISCO Europe</div>
+</div>
+
+<div class="filters">
+  <input type="text" class="search" id="search" placeholder="Search company, sector, country...">
+  <select id="country-filter">
+    <option value="">All Countries</option>
+    <option value="South Korea">South Korea</option>
+    <option value="Croatia">Croatia</option>
+    <option value="Czechia">Czechia</option>
+    <option value="France">France</option>
+    <option value="Italy">Italy</option>
+    <option value="Lithuania">Lithuania</option>
+    <option value="Malta">Malta</option>
+    <option value="Norway">Norway</option>
+    <option value="Romania">Romania</option>
+    <option value="Slovakia">Slovakia</option>
+    <option value="Spain">Spain</option>
+  </select>
+  <select id="sector-filter">
+    <option value="">All Sectors</option>
+    <option value="hospitality">Hospitality</option>
+    <option value="healthcare">Healthcare</option>
+    <option value="construction">Construction</option>
+    <option value="logistics">Logistics / Shipping</option>
+    <option value="automotive">Automotive</option>
+    <option value="technology">Technology</option>
+    <option value="government">Government</option>
+    <option value="recruitment agency">Recruitment Agency</option>
+    <option value="manufacturing">Manufacturing</option>
+    <option value="retail">Retail</option>
+    <option value="energy">Energy</option>
+    <option value="food">Food</option>
+  </select>
+  <span class="filter-info" id="filter-info">Loading...</span>
+</div>
+
+<div id="grid">
+  <div class="loading"><div class="loading-spinner"></div>Fetching from Supabase...</div>
+</div>
+
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+const SUPABASE_URL = 'https://dprdnrgjkzgfgtcsguuq.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRwcmRucmdqazp6Z2ZndGNzZ3V1cSIsInJvbGUiOiJhbm9ueW1vdXMiLCJpYXQiOjE3MDQwOTQ4MTYsImV4cCI6MjAxOTY3MDgxNn0.aI89LlDRrBXLCxNvGU64RV0EL1tZjczPDWpaT1halHY';
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let allData = [];
+let currentFilter = 'all';
+let currentCountry = '';
+let currentSector = '';
+let currentSearch = '';
+
+async function loadData() {
+  const { data, error } = await supabase
+    .from('pisco_prospects')
+    .select('company, country, sector, website, email, linkedin, whatsapp, decision_maker, dm_role, source_url, confidence, notes')
+    .limit(500);
+  
+  if (error) {
+    document.getElementById('grid').innerHTML = `<div class="error-msg">Error: ${error.message}</div>`;
+    return;
+  }
+  
+  allData = data || [];
+  renderStats();
+  render();
+}
+
+function renderStats() {
+  document.getElementById('stat-total').textContent = allData.length;
+  document.getElementById('stat-email').textContent = allData.filter(c => c.email).length;
+  document.getElementById('stat-li').textContent = allData.filter(c => c.linkedin).length;
+  document.getElementById('stat-countries').textContent = new Set(allData.map(c => c.country)).size;
+}
+
+function render() {
+  const grid = document.getElementById('grid');
+  let filtered = allData.filter(c => {
+    if (currentFilter === 'placewell' && c.country !== 'South Korea') return false;
+    if (currentFilter === 'pisco' && c.country === 'South Korea') return false;
+    if (currentCountry && c.country !== currentCountry) return false;
+    if (currentSector && c.sector !== currentSector) return false;
+    if (currentSearch) {
+      const text = [c.company, c.country, c.sector, c.notes, c.decision_maker].filter(Boolean).join(' ').toLowerCase();
+      if (!text.includes(currentSearch)) return false;
+    }
+    return true;
+  });
+  
+  document.getElementById('filter-info').textContent = `Showing ${filtered.length} of ${allData.length} contacts`;
+  
+  if (filtered.length === 0) {
+    grid.innerHTML = '<div class="empty-state">No contacts match your filters</div>';
+    return;
+  }
+  
+  grid.innerHTML = filtered.map(c => {
+    const badge = c.country === 'South Korea'
+      ? '<span class="badge badge-kr">Placewell KR</span>'
+      : '<span class="badge badge-eu">PISCO EU</span>';
+    
+    const countryFlag = { 'South Korea':'🇰🇷','Croatia':'🇭🇷','Czechia':'🇨🇿','France':'🇫🇷','Italy':'🇮🇹','Lithuania':'🇱🇹','Malta':'🇲🇹','Norway':'🇳🇴','Romania':'🇷🇴','Slovakia':'🇸🇰','Spain':'🇪🇸' }[c.country] || '🌐';
+    
+    const website = c.website ? `<a href="https://${c.website}" target="_blank">🌐 ${c.website}</a>` : '';
+    const email = c.email ? `<a href="mailto:${c.email}" class="email-link">📧 ${c.email}</a>` : '';
+    const linkedin = c.linkedin ? `<a href="${c.linkedin}" target="_blank" class="li-link">💼 LinkedIn</a>` : '';
+    const dm = c.decision_maker ? `<span>👤 ${c.decision_maker}${c.dm_role ? ' ('+c.dm_role+')' : ''}</span>` : '';
+    const notes = c.notes ? `<div class="notes">${c.notes.slice(0,150)}</div>` : '';
+    const source = c.source_url ? `<div class="source-link"><a href="${c.source_url}" target="_blank">🔗 Source</a></div>` : '';
+    
+    return `<div class="company-card">
+      <div class="card-top">
+        <div class="company-name">${c.company}</div>
+        ${badge}
+      </div>
+      <div class="card-meta">
+        <span>${countryFlag} ${c.country}</span>
+        ${c.sector ? '<span>🏭 ' + c.sector + '</span>' : ''}
+        ${dm}
+      </div>
+      <div class="card-links">${website} ${email} ${linkedin}</div>
+      ${notes}
+      ${source}
+    </div>`;
+  }).join('');
+}
+
+// Event listeners
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    currentFilter = tab.dataset.filter;
+    render();
+  });
+});
+
+document.getElementById('country-filter').addEventListener('change', e => { currentCountry = e.target.value; render(); });
+document.getElementById('sector-filter').addEventListener('change', e => { currentSector = e.target.value; render(); });
+document.getElementById('search').addEventListener('input', e => { currentSearch = e.target.value.toLowerCase(); render(); });
+
+loadData();
+</script>
+</body>
+</html>

@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hermes Factory Status</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #0a0e17;
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #1e293b;
+        }
+        
+        h1 {
+            font-size: 28px;
+            font-weight: 600;
+            color: #f0f0f0;
+        }
+        
+        .last-run {
+            color: #8b949e;
+            font-size: 14px;
+        }
+        
+        .subsystems-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .subsystem-card {
+            background: #111827;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #1e293b;
+        }
+        
+        .subsystem-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .subsystem-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #f0f0f0;
+        }
+        
+        .status-indicator {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .status-green {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+        
+        .status-yellow {
+            background: rgba(234, 179, 8, 0.2);
+            color: #eab308;
+        }
+        
+        .status-red {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+        
+        .subsystem-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        
+        .info-item {
+            background: #0a0e17;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        
+        .info-label {
+            font-size: 11px;
+            color: #6b7280;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+        
+        .info-value {
+            font-size: 14px;
+            color: #e0e0e0;
+            font-weight: 500;
+        }
+        
+        .stats-section {
+            background: #111827;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 1px solid #1e293b;
+        }
+        
+        .stats-section h2 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #f0f0f0;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            background: #0a0e17;
+            border-radius: 8px;
+        }
+        
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #22c55e;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 5px;
+        }
+        
+        .actions-section {
+            background: #111827;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #1e293b;
+        }
+        
+        .actions-section h2 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #f0f0f0;
+        }
+        
+        .actions-grid {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary {
+            background: #22c55e;
+            color: #0a0e17;
+        }
+        
+        .btn-primary:hover {
+            background: #16a34a;
+        }
+        
+        .btn-secondary {
+            background: #374151;
+            color: #e0e0e0;
+        }
+        
+        .btn-secondary:hover {
+            background: #4b5563;
+        }
+        
+        .scheduled-section {
+            margin-top: 30px;
+            background: #111827;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #1e293b;
+        }
+        
+        .scheduled-section h2 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #f0f0f0;
+        }
+        
+        .scheduled-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .scheduled-item {
+            background: #0a0e17;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .scheduled-item h3 {
+            font-size: 14px;
+            color: #22c55e;
+            margin-bottom: 8px;
+        }
+        
+        .scheduled-item p {
+            font-size: 12px;
+            color: #6b7280;
+        }
+        
+        .next-run {
+            color: #eab308;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div>
+                <h1>⚙️ Hermes Factory Status</h1>
+                <p style="color: #6b7280; margin-top: 5px;">Agent Factory Control Center</p>
+            </div>
+            <div class="last-run">
+                Last factory run: <span id="lastRun">Loading...</span>
+            </div>
+        </header>
+        
+        <div class="subsystems-grid">
+            <!-- Self-Reflection -->
+            <div class="subsystem-card">
+                <div class="subsystem-header">
+                    <span class="subsystem-name">🔄 Self-Reflection Loop</span>
+                    <span class="status-indicator status-green" id="ref-status">Green</span>
+                </div>
+                <div class="subsystem-info">
+                    <div class="info-item">
+                        <div class="info-label">Last Run</div>
+                        <div class="info-value" id="ref-last">--</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Sessions Today</div>
+                        <div class="info-value" id="ref-sessions">--</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Avg Score</div>
+                        <div class="info-value" id="ref-avg">--</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Next Trigger</div>
+                        <div class="info-value" style="color: #eab308;">5+ tool calls</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Error Recovery -->
+            <div class="subsystem-card">
+                <div class="subsystem-header">
+                    <span class="subsystem-name">🛡️ Error Recovery</span>
+                    <span class="status-indicator status-green" id="err-status">Green</span>
+                </div>
+                <div class="subsystem-info">
+                    <div class="info-item">
+                        <div class="info-label">Last Error</div>
+                        <div class="info-value" id="err-last">--</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Errors 30d</div>
+                        <div class="info-value" id="err-count">--</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Resolution Rate</div>
+                        <div class="info-value" id="err-rate">--</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Next Trigger</div>
+                        <div class="info-value" style="color: #ef4444;">exit_code != 0</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Skill Factory -->
+            <div class="subsystem-card">
+                <div class="subsystem-header">
+                    <span class="subsystem-name">🛠️ Skill Factory</span>
+                    <span class="status-indicator status-green" id="skill-status">Green</span>
+                </div>
+                <div class="subsystem-info">
+                    <div class="info-item">
+                        <div class="info-label">Last Authored</div>
+                        <div class="info-value" id="skill-last">--</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Total Skills</div>
+                        <div class="info-value" id="skill-total">--</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Auto-drafted</div>
+                        <div class="info-value" id="skill-auto">--</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Next Trigger</div>
+                        <div class="info-value" style="color: #8b5cf6;">8+ tool calls</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Memory Compactor -->
+            <div class="subsystem-card">
+                <div class="subsystem-header">
+                    <span class="subsystem-name">💾 Memory Compactor</span>
+                    <span class="status-indicator status-green" id="mem-status">Green</span>
+                </div>
+                <div class="subsystem-info">
+                    <div class="info-item">
+                        <div class="info-label">Last Run</div>
+                        <div class="info-value" id="mem-last">--</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Raw Files</div>
+                        <div class="info-value" id="mem-raw">--</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Wiki Size</div>
+                        <div class="info-value" id="mem-wiki">--</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Next Trigger</div>
+                        <div class="info-value" style="color: #3b82f6;">10+ raw files</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Multi-Agent Learning -->
+            <div class="subsystem-card">
+                <div class="subsystem-header">
+                    <span class="subsystem-name">🔗 Multi-Agent Learning</span>
+                    <span class="status-indicator status-green" id="multi-status">Green</span>
+                </div>
+                <div class="subsystem-info">
+                    <div class="info-item">
+                        <div class="info-label">Last Sync</div>
+                        <div class="info-value" id="multi-last">--</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Discoveries</div>
+                        <div class="info-value" id="multi-disc">--</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Learnings</div>
+                        <div class="info-value" id="multi-learn">--</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Next Trigger</div>
+                        <div class="info-value" style="color: #ec4899;">Weekly Sun 18:00</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Learning Loop Calendar -->
+            <div class="subsystem-card">
+                <div class="subsystem-header">
+                    <span class="subsystem-name">📅 Learning Loop Calendar</span>
+                    <span class="status-indicator status-green" id="cal-status">Green</span>
+                </div>
+                <div class="subsystem-info">
+                    <div class="info-item">
+                        <div class="info-label">Daily</div>
+                        <div class="info-value" id="cal-daily">--</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Weekly</div>
+                        <div class="info-value" id="cal-weekly">--</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Monthly</div>
+                        <div class="info-value" id="cal-monthly">--</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Current Streak</div>
+                        <div class="info-value" id="cal-streak">--</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="stats-section">
+            <h2>📊 Factory Metrics</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value" id="stat-sessions">0</div>
+                    <div class="stat-label">Sessions (30d)</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="stat-avg-score">--</div>
+                    <div class="stat-label">Avg Score</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="stat-errors">0</div>
+                    <div class="stat-label">Errors (30d)</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="stat-resolved">--%</div>
+                    <div class="stat-label">Resolved</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="stat-skills">0</div>
+                    <div class="stat-label">Skills</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="stat-memory">--</div>
+                    <div class="stat-label">Memory</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="actions-section">
+            <h2>⚡ Quick Actions</h2>
+            <div class="actions-grid">
+                <button class="action-btn btn-primary" onclick="runFactoryNow()">▶️ Run Factory Now</button>
+                <button class="action-btn btn-secondary" onclick="compactMemory()">💾 Compact Memory</button>
+                <button class="action-btn btn-secondary" onclick="syncNanobot()">🔗 Sync with Nanobot</button>
+                <button class="action-btn btn-secondary" onclick="runReflection()">🔄 Run Self-Reflection</button>
+                <button class="action-btn btn-secondary" onclick="optimizePrompts()">✨ Optimize Prompts</button>
+                <button class="action-btn btn-secondary" onclick="refreshDashboard()">🔃 Refresh Dashboard</button>
+            </div>
+        </div>
+        
+        <div class="scheduled-section">
+            <h2>📆 Scheduled Runs</h2>
+            <div class="scheduled-grid">
+                <div class="scheduled-item">
+                    <h3>Daily Check</h3>
+                    <p>Every day at 09:00</p>
+                    <p>Next: <span class="next-run" id="next-daily">--</span></p>
+                </div>
+                <div class="scheduled-item">
+                    <h3>Weekly Review</h3>
+                    <p>Every Sunday at 18:00</p>
+                    <p>Next: <span class="next-run" id="next-weekly">--</span></p>
+                </div>
+                <div class="scheduled-item">
+                    <h3>Monthly Audit</h3>
+                    <p>1st of month at 18:00</p>
+                    <p>Next: <span class="next-run" id="next-monthly">--</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Load metrics from JSON file
+        async function loadMetrics() {
+            try {
+                const response = await fetch('/Users/jordan/.hermes/memory/factory-metrics.json');
+                if (response.ok) {
+                    const metrics = await response.json();
+                    updateDashboard(metrics);
+                }
+            } catch (e) {
+                // File might not exist yet, show placeholder data
+                console.log('Metrics file not found, using placeholder data');
+            }
+        }
+        
+        function updateDashboard(metrics) {
+            // Update last run time
+            if (metrics.factory_runner?.last_run) {
+                document.getElementById('lastRun').textContent = metrics.factory_runner.last_run;
+            }
+            
+            // Self-Reflection
+            if (metrics.self_reflection) {
+                document.getElementById('ref-last').textContent = 
+                    metrics.self_reflection.last_check || '--';
+                document.getElementById('ref-sessions').textContent = 
+                    metrics.self_reflection.raw_sessions_count || 0;
+                document.getElementById('ref-avg').textContent = 
+                    (metrics.self_reflection.avg_score || '--') + '/5.0';
+                updateStatus('ref', metrics.self_reflection.status);
+            }
+            
+            // Error Recovery
+            if (metrics.error_recovery) {
+                document.getElementById('err-last').textContent = 
+                    metrics.error_recovery.last_error || 'None';
+                document.getElementById('err-count').textContent = 
+                    metrics.error_recovery.total_errors_30d || 0;
+                document.getElementById('err-rate').textContent = 
+                    ((metrics.error_recovery.self_resolved_rate || 0) * 100).toFixed(0) + '%';
+                updateStatus('err', metrics.error_recovery.status);
+            }
+            
+            // Skill Factory
+            if (metrics.skill_factory) {
+                document.getElementById('skill-last').textContent = 
+                    metrics.skill_factory.last_skill_authored || '--';
+                document.getElementById('skill-total').textContent = 
+                    metrics.skill_factory.total_skills || 0;
+                document.getElementById('skill-auto').textContent = 
+                    metrics.skill_factory.auto_documented_count || 0;
+                updateStatus('skill', metrics.skill_factory.status);
+            }
+            
+            // Memory Compactor
+            if (metrics.memory_compactor) {
+                document.getElementById('mem-last').textContent = 
+                    metrics.memory_compactor.last_run || 'Never';
+                document.getElementById('mem-raw').textContent = 
+                    metrics.memory_compactor.raw_files_count || 0;
+                const wikiKB = Math.round((metrics.memory_compactor.wiki_size_bytes || 0) / 1024);
+                document.getElementById('mem-wiki').textContent = wikiKB > 0 ? wikiKB + ' KB' : '--';
+                updateStatus('mem', metrics.memory_compactor.status);
+            }
+            
+            // Multi-Agent Learning
+            if (metrics.multi_agent_learning) {
+                document.getElementById('multi-last').textContent = 
+                    metrics.multi_agent_learning.last_sync || '--';
+                document.getElementById('multi-disc').textContent = 
+                    metrics.multi_agent_learning.discoveries_shared || 0;
+                document.getElementById('multi-learn').textContent = 
+                    metrics.multi_agent_learning.learnings_received || 0;
+                updateStatus('multi', metrics.multi_agent_learning.status);
+            }
+            
+            // Learning Loop Calendar
+            if (metrics.learning_loop_calendar) {
+                document.getElementById('cal-daily').textContent = 
+                    metrics.learning_loop_calendar.daily_last_run?.split(' ')[0] || '--';
+                document.getElementById('cal-weekly').textContent = 
+                    metrics.learning_loop_calendar.weekly_last_run?.split(' ')[0] || '--';
+                document.getElementById('cal-monthly').textContent = 
+                    metrics.learning_loop_calendar.monthly_last_run?.split(' ')[0] || '--';
+                document.getElementById('cal-streak').textContent = 
+                    (metrics.learning_loop_calendar.current_streak || 0) + ' days';
+                updateStatus('cal', metrics.learning_loop_calendar.status);
+            }
+            
+            // Stats section
+            document.getElementById('stat-sessions').textContent = 
+                metrics.self_reflection?.raw_sessions_count || 0;
+            document.getElementById('stat-avg-score').textContent = 
+                (metrics.self_reflection?.avg_score || '--');
+            document.getElementById('stat-errors').textContent = 
+                metrics.error_recovery?.total_errors_30d || 0;
+            document.getElementById('stat-resolved').textContent = 
+                ((metrics.error_recovery?.self_resolved_rate || 0) * 100).toFixed(0) + '%';
+            document.getElementById('stat-skills').textContent = 
+                metrics.skill_factory?.total_skills || 0;
+            document.getElementById('stat-memory').textContent = 
+                (metrics.memory_compactor?.wiki_size_bytes || 0) > 0 
+                    ? Math.round(metrics.memory_compactor.wiki_size_bytes / 1024) + ' KB' 
+                    : '--';
+        }
+        
+        function updateStatus(prefix, status) {
+            const el = document.getElementById(prefix + '-status');
+            if (el && status) {
+                el.className = 'status-indicator status-' + status;
+                el.textContent = status.charAt(0).toUpperCase() + status.slice(1);
+            }
+        }
+        
+        // Action handlers
+        function runFactoryNow() {
+            fetch('/Users/jordan/hermes-factory-runner.sh')
+                .catch(() => {
+                    // Can't run directly via fetch, inform user
+                    alert('Run ~/hermes-factory-runner.sh from terminal to execute');
+                });
+            location.reload();
+        }
+        
+        function compactMemory() {
+            alert('Run: ~/hermes-factory-runner.sh or trigger memory-compactor skill');
+        }
+        
+        function syncNanobot() {
+            alert('Trigger multi-agent-learning skill or run from terminal');
+        }
+        
+        function runReflection() {
+            alert('Trigger self-reflection skill manually');
+        }
+        
+        function optimizePrompts() {
+            alert('Trigger prompt-optimizer skill manually');
+        }
+        
+        function refreshDashboard() {
+            location.reload();
+        }
+        
+        // Calculate next scheduled runs
+        function updateScheduledRuns() {
+            const now = new Date();
+            
+            // Next daily (tomorrow 9am)
+            const tomorrow = new Date(now);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(9, 0, 0, 0);
+            document.getElementById('next-daily').textContent = tomorrow.toLocaleDateString('en-US', { 
+                month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' 
+            });
+            
+            // Next weekly (next Sunday)
+            const daysUntilSunday = (7 - now.getDay()) % 7 || 7;
+            const nextSunday = new Date(now);
+            nextSunday.setDate(nextSunday.getDate() + daysUntilSunday);
+            nextSunday.setHours(18, 0, 0, 0);
+            document.getElementById('next-weekly').textContent = nextSunday.toLocaleDateString('en-US', { 
+                month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' 
+            });
+            
+            // Next monthly (1st of next month)
+            const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1, 18, 0, 0, 0);
+            document.getElementById('next-monthly').textContent = nextMonth.toLocaleDateString('en-US', { 
+                month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' 
+            });
+        }
+        
+        // Initialize
+        loadMetrics();
+        updateScheduledRuns();
+        
+        // Auto-refresh every 30 seconds
+        setInterval(loadMetrics, 30000);
+    </script>
+</body>
+</html>

@@ -5,26 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mission Control — Jordan</title>
     <style>
-        :root {
-            --bg: #0a0a0f;
-            --surface: #12121a;
-            --card: #18181f;
-            --border: #26263a;
-            --text: #ededf4;
-            --muted: #6b6b88;
-            --green: #22c55e;
-            --amber: #eab308;
-            --red: #ef4444;
-            --blue: #3b82f6;
-            --purple: #a855f7;
-            --accent: #f5c518;
-        }
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #fafafa;
+            --surface: #ffffff;
+            --card: #ffffff;
+            --border: #e5e5e5;
+            --text: #111111;
+            --muted: #666666;
+            --dim: #999999;
+            --green: #16a34a;
+            --amber: #d97706;
+            --red: #dc2626;
+            --blue: #2563eb;
+            --purple: #7c3aed;
+        }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: var(--bg);
             color: var(--text);
             min-height: 100vh;
+            padding: 0;
             line-height: 1.5;
         }
 
@@ -32,7 +33,7 @@
         .header {
             background: var(--surface);
             border-bottom: 1px solid var(--border);
-            padding: 14px 20px;
+            padding: 16px 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -41,204 +42,154 @@
             z-index: 100;
         }
         .logo {
-            font-size: 1.05rem;
+            font-size: 1rem;
             font-weight: 800;
-            letter-spacing: -0.02em;
+            letter-spacing: -0.01em;
         }
         .logo span { color: var(--green); }
         .header-right { font-size: 0.72rem; color: var(--muted); }
 
-        /* LIVE STATUS BAR */
-        .status-bar {
-            background: linear-gradient(90deg, var(--green), #16a34a);
-            color: white;
-            font-size: 0.68rem;
-            font-weight: 700;
-            padding: 5px 12px;
-            text-align: center;
-            letter-spacing: 0.04em;
-        }
-        .status-bar.error { background: linear-gradient(90deg, var(--red), #dc2626); }
-
         /* MAIN */
-        .main { max-width: 700px; margin: 0 auto; padding: 16px 16px 80px; }
-
-        /* GREETING */
-        .greeting {
-            padding: 20px 0 12px;
-        }
-        .greeting h1 {
-            font-size: 1.6rem;
-            font-weight: 700;
-            letter-spacing: -0.03em;
-        }
-        .greeting h1 span { color: var(--green); }
-        .greeting p { color: var(--muted); font-size: 0.85rem; margin-top: 2px; }
+        .main { max-width: 680px; margin: 0 auto; padding: 20px 16px 60px; }
 
         /* SECTION */
         .section {
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 18px;
-            margin-bottom: 14px;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
         }
         .section-title {
-            font-size: 0.65rem;
+            font-size: 0.7rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.12em;
+            letter-spacing: 0.08em;
             color: var(--muted);
-            margin-bottom: 14px;
+            margin-bottom: 12px;
         }
 
-        /* BLOCKERS */
-        .blocker-item {
+        /* WORK LOG */
+        .log-item {
+            display: flex;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .log-item:last-child { border-bottom: none; }
+        .log-date { font-size: 0.68rem; color: var(--dim); width: 52px; flex-shrink: 0; padding-top: 1px; }
+        .log-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+        .log-dot.green { background: var(--green); }
+        .log-dot.amber { background: var(--amber); }
+        .log-dot.blue { background: var(--blue); }
+        .log-content { flex: 1; }
+        .log-title { font-size: 0.8rem; font-weight: 600; }
+        .log-meta { font-size: 0.68rem; color: var(--muted); }
+        .log-tag { font-size: 0.58rem; font-weight: 700; padding: 2px 7px; border-radius: 4px; flex-shrink: 0; align-self: flex-start; margin-top: 1px; }
+        .tag-hermes { background: rgba(22,163,74,0.1); color: var(--green); }
+        .tag-axton { background: rgba(124,58,237,0.1); color: var(--purple); }
+        .tag-jordan { background: rgba(37,99,235,0.1); color: var(--blue); }
+
+        /* PROJECTS */
+        .project-item {
             display: flex;
             align-items: center;
             gap: 10px;
             padding: 10px 0;
             border-bottom: 1px solid var(--border);
         }
-        .blocker-item:last-child { border-bottom: none; }
-        .blocker-icon { font-size: 1rem; width: 22px; text-align: center; }
-        .blocker-body { flex: 1; }
-        .blocker-name { font-size: 0.82rem; font-weight: 700; }
-        .blocker-reason { font-size: 0.68rem; color: var(--muted); margin-top: 1px; }
-        .blocker-item.resolved { opacity: 0.4; }
-        .blocker-item.resolved .blocker-name { text-decoration: line-through; }
-
-        /* DASHBOARD GRID */
-        .db-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-        }
-        .db-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 14px 12px;
-            text-align: center;
-            text-decoration: none;
-            color: inherit;
-            transition: border-color 0.15s, transform 0.15s;
-            display: block;
-        }
-        .db-card:hover { border-color: var(--green); transform: translateY(-2px); }
-        .db-icon { font-size: 1.4rem; margin-bottom: 6px; }
-        .db-name { font-size: 0.7rem; font-weight: 700; display: block; }
-        .db-sub { font-size: 0.6rem; color: var(--muted); display: block; margin-top: 2px; }
-        .db-status {
-            display: inline-block;
-            width: 6px; height: 6px;
-            border-radius: 50%;
-            margin-top: 6px;
-        }
-        .db-status.ok { background: var(--green); }
-        .db-status.warn { background: var(--amber); }
+        .project-item:last-child { border-bottom: none; }
+        .project-icon { font-size: 1rem; width: 24px; text-align: center; }
+        .project-info { flex: 1; }
+        .project-name { font-size: 0.82rem; font-weight: 700; }
+        .project-desc { font-size: 0.68rem; color: var(--muted); }
+        .status-pill { font-size: 0.6rem; font-weight: 700; padding: 2px 8px; border-radius: 20px; white-space: nowrap; }
+        .s-active { background: rgba(22,163,74,0.1); color: var(--green); }
+        .s-waiting { background: rgba(217,119,6,0.1); color: var(--amber); }
+        .s-blocked { background: rgba(220,38,38,0.1); color: var(--red); }
+        .s-done { background: rgba(153,153,153,0.1); color: var(--dim); }
 
         /* TASKS */
         .task-item {
             display: flex;
             align-items: center;
             gap: 10px;
-            padding: 11px 12px;
-            background: var(--card);
+            padding: 10px;
+            background: var(--bg);
             border: 1px solid var(--border);
-            border-radius: 10px;
-            margin-bottom: 7px;
+            border-radius: 8px;
+            margin-bottom: 6px;
             cursor: pointer;
-            transition: border-color 0.12s;
+            user-select: none;
         }
         .task-item:last-child { margin-bottom: 0; }
-        .task-item:hover { border-color: var(--green); }
         .task-check {
-            width: 22px; height: 22px;
+            width: 22px;
+            height: 22px;
             border-radius: 6px;
-            border: 2px solid var(--muted);
+            border: 2px solid var(--dim);
             flex-shrink: 0;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 0.7rem;
-            color: white;
             transition: all 0.15s;
         }
-        .task-check.done { background: var(--green); border-color: var(--green); }
+        .task-check.done { background: var(--green); border-color: var(--green); color: white; }
         .task-body { flex: 1; }
-        .task-text { font-size: 0.82rem; font-weight: 600; }
-        .task-text.done { text-decoration: line-through; color: var(--muted); }
+        .task-text { font-size: 0.82rem; font-weight: 500; }
+        .task-text.done { text-decoration: line-through; color: var(--dim); }
         .task-meta { font-size: 0.66rem; color: var(--muted); }
-        .task-pri {
-            font-size: 0.58rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            padding: 2px 8px;
-            border-radius: 4px;
-            letter-spacing: 0.05em;
-            flex-shrink: 0;
-        }
-        .pri-h { background: rgba(239,68,68,0.15); color: var(--red); }
-        .pri-m { background: rgba(234,179,8,0.15); color: var(--amber); }
-        .pri-l { background: rgba(107,107,136,0.15); color: var(--muted); }
-        .completed-toggle {
-            font-size: 0.72rem;
-            color: var(--muted);
-            cursor: pointer;
-            padding: 10px 0 2px;
-            text-align: center;
-        }
-        .completed-list { display: none; }
-        .completed-list.show { display: block; margin-top: 8px; }
+        .task-pri { font-size: 0.58rem; font-weight: 800; text-transform: uppercase; padding: 2px 7px; border-radius: 4px; letter-spacing: 0.05em; }
+        .pri-h { background: rgba(220,38,38,0.1); color: var(--red); }
+        .pri-m { background: rgba(217,119,6,0.1); color: var(--amber); }
+        .pri-l { background: rgba(153,153,153,0.1); color: var(--dim); }
 
         /* CRONS */
         .cron-item {
             display: flex;
             align-items: center;
             gap: 10px;
-            padding: 10px 0;
+            padding: 9px 0;
             border-bottom: 1px solid var(--border);
         }
         .cron-item:last-child { border-bottom: none; }
         .cron-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-        .cron-dot.ok { background: var(--green); }
-        .cron-dot.error { background: var(--red); animation: pulse 2s infinite; }
-        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+        .cron-dot.on { background: var(--green); }
+        .cron-dot.off { background: var(--dim); }
         .cron-body { flex: 1; }
-        .cron-name { font-size: 0.8rem; font-weight: 700; }
-        .cron-meta { font-size: 0.65rem; color: var(--muted); margin-top: 1px; }
-        .cron-time { font-size: 0.65rem; color: var(--muted); white-space: nowrap; }
+        .cron-name { font-size: 0.8rem; font-weight: 600; }
+        .cron-meta { font-size: 0.65rem; color: var(--muted); }
+        .cron-time { font-size: 0.65rem; color: var(--dim); white-space: nowrap; }
 
-        /* METRICS */
-        .metrics-row {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-            margin-bottom: 14px;
+        /* BLOCKERS */
+        .blocker-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 0;
+            border-bottom: 1px solid var(--border);
         }
-        .metric-box {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 14px 10px;
-            text-align: center;
-        }
-        .metric-num { font-size: 1.4rem; font-weight: 800; color: var(--green); }
-        .metric-label { font-size: 0.6rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 2px; }
+        .blocker-item:last-child { border-bottom: none; }
+        .blocker-icon { font-size: 0.85rem; }
+        .blocker-body { flex: 1; }
+        .blocker-name { font-size: 0.8rem; font-weight: 700; }
+        .blocker-reason { font-size: 0.65rem; color: var(--muted); }
+        .blocker-item.resolved { opacity: 0.5; }
+        .blocker-item.resolved .blocker-name { text-decoration: line-through; }
 
-        /* ACTIONS */
-        .action-grid { display: flex; flex-direction: column; gap: 7px; }
+        /* ACTION BUTTONS */
+        .action-grid { display: flex; flex-direction: column; gap: 6px; }
         .action-btn {
             display: flex;
             align-items: center;
             gap: 10px;
-            padding: 13px 14px;
-            background: var(--card);
+            padding: 12px 14px;
+            background: var(--bg);
             border: 1px solid var(--border);
-            border-radius: 10px;
-            font-size: 0.82rem;
-            font-weight: 700;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
             color: var(--text);
             cursor: pointer;
             text-decoration: none;
@@ -247,91 +198,41 @@
             width: 100%;
             text-align: left;
         }
-        .action-btn:hover { border-color: var(--green); background: rgba(34,197,94,0.05); }
+        .action-btn:hover { background: var(--border); }
+        .action-btn:active { transform: scale(0.98); }
         .action-icon { font-size: 0.9rem; width: 20px; text-align: center; }
-        .action-arrow { margin-left: auto; color: var(--muted); font-size: 0.75rem; }
+        .action-arrow { margin-left: auto; color: var(--dim); font-size: 0.75rem; }
 
-        /* PROJECTS STRIP */
-        .project-strip {
-            display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            padding-bottom: 4px;
-            scrollbar-width: none;
-        }
-        .project-strip::-webkit-scrollbar { display: none; }
-        .project-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 12px 14px;
-            min-width: 140px;
-            flex-shrink: 0;
-            text-decoration: none;
-            color: inherit;
-            display: block;
-            transition: border-color 0.15s;
-        }
-        .project-card:hover { border-color: var(--accent); }
-        .project-card .p-icon { font-size: 1.1rem; }
-        .project-card .p-name { font-size: 0.75rem; font-weight: 700; margin-top: 4px; display: block; }
-        .project-card .p-status {
-            font-size: 0.58rem;
+        /* STATUS BAR */
+        .status-bar {
+            background: var(--green);
+            color: white;
+            font-size: 0.68rem;
             font-weight: 700;
-            padding: 1px 7px;
-            border-radius: 20px;
-            display: inline-block;
-            margin-top: 5px;
-        }
-        .p-active { background: rgba(34,197,94,0.12); color: var(--green); }
-        .p-waiting { background: rgba(234,179,8,0.12); color: var(--amber); }
-        .p-blocked { background: rgba(239,68,68,0.12); color: var(--red); }
-
-        /* HEALTH */
-        .health-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-        }
-        .health-item {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 12px 10px;
+            padding: 6px 12px;
             text-align: center;
+            letter-spacing: 0.03em;
         }
-        .health-dot {
-            width: 8px; height: 8px;
-            border-radius: 50%;
-            display: inline-block;
-            margin-bottom: 6px;
-        }
-        .health-dot.ok { background: var(--green); }
-        .health-dot.warn { background: var(--amber); }
-        .health-dot.error { background: var(--red); }
-        .health-label { font-size: 0.68rem; font-weight: 600; display: block; }
-        .health-sub { font-size: 0.6rem; color: var(--muted); }
 
-        /* FOOTER */
-        .footer {
-            text-align: center;
-            padding: 24px 16px;
-            color: var(--muted);
+        /* DIVIDER */
+        hr { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+
+        /* COMPLETED */
+        .completed-toggle {
             font-size: 0.72rem;
+            color: var(--muted);
+            cursor: pointer;
+            padding: 8px 0;
         }
-        .footer a { color: var(--green); text-decoration: none; }
-
-        @media (max-width: 500px) {
-            .db-grid { grid-template-columns: repeat(2, 1fr); }
-            .metrics-row { grid-template-columns: repeat(2, 1fr); }
-            .health-grid { grid-template-columns: repeat(2, 1fr); }
-        }
+        .completed-list { display: none; margin-top: 6px; }
+        .completed-list.show { display: block; }
+        .task-item.done-task { opacity: 0.55; }
     </style>
 </head>
 <body>
 
 <!-- STATUS BAR -->
-<div class="status-bar" id="status-bar">● Hermes 007 · Mission Control · June 17, 2026</div>
+<div class="status-bar" id="status-bar">● All systems operational · Hermes 007 active</div>
 
 <!-- HEADER -->
 <div class="header">
@@ -344,390 +245,443 @@
 <!-- MAIN -->
 <div class="main">
 
-    <!-- GREETING -->
-    <div class="greeting">
-        <h1>Good morning, <span>Jordan</span></h1>
-        <p id="greeting-sub">6 loops running · 1 blocker · Hermes Self-Improve active</p>
-    </div>
-
-    <!-- LIVE METRICS -->
-    <div class="metrics-row">
-        <div class="metric-box">
-            <div class="metric-num">6</div>
-            <div class="metric-label">Active Loops</div>
-        </div>
-        <div class="metric-box">
-            <div class="metric-num">5</div>
-            <div class="metric-label">Projects</div>
-        </div>
-        <div class="metric-box">
-            <div class="metric-num">6</div>
-            <div class="metric-label">Day Streak</div>
-        </div>
-        <div class="metric-box">
-            <div class="metric-num">49</div>
-            <div class="metric-label">Sessions</div>
-        </div>
-    </div>
-
-    <!-- HERMES HEALTH -->
+    <!-- WORK LOG -->
     <div class="section">
-        <div class="section-title">Hermes Health</div>
-        <div class="health-grid">
-            <div class="health-item">
-                <div class="health-dot ok"></div>
-                <div class="health-label">Supabase</div>
-                <div class="health-sub">Connected</div>
+        <div class="section-title">What We've Done</div>
+        <div class="log-item">
+            <div class="log-date">May 16</div>
+            <div class="log-dot green"></div>
+            <div class="log-content">
+                <div class="log-title">Neurotech non-US → US market report built</div>
+                <div class="log-meta">MindMaze · Synchron · CoMind · Zander Labs · Kandu Health · 12+ companies</div>
             </div>
-            <div class="health-item">
-                <div class="health-dot ok"></div>
-                <div class="health-label">GitHub Pages</div>
-                <div class="health-sub">Publishing</div>
-            </div>
-            <div class="health-item">
-                <div class="health-dot ok"></div>
-                <div class="health-label">DDGS Search</div>
-                <div class="health-sub">Working</div>
-            </div>
-            <div class="health-item">
-                <div class="health-dot ok"></div>
-                <div class="health-label">Claude Key</div>
-                <div class="health-sub">Configured</div>
-            </div>
-            <div class="health-item">
-                <div class="health-dot warn"></div>
-                <div class="health-label">Email</div>
-                <div class="health-sub">Resend needs key</div>
-            </div>
-            <div class="health-item">
-                <div class="health-dot ok"></div>
-                <div class="health-label">Conscious Pod</div>
-                <div class="health-sub">Live</div>
-            </div>
+            <div class="log-tag tag-hermes">HERMES</div>
         </div>
-    </div>
-
-    <!-- BLOCKERS -->
-    <div class="section">
-        <div class="section-title">What's Blocking Us</div>
-        <div class="blocker-item">
-            <div class="blocker-icon">📧</div>
-            <div class="blocker-body">
-                <div class="blocker-name">Resend API key invalid</div>
-                <div class="blocker-reason">PISCO cold emails · Niah follow-ups · All email loops blocked</div>
+        <div class="log-item">
+            <div class="log-date">May 16</div>
+            <div class="log-dot green"></div>
+            <div class="log-content">
+                <div class="log-title">Memory restored — Honcho key replaced + 21 facts backfilled</div>
+                <div class="log-meta">Projects · workspace · Notion DBs · PISCO · Harvard cases · API keys</div>
             </div>
+            <div class="log-tag tag-hermes">HERMES</div>
         </div>
-        <div class="blocker-item">
-            <div class="blocker-icon">🤖</div>
-            <div class="blocker-body">
-                <div class="blocker-name">Model ceiling — MiniMax M2.7</div>
-                <div class="blocker-reason">Can't self-improve beyond current capabilities without Claude Sonnet 4</div>
+        <div class="log-item">
+            <div class="log-date">May 16</div>
+            <div class="log-dot green"></div>
+            <div class="log-content">
+                <div class="log-title">The Passage — 50 new philosophical concepts added (86 total)</div>
+                <div class="log-meta">Tabbed by region: East Asia · Europe · South Asia · Africa · Middle East · Americas · Pacific</div>
             </div>
+            <div class="log-tag tag-hermes">HERMES</div>
         </div>
-        <div class="blocker-item">
-            <div class="blocker-icon">🔍</div>
-            <div class="blocker-body">
-                <div class="blocker-name">Web search backend empty</div>
-                <div class="blocker-reason">Research crons hitting dead ends — Perplexity API ($20/mo) would fix</div>
+        <div class="log-item">
+            <div class="log-date">May 14</div>
+            <div class="log-dot amber"></div>
+            <div class="log-content">
+                <div class="log-title">PISCO CRM — 50+ European companies loaded</div>
+                <div class="log-meta">Transport/logistics · Meat processing · Construction · Hospitality</div>
             </div>
+            <div class="log-tag tag-hermes">HERMES</div>
+        </div>
+        <div class="log-item">
+            <div class="log-date">May 14</div>
+            <div class="log-dot amber"></div>
+            <div class="log-content">
+                <div class="log-title">City Match Quiz rebuilt — adaptive version</div>
+                <div class="log-meta">60+ variables · Madrid market context</div>
+            </div>
+            <div class="log-tag tag-hermes">HERMES</div>
+        </div>
+        <div class="log-item">
+            <div class="log-date">May 12</div>
+            <div class="log-dot blue"></div>
+            <div class="log-content">
+                <div class="log-title">Niah South Summit setup — Tally + Mailchimp + Squarespace + Zapier</div>
+                <div class="log-meta">Phase 1 manual first · automation added after live working</div>
+            </div>
+            <div class="log-tag tag-jordan">JORDAN</div>
+        </div>
+        <div class="log-item">
+            <div class="log-date">May 11</div>
+            <div class="log-dot amber"></div>
+            <div class="log-content">
+                <div class="log-title">Workspace organized — MAP.md + project folders</div>
+                <div class="log-meta">PISCO · Massage Club · Niah · Neurotech · MBA structured</div>
+            </div>
+            <div class="log-tag tag-hermes">HERMES</div>
         </div>
     </div>
 
     <!-- PROJECTS -->
     <div class="section">
-        <div class="section-title">Jordan's Projects</div>
-        <div class="project-strip">
-            <a class="project-card" href="https://jordanjayhays-cpu.github.io/007-Axton/neurotech/dashboards/neurotech-dashboard.html">
-                <span class="p-icon">🧠</span>
-                <span class="p-name">Neurotech</span>
-                <span class="p-status p-active">Running daily</span>
-            </a>
-            <a class="project-card" href="https://jordanjayhays-cpu.github.io/007-Axton/niah/dashboards/niah-dashboard.html">
-                <span class="p-icon">🤝</span>
-                <span class="p-name">Niah</span>
-                <span class="p-status p-active">South Summit live</span>
-            </a>
-            <a class="project-card" href="https://jordanjayhays-cpu.github.io/007-Axton/pisco-dashboard.html">
-                <span class="p-icon">📦</span>
-                <span class="p-name">PISCO</span>
-                <span class="p-status p-blocked">Email blocked</span>
-            </a>
-            <a class="project-card" href="https://jordanjayhays-cpu.github.io/007-Axton/massage-pass/index.html">
-                <span class="p-icon">💆</span>
-                <span class="p-name">Massage Pass</span>
-                <span class="p-status p-active">Daily leads</span>
-            </a>
-            <a class="project-card" href="https://jordanjayhays-cpu.github.io/007-Axton/conscious.html">
-                <span class="p-icon">🚀</span>
-                <span class="p-name">Conscious Pod</span>
-                <span class="p-status p-active">Showroom live</span>
-            </a>
+        <div class="section-title">Projects</div>
+        <div class="project-item">
+            <div class="project-icon">🧠</div>
+            <div class="project-info">
+                <div class="project-name">Neurotech Intelligence</div>
+                <div class="project-desc">80+ companies tracked · non-US → US report live · videos planned</div>
+            </div>
+            <div class="status-pill s-active">Active</div>
+        </div>
+        <div class="project-item">
+            <div class="project-icon">📦</div>
+            <div class="project-info">
+                <div class="project-name">PISCO Pipeline</div>
+                <div class="project-desc">50+ European companies · transport/logistics/meat/construction</div>
+            </div>
+            <div class="status-pill s-waiting">Waiting on email tool</div>
+        </div>
+        <div class="project-item">
+            <div class="project-icon">💆</div>
+            <div class="project-info">
+                <div class="project-name">Massage Pass / Massage Club</div>
+                <div class="project-desc">Madrid therapist marketplace · Supabase backend</div>
+            </div>
+            <div class="status-pill s-active">Active</div>
+        </div>
+        <div class="project-item">
+            <div class="project-icon">🤝</div>
+            <div class="project-info">
+                <div class="project-name">Niah — South Summit</div>
+                <div class="project-desc">B2B event networking · Tally + Mailchimp + Squarespace</div>
+            </div>
+            <div class="status-pill s-active">Active</div>
+        </div>
+        <div class="project-item">
+            <div class="project-icon">🎓</div>
+            <div class="project-info">
+                <div class="project-name">Harvard MBA Simulation</div>
+                <div class="project-desc">W21312 · R1101C · 325031 · GSCM strategy cases</div>
+            </div>
+            <div class="status-pill s-waiting">Needs prep</div>
+        </div>
+        <div class="project-item">
+            <div class="project-icon">🎵</div>
+            <div class="project-info">
+                <div class="project-name">PK Music</div>
+                <div class="project-desc">ProfileStack MVP · music releases</div>
+            </div>
+            <div class="status-pill s-blocked">Blocked</div>
         </div>
     </div>
 
-    <!-- ALL DASHBOARDS -->
+    <!-- DASHBOARDS -->
     <div class="section">
         <div class="section-title">All Dashboards</div>
-        <div class="db-grid">
-            <a class="db-card" href="https://jordanjayhays-cpu.github.io/007-Axton/neurotech/dashboards/neurotech-dashboard.html">
-                <div class="db-icon">🧠</div>
-                <span class="db-name">Neurotech</span>
-                <span class="db-sub">Intelligence</span>
-                <div class="db-status ok"></div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+            <a class="action-btn" href="../the-passage.html" style="text-decoration:none; padding:12px;">
+                <span style="font-size:1.1rem;">🧠</span><br>
+                <span style="font-size:0.72rem;font-weight:700;">The Passage</span><br>
+                <span style="font-size:0.6rem;color:#666;">Philosophy</span>
             </a>
-            <a class="db-card" href="https://jordanjayhays-cpu.github.io/007-Axton/niah/dashboards/niah-dashboard.html">
-                <div class="db-icon">🤝</div>
-                <span class="db-name">Niah</span>
-                <span class="db-sub">South Summit</span>
-                <div class="db-status ok"></div>
+            <a class="action-btn" href="../neurotech/dashboards/neurotech-dashboard.html" style="text-decoration:none; padding:12px;">
+                <span style="font-size:1.1rem;">🧠</span><br>
+                <span style="font-size:0.72rem;font-weight:700;">Neurotech</span><br>
+                <span style="font-size:0.6rem;color:#666;">Companies</span>
             </a>
-            <a class="db-card" href="https://jordanjayhays-cpu.github.io/007-Axton/pisco-dashboard.html">
-                <div class="db-icon">📦</div>
-                <span class="db-name">PISCO</span>
-                <span class="db-sub">Pipeline</span>
-                <div class="db-status warn"></div>
+            <a class="action-btn" href="../pisco-dashboard.html" style="text-decoration:none; padding:12px;">
+                <span style="font-size:1.1rem;">📦</span><br>
+                <span style="font-size:0.72rem;font-weight:700;">PISCO</span><br>
+                <span style="font-size:0.6rem;color:#666;">Pipeline</span>
             </a>
-            <a class="db-card" href="https://jordanjayhays-cpu.github.io/007-Axton/massage-pass/index.html">
-                <div class="db-icon">💆</div>
-                <span class="db-name">Massage Pass</span>
-                <span class="db-sub">Madrid</span>
-                <div class="db-status ok"></div>
+            <a class="action-btn" href="../niah-dashboard/index.html" style="text-decoration:none; padding:12px;">
+                <span style="font-size:1.1rem;">🤝</span><br>
+                <span style="font-size:0.72rem;font-weight:700;">Niah</span><br>
+                <span style="font-size:0.6rem;color:#666;">Events</span>
             </a>
-            <a class="db-card" href="https://jordanjayhays-cpu.github.io/007-Axton/conscious.html">
-                <div class="db-icon">🚀</div>
-                <span class="db-name">Conscious Pod</span>
-                <span class="db-sub">Showroom</span>
-                <div class="db-status ok"></div>
+            <a class="action-btn" href="../overnight-builds/massage-pass-landing.html" style="text-decoration:none; padding:12px;">
+                <span style="font-size:1.1rem;">💆</span><br>
+                <span style="font-size:0.72rem;font-weight:700;">Massage Pass</span><br>
+                <span style="font-size:0.6rem;color:#666;">Landing</span>
             </a>
-            <a class="db-card" href="https://jordanjayhays-cpu.github.io/007-Axton/the-passage.html">
-                <div class="db-icon">📖</div>
-                <span class="db-name">The Passage</span>
-                <span class="db-sub">130 concepts</span>
-                <div class="db-status ok"></div>
+            <a class="action-btn" href="../city-quiz/city-match-quiz-v2.html" style="text-decoration:none; padding:12px;">
+                <span style="font-size:1.1rem;">🏙️</span><br>
+                <span style="font-size:0.72rem;font-weight:700;">City Quiz</span><br>
+                <span style="font-size:0.6rem;color:#666;">v2</span>
             </a>
-            <a class="db-card" href="https://jordanjayhays-cpu.github.io/007-Axton/city-quiz/city-match-quiz-v2.html">
-                <div class="db-icon">🏙️</div>
-                <span class="db-name">City Quiz</span>
-                <span class="db-sub">Madrid match</span>
-                <div class="db-status ok"></div>
+            <a class="action-btn" href="../harvard-simulation-quiz.html" style="text-decoration:none; padding:12px;">
+                <span style="font-size:1.1rem;">🎓</span><br>
+                <span style="font-size:0.72rem;font-weight:700;">Harvard Sim</span><br>
+                <span style="font-size:0.6rem;color:#666;">Quiz</span>
             </a>
-            <a class="db-card" href="https://jordanjayhays-cpu.github.io/007-Axton/harvard-simulation-quiz.html">
-                <div class="db-icon">🎓</div>
-                <span class="db-name">Harvard Sim</span>
-                <span class="db-sub">MBA prep</span>
-                <div class="db-status ok"></div>
+            <a class="action-btn" href="../hermes-factory.html" style="text-decoration:none; padding:12px;">
+                <span style="font-size:1.1rem;">🤖</span><br>
+                <span style="font-size:0.72rem;font-weight:700;">Hermes</span><br>
+                <span style="font-size:0.6rem;color:#666;">Factory</span>
             </a>
-            <a class="db-card" href="https://jordanjayhays-cpu.github.io/007-Axton/hermes-hub.html">
-                <div class="db-icon">🤖</div>
-                <span class="db-name">Hermes Hub</span>
-                <span class="db-sub">Command center</span>
-                <div class="db-status ok"></div>
-            </a>
-        </div>
-    </div>
-
-    <!-- ACTIVE LOOPS -->
-    <div class="section">
-        <div class="section-title">Active Loops Running</div>
-        <div class="cron-item">
-            <div class="cron-dot ok"></div>
-            <div class="cron-body">
-                <div class="cron-name">Hermes Health Loop</div>
-                <div class="cron-meta">Checks services · Next: Tomorrow 08:00</div>
-            </div>
-            <div class="cron-time">Daily 8AM</div>
-        </div>
-        <div class="cron-item">
-            <div class="cron-dot ok"></div>
-            <div class="cron-body">
-                <div class="cron-name">Hermes Self-Improve</div>
-                <div class="cron-meta">Runs curator + health · Next: Today 09:00</div>
-            </div>
-            <div class="cron-time">Daily 9AM</div>
-        </div>
-        <div class="cron-item">
-            <div class="cron-dot ok"></div>
-            <div class="cron-body">
-                <div class="cron-name">Niah Event Scout</div>
-                <div class="cron-meta">Madrid events · Next: Tomorrow 08:00</div>
-            </div>
-            <div class="cron-time">Daily 8AM</div>
-        </div>
-        <div class="cron-item">
-            <div class="cron-dot ok"></div>
-            <div class="cron-body">
-                <div class="cron-name">Neurotech Research</div>
-                <div class="cron-meta">Daily research · Next: Tomorrow 08:00</div>
-            </div>
-            <div class="cron-time">Daily 8AM</div>
-        </div>
-        <div class="cron-item">
-            <div class="cron-dot ok"></div>
-            <div class="cron-body">
-                <div class="cron-name">Madrid Massage Leads</div>
-                <div class="cron-meta">Daily scout · Next: Today 09:00</div>
-            </div>
-            <div class="cron-time">Daily 9AM</div>
-        </div>
-        <div class="cron-item">
-            <div class="cron-dot error"></div>
-            <div class="cron-body">
-                <div class="cron-name">Neurotech Dashboard Refresh</div>
-                <div class="cron-meta">ERROR: Output truncated · Next: Today 10:00</div>
-            </div>
-            <div class="cron-time">Daily 10AM ⚠️</div>
         </div>
     </div>
 
     <!-- TASKS -->
     <div class="section">
-        <div class="section-title">Your Tasks — tap to check off</div>
+        <div class="section-title">Tasks — tap to check off</div>
         <div class="task-item" onclick="toggleTask('t1')">
             <div class="task-check" id="t1"></div>
             <div class="task-body">
-                <div class="task-text" id="t1-text">Give me a fresh Resend API key</div>
-                <div class="task-meta">Unblocks all email loops — resend.com → API keys</div>
+                <div class="task-text" id="t1-text">DM Rachel King on LinkedIn — Massage Club intro</div>
+                <div class="task-meta">Neurotech founder · BCI startup · PISCO lead</div>
             </div>
             <div class="task-pri pri-h">HIGH</div>
         </div>
         <div class="task-item" onclick="toggleTask('t2')">
             <div class="task-check" id="t2"></div>
             <div class="task-body">
-                <div class="task-text" id="t2-text">Decide if Claude Sonnet 4 is worth it</div>
-                <div class="task-meta">You gave me the key — should I switch from MiniMax M2.7?</div>
+                <div class="task-text" id="t2-text">DM Victor Presa on LinkedIn — Madrid market</div>
+                <div class="task-meta">Strategic contact · Madrid</div>
             </div>
             <div class="task-pri pri-h">HIGH</div>
         </div>
         <div class="task-item" onclick="toggleTask('t3')">
             <div class="task-check" id="t3"></div>
             <div class="task-body">
-                <div class="task-text" id="t3-text">Look at the Consciousness Pod showroom</div>
-                <div class="task-meta">conscious.html — is the new pod design good?</div>
+                <div class="task-text" id="t3-text">WhatsApp Javier Estrada — Mallorca lead</div>
+                <div class="task-meta">Warm lead · Mallorca market</div>
             </div>
-            <div class="task-pri pri-m">MED</div>
+            <div class="task-pri pri-h">HIGH</div>
         </div>
         <div class="task-item" onclick="toggleTask('t4')">
             <div class="task-check" id="t4"></div>
             <div class="task-body">
-                <div class="task-text" id="t4-text">Tell me what you want to decide next</div>
-                <div class="task-meta">COMARE ICP · PISCO ICP · Niah next move</div>
+                <div class="task-text" id="t4-text">Send 10 PISCO cold emails</div>
+                <div class="task-meta">Waiting on email tool — SendGrid / Apollo / Instantly</div>
             </div>
             <div class="task-pri pri-m">MED</div>
         </div>
         <div class="task-item" onclick="toggleTask('t5')">
             <div class="task-check" id="t5"></div>
             <div class="task-body">
-                <div class="task-text" id="t5-text">Buy massagepass.com domain</div>
-                <div class="task-meta">~$10 · still available</div>
+                <div class="task-text" id="t5-text">Post ProfileStack on X/LinkedIn</div>
+                <div class="task-meta">MVP ready to publish</div>
             </div>
-            <div class="task-pri pri-l">LOW</div>
+            <div class="task-pri pri-m">MED</div>
         </div>
         <div class="task-item" onclick="toggleTask('t6')">
             <div class="task-check" id="t6"></div>
             <div class="task-body">
-                <div class="task-text" id="t6-text">DM Rachel King on LinkedIn — Neurotech intro</div>
-                <div class="task-meta">BCI startup · Warm lead</div>
+                <div class="task-text" id="t6-text">Decide COMARE ICP</div>
+                <div class="task-meta">Pharmacies · Restaurants · Medical · Gyms — pick one</div>
+            </div>
+            <div class="task-pri pri-m">MED</div>
+        </div>
+        <div class="task-item" onclick="toggleTask('t7')">
+            <div class="task-check" id="t7"></div>
+            <div class="task-body">
+                <div class="task-text" id="t7-text">Write Neurotech Video 1 script</div>
+                <div class="task-meta">"The New Space Race" · thumbnail ready</div>
+            </div>
+            <div class="task-pri pri-l">LOW</div>
+        </div>
+        <div class="task-item" onclick="toggleTask('t8')">
+            <div class="task-check" id="t8"></div>
+            <div class="task-body">
+                <div class="task-text" id="t8-text">Buy massagepass.com domain</div>
+                <div class="task-meta">~$10 · easy win</div>
             </div>
             <div class="task-pri pri-l">LOW</div>
         </div>
 
-        <div class="completed-toggle" onclick="toggleCompleted()">✓ Show completed</div>
+        <div class="completed-toggle" onclick="toggleCompleted()">✓ Completed (tap to show)</div>
         <div class="completed-list" id="completed-list">
             <div class="task-item done-task">
                 <div class="task-check done">✓</div>
                 <div class="task-body">
-                    <div class="task-text done">Consciousness Pod showroom rebuilt</div>
-                    <div class="task-meta">Jun 17</div>
+                    <div class="task-text done">Memory fixed — Honcho key replaced + backfilled 21 facts</div>
+                    <div class="task-meta">May 16</div>
                 </div>
             </div>
             <div class="task-item done-task">
                 <div class="task-check done">✓</div>
                 <div class="task-body">
-                    <div class="task-text done">Hermes Hub built</div>
-                    <div class="task-meta">Jun 17</div>
+                    <div class="task-text done">The Passage — added 50 new concepts (86 total)</div>
+                    <div class="task-meta">May 16</div>
                 </div>
             </div>
             <div class="task-item done-task">
                 <div class="task-check done">✓</div>
                 <div class="task-body">
-                    <div class="task-text done">Self-improvement loop added</div>
-                    <div class="task-meta">Jun 17</div>
+                    <div class="task-text done">Niah South Summit setup</div>
+                    <div class="task-meta">May 12</div>
                 </div>
             </div>
             <div class="task-item done-task">
                 <div class="task-check done">✓</div>
                 <div class="task-body">
-                    <div class="task-text done">Memory consolidated</div>
-                    <div class="task-meta">Jun 17</div>
+                    <div class="task-text done">Workspace organized</div>
+                    <div class="task-meta">May 11</div>
+                </div>
+            </div>
+            <div class="task-item done-task">
+                <div class="task-check done">✓</div>
+                <div class="task-body">
+                    <div class="task-text done">City Match Quiz rebuilt</div>
+                    <div class="task-meta">May 14</div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- QUICK ACTIONS -->
+    <!-- CRON JOBS -->
     <div class="section">
-        <div class="section-title">Quick Actions — tap to run</div>
+        <div class="section-title">Scheduled Crons (live from Hermes)</div>
+        <div class="cron-item">
+            <div class="cron-dot on"></div>
+            <div class="cron-body">
+                <div class="cron-name">Self-Improvement Research</div>
+                <div class="cron-meta">Skills: research-pipelines · Next: May 17 07:00</div>
+            </div>
+            <div class="cron-time">7:00 AM</div>
+        </div>
+        <div class="cron-item">
+            <div class="cron-dot on"></div>
+            <div class="cron-body">
+                <div class="cron-name">Neurotech: Non-US → US Market</div>
+                <div class="cron-meta">Skills: research-pipelines, neurotech · Next: May 16 08:00</div>
+            </div>
+            <div class="cron-time">8:00 AM</div>
+        </div>
+        <div class="cron-item">
+            <div class="cron-dot on"></div>
+            <div class="cron-body">
+                <div class="cron-name">Madrid Massage Leads — Daily Scout</div>
+                <div class="cron-meta">Facebook/Forum · Last run: May 15 09:02 ✓</div>
+            </div>
+            <div class="cron-time">9:00 AM</div>
+        </div>
+        <div class="cron-item">
+            <div class="cron-dot on"></div>
+            <div class="cron-body">
+                <div class="cron-name">Neurotech Dashboard — Daily Refresh</div>
+                <div class="cron-meta">Skills: last30days-research · Last run: May 15 10:01 ✓</div>
+            </div>
+            <div class="cron-time">10:00 AM</div>
+        </div>
+        <div class="cron-item">
+            <div class="cron-dot on"></div>
+            <div class="cron-body">
+                <div class="cron-name">Neurotech Funding — Daily Research</div>
+                <div class="cron-meta">Skills: last30days-research · Last run: May 15 08:05 ✓</div>
+            </div>
+            <div class="cron-time">8:00 AM</div>
+        </div>
+        <div class="cron-item">
+            <div class="cron-dot on"></div>
+            <div class="cron-body">
+                <div class="cron-name">Philosophical Songhooks</div>
+                <div class="cron-meta">Skills: research · Next: May 18 10:00</div>
+            </div>
+            <div class="cron-time">Sun 10AM</div>
+        </div>
+        <div class="cron-item">
+            <div class="cron-dot on"></div>
+            <div class="cron-body">
+                <div class="cron-name">Neurotech Weekly Dashboard Update</div>
+                <div class="cron-meta">Script: neurotech-weekly-update.py · Next: May 18 09:00</div>
+            </div>
+            <div class="cron-time">Mon 9AM</div>
+        </div>
+    </div>
+
+    <!-- BLOCKERS -->
+    <div class="section">
+        <div class="section-title">Blockers</div>
+        <div class="blocker-item">
+            <div class="blocker-icon">📧</div>
+            <div class="blocker-body">
+                <div class="blocker-name">Email sending tool</div>
+                <div class="blocker-reason">PISCO outreach blocked · SendGrid / Apollo / Instantly</div>
+            </div>
+        </div>
+        <div class="blocker-item">
+            <div class="blocker-icon">🔑</div>
+            <div class="blocker-body">
+                <div class="blocker-name">Vercel API Token</div>
+                <div class="blocker-reason">Custom app deployment blocked</div>
+            </div>
+        </div>
+        <div class="blocker-item">
+            <div class="blocker-icon">🔑</div>
+            <div class="blocker-body">
+                <div class="blocker-name">Notion API Key</div>
+                <div class="blocker-reason">PISCO CRM · COMARE pipeline · MASSAGE-PASS sync blocked</div>
+            </div>
+        </div>
+        <div class="blocker-item">
+            <div class="blocker-icon">🔑</div>
+            <div class="blocker-body">
+                <div class="blocker-name">Supabase service_role key</div>
+                <div class="blocker-reason">Massage Club bookings pipeline</div>
+            </div>
+        </div>
+        <div class="blocker-item">
+            <div class="blocker-icon">🎵</div>
+            <div class="blocker-body">
+                <div class="blocker-name">DistroKid account</div>
+                <div class="blocker-reason">PK Music releases blocked</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="section">
+        <div class="section-title">Actions — tap to run</div>
         <div class="action-grid">
-            <a class="action-btn" href="https://t.me/jordanjayhays_bot?text=What's%20happening%3F">
+            <a class="action-btn" href="https://t.me/JordanHaysBot?text=Status">
                 <span class="action-icon">⚡</span>
-                Ask me — what's happening right now?
+                Ask Hermes — What's happening?
                 <span class="action-arrow">→</span>
             </a>
-            <a class="action-btn" href="https://t.me/jordanjayhays_bot?text=Run%20health%20check">
-                <span class="action-icon">🩺</span>
-                Run Hermes health check
-                <span class="action-arrow">→</span>
-            </a>
-            <a class="action-btn" href="https://t.me/jordanjayhays_bot?text=Research%20%5Btopic%5D">
-                <span class="action-icon">🔍</span>
-                Research something new
-                <span class="action-arrow">→</span>
-            </a>
-            <a class="action-btn" href="https://t.me/jordanjayhays_bot?text=Find%20events%20in%20Spain">
-                <span class="action-icon">📅</span>
-                Find events in Spain for Niah
-                <span class="action-arrow">→</span>
-            </a>
-            <a class="action-btn" href="https://t.me/jordanjayhays_bot?text=Show%20me%20all%20tasks">
+            <a class="action-btn" href="https://t.me/JordanHaysBot?text=Tasks">
                 <span class="action-icon">✅</span>
-                List all tasks and what's next
+                List all tasks
                 <span class="action-arrow">→</span>
             </a>
-            <a class="action-btn" href="https://t.me/jordanjayhays_bot?text=Improve%20yourself">
-                <span class="action-icon">⚡</span>
-                Self-improve — run the loop now
+            <a class="action-btn" href="https://t.me/JordanHaysBot?text=Run%20Neurotech%20scan%20now">
+                <span class="action-icon">🔄</span>
+                Run Neurotech scan now
+                <span class="action-arrow">→</span>
+            </a>
+            <a class="action-btn" href="https://t.me/JordanHaysBot?text=New%20lead">
+                <span class="action-icon">📋</span>
+                Add new PISCO lead
+                <span class="action-arrow">→</span>
+            </a>
+            <a class="action-btn" href="https://t.me/JordanHaysBot?text=PISCO%20CRM%20status">
+                <span class="action-icon">📦</span>
+                PISCO CRM status
+                <span class="action-arrow">→</span>
+            </a>
+            <a class="action-btn" href="https://t.me/JordanHaysBot?text=Decide">
+                <span class="action-icon">🔮</span>
+                What should I decide next?
+                <span class="action-arrow">→</span>
+            </a>
+            <a class="action-btn" href="https://t.me/JordanHaysBot?text=Pause%20cron%209am">
+                <span class="action-icon">⏸</span>
+                Pause 9am cron
+                <span class="action-arrow">→</span>
+            </a>
+            <a class="action-btn" href="https://t.me/JordanHaysBot?text=Resume%20cron%209am">
+                <span class="action-icon">▶</span>
+                Resume 9am cron
                 <span class="action-arrow">→</span>
             </a>
         </div>
     </div>
 
-</div>
-
-<!-- FOOTER -->
-<div class="footer">
-    Mission Control · Hermes 007 · <a href="https://t.me/jordanjayhays_bot">Talk to Hermes</a>
 </div>
 
 <script>
-    // Live clock
+    // Clock
     function updateClock() {
         const now = new Date();
-        const madrid = now.toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit', hour12:false, timeZone:'Europe/Madrid'});
-        const date = now.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric', timeZone:'Europe/Madrid'});
-        document.getElementById('clock').textContent = madrid;
-        document.getElementById('date').textContent = date;
+        document.getElementById('clock').textContent = now.toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit', hour12:false});
+        document.getElementById('date').textContent = now.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'});
     }
     updateClock();
     setInterval(updateClock, 1000);
 
-    // Greeting based on hour
-    const hour = new Date().getHours();
-    const greeting = document.getElementById('greeting-sub');
-    if (hour < 12) greeting.textContent = '6 loops running · 1 blocker · Good morning';
-    else if (hour < 17) greeting.textContent = '6 loops running · 1 blocker · Good afternoon';
-    else greeting.textContent = '6 loops running · 1 blocker · Good evening';
-
-    // Task toggle
+    // Task toggle — SAVES to localStorage
     function toggleTask(id) {
         const check = document.getElementById(id);
         const text = document.getElementById(id + '-text');
@@ -736,7 +690,8 @@
         localStorage.setItem('mc_task_' + id, isDone ? 'done' : '');
     }
 
-    ['t1','t2','t3','t4','t5','t6'].forEach(id => {
+    // Restore task states on load
+    ['t1','t2','t3','t4','t5','t6','t7','t8'].forEach(id => {
         if (localStorage.getItem('mc_task_' + id) === 'done') {
             const check = document.getElementById(id);
             const text = document.getElementById(id + '-text');
@@ -745,13 +700,13 @@
         }
     });
 
+    // Show/hide completed
     function toggleCompleted() {
         const list = document.getElementById('completed-list');
         const toggle = document.querySelector('.completed-toggle');
         list.classList.toggle('show');
-        toggle.textContent = list.classList.contains('show') ? '✓ Hide completed' : '✓ Show completed';
+        toggle.textContent = list.classList.contains('show') ? '✓ Completed (tap to hide)' : '✓ Completed (tap to show)';
     }
 </script>
-
 </body>
 </html>

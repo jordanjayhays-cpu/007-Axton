@@ -520,6 +520,223 @@
     </div>
   </div>
 
+<!-- HARVARD SIMULATION PREP -->
+  <h2>Harvard GSCM Simulation Prep</h2>
+  <div class="table-wrap" style="margin-bottom: 32px;">
+    <table>
+      <thead>
+        <tr>
+          <th>Room</th>
+          <th>What to Do</th>
+          <th>Key Rule</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Design Room</strong></td>
+          <td>Pick option with HIGHEST profit per unit for Model A and Model B</td>
+          <td>Higher profit = better option</td>
+        </tr>
+        <tr>
+          <td><strong>Forecasting</strong></td>
+          <td>Calculate YOUR OWN average of 6 forecasters, multiply by 8</td>
+          <td>Use your average, not Consensus</td>
+        </tr>
+        <tr>
+          <td><strong>Production</strong></td>
+          <td>Model A → cheapest/slow supplier. Model B → fastest/expensive</td>
+          <td>Model B = underproduce (neverage newsvendor)</td>
+        </tr>
+        <tr>
+          <td><strong>Boardroom</strong></td>
+          <td>Explain WHY you made each decision — not just what</td>
+          <td>Carla = forecast math. Ankit = risk. Matheo = cost. Adele = flexibility. Mia = capacity</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- NEWSVENDOR -->
+  <h2>Newsvendor Rule</h2>
+  <div class="table-wrap" style="margin-bottom: 32px;">
+    <table>
+      <thead>
+        <tr>
+          <th>Model</th>
+          <th>Overage Cost</th>
+          <th>Underage Cost</th>
+          <th>Rule</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Model A</strong></td>
+          <td>$17.50 (Cost − Markdown)</td>
+          <td>$70 (Price − Cost)</td>
+          <td>Underage > Overage</td>
+          <td style="color: var(--confirmed);">OVERPRODUCE</td>
+        </tr>
+        <tr>
+          <td><strong>Model B</strong></td>
+          <td>$136.50 (Cost − Markdown)</td>
+          <td>$90 (Price − Cost)</td>
+          <td>Overage > Underage</td>
+          <td style="color: #e74c3c;">UNDERPRODUCE</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- FORMULAS -->
+  <h2>Formulas</h2>
+  <div class="table-wrap" style="margin-bottom: 32px;">
+    <table>
+      <thead>
+        <tr>
+          <th>Calculation</th>
+          <th>Formula</th>
+          <th>Example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Profit per unit</td>
+          <td><code>Price − Cost</code></td>
+          <td>$245 − $175 = $70</td>
+        </tr>
+        <tr>
+          <td>Margin %</td>
+          <td><code>(Profit ÷ Price) × 100</code></td>
+          <td>($70 ÷ $245) × 100 = 28.6%</td>
+        </tr>
+        <tr>
+          <td>Total units</td>
+          <td><code>Consensus × 8</code></td>
+          <td>65 × 8 = 520 units</td>
+        </tr>
+        <tr>
+          <td>Your average</td>
+          <td><code>Sum of 6 forecasters ÷ 6</code></td>
+          <td>54+64+62+58+60+61 = 359 ÷ 6 = 60</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SUPPLIERS -->
+  <h2>Suppliers</h2>
+  <div class="table-wrap" style="margin-bottom: 32px;">
+    <table>
+      <thead>
+        <tr>
+          <th>Supplier</th>
+          <th>Cost</th>
+          <th>Speed</th>
+          <th>Best For</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>FarFarAway</strong></td>
+          <td>Cheapest</td>
+          <td>Slow (4 months)</td>
+          <td>Model A (stable demand)</td>
+        </tr>
+        <tr>
+          <td><strong>Far Away</strong></td>
+          <td>Medium</td>
+          <td>Medium (3 months)</td>
+          <td>Backup / mixed</td>
+        </tr>
+        <tr>
+          <td><strong>PrettyClose</strong></td>
+          <td>Expensive</td>
+          <td>Fast (0 months)</td>
+          <td>Model B (volatile demand)</td>
+        </tr>
+        <tr>
+          <td><strong>Very Fast</strong></td>
+          <td>Most expensive</td>
+          <td>Fastest (0 months)</td>
+          <td>Mid-year adjustments</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- BOARD MEMBERS -->
+  <h2>Board Members</h2>
+  <div class="table-wrap" style="margin-bottom: 32px;">
+    <table>
+      <thead>
+        <tr>
+          <th>Who</th>
+          <th>Role</th>
+          <th>What They Ask</th>
+          <th>How to Answer</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Carla</strong></td>
+          <td>Forecasting</td>
+          <td>"How did you develop your forecast?"</td>
+          <td>"We calculated our own average of all 6 forecasters rather than relying on Consensus"</td>
+        </tr>
+        <tr>
+          <td><strong>Ankit</strong></td>
+          <td>Risk</td>
+          <td>"How did you manage uncertainty?"</td>
+          <td>"We chose options that reduce standard deviation. For Model B, we underproduce because overage cost exceeds underage cost"</td>
+        </tr>
+        <tr>
+          <td><strong>Matheo</strong></td>
+          <td>Cost</td>
+          <td>"Why those suppliers?"</td>
+          <td>"Model A → low-cost (stable demand). Model B → flexible (volatile demand)"</td>
+        </tr>
+        <tr>
+          <td><strong>Adele</strong></td>
+          <td>Sourcing</td>
+          <td>"How do you ensure flexibility?"</td>
+          <td>"We scheduled 30-50% of Model B production early with a flexible supplier"</td>
+        </tr>
+        <tr>
+          <td><strong>Mia</strong></td>
+          <td>Capacity</td>
+          <td>"What's your capacity plan?"</td>
+          <td>"We ensure maximum flexible capacity for demand swings. Issue change order if demand 20%+ above forecast"</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- DESIGN OPTIONS BY YEAR -->
+  <h2>Design Options by Year</h2>
+  <div class="table-wrap" style="margin-bottom: 32px;">
+    <table>
+      <thead>
+        <tr>
+          <th>Year</th>
+          <th>Options</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Year 1</strong></td><td>Upgraded Communication, Exterior Material, Stylish, Storage Capacity</td></tr>
+        <tr><td><strong>Year 2</strong></td><td>Stylish, Storage Capacity, Extended Battery, Durability</td></tr>
+        <tr><td><strong>Year 3</strong></td><td>Extended Battery, Durability, Audio Quality, GPS Anti-theft</td></tr>
+        <tr><td><strong>Year 4</strong></td><td>GPS Anti-theft, Audio Quality, Super Slim, Camera Quality</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- FULL GUIDE LINK -->
+  <div style="background: var(--border); border-radius: 12px; padding: 24px; border: 1px solid var(--terracotta); text-align: center; margin-bottom: 32px;">
+    <p style="font-size: 14px; color: var(--off-white); margin-bottom: 12px;">Full guide with step-by-step room explanations:</p>
+    <a href="https://raw.githubusercontent.com/jordanjayhays-cpu/mission-control/master/harvard-simulation-prep-guide.md" style="color: var(--terracotta); font-size: 13px; font-weight: 600;">Open Full Prep Guide (Markdown)</a>
+  </div>
+
 </main>
 
 <footer>

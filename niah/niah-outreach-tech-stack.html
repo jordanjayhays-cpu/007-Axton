@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Niah — Outreach Tech Stack Comparison</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0F0E0C;
+    --card: #1A1816;
+    --border: #2E2822;
+    --text: #E8E0D5;
+    --muted: #9A8F82;
+    --terracotta: #C4704F;
+    --green: #4CAF50;
+    --red: #E05555;
+    --yellow: #E8C547;
+    --blue: #5B8FD9;
+  }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; line-height: 1.6; }
+  .container { max-width: 900px; margin: 0 auto; padding: 40px 24px; }
+  header { margin-bottom: 48px; }
+  .badge { background: var(--terracotta); color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; display: inline-block; margin-bottom: 12px; }
+  h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+  .subtitle { color: var(--muted); font-size: 15px; }
+  .meta { display: flex; gap: 24px; margin-top: 16px; font-size: 13px; color: var(--muted); }
+  .meta span { display: flex; align-items: center; gap: 6px; }
+  .verdict-box { background: var(--card); border: 2px solid var(--terracotta); border-radius: 16px; padding: 28px; margin-bottom: 40px; }
+  .verdict-box h2 { color: var(--terracotta); font-size: 18px; margin-bottom: 12px; }
+  .verdict-box p { font-size: 15px; }
+  .section-label { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: var(--muted); margin-bottom: 16px; margin-top: 40px; }
+  .tier { margin-bottom: 32px; }
+  .tier-name { font-size: 14px; font-weight: 700; color: var(--terracotta); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 12px; }
+  .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .card-name { font-size: 16px; font-weight: 700; }
+  .card-price { font-size: 14px; font-weight: 700; color: var(--terracotta); }
+  .card-body { font-size: 13px; }
+  .pros { color: var(--green); margin-bottom: 8px; }
+  .cons { color: var(--red); margin-bottom: 8px; }
+  .verdict { color: var(--yellow); font-weight: 600; font-size: 13px; margin-top: 10px; }
+  .verdict-green { color: var(--green); }
+  .best { border-color: var(--green); }
+  .best .card-name { color: var(--green); }
+  .rec-box { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 28px; margin: 40px 0; }
+  .rec-box h3 { font-size: 16px; font-weight: 700; margin-bottom: 16px; color: var(--terracotta); }
+  .phase { margin-bottom: 24px; }
+  .phase-header { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+  .phase-num { background: var(--border); padding: 4px 10px; border-radius: 8px; font-size: 12px; font-weight: 700; }
+  .phase-title { font-weight: 700; font-size: 14px; }
+  .phase-detail { color: var(--muted); font-size: 13px; padding-left: 36px; }
+  .phase-price { color: var(--terracotta); font-weight: 600; }
+  .week-plan { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 28px; margin-top: 40px; }
+  .week-plan h3 { font-size: 16px; font-weight: 700; margin-bottom: 20px; color: var(--text); }
+  .day { display: flex; gap: 16px; margin-bottom: 16px; align-items: flex-start; }
+  .day-num { background: var(--terracotta); color: white; padding: 4px 10px; border-radius: 8px; font-size: 12px; font-weight: 700; min-width: 50px; text-align: center; }
+  .day-content { font-size: 13px; color: var(--muted); }
+  .day-content strong { color: var(--text); }
+  .budget { background: linear-gradient(135deg, #1A1816 0%, #2A2320 100%); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-top: 32px; text-align: center; }
+  .budget-num { font-size: 32px; font-weight: 700; color: var(--terracotta); }
+  .budget-label { font-size: 13px; color: var(--muted); margin-top: 4px; }
+  .comparison-table { width: 100%; border-collapse: collapse; margin: 32px 0; font-size: 13px; }
+  .comparison-table th { text-align: left; padding: 12px; border-bottom: 2px solid var(--border); color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+  .comparison-table td { padding: 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .check { color: var(--green); }
+  .cross { color: var(--red); }
+  .partial { color: var(--yellow); }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <div class="badge">Niah — Outbound Strategy</div>
+  <h1>Outreach Tech Stack Comparison</h1>
+  <p class="subtitle">What's the best tool to get your first clients?</p>
+  <div class="meta">
+    <span>🎯 Target: Event organizers, conferences, co-working spaces</span>
+    <span>💰 Stage: Early startup — need cost-effective</span>
+  </div>
+</header>
+
+<div class="verdict-box">
+  <h2>🚨 BOTTOM LINE RECOMMENDATION</h2>
+  <p><strong>Start with Apollo.io at $49/mo</strong> — it handles prospecting + email + LinkedIn + CRM in one place. That's everything you need to get first clients.</p>
+  <p style="margin-top:8px;color:var(--muted);font-size:13px;">Upgrade to Apollo + LinkedIn Sales Navigator ($79/mo) once you're closing revenue. Don't overcomplicate it yet.</p>
+</div>
+
+<div class="comparison-table">
+  <table>
+    <thead>
+      <tr>
+        <th>Tool</th>
+        <th>Price</th>
+        <th>Email Sequences</th>
+        <th>LinkedIn Outreach</th>
+        <th>Prospect Database</th>
+        <th>CRM</th>
+        <th>Best For</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong style="color:var(--green)">Apollo.io ★</strong></td>
+        <td>$49/mo</td>
+        <td class="check">✓ Full</td>
+        <td class="partial">Light</td>
+        <td class="check">✓ 300M+</td>
+        <td class="check">✓ Built-in</td>
+        <td>All-in-one startup stack</td>
+      </tr>
+      <tr>
+        <td><strong>Lemlist</strong></td>
+        <td>$79/mo</td>
+        <td class="check">✓ Full</td>
+        <td class="check">✓ Strong</td>
+        <td class="partial">Email only</td>
+        <td class="check">✓ Built-in</td>
+        <td>LinkedIn-first outreach</td>
+      </tr>
+      <tr>
+        <td><strong>Instantly.ai</strong></td>
+        <td>$39/mo</td>
+        <td class="check">✓ Full</td>
+        <td class="cross">✗ None</td>
+        <td class="cross">✗ None</td>
+        <td class="cross">✗ None</td>
+        <td>High-volume email only</td>
+      </tr>
+      <tr>
+        <td><strong>Smartlead</strong></td>
+        <td>$49/mo</td>
+        <td class="check">✓ Full</td>
+        <td class="cross">✗ None</td>
+        <td class="cross">✗ None</td>
+        <td class="cross">✗ None</td>
+        <td>Email-only, cheap</td>
+      </tr>
+      <tr>
+        <td><strong>Phantombuster + Apollo</strong></td>
+        <td>$107/mo</td>
+        <td class="check">✓ Full</td>
+        <td class="check">✓ Best</td>
+        <td class="check">✓ Full</td>
+        <td class="check">✓ Built-in</td>
+        <td>Full LinkedIn automation</td>
+      </tr>
+      <tr>
+        <td><strong>HubSpot Free + Sales Nav</strong></td>
+        <td>$30/mo</td>
+        <td class="cross">✗ Manual</td>
+        <td class="check">✓ Good</td>
+        <td class="partial">Partial</td>
+        <td class="check">✓ Good</td>
+        <td>Free but manual</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<p class="section-label">Tier 1 — All-in-One</p>
+
+<div class="tier">
+  <div class="card best">
+    <div class="card-header">
+      <div class="card-name">Apollo.io ★ RECOMMENDED</div>
+      <div class="card-price">$49/mo</div>
+    </div>
+    <div class="card-body">
+      <div class="pros">✓ 300M+ contact database (find any prospect)</div>
+      <div class="pros">✓ Email sequences with automation</div>
+      <div class="pros">✓ Built-in CRM + deal pipeline</div>
+      <div class="pros">✓ Email warmup included</div>
+      <div class="pros">✓ LinkedIn browser extension (find contacts)</div>
+      <div class="cons">✗ LinkedIn automation is light (1 channel)</div>
+      <div class="cons">✗ 5,000 emails/mo cap on base plan</div>
+      <div class="verdict verdict-green">BEST VALUE — covers everything at $49/mo</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-name">Lemlist</div>
+      <div class="card-price">$79/mo</div>
+    </div>
+    <div class="card-body">
+      <div class="pros">✓ Strong LinkedIn multi-channel sequencing</div>
+      <div class="pros">✓ Email + LinkedIn + voicemail in one</div>
+      <div class="pros">✓ Personalization with dynamic images/videos</div>
+      <div class="cons">✗ No built-in prospect database</div>
+      <div class="cons">✗ More expensive than Apollo</div>
+      <div class="verdict">Only worth $30 more if LinkedIn is your primary channel</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-name">Instantly.ai</div>
+      <div class="card-price">$39/mo</div>
+    </div>
+    <div class="card-body">
+      <div class="pros">✓ Unlimited email accounts</div>
+      <div class="pros">✓ 30+ warmup accounts included</div>
+      <div class="cons">✗ NO LinkedIn automation</div>
+      <div class="cons">✗ NO prospect database (bring your own leads)</div>
+      <div class="cons">✗ NO CRM</div>
+      <div class="verdict">Cheap but incomplete — you'd need 2 more tools anyway</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-name">Smartlead</div>
+      <div class="card-price">$49/mo</div>
+    </div>
+    <div class="card-body">
+      <div class="pros">✓ Unlimited email sending</div>
+      <div class="pros">✓ Good email sequencing</div>
+      <div class="pros">✓ Warmup built in</div>
+      <div class="cons">✗ NO LinkedIn automation</div>
+      <div class="cons">✗ NO prospect database</div>
+      <div class="verdict">Fine for email but doesn't solve the prospecting problem</div>
+    </div>
+  </div>
+</div>
+
+<p class="section-label">Tier 2 — LinkedIn-First Stack</p>
+
+<div class="tier">
+  <div class="card">
+    <div class="card-header">
+      <div class="card-name">Phantombuster + Apollo.io</div>
+      <div class="card-price">$107/mo</div>
+    </div>
+    <div class="card-body">
+      <div class="pros">✓ Best-in-class LinkedIn automation</div>
+      <div class="pros">✓ Apollo handles email + prospecting + CRM</div>
+      <div class="cons">✗ Expensive (two subscriptions)</div>
+      <div class="cons">✗ Complex to manage</div>
+      <div class="verdict">Only if LinkedIn outreach is making you money — not yet</div>
+    </div>
+  </div>
+</div>
+
+<p class="section-label">Tier 3 — Free/Cheap</p>
+
+<div class="tier">
+  <div class="card">
+    <div class="card-header">
+      <div class="card-name">HubSpot Free + LinkedIn Sales Nav</div>
+      <div class="card-price">$30/mo</div>
+    </div>
+    <div class="card-body">
+      <div class="pros">✓ Real free CRM that scales</div>
+      <div class="pros">✓ Good LinkedIn prospecting with Sales Nav</div>
+      <div class="cons">✗ Manual email sending (no sequences)</div>
+      <div class="cons">✗ No automated follow-ups</div>
+      <div class="cons">✗ No email warmup (deliverability risk)</div>
+      <div class="verdict">Ok if you literally can't afford $49/mo — you'll outgrow it fast</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-name">Google Sheets + Notion (manual)</div>
+      <div class="card-price">Free</div>
+    </div>
+    <div class="card-body">
+      <div class="pros">✓ Free</div>
+      <div class="cons">✗ Not a real CRM</div>
+      <div class="cons">✗ High manual work</div>
+      <div class="cons">✗ No tracking of what works</div>
+      <div class="verdict">Too primitive — wastes your time (which is more expensive than $49/mo)</div>
+    </div>
+  </div>
+</div>
+
+<div class="rec-box">
+  <h3>📋 Recommended Build-Out for Niah</h3>
+
+  <div class="phase">
+    <div class="phase-header">
+      <span class="phase-num">NOW</span>
+      <span class="phase-title">Apollo.io — $49/mo</span>
+    </div>
+    <div class="phase-detail">
+     Prospect → Email → LinkedIn helper → CRM — all in one tool.<br>
+      <span class="phase-price">Cost: €45/mo</span>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-header">
+      <span class="phase-num">3-6 MO</span>
+      <span class="phase-title">Apollo + LinkedIn Sales Navigator — $79/mo</span>
+    </div>
+    <div class="phase-detail">
+      Once revenue comes in, add Sales Nav for deeper LinkedIn prospecting.<br>
+      <span class="phase-price">Cost: €72/mo</span>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-header">
+      <span class="phase-num">6-12 MO</span>
+      <span class="phase-title">Keep Apollo or switch to Lemlist if LinkedIn is dominant</span>
+    </div>
+    <div class="phase-detail">
+      If building a sales team, add a calling tool (Callendo or similar).<br>
+      <span class="phase-price">Cost: ~$100+/mo</span>
+    </div>
+  </div>
+</div>
+
+<div class="week-plan">
+  <h3>⚡ Your First Week with Apollo — Action Plan</h3>
+
+  <div class="day">
+    <span class="day-num">Day 1</span>
+    <div class="day-content">
+      <strong>Set up Apollo account</strong><br>
+      Connect your Gmail. Configure email warmup. Set up your first campaign.
+    </div>
+  </div>
+  <div class="day">
+    <span class="day-num">Day 2</span>
+    <div class="day-content">
+      <strong>Build first prospect list</strong><br>
+      Target: Event organizers at conferences in Madrid/Spain. Aim for 50 contacts. Use Apollo's filters: job title + location + company type.
+    </div>
+  </div>
+  <div class="day">
+    <span class="day-num">Day 3</span>
+    <div class="day-content">
+      <strong>Write your outreach sequence</strong><br>
+      3 email variants (short/native, value-prop, question-based). Set up 4-step follow-up sequence (Day 0, Day 3, Day 7, Day 14).
+    </div>
+  </div>
+  <div class="day">
+    <span class="day-num">Day 4</span>
+    <div class="day-content">
+      <strong>Launch your first campaign</strong><br>
+      Upload 50 prospects. Start sending 10-15 emails/day. Don't flood — drip.
+    </div>
+  </div>
+  <div class="day">
+    <span class="day-num">Day 5</span>
+    <div class="day-content">
+      <strong>Check first replies, update CRM</strong><br>
+      Log every reply in Apollo CRM. Move hot leads to "Contacted" stage. Respond to anyone who replied.
+    </div>
+  </div>
+  <div class="day">
+    <span class="day-num">Day 6-7</span>
+    <div class="day-content">
+      <strong>Review metrics, refine</strong><br>
+      Check open rates, reply rates. Kill low-performing email variants. Build your second prospect list (next 50).
+    </div>
+  </div>
+</div>
+
+<div class="budget">
+  <div class="budget-num">€45/mo</div>
+  <div class="budget-label">Apollo.io cost = less than 2 coffees/week. Worth it if it brings in 1 event client at €500-2,000.</div>
+</div>
+
+</div>
+</body>
+</html>

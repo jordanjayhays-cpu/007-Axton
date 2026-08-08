@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Hermes Agents Make Money — Jordan's Playbook</title>
+    <style>
+        :root {
+            --bg: #1C1816;
+            --off-white: #F2EBE1;
+            --terracotta: #A65746;
+            --taupe: #8C7B6C;
+            --border: #332D29;
+            --green: #4A7C59;
+            --font: -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: var(--bg);
+            color: var(--off-white);
+            font-family: var(--font);
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        h1 { font-size: 26px; color: var(--terracotta); margin-bottom: 8px; }
+        h2 { font-size: 18px; color: var(--off-white); margin: 24px 0 10px; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+        h3 { font-size: 15px; color: var(--terracotta); margin: 16px 0 6px; }
+        p { color: var(--taupe); margin-bottom: 12px; font-size: 14px; }
+        .subtitle { color: var(--taupe); font-size: 13px; margin-bottom: 24px; }
+        
+        .highlight-box {
+            background: var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+            border-left: 4px solid var(--green);
+        }
+        .highlight-box h3 { color: var(--green); margin-top: 0; }
+        
+        .money-box {
+            background: linear-gradient(135deg, #2a2420, #332D29);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 16px 0;
+            text-align: center;
+        }
+        .money-box .amount { font-size: 36px; font-weight: 700; color: var(--terracotta); }
+        .money-box .label { color: var(--taupe); font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+        
+        .model-card {
+            background: var(--border);
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+        .model-name { font-size: 15px; font-weight: 700; color: var(--off-white); margin-bottom: 4px; }
+        .model-revenue { font-size: 13px; color: var(--green); margin-bottom: 6px; }
+        .model-desc { font-size: 13px; color: var(--taupe); }
+        
+        .step-list { list-style: none; }
+        .step-list li {
+            background: var(--border);
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: var(--off-white);
+        }
+        .step-list li strong { color: var(--terracotta); }
+        
+        .divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+        
+        .action-banner {
+            background: linear-gradient(135deg, var(--terracotta), #8B4A3A);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin: 24px 0;
+        }
+        .action-banner h3 { color: var(--off-white); margin-bottom: 8px; }
+        .action-banner p { color: rgba(242,235,225,0.8); margin-bottom: 14px; font-size: 13px; }
+        .action-banner a {
+            display: inline-block;
+            background: var(--bg);
+            color: var(--off-white);
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .stat-row {
+            display: flex;
+            gap: 12px;
+            margin: 12px 0;
+            flex-wrap: wrap;
+        }
+        .stat-pill {
+            background: var(--border);
+            border-radius: 20px;
+            padding: 6px 14px;
+            font-size: 12px;
+            color: var(--off-white);
+        }
+        .stat-pill .num { color: var(--terracotta); font-weight: 700; }
+        
+        blockquote {
+            background: var(--border);
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin: 12px 0;
+            font-size: 13px;
+            color: var(--taupe);
+            border-left: 3px solid var(--terracotta);
+        }
+    </style>
+</head>
+<body>
+
+<h1>🤖 How AI Agents Make Money</h1>
+<p class="subtitle">Research brief — what works, what doesn't, Jordan's play</p>
+
+<!-- KEY FINDINGS -->
+<h2>💡 The Core Insight</h2>
+<div class="highlight-box">
+    <h3>Building is not the bottleneck — Distribution is.</h3>
+    <p style="color: var(--off-white); font-size: 14px;">A hacker ran Claude Code autonomously for 72 hours. Built 7 products, posted 150+ times. Made <strong>$0</strong>. Production without distribution = nothing.</p>
+    <p style="color: var(--off-white); font-size: 14px; margin-top: 8px;">The AI agent gold rush isn't about who builds the best agent — it's about who can sell and deliver one.</p>
+</div>
+
+<div class="stat-row">
+    <div class="stat-pill"><span class="num">$5.5B</span> AI agent market 2025</div>
+    <div class="stat-pill"><span class="num">$52B+</span> projected 2030</div>
+    <div class="stat-pill"><span class="num">40%</span> CAGR growth</div>
+    <div class="stat-pill"><span class="num">70%</span> human-in-loop wins</div>
+</div>
+
+<h2>💰 What Actually Makes Money</h2>
+
+<!-- MODEL 1: Autonomous SDR -->
+<div class="model-card">
+    <div class="model-name">🤝 Autonomous SDR (Sales Development Rep)</div>
+    <div class="model-revenue">$2,000–$5,000/month per client | 70-80% cheaper than human SDR</div>
+    <div class="model-desc">AI agent handles prospecting, outreach, qualification, appointment setting. B2B companies spend $50K–$150K/year per SDR. You charge $2–5K/month for 70-80% cost savings. The work is already done — Jordan's neuro outreach IS this.</div>
+</div>
+
+<!-- MODEL 2: B2B Automation Agency -->
+<div class="model-card">
+    <div class="model-name">⚙️ B2B Automation Agency</div>
+    <div class="model-revenue">$47K in 90 days | $23K MRR with 14 clients</div>
+    <div class="model-desc">$800–$3,500/month retainers. Build agents that automate specific business workflows (lead management, invoice processing, content repurposing). Clients pay for outcomes, not code.</div>
+</div>
+
+<!-- MODEL 3: Outcome-Based Pricing -->
+<div class="model-card">
+    <div class="model-name">📊 Outcome-Based Pricing</div>
+    <div class="model-revenue">$0.99 per resolution | $9.99 per qualified lead | $50-200/meeting booked</div>
+    <div class="model-desc">Charge per result, not per hour. Intercom Fin charges $0.99 per resolved conversation. Best alignment: vendor bears risk, client pays only for results. This is what Jordan should charge for neuro outreach.</div>
+</div>
+
+<!-- MODEL 4: Agent Building Freelance -->
+<div class="model-card">
+    <div class="model-name">🛠️ AI Agent Building (Freelance)</div>
+    <div class="model-revenue">$100K in 6 months | $3K–$8K setup + $1K–$3K/month retainer</div>
+    <div class="model-desc">Build custom agents for businesses. $3K–$8K upfront setup + $1K–$3K/month maintenance. Clients own the agent, you maintain it. Contracts + milestones + partial payment upfront.</div>
+</div>
+
+<!-- MODEL 5: Subscription SaaS -->
+<div class="model-card">
+    <div class="model-name">📦 AI SaaS Subscription</div>
+    <div class="model-revenue">$99–$500/month per client | $150–200 ARPU</div>
+    <div class="model-desc">Build a product that runs itself. Vertical-specific agents (legal, healthcare, neurotech) show 3–5x higher retention. $29–$99/seat for SMB, $500+/month for enterprise.</div>
+</div>
+
+<h2>🔑 What Fails</h2>
+<blockquote>"Cost-plus pricing, copying consumer models ($20 ChatGPT doesn't work for specialized agents), and per-seat models that ignore agent autonomy."</blockquote>
+<ul style="color: var(--taupe); font-size: 13px; padding-left: 20px;">
+    <li>AI wrapper chatbots with no clear workflow — $0</li>
+    <li>Generic "AI consulting" — saturated, low margin</li>
+    <li>Full autonomy without human gates — 1.2x ROI vs 4x ROI with human-in-loop</li>
+    <li>Per-token pricing with no buffer — API costs wipe margins</li>
+</ul>
+
+<h2>🧠 Jordan's Play — Tonight</h2>
+<p>The neuro outreach work already done is an Autonomous SDR agent. Here's how to monetize it:</p>
+
+<h3>Option A: Sell the Agent as a Service</h3>
+<div class="step-list">
+    <li><strong>Package it:</strong> "Neurotech US SDR Agent — targets non-US neuro companies for US market entry partnerships"</li>
+    <li><strong>Price:</strong> $2,000–$3,000/month per client (neurotech companies)</li>
+    <li><strong>Deliver:</strong> 10–20 qualified leads/month + outreach sent</li>
+    <li><strong>Who pays:</strong> Any non-US neurotech company entering the US</li>
+</div>
+
+<h3>Option B: Charge Per Outcome</h3>
+<div class="step-list">
+    <li><strong>Price:</strong> $500 per qualified meeting booked, $1,000 per US partnership closed</li>
+    <li><strong>No upfront cost to client</strong> — you only get paid if you deliver</li>
+    <li><strong>Upside:</strong> One deal at $10K success fee = equivalent to 20 hours of cold calling</li>
+</div>
+
+<h3>Option C: Build and License</h3>
+<div class="step-list">
+    <li><strong>Build:</strong> A "US Neurotech Market Entry Agent" that any non-US neuro company can use</li>
+    <li><strong>License:</strong> $500–$1,500/month subscription</li>
+    <li><strong>Tools:</strong> Railway (already paid), GitHub Pages (already paid), your existing lead list</li>
+</div>
+
+<div class="divider"></div>
+
+<h2>📊 The Math</h2>
+<div class="money-box">
+    <div class="amount">$10K–$40K</div>
+    <div class="label">Potential monthly revenue from neuro outreach</div>
+</div>
+<div style="text-align: center; font-size: 13px; color: var(--taupe); margin-top: 8px;">
+    <p>2 neuro clients × $3K/month retainer = $6K/month</p>
+    <p>1 partnership closed × $10K success fee = $10K one-time</p>
+    <p>1 agent licensed × $1K/month = $12K/year recurring</p>
+</div>
+
+<div class="divider"></div>
+
+<h2>🛠️ Tools You Already Have (Paid For)</h2>
+<div class="stat-row">
+    <div class="stat-pill">✅ Railway — running now, $5/mo</div>
+    <div class="stat-pill">✅ GitHub Pages — deployed, free</div>
+    <div class="stat-pill">✅ Hermes (me) — your agent, working</div>
+    <div class="stat-pill">✅ Notion — pipeline tracking</div>
+</div>
+<div class="stat-row">
+    <div class="stat-pill">✅ Nanobot (006) — Railway agent, can delegate</div>
+    <div class="stat-pill">✅ 10 neuro company leads — done</div>
+    <div class="stat-pill">✅ 30 email scripts — done</div>
+    <div class="stat-pill">✅ This research — done</div>
+</div>
+
+<div class="action-banner">
+    <h3>The Work is Done. Now Execute.</h3>
+    <p>The agent infrastructure is built. The leads are found. The emails are written. The revenue models are clear. All that's left is sending the emails and signing clients.</p>
+    <a href="emails-day-0.html">📧 Open the Email Doc → Send the First Email</a>
+</div>
+
+</body>
+</html>

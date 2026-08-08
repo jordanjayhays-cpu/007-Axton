@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What's Actually Selling — Research Brief</title>
+    <style>
+        :root {
+            --bg: #1C1816;
+            --off-white: #F2EBE1;
+            --terracotta: #A65746;
+            --taupe: #8C7B6C;
+            --border: #332D29;
+            --green: #4A7C59;
+            --font: -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: var(--bg);
+            color: var(--off-white);
+            font-family: var(--font);
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        h1 { font-size: 26px; color: var(--terracotta); margin-bottom: 8px; }
+        h2 { font-size: 18px; color: var(--off-white); margin: 24px 0 10px; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+        h3 { font-size: 15px; color: var(--terracotta); margin: 16px 0 6px; }
+        p { color: var(--taupe); margin-bottom: 12px; font-size: 14px; }
+        .subtitle { color: var(--taupe); font-size: 13px; margin-bottom: 24px; }
+
+        .product-card {
+            background: var(--border);
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 14px;
+            border-left: 4px solid var(--green);
+        }
+        .product-name { font-size: 16px; font-weight: 700; color: var(--off-white); }
+        .product-revenue { font-size: 13px; color: var(--green); margin: 4px 0 8px; }
+        .product-desc { font-size: 13px; color: var(--taupe); }
+
+        .highlight-box {
+            background: var(--border);
+            border-radius: 12px;
+            padding: 18px;
+            margin: 18px 0;
+            border-left: 4px solid var(--terracotta);
+        }
+
+        .pricing-table {
+            background: var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 14px 0;
+        }
+        .pricing-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--bg);
+            font-size: 13px;
+        }
+        .pricing-row:last-child { border-bottom: none; }
+        .pricing-label { color: var(--taupe); }
+        .pricing-value { color: var(--off-white); font-weight: 600; }
+
+        .action-box {
+            background: linear-gradient(135deg, var(--terracotta), #8B4A3A);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin: 24px 0;
+        }
+        .action-box h3 { color: var(--off-white); margin-bottom: 8px; }
+        .action-box p { color: rgba(242,235,225,0.8); margin-bottom: 14px; font-size: 13px; }
+        .action-box a {
+            display: inline-block;
+            background: var(--bg);
+            color: var(--off-white);
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .checklist {
+            background: var(--border);
+            border-radius: 10px;
+            padding: 14px;
+            margin: 12px 0;
+        }
+        .checklist-title { font-size: 14px; font-weight: 700; color: var(--off-white); margin-bottom: 10px; }
+        .check-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin-bottom: 6px;
+            font-size: 13px;
+            color: var(--taupe);
+        }
+        .check-item input[type="checkbox"] { margin-top: 3px; accent-color: var(--terracotta); }
+
+        blockquote {
+            background: var(--border);
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin: 12px 0;
+            font-size: 13px;
+            color: var(--taupe);
+            border-left: 3px solid var(--terracotta);
+        }
+
+        .divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+
+        .stat-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0; }
+        .stat-pill {
+            background: var(--border);
+            border-radius: 20px;
+            padding: 5px 12px;
+            font-size: 12px;
+            color: var(--off-white);
+        }
+        .stat-pill .num { color: var(--terracotta); font-weight: 700; }
+    </style>
+</head>
+<body>
+
+<h1>📊 What's Actually Selling in 2025</h1>
+<p class="subtitle">Research from 200,000+ digital products — real data, not theory</p>
+
+<div class="highlight-box">
+    <h3 style="margin-top: 0;">The Core Finding</h3>
+    <p style="color: var(--off-white); font-size: 14px;">"People don't pay for long books — they pay for solutions. Buyers don't want flexibility — they want completion."</p>
+    <p style="color: var(--taupe); font-size: 13px; margin-top: 8px;">Products that <strong style="color: var(--off-white);">remove friction from work people are already doing</strong> outsell everything else.</p>
+</div>
+
+<h2>🔥 What Actually Sells</h2>
+
+<!-- PRODUCT 1 -->
+<div class="product-card">
+    <div class="product-name">📊 Hyper-Specific Spreadsheets / Notion Templates</div>
+    <div class="product-revenue">$19–$49 one-time | $3,500/month from bundles</div>
+    <div class="product-desc">Trackers, systems, operating environments. People pay for something that solves ONE problem completely. Notion templates, Google Sheet trackers, budget systems. The key: hyper-specific niche, not generic.</div>
+</div>
+
+<!-- PRODUCT 2 -->
+<div class="product-card">
+    <div class="product-name">🤖 Industry-Specific AI Prompt Packs</div>
+    <div class="product-revenue">$19–$39 one-time | $10K/month from bundles</div>
+    <div class="product-desc">Prompts for a specific job (wedding photographer, neurotech CEO, real estate agent) dramatically outperform generic. Sellers making $10K/month with bundles. Key: industry-specific, not general ChatGPT prompts.</div>
+</div>
+
+<!-- PRODUCT 3 -->
+<div class="product-card">
+    <div class="product-name">⚙️ Automation Workflow Templates (n8n, Make)</div>
+    <div class="product-revenue">$29–$49 one-time | $4,200 over 4 months</div>
+    <div class="product-desc">"n8n SEO automation template" made $1,310 in one sale. "50+ Make.com templates" at $19. The self-service automation market is exploding. People want the workflow, not the lesson.</div>
+</div>
+
+<!-- PRODUCT 4 -->
+<div class="product-card">
+    <div class="product-name">✅ High-Stakes Checklists</div>
+    <div class="product-revenue">$19–$29 one-time</div>
+    <div class="product-desc">"Product launch checklist", "FDA submission checklist", "First 30 days of my business checklist". Sold as certainty for high-stakes tasks. People pay to avoid catastrophic mistakes.</div>
+</div>
+
+<!-- PRODUCT 5 -->
+<div class="product-card">
+    <div class="product-name">🔍 Research / Market Maps</div>
+    <div class="product-revenue">$49–$97 one-time | $1K–$5K/month</div>
+    <div class="product-desc">"Niche research map", "Competitor landscape tool", "Funding round tracker". People pay to avoid choosing the wrong niche. Raw data + explanation of what it means = sellable.</div>
+</div>
+
+<!-- PRODUCT 6 -->
+<div class="product-card">
+    <div class="product-name">📅 Subscription Monitoring Services</div>
+    <div class="product-revenue">$19–$49/month recurring</div>
+    <div class="product-desc">Monthly email + PDF report on a specific market. "AI agent funding tracker", "Neurotech deal radar". People pay to stay informed without doing the research themselves. Fully automated delivery.</div>
+</div>
+
+<h2>💰 The Pricing Sweet Spots</h2>
+<div class="pricing-table">
+    <div class="pricing-row">
+        <span class="pricing-label">Impulse buy (templates, prompts)</span>
+        <span class="pricing-value">$19–$29</span>
+    </div>
+    <div class="pricing-row">
+        <span class="pricing-label">Mid-tier (comprehensive templates + docs)</span>
+        <span class="pricing-value">$49–$79</span>
+    </div>
+    <div class="pricing-row">
+        <span class="pricing-label">Premium (video walkthroughs + community)</span>
+        <span class="pricing-value">$97+</span>
+    </div>
+    <div class="pricing-row">
+        <span class="pricing-label">Subscription (monitoring, lead gen)</span>
+        <span class="pricing-value">$19–$85/month</span>
+    </div>
+    <div class="pricing-row">
+        <span class="pricing-label">SaaS tools (self-service AI tools)</span>
+        <span class="pricing-value">$29–$500/month</span>
+    </div>
+</div>
+
+<div class="divider"></div>
+
+<h2>🧠 What Jordan Should Build</h2>
+<div class="highlight-box">
+    <h3 style="margin-top: 0;">Based on what's selling + what Jordan has</h3>
+    <p style="color: var(--off-white); font-size: 14px;">Two options that match: (1) what the market wants, (2) what Jordan can build and deliver automatically tonight</p>
+</div>
+
+<h3>Option A: "Neurotech Funding Radar" — $29/month subscription</h3>
+<div class="product-desc" style="margin-bottom: 10px;">
+    <strong style="color: var(--off-white);">What:</strong> Monthly email + PDF with non-US neuro companies that raised funding in the last 30 days. Who raised, how much, what they need for US market entry.
+</div>
+<div class="product-desc" style="margin-bottom: 10px;">
+    <strong style="color: var(--off-white);">Why it sells:</strong> "People pay to avoid doing the research themselves." Research/market maps are proven sellers. Subscription model = recurring revenue.
+</div>
+<div class="product-desc">
+    <strong style="color: var(--off-white);">Delivery:</strong> Fully automated. Railway cron runs on the 1st of each month. You never touch it.
+</div>
+
+<h3>Option B: "Neurotech US Entry Tracker" — $49 Notion Template</h3>
+<div class="product-desc" style="margin-bottom: 10px;">
+    <strong style="color: var(--off-white);">What:</strong> A Notion spreadsheet tracking 50+ non-US neuro companies, their funding stage, FDA status, US entry strategy, and contact info. Updated monthly.
+</div>
+<div class="product-desc" style="margin-bottom: 10px;">
+    <strong style="color: var(--off-white);">Why it sells:</strong> "Hyper-specific spreadsheets that solve ONE problem completely." This is hyper-specific — not generic productivity. A BD consultant or VC researcher would pay $49 to not build this themselves.
+</div>
+<div class="product-desc">
+    <strong style="color: var(--off-white);">Delivery:</strong> Gumroad or Lemon Squeezy. Instant delivery. You never talk to the buyer.
+</div>
+
+<div class="divider"></div>
+
+<h2>✅ What Makes a Product Sell</h2>
+<div class="checklist">
+    <div class="checklist-title">The 2025 Digital Product Checklist</div>
+    <div class="check-item"><input type="checkbox"> ✓ Removes friction from work they're already doing</div>
+    <div class="check-item"><input type="checkbox"> ✓ Reduces risk of a high-stakes decision</div>
+    <div class="check-item"><input type="checkbox"> ✓ Eliminates decisions (one specific job, not many)</div>
+    <div class="check-item"><input type="checkbox"> ✓ Turns effort into output (template > tutorial)</div>
+    <div class="check-item"><input type="checkbox"> ✓ Hyper-specific (not "marketing templates" but "wedding photographer social media kit")</div>
+    <div class="check-item"><input type="checkbox"> ✓ Self-service delivery (no human after purchase)</div>
+</div>
+
+<div class="divider"></div>
+
+<h2>🔑 Key Insight from 200K Products</h2>
+<blockquote>
+"The massive surge in 'Answers,' 'Exams,' and 'Certification' products (+380%+) signals high demand for study guides and test prep materials. <strong style="color: var(--off-white);">Educational arbitrage</strong> — sell knowledge someone would otherwise have to learn themselves — is a proven path."
+</blockquote>
+<blockquote>
+"AI prompts grew 48%, AI tools 32%. It's no longer a flash in the pan — it's a sustained category. Industry-specific prompts (not generic ChatGPT) are winning."
+</blockquote>
+
+<div class="stat-row">
+    <div class="stat-pill"><span class="num">2205%</span> growth: Answers products</div>
+    <div class="stat-pill"><span class="num">614%</span> growth: Exam prep</div>
+    <div class="stat-pill"><span class="num">48%</span> growth: AI prompts</div>
+    <div class="stat-pill"><span class="num">$10K</span> month from prompt bundles</div>
+</div>
+
+<div class="divider"></div>
+
+<h2>⚡ Immediate Action</h2>
+<div class="action-box">
+    <h3>Build This Tonight</h3>
+    <p>"Neurotech Funding Radar" — $29/month subscription.<br>Monthly PDF report of non-US neuro companies that raised money.<br>Automated on Railway. Delivered by email. Zero ongoing work.</p>
+    <a href="mailto:jordanjayhays@gmail.com">Tell me to build it →</a>
+</div>
+
+</body>
+</html>

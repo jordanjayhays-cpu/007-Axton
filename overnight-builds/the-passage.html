@@ -1,0 +1,2564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Passage</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body, html { width: 100%; height: 100%; overflow: hidden; }
+        body {
+            font-family: 'Georgia', serif;
+            background: #000;
+        }
+        .stage {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .stage img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+        .overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to bottom,
+                rgba(0,0,0,0.2) 0%,
+                rgba(0,0,0,0.5) 30%,
+                rgba(0,0,0,0.8) 60%,
+                rgba(0,0,0,0.98) 100%
+            );
+            z-index: 1;
+        }
+        .border-glow {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 2;
+            box-shadow: inset 0 0 100px rgba(20,80,80,0.2);
+            border: 1px solid rgba(20,80,60,0.12);
+        }
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 40px 30px;
+        }
+        .header {
+            text-align: center;
+            flex-shrink: 0;
+        }
+        .header h1 {
+            font-size: 3em;
+            font-weight: 300;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: #c8e0d8;
+            margin-bottom: 8px;
+            text-shadow: 0 0 60px rgba(40,140,120,0.6);
+        }
+        .header .subtitle {
+            font-size: 0.8em;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: rgba(200,224,216,0.5);
+            margin-bottom: 30px;
+        }
+        .divider {
+            width: 80px;
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(200,224,216,0.4), transparent);
+            margin: 0 auto;
+        }
+
+        /* Tab navigation */
+        .tabs {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 24px 0 20px;
+            flex-shrink: 0;
+        }
+        .tab {
+            padding: 8px 18px;
+            background: rgba(20,80,70,0.15);
+            border: 1px solid rgba(200,224,216,0.12);
+            border-radius: 3px;
+            color: rgba(200,224,216,0.5);
+            font-size: 0.72em;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.35s ease;
+        }
+        .tab:hover {
+            background: rgba(20,80,70,0.3);
+            color: rgba(200,224,216,0.8);
+        }
+        .tab.active {
+            background: rgba(20,80,70,0.45);
+            border-color: rgba(200,224,216,0.3);
+            color: #c8e0d8;
+            box-shadow: 0 0 20px rgba(40,140,120,0.25);
+        }
+        .tab .count {
+            opacity: 0.6;
+            margin-left: 4px;
+        }
+
+        /* Concepts grid */
+        .region-title {
+            font-size: 0.68em;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: rgba(200,224,216,0.35);
+            margin-bottom: 18px;
+            text-align: center;
+        }
+        .concepts-container {
+            flex: 1;
+            overflow-y: auto;
+            width: 100%;
+            max-width: 700px;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(20,80,70,0.4) transparent;
+        }
+        .concepts-container::-webkit-scrollbar {
+            width: 4px;
+        }
+        .concepts-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .concepts-container::-webkit-scrollbar-thumb {
+            background: rgba(20,80,70,0.4);
+            border-radius: 2px;
+        }
+        .concepts {
+            display: none;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px 24px;
+            padding-bottom: 40px;
+        }
+        .concepts.active {
+            display: grid;
+            animation: fadeIn 0.4s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .concept {
+            border-left: 1px solid rgba(200,224,216,0.2);
+            padding-left: 16px;
+        }
+        .concept .name {
+            font-size: 1.05em;
+            color: #c8e0d8;
+            margin-bottom: 3px;
+            font-style: italic;
+        }
+        .concept .origin {
+            font-size: 0.68em;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: rgba(200,224,216,0.4);
+            margin-bottom: 5px;
+        }
+        .concept .meaning {
+            font-size: 0.78em;
+            color: rgba(200,224,216,0.65);
+            line-height: 1.55;
+        }
+        .bottom-note {
+            flex-shrink: 0;
+            margin-top: 20px;
+            font-size: 0.7em;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: rgba(200,224,216,0.3);
+            text-align: center;
+        }
+        .tab-hint {
+            flex-shrink: 0;
+            font-size: 0.65em;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: rgba(200,224,216,0.25);
+            text-align: center;
+            margin-top: 6px;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 { font-size: 1.8em; letter-spacing: 0.25em; }
+            .tabs { gap: 3px; }
+            .tab { padding: 6px 12px; font-size: 0.65em; }
+            .concepts { grid-template-columns: 1fr; gap: 20px; }
+            .content { padding: 24px 20px 20px; }
+        }
+    </style>
+</head>
+<body>
+<div class="stage">
+    <img src="https://raw.githubusercontent.com/jordanjayhays-cpu/mission-control/master/neuromatch/the-passage-bg.jpg" alt="The passage" />
+    <div class="overlay"></div>
+    <div class="border-glow"></div>
+
+    <div class="content">
+        <div class="header">
+            <h1>The Passage</h1>
+            <div class="subtitle">Philosophical Terms · 169 Concepts · 8 Regions</div>
+            <div class="divider"></div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" data-region="all">All<span class="count">264</span></button>
+            <button class="tab" data-region="east-asia">East Asia<span class="count">29</span></button>
+            <button class="tab" data-region="europe">Europe<span class="count">47</span></button>
+            <button class="tab" data-region="south-asia">South Asia<span class="count">13</span></button>
+            <button class="tab" data-region="africa">Africa<span class="count">14</span></button>
+            <button class="tab" data-region="middle-east">Middle East<span class="count">14</span></button>
+            <button class="tab" data-region="americas">Americas<span class="count">12</span></button>
+            <button class="tab" data-region="pacific">Pacific<span class="count">11</span></button>
+            <button class="tab" data-region="new">New<span class="count">99</span></button>
+        </div>
+
+        <div class="tab-hint">↑ click a region to explore ↑</div>
+
+        <div class="concepts-container">
+
+                        <div class="concepts active" data-region="all">
+                <div class="concept">
+                    <div class="name">Abarba</div>
+                    <div class="origin">Ancient Greece · Europe</div>
+                    <div class="meaning">The foam of the sea. Transient, beautiful, and entirely out of your control.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Abhisheka</div>
+                    <div class="origin">Sanskrit · South Asia</div>
+                    <div class="meaning">Empowerment. The initiation that changes the nature of what you are.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Agape</div>
+                    <div class="origin">Greece · Europe</div>
+                    <div class="meaning">Love that asks nothing. Not desire, not affection — unconditional regard.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Akoranga</div>
+                    <div class="origin">Māori · New Zealand/Pacific</div>
+                    <div class="meaning">The sacred transmission. Knowledge passed through direct encounter with the divine — not study, revelation.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Amae</div>
+                    <div class="origin">Japan · East Asia</div>
+                    <div class="meaning">Dependency on another's goodwill. The comfort of being fully accepted.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Amentet</div>
+                    <div class="origin">Egypt · North Africa</div>
+                    <div class="meaning">Truth and rightness. The force that orders the cosmos and the self.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Amor fati</div>
+                    <div class="origin">Stoicism · Europe</div>
+                    <div class="meaning">Love of one's fate. Not resigned acceptance — full embrace of what's real.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Ananda</div>
+                    <div class="origin">Sanskrit · South Asia</div>
+                    <div class="meaning">Bliss. Not happiness — a state of being that doesn't depend on circumstances.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Anatta</div>
+                    <div class="origin">Buddhism · South Asia</div>
+                    <div class="meaning">No permanent self. You are a process, not a thing.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Angst</div>
+                    <div class="origin">Kierkegaard · Europe</div>
+                    <div class="meaning">The dread of possibility. The weight of being the one who decides.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Anicca</div>
+                    <div class="origin">Buddhism · South Asia</div>
+                    <div class="meaning">Impermanence is the only constant. Everything that rises must fall.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">An共生</div>
+                    <div class="origin">Japan · East Asia</div>
+                    <div class="meaning">Symbiosis. The idea that your life is woven into other lives.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Apollonian</div>
+                    <div class="origin">Nietzsche · Europe</div>
+                    <div class="meaning">Order from chaos. The principle of form, reason, and structure.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Aroha</div>
+                    <div class="origin">Māori · New Zealand/Pacific</div>
+                    <div class="meaning">Love that is also compassion. Not romantic alone — the love that sees another person's suffering as your own.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Atma</div>
+                    <div class="origin">Sanskrit · India/South Asia</div>
+                    <div class="meaning">The eternal self. Not the body, not the mind — the unchanging witness behind all experience.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Atman</div>
+                    <div class="origin">Hinduism · South Asia</div>
+                    <div class="meaning">The eternal self. You are not the wave — you are the ocean wearing the wave.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Awe</div>
+                    <div class="origin">Hawaii · Pacific</div>
+                    <div class="meaning">The hush before the infinite. When the small self meets the large.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Ayllu</div>
+                    <div class="origin">Andes · The Americas</div>
+                    <div class="meaning">You are a node in a living web. No one is an orphan.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Ayn</div>
+                    <div class="origin">Arabic · Middle East</div>
+                    <div class="meaning">The eye. To witness without judging — pure attention.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Ayni</div>
+                    <div class="origin">Quechua · Andes/The Americas</div>
+                    <div class="meaning">Reciprocity. What you give returns — the law of return that governs all human exchange.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Aśa</div>
+                    <div class="origin">Zoroastrianism · Persia</div>
+                    <div class="meaning">Truth and right order. The cosmic force that keeps the world from lying to itself.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Bardo</div>
+                    <div class="origin">Tibet · South Asia</div>
+                    <div class="meaning">The gap between death and rebirth. Liminal space as teacher.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Bodhisattva</div>
+                    <div class="origin">Sanskrit · South Asia</div>
+                    <div class="meaning">One who wakes for others. The being who attains enlightenment and chooses to remain in the world to help others.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Botho</div>
+                    <div class="origin">Tswana · Southern Africa</div>
+                    <div class="meaning">The quality of a person. Your worth is measured by what you contribute to others.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Buenaventura</div>
+                    <div class="origin">Spanish · The Americas</div>
+                    <div class="meaning">May it go well. The hope that what you've set in motion turns toward good.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Cafe</div>
+                    <div class="origin">Turkey · Middle East</div>
+                    <div class="meaning">Discussions that outlast the coffee. The art of talking for hours.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Coyote</div>
+                    <div class="origin">Native American · The Americas</div>
+                    <div class="meaning">The trickster. The one who shows up sideways and names what no one sees.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">De</div>
+                    <div class="origin">Chinese · East Asia</div>
+                    <div class="meaning">Virtue. The power that comes from alignment with the Tao — not moral, natural.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Desenko</div>
+                    <div class="origin">Russia · Europe</div>
+                    <div class="meaning">The sadness of fate. A longing for what cannot be changed.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Deshi</div>
+                    <div class="origin">Japan · East Asia</div>
+                    <div class="meaning">The worthy student. One who has internalized the lesson and walks it.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Desvelo</div>
+                    <div class="origin">Spain · Europe</div>
+                    <div class="meaning">The sleeplessness of love. To lie awake thinking of someone — not anxious, just full.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Dharma</div>
+                    <div class="origin">Sanskrit · South Asia</div>
+                    <div class="meaning">The path of truth. Not a belief — a principle that governs the universe and your place in it.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Dhikr</div>
+                    <div class="origin">Arabic · Middle East</div>
+                    <div class="meaning">Remembrance. The practice of keeping the divine present through repetition — heartbeats of the soul.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Dhyana</div>
+                    <div class="origin">Buddhism · South Asia</div>
+                    <div class="meaning">Meditation that absorbs. To still the mind until it becomes the thing it watches.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Dionysian</div>
+                    <div class="origin">Nietzsche · Europe</div>
+                    <div class="meaning">Chaos as liberation. The principle of instinct, intoxication, and excess.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Dolce far niente</div>
+                    <div class="origin">Italy · Europe</div>
+                    <div class="meaning">The sweetness of doing nothing. Productive idleness — art's prerequisite.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Duende</div>
+                    <div class="origin">Spain · Europe</div>
+                    <div class="meaning">The moment when art becomes flesh. A state of heightened presence — not inspiration, possession.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Dukkha</div>
+                    <div class="origin">Buddhism · South Asia</div>
+                    <div class="meaning">Life doesn't fit. The subtle misalignment between expectation and reality.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Dulcinea</div>
+                    <div class="origin">Spain · Europe</div>
+                    <div class="meaning">The ideal beyond reach. You pursue what can never be attained.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Dào</div>
+                    <div class="origin">China · East Asia</div>
+                    <div class="meaning">The path. Not a destination — a way of walking through.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Empathy</div>
+                    <div class="origin">Greece · Europe</div>
+                    <div class="meaning">To feel with. Not pity — standing inside another's fire and staying.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Ena</div>
+                    <div class="origin">Yoruba · West Africa</div>
+                    <div class="meaning">The water of life. The essential substance that runs through all things.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Engimo</div>
+                    <div class="origin">Ireland · Europe</div>
+                    <div class="meaning">The craving for what's out of reach. Hunger that sharpens the hunt.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Ennui</div>
+                    <div class="origin">France · Europe</div>
+                    <div class="meaning">The boredom that comes from having everything except the thing that matters.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Enso</div>
+                    <div class="origin">Japan · East Asia</div>
+                    <div class="meaning">The circle. Enlightenment drawn with one brushstroke — incomplete and perfect.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Ernst</div>
+                    <div class="origin">Germany · Europe</div>
+                    <div class="meaning">Seriousness without somberness. To take the matter seriously without losing lightness.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Eudaimonia</div>
+                    <div class="origin">Aristotle · Europe</div>
+                    <div class="meaning">Flourishing. Not pleasure — the full expression of what you're capable of.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Existenz</div>
+                    <div class="origin">Kierkegaard · Europe</div>
+                    <div class="meaning">The vertigo of freedom. Every choice defines who you are.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Fa'a Samoa</div>
+                    <div class="origin">Samoa · Pacific</div>
+                    <div class="meaning">The Samoan way. The whole system of values, protocol, and obligation that holds a people together.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Fado</div>
+                    <div class="origin">Portugal · Europe</div>
+                    <div class="meaning">Fate. The Portuguese knowing — some things are fixed, sing anyway.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Faka'apa'apa</div>
+                    <div class="origin">Tongan · Pacific</div>
+                    <div class="meaning">Mutual respect. The courtesy that acknowledges the dignity of every person in the room.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Fana</div>
+                    <div class="origin">Persia · Middle East</div>
+                    <div class="meaning">Annihilate the ego. Die before you die. Love as the dissolving agent.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Feng</div>
+                    <div class="origin">China · East Asia</div>
+                    <div class="meaning">Wind. The breath of the world that bends everything it touches.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Feng shui</div>
+                    <div class="origin">China · East Asia</div>
+                    <div class="meaning">Wind and water. The art of arranging space so energy flows.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Fernweh</div>
+                    <div class="origin">Germany · Europe</div>
+                    <div class="meaning">Farsickness. The longing for somewhere you've never been. Wanderlust with a ache in it.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Fikra</div>
+                    <div class="origin">Arabic · Middle East</div>
+                    <div class="meaning">Thought that becomes vision. The ability to see the consequences of action before taking it.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Firgun</div>
+                    <div class="origin">Israel · Middle East</div>
+                    <div class="meaning">Genuine happiness at another's fortune. To cheer without a trace of envy.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Frisson</div>
+                    <div class="origin">France · Europe</div>
+                    <div class="meaning">The shiver of the sublime. A shiver down the spine when something is too beautiful or vast.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Furui</div>
+                    <div class="origin">Japan · East Asia</div>
+                    <div class="meaning">To be old in a way that softens rather than hardens. Ripeness.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Fyr</div>
+                    <div class="origin">Norwegian · Europe</div>
+                    <div class="meaning">The fire. The passion that drives a person toward their purpose — not gentle, not quiet.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Gaman</div>
+                    <div class="origin">Japan · East Asia</div>
+                    <div class="meaning">To endure with dignity. To bear the unbearable without complaint.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Geborgenheit</div>
+                    <div class="origin">Germany · Europe</div>
+                    <div class="meaning">The feeling of being sheltered. Safe enough to be fully seen.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Gemütlichkeit</div>
+                    <div class="origin">Germany · Europe</div>
+                    <div class="meaning">The warmth of belonging. A room, a fire, people who know you — the feeling of being held by the world.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Gestalt</div>
+                    <div class="origin">Germany · Europe</div>
+                    <div class="meaning">The shape that emerges from the parts. The whole is different from the sum — and it's the whole that matters.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Gestimmtheit</div>
+                    <div class="origin">Heidegger · Europe</div>
+                    <div class="meaning">The mood that colors everything. You never see the world neutrally.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Gheorghe</div>
+                    <div class="origin">Romania · Europe</div>
+                    <div class="meaning">The farmer. A name that holds the memory of the land and the sweat of it.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Gul</div>
+                    <div class="origin">Swedish · Europe</div>
+                    <div class="meaning">The deep connection to nature. To feel at home in the wild — the forest is not separate from you.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Ha</div>
+                    <div class="origin">Confucianism · East Asia</div>
+                    <div class="meaning">To break free. The second stage: question what you were taught.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Ha'aha</div>
+                    <div class="origin">Hawaiian · Pacific</div>
+                    <div class="meaning">The quiet of humility. Not silence — the quiet that holds more power than noise.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Hakuna matata</div>
+                    <div class="origin">Swahili · East Africa</div>
+                    <div class="meaning">No worries. Not denial — the choice to not carry what isn't yours.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Han</div>
+                    <div class="origin">Korea · East Asia</div>
+                    <div class="meaning">The weight of grief and resentment. A chip on the shoulder of a people.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Harambee</div>
+                    <div class="origin">Swahili · East Africa</div>
+                    <div class="meaning">Pulling together. We all lean in and the weight rises.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Haya</div>
+                    <div class="origin">Arabic · Middle East</div>
+                    <div class="meaning">Inner light. The shame that comes from self-awareness — the beginning of conscience.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Hikma</div>
+                    <div class="origin">Arabic · Middle East</div>
+                    <div class="meaning">Wisdom that flows from experience. Not book knowledge — the kind of knowing that comes through living.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Hiraeth</div>
+                    <div class="origin">Wales · Europe</div>
+                    <div class="meaning">A homesickness for a place you can't return to. Nostalgia for what's gone.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Hunab Ku</div>
+                    <div class="origin">Maya · The Americas</div>
+                    <div class="meaning">One shooter. The giver of all movement and measure. The pulse that drives the universe.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Hungr</div>
+                    <div class="origin">Icelandic · Europe</div>
+                    <div class="meaning">A hunger that is also thirst. Wanting something so badly your whole body aches for it.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Hygge</div>
+                    <div class="origin">Denmark · Europe</div>
+                    <div class="meaning">The art of cozy presence. Candlelight and conversation — no agenda.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Hyggelig</div>
+                    <div class="origin">Denmark · Europe</div>
+                    <div class="meaning">The warmth of intimate gathering. Candlelight, shared food, the feeling of being held by the room.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Ikigai</div>
+                    <div class="origin">Japan · East Asia</div>
+                    <div class="meaning">The reason you get up in the morning. Not a goal — a direction.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Insha'Allah</div>
+                    <div class="origin">Arabic · Middle East</div>
+                    <div class="meaning">If God wills. The surrender of outcome to forces beyond yourself.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Inshallah</div>
+                    <div class="origin">Arabic · Middle East</div>
+                    <div class="meaning">The acceptance that the future belongs to something larger than your plan.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Ishima</div>
+                    <div class="origin">Ibibio · West Africa</div>
+                    <div class="meaning">The capacity to forgive. To let go of the injury without forgetting it happened.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Jaymu</div>
+                    <div class="origin">Myanmar · Southeast Asia</div>
+                    <div class="meaning">A Pali imperative: to conquer. The work of turning against one's own craving.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Jeong</div>
+                    <div class="origin">Korea · East Asia</div>
+                    <div class="meaning">The deep ties that bind. Not chosen — accumulated through time and hardship.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Kaitiaki</div>
+                    <div class="origin">Māori · Pacific</div>
+                    <div class="meaning">Guardian. The one who holds the responsibility for what they've been given.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Karma</div>
+                    <div class="origin">Sanskrit · South Asia</div>
+                    <div class="meaning">The weight of action. What you do shapes what you become — not punishment, consequence.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Karuna</div>
+                    <div class="origin">Buddhism · South Asia</div>
+                    <div class="meaning">Compassion that moves to action. Not feeling with — doing for.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Kia kaha</div>
+                    <div class="origin">Māori · New Zealand/Pacific</div>
+                    <div class="meaning">Be strong. Not a command — a wish. Spoken to someone who needs to find their own strength.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Kintsugi</div>
+                    <div class="origin">Japan · East Asia</div>
+                    <div class="meaning">Golden repair. The broken places are where the light enters.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Komorebi</div>
+                    <div class="origin">Japan · East Asia</div>
+                    <div class="meaning">Sunlight filtering through leaves. The forest breathing light.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Kuumba</div>
+                    <div class="origin">Akan · Ghana/Africa</div>
+                    <div class="meaning">To create. To do what you can, in the way you can, to make the world more beautiful.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Lagom</div>
+                    <div class="origin">Sweden · Europe</div>
+                    <div class="meaning">Just enough. Not too much, not too little — the perfection of balance.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Layl</div>
+                    <div class="origin">Yaqui · Mexico/The Americas</div>
+                    <div class="meaning">The between-place. Caught between two worlds — too foreign to go back, not yet foreign enough to belong.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Li</div>
+                    <div class="origin">Chinese · East Asia</div>
+                    <div class="meaning">The pattern in things. The structure that connects everything — like the grain in wood.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Limerence</div>
+                    <div class="origin">psychology · Europe</div>
+                    <div class="meaning">Obsessive infatuation. Love as a wound you cannot stop touching.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Litost</div>
+                    <div class="origin">Czech Republic · Europe</div>
+                    <div class="meaning">A state of agony and torment caused by the sudden sight of one's own misery.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Logos</div>
+                    <div class="origin">Greece · Europe</div>
+                    <div class="meaning">The reason underlying all things. Not just word — the order the universe speaks.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Loka</div>
+                    <div class="origin">Quechua · Andes/The Americas</div>
+                    <div class="meaning">The complete path. When you have given everything and nothing is left to want.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Lumana'i</div>
+                    <div class="origin">Chamorro · Guam/Pacific</div>
+                    <div class="meaning">The calm of the sea at night. Not peace — a particular kind of quiet that comes from being still enough to hear.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Ma</div>
+                    <div class="origin">Japan · East Asia</div>
+                    <div class="meaning">Negative space. The gap is not emptiness — it's where the meaning lives.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Madrugada</div>
+                    <div class="origin">Mexico · The Americas</div>
+                    <div class="meaning">The time before dawn. The darkest hour when something is about to change — the liminal threshold of the self.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Malu</div>
+                    <div class="origin">Samoan · Pacific</div>
+                    <div class="meaning">The protective shade. The covering that shields without suffocating — love that holds space.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Mana</div>
+                    <div class="origin">Polynesia · Pacific</div>
+                    <div class="meaning">The life force. Not magic — the raw energy that moves through all things.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Maya</div>
+                    <div class="origin">Sanskrit · South Asia</div>
+                    <div class="meaning">The great illusion. The world as a magic show — real enough to trap you, not real enough to satisfy.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Mektub</div>
+                    <div class="origin">Turkish · Middle East</div>
+                    <div class="meaning">It is written. The comfort and terror of a fate already mapped.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Memento mori</div>
+                    <div class="origin">Rome · Europe</div>
+                    <div class="meaning">Remember you will die. Not morbid — clarifying. The only deadline that matters.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Meraki</div>
+                    <div class="origin">Greece · Europe</div>
+                    <div class="meaning">To create with soul. To pour yourself into something until it's gone.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Metamorphosis</div>
+                    <div class="origin">Greece · Europe</div>
+                    <div class="meaning">You cannot step into the same river. Every version of you is a different species.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Meyer</div>
+                    <div class="origin">Quechua · Peru/The Americas</div>
+                    <div class="meaning">The weaving of meaning. To take the threads of experience and make them cohere into something that holds.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Mizu</div>
+                    <div class="origin">Japan · East Asia</div>
+                    <div class="meaning">Water. The soft that overcomes the hard — not by fighting but by staying.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Moana</div>
+                    <div class="origin">Polynesian · Pacific</div>
+                    <div class="meaning">The ocean. Not a boundary — the medium that connects all islands and all people.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Moemoeā</div>
+                    <div class="origin">Cook Islands Māori · Pacific</div>
+                    <div class="meaning">The dream realm. Not fantasy — the place where your deepest knowing lives in images.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Mono no aware</div>
+                    <div class="origin">Japan · East Asia</div>
+                    <div class="meaning">The pathos of things. To feel the transience of everything and love it anyway.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Moshin</div>
+                    <div class="origin">Japan · East Asia</div>
+                    <div class="meaning">Letting go of the self. To ride the wave rather than fight it.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Mudita</div>
+                    <div class="origin">Buddhism · South Asia</div>
+                    <div class="meaning">Sympathetic joy. To celebrate another's success without a trace of envy.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Mujo</div>
+                    <div class="origin">Japan · East Asia</div>
+                    <div class="meaning">Impermanence. The way everything flows — joy, sorrow, cherry blossoms.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Mulberry</div>
+                    <div class="origin">China · East Asia</div>
+                    <div class="meaning">The silkworm's food — patience, industry, the quiet transformation of labor into beauty.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Muntu</div>
+                    <div class="origin">Bantu · Central Africa</div>
+                    <div class="meaning">The essence of being human. Not body, not soul — the force that animates both.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Mångata</div>
+                    <div class="origin">Sweden · Europe</div>
+                    <div class="meaning">The road-like reflection of the moon on water. The path that appears in the water as you walk toward it.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Nafs</div>
+                    <div class="origin">Arabic · Middle East</div>
+                    <div class="meaning">The lower self. The ego that must be confronted and transcended to reach true self.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Namaste</div>
+                    <div class="origin">Sanskrit · South Asia</div>
+                    <div class="meaning">The light in me honors the light in you. A greeting that acknowledges the divine in every person.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Nasake</div>
+                    <div class="origin">Yoruba · West Africa</div>
+                    <div class="meaning">Compassion that moves to action. To feel another's pain as your own.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Natsukashii</div>
+                    <div class="origin">Japan · East Asia</div>
+                    <div class="meaning">The bittersweet ache of the past. Nostalgia that hurts and comforts at once.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Naufragio</div>
+                    <div class="origin">Spanish colonial · The Americas</div>
+                    <div class="meaning">Shipwreck. The breakdown that reveals what you actually are when everything else is gone.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Nefesh</div>
+                    <div class="origin">Hebrew · Middle East</div>
+                    <div class="meaning">The soul that breathes. Not spirit — the animal aliveness in you.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Nirvana</div>
+                    <div class="origin">India · South Asia</div>
+                    <div class="meaning">Not escape — blowing out the flame that burns against itself.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Njangi</div>
+                    <div class="origin">Cameroon · Central Africa</div>
+                    <div class="meaning">The wisdom of grey hair. Knowledge earned through time, not books.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Nkrabe</div>
+                    <div class="origin">Akan · West Africa</div>
+                    <div class="meaning">The weight of ubuntu. The burden of belonging to everyone.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Noa</div>
+                    <div class="origin">Māori · New Zealand/Pacific</div>
+                    <div class="meaning">Freedom from restriction. The state of being open, accessible, ordinary — the lifting of tapu.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Nocebo</div>
+                    <div class="origin">Latin · Europe</div>
+                    <div class="meaning">The harm you call into being. Not what happens — what you believe will.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Ori</div>
+                    <div class="origin">Yoruba · West Africa</div>
+                    <div class="meaning">Your head — your personal destiny. The seed planted in you before you were born.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Oya</div>
+                    <div class="origin">Yoruba · West Africa</div>
+                    <div class="meaning">The wind. Spirit that moves without warning and changes everything.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Pachamama</div>
+                    <div class="origin">Andean · The Americas</div>
+                    <div class="meaning">The mother who holds everything. Not metaphor — literal truth. The earth is alive and listening.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Pachorra</div>
+                    <div class="origin">Argentina · The Americas</div>
+                    <div class="meaning">The willingness to wait for the right moment. Not laziness — the discipline to not act until action matters.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Patanjali</div>
+                    <div class="origin">India · South Asia</div>
+                    <div class="meaning">The compiler. One who organizes the infinite into something a student can hold.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Pena</div>
+                    <div class="origin">Philippines · Southeast Asia</div>
+                    <div class="meaning">A profound melancholy. The feeling of something heavy in the chest.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Philotimo</div>
+                    <div class="origin">Greek · Europe</div>
+                    <div class="meaning">The love of honor. To do the right thing because your character demands it, not because anyone is watching.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Prajna</div>
+                    <div class="origin">Buddhism · South Asia</div>
+                    <div class="meaning">Wisdom that cuts. Not knowledge — the insight that ends the illusion.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Prana</div>
+                    <div class="origin">Sanskrit · South Asia</div>
+                    <div class="meaning">The breath of life. Not air — the vital force that animates the body and moves through all things.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Praxis</div>
+                    <div class="origin">Greece · Europe</div>
+                    <div class="meaning">Action informed by reflection. Not theory, not habit — practice with intention.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Prozvut</div>
+                    <div class="origin">Russia · Europe</div>
+                    <div class="meaning">The torment of waiting. To know something is coming and it changes nothing.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Querencia</div>
+                    <div class="origin">Spain · Europe</div>
+                    <div class="meaning">The place where you are most true. Not comfort — truth.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Rahma</div>
+                    <div class="origin">Arabic · Middle East</div>
+                    <div class="meaning">Compassion. Not pity — the recognition that your fate is tied to everyone else's.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Ren</div>
+                    <div class="origin">China · East Asia</div>
+                    <div class="meaning">Humanity. To treat every person as if they matter — because they do.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Resignation</div>
+                    <div class="origin">Czech · Europe</div>
+                    <div class="meaning">Not giving up — the peace that comes when you stop fighting what cannot be changed.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Ri</div>
+                    <div class="origin">Confucianism · East Asia</div>
+                    <div class="meaning">To become one's own master. The third stage: walk your own path.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Sabr</div>
+                    <div class="origin">Arabic · Middle East</div>
+                    <div class="meaning">Patience with certainty. Not passive acceptance — active endurance grounded in faith that the moment will come.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Samsara</div>
+                    <div class="origin">Buddhism · South Asia</div>
+                    <div class="meaning">The wheel of becoming. Round and round — pleasure, pain, repeat.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Sankofa</div>
+                    <div class="origin">Ghana · Africa</div>
+                    <div class="meaning">Go back to collect what you left. The past is medicine, not weight.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Santosh</div>
+                    <div class="origin">Yoga · South Asia</div>
+                    <div class="meaning">Contentment. Not resignation — the understanding that this is enough.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Saudade</div>
+                    <div class="origin">Portugal · Europe</div>
+                    <div class="meaning">A nostalgic longing for something you've never had. Love for what's missing.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Sawubona</div>
+                    <div class="origin">Zulu · Southern Africa</div>
+                    <div class="meaning">I see you. The greeting that names the person as worthy before they speak a word.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Schadenfreude</div>
+                    <div class="origin">Germany · Europe</div>
+                    <div class="meaning">Joy at another's misfortune. The ugly truth of how we compare.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Seamus</div>
+                    <div class="origin">Gaelic · Europe</div>
+                    <div class="meaning">The name that hears. The one who listens deeply enough to be changed.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Sehnsucht</div>
+                    <div class="origin">Germany · Europe</div>
+                    <div class="meaning">Longing for something ideal — the ache of homesickness for a place you've never been.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Seinsgeschick</div>
+                    <div class="origin">Heidegger · Europe</div>
+                    <div class="meaning">The sending of being. The era that decides what's revealed.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Shastipe</div>
+                    <div class="origin">Cherokee · The Americas</div>
+                    <div class="meaning">The red chief. The authority that comes from having walked the hard road alone.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Shinrin-yoku</div>
+                    <div class="origin">Japan · East Asia</div>
+                    <div class="meaning">Forest bathing. To be medicine for the forest and the forest to be medicine for you.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Shoshin</div>
+                    <div class="origin">Zen Buddhism · East Asia</div>
+                    <div class="meaning">Beginner's mind. The mind that is empty and ready.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Shu</div>
+                    <div class="origin">Confucianism · East Asia</div>
+                    <div class="meaning">To follow. The first stage: learn the rules before you break them.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Shunyata</div>
+                    <div class="origin">Sanskrit · South Asia</div>
+                    <div class="meaning">Emptiness. Not nihilism — the openness that makes room for everything.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Simsim</div>
+                    <div class="origin">Arabic · Middle East</div>
+                    <div class="meaning">Sesame — open sesame. The word that opens what is locked.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Sobremesa</div>
+                    <div class="origin">Spain · Europe</div>
+                    <div class="meaning">The time after the meal. When the plates are cleared and the conversation deepens into what matters.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Solace</div>
+                    <div class="origin">Latin · Europe</div>
+                    <div class="meaning">The comfort that arrives in silence. Not words — presence.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Spleen</div>
+                    <div class="origin">France · Europe</div>
+                    <div class="meaning">The black bile. Not depression — a noble melancholy that refuses to be consoled.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Tao</div>
+                    <div class="origin">Chinese · East Asia</div>
+                    <div class="meaning">The way. Not a path — the principle that underlies all things. The river you are already in.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Tapa</div>
+                    <div class="origin">Pacific</div>
+                    <div class="meaning">The cloth that holds stories. Worn bark cloth — your identity is sewn into what you wrap yourself in.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Tapas</div>
+                    <div class="origin">Sanskrit · South Asia</div>
+                    <div class="meaning">The fire that transforms. Heat that burns away what you are not.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Tapu</div>
+                    <div class="origin">Māori · New Zealand/Pacific</div>
+                    <div class="meaning">The sacred. Something set apart — the power of prohibition that defines what is holy.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Tarab</div>
+                    <div class="origin">Arabic · Middle East</div>
+                    <div class="meaning">Musical enchantment. To be transported by sound past the point of return.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Tasavvur</div>
+                    <div class="origin">Persia · Middle East</div>
+                    <div class="meaning">To be consumed by an image. When a thought or person takes over your entire inner landscape.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Tawbah</div>
+                    <div class="origin">Arabic · Middle East</div>
+                    <div class="meaning">Repentance. Not guilt — turning around. The moment you stop running from yourself.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Temi</div>
+                    <div class="origin">Yoruba · West Africa</div>
+                    <div class="meaning">What is fitting. The alignment of action with cosmic order — not what works, but what is right.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Tikkun</div>
+                    <div class="origin">Judaism · Middle East</div>
+                    <div class="meaning">To repair, to restore. The world broke — you are the glue.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Tinkuy</div>
+                    <div class="origin">Quechua · Andes/The Americas</div>
+                    <div class="meaning">The meeting of opposites. Where two forces collide and create something neither could alone.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Torschlusspanik</div>
+                    <div class="origin">Germany · Europe</div>
+                    <div class="meaning">The fear of the closing gate. Time running out on what's possible.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Toska</div>
+                    <div class="origin">Russia · Europe</div>
+                    <div class="meaning">A spiritual longing for something indefinite. The ache with no specific name.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Tremendum</div>
+                    <div class="origin">Germany · Europe</div>
+                    <div class="meaning">The terror of the sacred. When God is not comforting — God is vast.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Treue</div>
+                    <div class="origin">Nietzsche · Europe</div>
+                    <div class="meaning">Loyalty as a virtue. Not blind — chosen, renewed each day.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Tupã</div>
+                    <div class="origin">Guarani · Paraguay/The Americas</div>
+                    <div class="meaning">The word that made the world. Not spoken — sung. Creation as a musical act.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Tympan</div>
+                    <div class="origin">Gaelic · Europe</div>
+                    <div class="meaning">A sense of quiet reverence. The hush before a blessing is spoken.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Ubuntu</div>
+                    <div class="origin">Southern Africa</div>
+                    <div class="meaning">I am because we are. The person is in the people.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Ukuthwala</div>
+                    <div class="origin">Xhosa · Southern Africa</div>
+                    <div class="meaning">To carry. The willingness to take on the burden another cannot bear alone.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Upekkha</div>
+                    <div class="origin">Buddhism · South Asia</div>
+                    <div class="meaning">Equanimity. Not indifference — calm that holds everything equally.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Utopia</div>
+                    <div class="origin">Thomas More · Europe</div>
+                    <div class="meaning">No place. A map of somewhere that doesn't exist — and the ache it leaves.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Utu</div>
+                    <div class="origin">Swahili · East Africa</div>
+                    <div class="meaning">Reciprocity. What you give returns. The currency of generosity is trust.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Uwesili</div>
+                    <div class="origin">Basotho · Lesotho/Africa</div>
+                    <div class="meaning">The act of blessing. To speak good into someone's life — words as carriers of power.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Vairagya</div>
+                    <div class="origin">Yoga · South Asia</div>
+                    <div class="meaning">Non-attachment. To let go not because you don't care — because you see it clearly.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Vespertine</div>
+                    <div class="origin">Latin · Europe</div>
+                    <div class="meaning">Of the evening. The melancholy grace of something happening at dusk.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Vulnerability</div>
+                    <div class="origin">Austria · Europe</div>
+                    <div class="meaning">To be pierced. The place where you feel most exposed is where growth lives.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Vā</div>
+                    <div class="origin">Polynesian · Pacific</div>
+                    <div class="meaning">The space between. Not empty — charged. The relationship between things is as real as the things.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Wabi</div>
+                    <div class="origin">Japan · East Asia</div>
+                    <div class="meaning">The beauty of things that are plain, aged, imperfect. Rust, not polish.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Wabi-sabi</div>
+                    <div class="origin">Japan · East Asia</div>
+                    <div class="meaning">Imperfection is the point. Cracked glaze, not polished chrome.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Wafa</div>
+                    <div class="origin">Arabic · Middle East</div>
+                    <div class="meaning">Faithfulness. To remain loyal to what you have committed to even when the feeling passes.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Weltangst</div>
+                    <div class="origin">Germany · Europe</div>
+                    <div class="meaning">World dread. The anxiety of an entire generation facing collapse.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Weltschmerz</div>
+                    <div class="origin">Germany · Europe</div>
+                    <div class="meaning">The weariness of the world. The grief of knowing the world cannot be what you needed it to be.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Wu</div>
+                    <div class="origin">Taoism · East Asia</div>
+                    <div class="meaning">Non-being. The empty space that gives everything its shape.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Wu wei</div>
+                    <div class="origin">Taoism · East Asia</div>
+                    <div class="meaning">Non-action. The art of effort without striving.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Xhosa Ubuntu</div>
+                    <div class="origin">Xhosa · Southern Africa</div>
+                    <div class="meaning">The law of relatedness. You cannot be human alone — your humanity is confirmed in community.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Xiao</div>
+                    <div class="origin">Confucianism · East Asia</div>
+                    <div class="meaning">Filial piety. The duty to honor your parents and ancestors.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Xin</div>
+                    <div class="origin">China · East Asia</div>
+                    <div class="meaning">The heart-mind. Reason and feeling as one organ, not two.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Xochitl</div>
+                    <div class="origin">Aztec · The Americas</div>
+                    <div class="meaning">The flower. Beauty as a sacred obligation — the right and duty to make things beautiful.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Ya'aburnee</div>
+                    <div class="origin">Arabic · Middle East</div>
+                    <div class="meaning">May you bury me. A plea to outlive the one you cannot bear to lose.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Yajé</div>
+                    <div class="origin">Siona · Colombia/The Americas</div>
+                    <div class="meaning">The vine of the soul. A plant teacher that shows you the parts of yourself you keep folded away.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Yarana</div>
+                    <div class="origin">Persia · Middle East</div>
+                    <div class="meaning">The wonder of the unfamiliar. Something so strange it sharpens your attention.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Yi</div>
+                    <div class="origin">Chinese · East Asia</div>
+                    <div class="meaning">Righteousness. The moral clarity to know what is right and the courage to do it.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Yin</div>
+                    <div class="origin">Taoism · East Asia</div>
+                    <div class="meaning">The yielding. Water that overcomes stone by not fighting it.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Yoga</div>
+                    <div class="origin">India · South Asia</div>
+                    <div class="meaning">To yoke, to harness. Not flexibility — unification of scattered selves.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Yugen</div>
+                    <div class="origin">Japan · East Asia</div>
+                    <div class="meaning">The sadness of depth. Beauty that makes you feel the edge of something vast.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Zan</div>
+                    <div class="origin">Zen Buddhism · East Asia</div>
+                    <div class="meaning">To cut. The moment you see through the illusion.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Zeal</div>
+                    <div class="origin">Persia · Middle East</div>
+                    <div class="meaning">Fire in the veins. The passion that drives a person past caution into devotion.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Zeitgeist</div>
+                    <div class="origin">Germany · Europe</div>
+                    <div class="meaning">The spirit of the time. The invisible current that moves a generation toward its fate.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Zugzwang</div>
+                    <div class="origin">Germany · Europe</div>
+                    <div class="meaning">Every move is a loss. Sometimes the only winning move is not to play.</div>
+                </div>
+            </div>
+
+                        <div class="concepts" data-region="east-asia">
+                <div class="concept">
+                    <div class="name">Amae</div>
+                    <div class="origin">Japan · East Asia</div>
+                    <div class="meaning">Dependency on another's goodwill. The comfort of being fully accepted.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Dào</div>
+                    <div class="origin">China · East Asia</div>
+                    <div class="meaning">The path. Not a destination — a way of walking through.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Feng shui</div>
+                    <div class="origin">China · East Asia</div>
+                    <div class="meaning">Wind and water. The art of arranging space so energy flows.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Furui</div>
+                    <div class="origin">Japan · East Asia</div>
+                    <div class="meaning">To be old in a way that softens rather than hardens. Ripeness.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Gaman</div>
+                    <div class="origin">Japan · East Asia</div>
+                    <div class="meaning">To endure with dignity. To bear the unbearable without complaint.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Ha</div>
+                    <div class="origin">Confucianism · East Asia</div>
+                    <div class="meaning">To break free. The second stage: question what you were taught.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Han</div>
+                    <div class="origin">Korea · East Asia</div>
+                    <div class="meaning">The weight of grief and resentment. A chip on the shoulder of a people.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Ikigai</div>
+                    <div class="origin">Japan · East Asia</div>
+                    <div class="meaning">The reason you get up in the morning. Not a goal — a direction.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Jaymu</div>
+                    <div class="origin">Myanmar · Southeast Asia</div>
+                    <div class="meaning">A Pali imperative: to conquer. The work of turning against one's own craving.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Jeong</div>
+                    <div class="origin">Korea · East Asia</div>
+                    <div class="meaning">The deep ties that bind. Not chosen — accumulated through time and hardship.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Kintsugi</div>
+                    <div class="origin">Japan · East Asia</div>
+                    <div class="meaning">Golden repair. The broken places are where the light enters.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Komorebi</div>
+                    <div class="origin">Japan · East Asia</div>
+                    <div class="meaning">Sunlight filtering through leaves. The forest breathing light.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Ma</div>
+                    <div class="origin">Japan · East Asia</div>
+                    <div class="meaning">Negative space. The gap is not emptiness — it's where the meaning lives.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Mono no aware</div>
+                    <div class="origin">Japan · East Asia</div>
+                    <div class="meaning">The pathos of things. To feel the transience of everything and love it anyway.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Moshin</div>
+                    <div class="origin">Japan · East Asia</div>
+                    <div class="meaning">Letting go of the self. To ride the wave rather than fight it.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Mujo</div>
+                    <div class="origin">Japan · East Asia</div>
+                    <div class="meaning">Impermanence. The way everything flows — joy, sorrow, cherry blossoms.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Natsukashii</div>
+                    <div class="origin">Japan · East Asia</div>
+                    <div class="meaning">The bittersweet ache of the past. Nostalgia that hurts and comforts at once.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Pena</div>
+                    <div class="origin">Philippines · Southeast Asia</div>
+                    <div class="meaning">A profound melancholy. The feeling of something heavy in the chest.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Ren</div>
+                    <div class="origin">China · East Asia</div>
+                    <div class="meaning">Humanity. To treat every person as if they matter — because they do.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Ri</div>
+                    <div class="origin">Confucianism · East Asia</div>
+                    <div class="meaning">To become one's own master. The third stage: walk your own path.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Shoshin</div>
+                    <div class="origin">Zen Buddhism · East Asia</div>
+                    <div class="meaning">Beginner's mind. The mind that is empty and ready.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Shu</div>
+                    <div class="origin">Confucianism · East Asia</div>
+                    <div class="meaning">To follow. The first stage: learn the rules before you break them.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Wabi</div>
+                    <div class="origin">Japan · East Asia</div>
+                    <div class="meaning">The beauty of things that are plain, aged, imperfect. Rust, not polish.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Wabi-sabi</div>
+                    <div class="origin">Japan · East Asia</div>
+                    <div class="meaning">Imperfection is the point. Cracked glaze, not polished chrome.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Wu wei</div>
+                    <div class="origin">Taoism · East Asia</div>
+                    <div class="meaning">Non-action. The art of effort without striving.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Xiao</div>
+                    <div class="origin">Confucianism · East Asia</div>
+                    <div class="meaning">Filial piety. The duty to honor your parents and ancestors.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Xin</div>
+                    <div class="origin">China · East Asia</div>
+                    <div class="meaning">The heart-mind. Reason and feeling as one organ, not two.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Yugen</div>
+                    <div class="origin">Japan · East Asia</div>
+                    <div class="meaning">The sadness of depth. Beauty that makes you feel the edge of something vast.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Zan</div>
+                    <div class="origin">Zen Buddhism · East Asia</div>
+                    <div class="meaning">To cut. The moment you see through the illusion.</div>
+                </div>
+            </div>
+
+                        <div class="concepts" data-region="europe">
+                <div class="concept">
+                    <div class="name">Abarba</div>
+                    <div class="origin">Ancient Greece · Europe</div>
+                    <div class="meaning">The foam of the sea. Transient, beautiful, and entirely out of your control.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Agape</div>
+                    <div class="origin">Greece · Europe</div>
+                    <div class="meaning">Love that asks nothing. Not desire, not affection — unconditional regard.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Amor fati</div>
+                    <div class="origin">Stoicism · Europe</div>
+                    <div class="meaning">Love of one's fate. Not resigned acceptance — full embrace of what's real.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Angst</div>
+                    <div class="origin">Kierkegaard · Europe</div>
+                    <div class="meaning">The dread of possibility. The weight of being the one who decides.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Apollonian</div>
+                    <div class="origin">Nietzsche · Europe</div>
+                    <div class="meaning">Order from chaos. The principle of form, reason, and structure.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Desenko</div>
+                    <div class="origin">Russia · Europe</div>
+                    <div class="meaning">The sadness of fate. A longing for what cannot be changed.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Dionysian</div>
+                    <div class="origin">Nietzsche · Europe</div>
+                    <div class="meaning">Chaos as liberation. The principle of instinct, intoxication, and excess.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Dolce far niente</div>
+                    <div class="origin">Italy · Europe</div>
+                    <div class="meaning">The sweetness of doing nothing. Productive idleness — art's prerequisite.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Dulcinea</div>
+                    <div class="origin">Spain · Europe</div>
+                    <div class="meaning">The ideal beyond reach. You pursue what can never be attained.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Empathy</div>
+                    <div class="origin">Greece · Europe</div>
+                    <div class="meaning">To feel with. Not pity — standing inside another's fire and staying.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Ennui</div>
+                    <div class="origin">France · Europe</div>
+                    <div class="meaning">The boredom that comes from having everything except the thing that matters.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Ernst</div>
+                    <div class="origin">Germany · Europe</div>
+                    <div class="meaning">Seriousness without somberness. To take the matter seriously without losing lightness.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Eudaimonia</div>
+                    <div class="origin">Aristotle · Europe</div>
+                    <div class="meaning">Flourishing. Not pleasure — the full expression of what you're capable of.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Existenz</div>
+                    <div class="origin">Kierkegaard · Europe</div>
+                    <div class="meaning">The vertigo of freedom. Every choice defines who you are.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Fado</div>
+                    <div class="origin">Portugal · Europe</div>
+                    <div class="meaning">Fate. The Portuguese knowing — some things are fixed, sing anyway.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Frisson</div>
+                    <div class="origin">France · Europe</div>
+                    <div class="meaning">The shiver of the sublime. A shiver down the spine when something is too beautiful or vast.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Fyr</div>
+                    <div class="origin">Norwegian · Europe</div>
+                    <div class="meaning">The fire. The passion that drives a person toward their purpose — not gentle, not quiet.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Geborgenheit</div>
+                    <div class="origin">Germany · Europe</div>
+                    <div class="meaning">The feeling of being sheltered. Safe enough to be fully seen.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Gestimmtheit</div>
+                    <div class="origin">Heidegger · Europe</div>
+                    <div class="meaning">The mood that colors everything. You never see the world neutrally.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Gheorghe</div>
+                    <div class="origin">Romania · Europe</div>
+                    <div class="meaning">The farmer. A name that holds the memory of the land and the sweat of it.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Gul</div>
+                    <div class="origin">Swedish · Europe</div>
+                    <div class="meaning">The deep connection to nature. To feel at home in the wild — the forest is not separate from you.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Hygge</div>
+                    <div class="origin">Denmark · Europe</div>
+                    <div class="meaning">The art of cozy presence. Candlelight and conversation — no agenda.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Hyggelig</div>
+                    <div class="origin">Denmark · Europe</div>
+                    <div class="meaning">The warmth of intimate gathering. Candlelight, shared food, the feeling of being held by the room.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Lagom</div>
+                    <div class="origin">Sweden · Europe</div>
+                    <div class="meaning">Just enough. Not too much, not too little — the perfection of balance.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Limerence</div>
+                    <div class="origin">psychology · Europe</div>
+                    <div class="meaning">Obsessive infatuation. Love as a wound you cannot stop touching.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Litost</div>
+                    <div class="origin">Czech Republic · Europe</div>
+                    <div class="meaning">A state of agony and torment caused by the sudden sight of one's own misery.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Memento mori</div>
+                    <div class="origin">Rome · Europe</div>
+                    <div class="meaning">Remember you will die. Not morbid — clarifying. The only deadline that matters.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Meraki</div>
+                    <div class="origin">Greece · Europe</div>
+                    <div class="meaning">To create with soul. To pour yourself into something until it's gone.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Metamorphosis</div>
+                    <div class="origin">Greece · Europe</div>
+                    <div class="meaning">You cannot step into the same river. Every version of you is a different species.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Nocebo</div>
+                    <div class="origin">Latin · Europe</div>
+                    <div class="meaning">The harm you call into being. Not what happens — what you believe will.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Querencia</div>
+                    <div class="origin">Spain · Europe</div>
+                    <div class="meaning">The place where you are most true. Not comfort — truth.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Resignation</div>
+                    <div class="origin">Czech · Europe</div>
+                    <div class="meaning">Not giving up — the peace that comes when you stop fighting what cannot be changed.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Saudade</div>
+                    <div class="origin">Portugal · Europe</div>
+                    <div class="meaning">A nostalgic longing for something you've never had. Love for what's missing.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Schadenfreude</div>
+                    <div class="origin">Germany · Europe</div>
+                    <div class="meaning">Joy at another's misfortune. The ugly truth of how we compare.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Sehnsucht</div>
+                    <div class="origin">Germany · Europe</div>
+                    <div class="meaning">Longing for something ideal — the ache of homesickness for a place you've never been.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Seinsgeschick</div>
+                    <div class="origin">Heidegger · Europe</div>
+                    <div class="meaning">The sending of being. The era that decides what's revealed.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Spleen</div>
+                    <div class="origin">France · Europe</div>
+                    <div class="meaning">The black bile. Not depression — a noble melancholy that refuses to be consoled.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Torschlusspanik</div>
+                    <div class="origin">Germany · Europe</div>
+                    <div class="meaning">The fear of the closing gate. Time running out on what's possible.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Tremendum</div>
+                    <div class="origin">Germany · Europe</div>
+                    <div class="meaning">The terror of the sacred. When God is not comforting — God is vast.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Treue</div>
+                    <div class="origin">Nietzsche · Europe</div>
+                    <div class="meaning">Loyalty as a virtue. Not blind — chosen, renewed each day.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Tympan</div>
+                    <div class="origin">Gaelic · Europe</div>
+                    <div class="meaning">A sense of quiet reverence. The hush before a blessing is spoken.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Utopia</div>
+                    <div class="origin">Thomas More · Europe</div>
+                    <div class="meaning">No place. A map of somewhere that doesn't exist — and the ache it leaves.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Vespertine</div>
+                    <div class="origin">Latin · Europe</div>
+                    <div class="meaning">Of the evening. The melancholy grace of something happening at dusk.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Vulnerability</div>
+                    <div class="origin">Austria · Europe</div>
+                    <div class="meaning">To be pierced. The place where you feel most exposed is where growth lives.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Weltangst</div>
+                    <div class="origin">Germany · Europe</div>
+                    <div class="meaning">World dread. The anxiety of an entire generation facing collapse.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Weltschmerz</div>
+                    <div class="origin">Germany · Europe</div>
+                    <div class="meaning">The weariness of the world. The grief of knowing the world cannot be what you needed it to be.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Zugzwang</div>
+                    <div class="origin">Germany · Europe</div>
+                    <div class="meaning">Every move is a loss. Sometimes the only winning move is not to play.</div>
+                </div>
+            </div>
+
+                        <div class="concepts" data-region="south-asia">
+                <div class="concept">
+                    <div class="name">Abhisheka</div>
+                    <div class="origin">Sanskrit · South Asia</div>
+                    <div class="meaning">Empowerment. The initiation that changes the nature of what you are.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Anatta</div>
+                    <div class="origin">Buddhism · South Asia</div>
+                    <div class="meaning">No permanent self. You are a process, not a thing.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Anicca</div>
+                    <div class="origin">Buddhism · South Asia</div>
+                    <div class="meaning">Impermanence is the only constant. Everything that rises must fall.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Bardo</div>
+                    <div class="origin">Tibet · South Asia</div>
+                    <div class="meaning">The gap between death and rebirth. Liminal space as teacher.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Dukkha</div>
+                    <div class="origin">Buddhism · South Asia</div>
+                    <div class="meaning">Life doesn't fit. The subtle misalignment between expectation and reality.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Karuna</div>
+                    <div class="origin">Buddhism · South Asia</div>
+                    <div class="meaning">Compassion that moves to action. Not feeling with — doing for.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Mudita</div>
+                    <div class="origin">Buddhism · South Asia</div>
+                    <div class="meaning">Sympathetic joy. To celebrate another's success without a trace of envy.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Nirvana</div>
+                    <div class="origin">India · South Asia</div>
+                    <div class="meaning">Not escape — blowing out the flame that burns against itself.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Samsara</div>
+                    <div class="origin">Buddhism · South Asia</div>
+                    <div class="meaning">The wheel of becoming. Round and round — pleasure, pain, repeat.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Santosh</div>
+                    <div class="origin">Yoga · South Asia</div>
+                    <div class="meaning">Contentment. Not resignation — the understanding that this is enough.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Upekkha</div>
+                    <div class="origin">Buddhism · South Asia</div>
+                    <div class="meaning">Equanimity. Not indifference — calm that holds everything equally.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Vairagya</div>
+                    <div class="origin">Yoga · South Asia</div>
+                    <div class="meaning">Non-attachment. To let go not because you don't care — because you see it clearly.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Yoga</div>
+                    <div class="origin">India · South Asia</div>
+                    <div class="meaning">To yoke, to harness. Not flexibility — unification of scattered selves.</div>
+                </div>
+            </div>
+
+                        <div class="concepts" data-region="africa">
+                <div class="concept">
+                    <div class="name">Amentet</div>
+                    <div class="origin">Egypt · North Africa</div>
+                    <div class="meaning">Truth and rightness. The force that orders the cosmos and the self.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Botho</div>
+                    <div class="origin">Tswana · Southern Africa</div>
+                    <div class="meaning">The quality of a person. Your worth is measured by what you contribute to others.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Ena</div>
+                    <div class="origin">Yoruba · West Africa</div>
+                    <div class="meaning">The water of life. The essential substance that runs through all things.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Harambee</div>
+                    <div class="origin">Swahili · East Africa</div>
+                    <div class="meaning">Pulling together. We all lean in and the weight rises.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Ishima</div>
+                    <div class="origin">Ibibio · West Africa</div>
+                    <div class="meaning">The capacity to forgive. To let go of the injury without forgetting it happened.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Njangi</div>
+                    <div class="origin">Cameroon · Central Africa</div>
+                    <div class="meaning">The wisdom of grey hair. Knowledge earned through time, not books.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Nkrabe</div>
+                    <div class="origin">Akan · West Africa</div>
+                    <div class="meaning">The weight of ubuntu. The burden of belonging to everyone.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Ori</div>
+                    <div class="origin">Yoruba · West Africa</div>
+                    <div class="meaning">Your head — your personal destiny. The seed planted in you before you were born.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Sankofa</div>
+                    <div class="origin">Ghana · Africa</div>
+                    <div class="meaning">Go back to collect what you left. The past is medicine, not weight.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Sawubona</div>
+                    <div class="origin">Zulu · Southern Africa</div>
+                    <div class="meaning">I see you. The greeting that names the person as worthy before they speak a word.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Temi</div>
+                    <div class="origin">Yoruba · West Africa</div>
+                    <div class="meaning">What is fitting. The alignment of action with cosmic order — not what works, but what is right.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Ubuntu</div>
+                    <div class="origin">Southern Africa</div>
+                    <div class="meaning">I am because we are. The person is in the people.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Utu</div>
+                    <div class="origin">Swahili · East Africa</div>
+                    <div class="meaning">Reciprocity. What you give returns. The currency of generosity is trust.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Xhosa Ubuntu</div>
+                    <div class="origin">Xhosa · Southern Africa</div>
+                    <div class="meaning">The law of relatedness. You cannot be human alone — your humanity is confirmed in community.</div>
+                </div>
+            </div>
+
+                        <div class="concepts" data-region="middle-east">
+                <div class="concept">
+                    <div class="name">Aśa</div>
+                    <div class="origin">Zoroastrianism · Persia</div>
+                    <div class="meaning">Truth and right order. The cosmic force that keeps the world from lying to itself.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Cafe</div>
+                    <div class="origin">Turkey · Middle East</div>
+                    <div class="meaning">Discussions that outlast the coffee. The art of talking for hours.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Fana</div>
+                    <div class="origin">Persia · Middle East</div>
+                    <div class="meaning">Annihilate the ego. Die before you die. Love as the dissolving agent.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Hakuna matata</div>
+                    <div class="origin">Swahili · East Africa</div>
+                    <div class="meaning">No worries. Not denial — the choice to not carry what isn't yours.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Insha'Allah</div>
+                    <div class="origin">Arabic · Middle East</div>
+                    <div class="meaning">If God wills. The surrender of outcome to forces beyond yourself.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Inshallah</div>
+                    <div class="origin">Arabic · Middle East</div>
+                    <div class="meaning">The acceptance that the future belongs to something larger than your plan.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Mektub</div>
+                    <div class="origin">Turkish · Middle East</div>
+                    <div class="meaning">It is written. The comfort and terror of a fate already mapped.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Nasake</div>
+                    <div class="origin">Yoruba · West Africa</div>
+                    <div class="meaning">Compassion that moves to action. To feel another's pain as your own.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Nefesh</div>
+                    <div class="origin">Hebrew · Middle East</div>
+                    <div class="meaning">The soul that breathes. Not spirit — the animal aliveness in you.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Simsim</div>
+                    <div class="origin">Arabic · Middle East</div>
+                    <div class="meaning">Sesame — open sesame. The word that opens what is locked.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Tarab</div>
+                    <div class="origin">Arabic · Middle East</div>
+                    <div class="meaning">Musical enchantment. To be transported by sound past the point of return.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Tikkun</div>
+                    <div class="origin">Judaism · Middle East</div>
+                    <div class="meaning">To repair, to restore. The world broke — you are the glue.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Ya'aburnee</div>
+                    <div class="origin">Arabic · Middle East</div>
+                    <div class="meaning">May you bury me. A plea to outlive the one you cannot bear to lose.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Yarana</div>
+                    <div class="origin">Persia · Middle East</div>
+                    <div class="meaning">The wonder of the unfamiliar. Something so strange it sharpens your attention.</div>
+                </div>
+            </div>
+
+                        <div class="concepts" data-region="americas">
+                <div class="concept">
+                    <div class="name">Ayllu</div>
+                    <div class="origin">Andes · The Americas</div>
+                    <div class="meaning">You are a node in a living web. No one is an orphan.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Buenaventura</div>
+                    <div class="origin">Spanish · The Americas</div>
+                    <div class="meaning">May it go well. The hope that what you've set in motion turns toward good.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Coyote</div>
+                    <div class="origin">Native American · The Americas</div>
+                    <div class="meaning">The trickster. The one who shows up sideways and names what no one sees.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Hunab Ku</div>
+                    <div class="origin">Maya · The Americas</div>
+                    <div class="meaning">One shooter. The giver of all movement and measure. The pulse that drives the universe.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Layl</div>
+                    <div class="origin">Yaqui · Mexico/The Americas</div>
+                    <div class="meaning">The between-place. Caught between two worlds — too foreign to go back, not yet foreign enough to belong.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Loka</div>
+                    <div class="origin">Quechua · Andes/The Americas</div>
+                    <div class="meaning">The complete path. When you have given everything and nothing is left to want.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Naufragio</div>
+                    <div class="origin">Spanish colonial · The Americas</div>
+                    <div class="meaning">Shipwreck. The breakdown that reveals what you actually are when everything else is gone.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Pachamama</div>
+                    <div class="origin">Andean · The Americas</div>
+                    <div class="meaning">The mother who holds everything. Not metaphor — literal truth. The earth is alive and listening.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Shastipe</div>
+                    <div class="origin">Cherokee · The Americas</div>
+                    <div class="meaning">The red chief. The authority that comes from having walked the hard road alone.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Tupã</div>
+                    <div class="origin">Guarani · Paraguay/The Americas</div>
+                    <div class="meaning">The word that made the world. Not spoken — sung. Creation as a musical act.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Xochitl</div>
+                    <div class="origin">Aztec · The Americas</div>
+                    <div class="meaning">The flower. Beauty as a sacred obligation — the right and duty to make things beautiful.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Yajé</div>
+                    <div class="origin">Siona · Colombia/The Americas</div>
+                    <div class="meaning">The vine of the soul. A plant teacher that shows you the parts of yourself you keep folded away.</div>
+                </div>
+            </div>
+
+                        <div class="concepts" data-region="pacific">
+                <div class="concept">
+                    <div class="name">Akoranga</div>
+                    <div class="origin">Māori · New Zealand/Pacific</div>
+                    <div class="meaning">The sacred transmission. Knowledge passed through direct encounter with the divine — not study, revelation.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Awe</div>
+                    <div class="origin">Hawaii · Pacific</div>
+                    <div class="meaning">The hush before the infinite. When the small self meets the large.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Fa'a Samoa</div>
+                    <div class="origin">Samoa · Pacific</div>
+                    <div class="meaning">The Samoan way. The whole system of values, protocol, and obligation that holds a people together.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Faka'apa'apa</div>
+                    <div class="origin">Tongan · Pacific</div>
+                    <div class="meaning">Mutual respect. The courtesy that acknowledges the dignity of every person in the room.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Ha'aha</div>
+                    <div class="origin">Hawaiian · Pacific</div>
+                    <div class="meaning">The quiet of humility. Not silence — the quiet that holds more power than noise.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Lumana'i</div>
+                    <div class="origin">Chamorro · Guam/Pacific</div>
+                    <div class="meaning">The calm of the sea at night. Not peace — a particular kind of quiet that comes from being still enough to hear.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Malu</div>
+                    <div class="origin">Samoan · Pacific</div>
+                    <div class="meaning">The protective shade. The covering that shields without suffocating — love that holds space.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Mana</div>
+                    <div class="origin">Polynesia · Pacific</div>
+                    <div class="meaning">The life force. Not magic — the raw energy that moves through all things.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Moemoeā</div>
+                    <div class="origin">Cook Islands Māori · Pacific</div>
+                    <div class="meaning">The dream realm. Not fantasy — the place where your deepest knowing lives in images.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Tapa</div>
+                    <div class="origin">Pacific</div>
+                    <div class="meaning">The cloth that holds stories. Worn bark cloth — your identity is sewn into what you wrap yourself in.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Vā</div>
+                    <div class="origin">Polynesian · Pacific</div>
+                    <div class="meaning">The space between. Not empty — charged. The relationship between things is as real as the things.</div>
+                </div>
+            </div>
+
+                        <div class="concepts" data-region="new">
+                <div class="concept">
+                    <div class="name">Ananda</div>
+                    <div class="origin">Sanskrit · South Asia</div>
+                    <div class="meaning">Bliss. Not happiness — a state of being that doesn't depend on circumstances.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Aroha</div>
+                    <div class="origin">Māori · New Zealand/Pacific</div>
+                    <div class="meaning">Love that is also compassion. Not romantic alone — the love that sees another person's suffering as your own.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Atma</div>
+                    <div class="origin">Sanskrit · India/South Asia</div>
+                    <div class="meaning">The eternal self. Not the body, not the mind — the unchanging witness behind all experience.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Ayni</div>
+                    <div class="origin">Quechua · Andes/The Americas</div>
+                    <div class="meaning">Reciprocity. What you give returns — the law of return that governs all human exchange.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Bodhisattva</div>
+                    <div class="origin">Sanskrit · South Asia</div>
+                    <div class="meaning">One who wakes for others. The being who attains enlightenment and chooses to remain in the world to help others.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">De</div>
+                    <div class="origin">Chinese · East Asia</div>
+                    <div class="meaning">Virtue. The power that comes from alignment with the Tao — not moral, natural.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Desvelo</div>
+                    <div class="origin">Spain · Europe</div>
+                    <div class="meaning">The sleeplessness of love. To lie awake thinking of someone — not anxious, just full.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Dharma</div>
+                    <div class="origin">Sanskrit · South Asia</div>
+                    <div class="meaning">The path of truth. Not a belief — a principle that governs the universe and your place in it.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Dhikr</div>
+                    <div class="origin">Arabic · Middle East</div>
+                    <div class="meaning">Remembrance. The practice of keeping the divine present through repetition — heartbeats of the soul.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Duende</div>
+                    <div class="origin">Spain · Europe</div>
+                    <div class="meaning">The moment when art becomes flesh. A state of heightened presence — not inspiration, possession.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Fernweh</div>
+                    <div class="origin">Germany · Europe</div>
+                    <div class="meaning">Farsickness. The longing for somewhere you've never been. Wanderlust with a ache in it.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Fikra</div>
+                    <div class="origin">Arabic · Middle East</div>
+                    <div class="meaning">Thought that becomes vision. The ability to see the consequences of action before taking it.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Gemütlichkeit</div>
+                    <div class="origin">Germany · Europe</div>
+                    <div class="meaning">The warmth of belonging. A room, a fire, people who know you — the feeling of being held by the world.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Gestalt</div>
+                    <div class="origin">Germany · Europe</div>
+                    <div class="meaning">The shape that emerges from the parts. The whole is different from the sum — and it's the whole that matters.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Haya</div>
+                    <div class="origin">Arabic · Middle East</div>
+                    <div class="meaning">Inner light. The shame that comes from self-awareness — the beginning of conscience.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Hikma</div>
+                    <div class="origin">Arabic · Middle East</div>
+                    <div class="meaning">Wisdom that flows from experience. Not book knowledge — the kind of knowing that comes through living.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Hungr</div>
+                    <div class="origin">Icelandic · Europe</div>
+                    <div class="meaning">A hunger that is also thirst. Wanting something so badly your whole body aches for it.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Karma</div>
+                    <div class="origin">Sanskrit · South Asia</div>
+                    <div class="meaning">The weight of action. What you do shapes what you become — not punishment, consequence.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Kia kaha</div>
+                    <div class="origin">Māori · New Zealand/Pacific</div>
+                    <div class="meaning">Be strong. Not a command — a wish. Spoken to someone who needs to find their own strength.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Kuumba</div>
+                    <div class="origin">Akan · Ghana/Africa</div>
+                    <div class="meaning">To create. To do what you can, in the way you can, to make the world more beautiful.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Li</div>
+                    <div class="origin">Chinese · East Asia</div>
+                    <div class="meaning">The pattern in things. The structure that connects everything — like the grain in wood.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Madrugada</div>
+                    <div class="origin">Mexico · The Americas</div>
+                    <div class="meaning">The time before dawn. The darkest hour when something is about to change — the liminal threshold of the self.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Maya</div>
+                    <div class="origin">Sanskrit · South Asia</div>
+                    <div class="meaning">The great illusion. The world as a magic show — real enough to trap you, not real enough to satisfy.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Meyer</div>
+                    <div class="origin">Quechua · Peru/The Americas</div>
+                    <div class="meaning">The weaving of meaning. To take the threads of experience and make them cohere into something that holds.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Moana</div>
+                    <div class="origin">Polynesian · Pacific</div>
+                    <div class="meaning">The ocean. Not a boundary — the medium that connects all islands and all people.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Muntu</div>
+                    <div class="origin">Bantu · Central Africa</div>
+                    <div class="meaning">The essence of being human. Not body, not soul — the force that animates both.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Mångata</div>
+                    <div class="origin">Sweden · Europe</div>
+                    <div class="meaning">The road-like reflection of the moon on water. The path that appears in the water as you walk toward it.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Nafs</div>
+                    <div class="origin">Arabic · Middle East</div>
+                    <div class="meaning">The lower self. The ego that must be confronted and transcended to reach true self.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Namaste</div>
+                    <div class="origin">Sanskrit · South Asia</div>
+                    <div class="meaning">The light in me honors the light in you. A greeting that acknowledges the divine in every person.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Noa</div>
+                    <div class="origin">Māori · New Zealand/Pacific</div>
+                    <div class="meaning">Freedom from restriction. The state of being open, accessible, ordinary — the lifting of tapu.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Pachorra</div>
+                    <div class="origin">Argentina · The Americas</div>
+                    <div class="meaning">The willingness to wait for the right moment. Not laziness — the discipline to not act until action matters.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Philotimo</div>
+                    <div class="origin">Greek · Europe</div>
+                    <div class="meaning">The love of honor. To do the right thing because your character demands it, not because anyone is watching.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Prana</div>
+                    <div class="origin">Sanskrit · South Asia</div>
+                    <div class="meaning">The breath of life. Not air — the vital force that animates the body and moves through all things.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Rahma</div>
+                    <div class="origin">Arabic · Middle East</div>
+                    <div class="meaning">Compassion. Not pity — the recognition that your fate is tied to everyone else's.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Sabr</div>
+                    <div class="origin">Arabic · Middle East</div>
+                    <div class="meaning">Patience with certainty. Not passive acceptance — active endurance grounded in faith that the moment will come.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Shinrin-yoku</div>
+                    <div class="origin">Japan · East Asia</div>
+                    <div class="meaning">Forest bathing. To be medicine for the forest and the forest to be medicine for you.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Shunyata</div>
+                    <div class="origin">Sanskrit · South Asia</div>
+                    <div class="meaning">Emptiness. Not nihilism — the openness that makes room for everything.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Sobremesa</div>
+                    <div class="origin">Spain · Europe</div>
+                    <div class="meaning">The time after the meal. When the plates are cleared and the conversation deepens into what matters.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Tao</div>
+                    <div class="origin">Chinese · East Asia</div>
+                    <div class="meaning">The way. Not a path — the principle that underlies all things. The river you are already in.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Tapas</div>
+                    <div class="origin">Sanskrit · South Asia</div>
+                    <div class="meaning">The fire that transforms. Heat that burns away what you are not.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Tapu</div>
+                    <div class="origin">Māori · New Zealand/Pacific</div>
+                    <div class="meaning">The sacred. Something set apart — the power of prohibition that defines what is holy.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Tasavvur</div>
+                    <div class="origin">Persia · Middle East</div>
+                    <div class="meaning">To be consumed by an image. When a thought or person takes over your entire inner landscape.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Tawbah</div>
+                    <div class="origin">Arabic · Middle East</div>
+                    <div class="meaning">Repentance. Not guilt — turning around. The moment you stop running from yourself.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Tinkuy</div>
+                    <div class="origin">Quechua · Andes/The Americas</div>
+                    <div class="meaning">The meeting of opposites. Where two forces collide and create something neither could alone.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Uwesili</div>
+                    <div class="origin">Basotho · Lesotho/Africa</div>
+                    <div class="meaning">The act of blessing. To speak good into someone's life — words as carriers of power.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Wafa</div>
+                    <div class="origin">Arabic · Middle East</div>
+                    <div class="meaning">Faithfulness. To remain loyal to what you have committed to even when the feeling passes.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Yi</div>
+                    <div class="origin">Chinese · East Asia</div>
+                    <div class="meaning">Righteousness. The moral clarity to know what is right and the courage to do it.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Zeal</div>
+                    <div class="origin">Persia · Middle East</div>
+                    <div class="meaning">Fire in the veins. The passion that drives a person past caution into devotion.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Zeitgeist</div>
+                    <div class="origin">Germany · Europe</div>
+                    <div class="meaning">The spirit of the time. The invisible current that moves a generation toward its fate.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Sumak'kawsay</div>
+                    <div class="origin">Quechua · Andes/The Americas</div>
+                    <div class="meaning">Living well in balance with the web of life. Not success — harmony with all things.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Yuanfen</div>
+                    <div class="origin">China · East Asia</div>
+                    <div class="meaning">The invisible thread that connects people across distance and time. Not luck — alignment.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Temn</div>
+                    <div class="origin">Egyptian · North Africa</div>
+                    <div class="meaning">Truth and rightness. The force that orders the cosmos and the self.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Netzah</div>
+                    <div class="origin">Hebrew · Middle East</div>
+                    <div class="meaning">Eternity. Not time — the quality of what is undestroyed.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Hakuta</div>
+                    <div class="origin">Ainu · Japan/East Asia</div>
+                    <div class="meaning">The spirit of the forest. Intelligence in all living things.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Nser</div>
+                    <div class="origin">Egyptian · North Africa</div>
+                    <div class="meaning">The goddess of drink. The water of consciousness itself.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Aidos</div>
+                    <div class="origin">Greek · Europe</div>
+                    <div class="meaning">Shame as social grace. Not weakness — the protection of dignity in others.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Arete</div>
+                    <div class="origin">Greek · Europe</div>
+                    <div class="meaning">Excellence of kind. The full flowering of what a thing was made for.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Aponia</div>
+                    <div class="origin">Greek · Europe</div>
+                    <div class="meaning">The absence of pain. Not pleasure — the quiet when suffering stops.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Xenia</div>
+                    <div class="origin">Greek · Europe</div>
+                    <div class="meaning">The sacred stranger. Every traveler may carry a god in disguise.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Ataraxia</div>
+                    <div class="origin">Greek · Europe</div>
+                    <div class="meaning">Undisturbed calm. The peace of a mind that has stopped demanding.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Apatheia</div>
+                    <div class="origin">Greek · Europe</div>
+                    <div class="meaning">Beyond passion. Not coldness — the freedom of not being ruled by feeling.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Penia</div>
+                    <div class="origin">Greek · Europe</div>
+                    <div class="meaning">Poverty and desire. Lack as the condition of all seekers.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Topos</div>
+                    <div class="origin">Greek · Europe</div>
+                    <div class="meaning">The place where truth gathers. Philosophy as the journey home.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Autarkia</div>
+                    <div class="origin">Greek · Europe</div>
+                    <div class="meaning">Self-sufficiency. Not isolation — the completeness of one who needs nothing false.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Kenosis</div>
+                    <div class="origin">Greek · Europe</div>
+                    <div class="meaning">Self-emptying. The pouring out that makes room for something greater.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Eunoia</div>
+                    <div class="origin">Greek · Europe</div>
+                    <div class="meaning">Beautiful thinking. The quality of a mind that produces good thoughts.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Kairos</div>
+                    <div class="origin">Greek · Europe</div>
+                    <div class="meaning">The right moment. Not clock time — the moment when everything pivots.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Hara</div>
+                    <div class="origin">Japanese · East Asia</div>
+                    <div class="meaning">The lower belly as center of being. Where intention lives below conscious thought.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Mushin</div>
+                    <div class="origin">Japanese · East Asia</div>
+                    <div class="meaning">No mind. The state where skill becomes pure action without thought.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Fūryū</div>
+                    <div class="origin">Japanese · East Asia</div>
+                    <div class="meaning">The wind and flow. Elegance that moves without trying.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Hira</div>
+                    <div class="origin">Ainu · Japan/East Asia</div>
+                    <div class="meaning">The sudden burning in the chest. The awakening of purpose.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Kokoro</div>
+                    <div class="origin">Japanese · East Asia</div>
+                    <div class="meaning">The whole self — heart, mind, spirit as one. The place where all three meet.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Moksha</div>
+                    <div class="origin">Sanskrit · South Asia</div>
+                    <div class="meaning">Liberation. Not escape — the dissolution of the boundaries that imprisoned you.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Turiya</div>
+                    <div class="origin">Sanskrit · South Asia</div>
+                    <div class="meaning">The fourth state. Beyond waking, dreaming, sleeping — pure consciousness.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Samadhi</div>
+                    <div class="origin">Sanskrit · South Asia</div>
+                    <div class="meaning">Total absorption. Union of doer and deed until no separation remains.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Vritti</div>
+                    <div class="origin">Sanskrit · South Asia</div>
+                    <div class="meaning">The whirlpool of the mind. The thoughts that keep the surface churned.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Bodhi</div>
+                    <div class="origin">Buddhism · South Asia</div>
+                    <div class="meaning">Awakening. The moment the mind stops mistaking the ripples for the depth.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Zazen</div>
+                    <div class="origin">Zen Buddhism · East Asia</div>
+                    <div class="meaning">Just sitting. No technique — the posture that makes the mind stop spinning.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Koan</div>
+                    <div class="origin">Zen Buddhism · East Asia</div>
+                    <div class="meaning">The unsolvable that cracks the mind open. Not an answer — a dissolution.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Fudoshin</div>
+                    <div class="origin">Japanese · East Asia</div>
+                    <div class="meaning">Immovable mind. Not rigidity — the calm that cannot be unsettled.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Zanshin</div>
+                    <div class="origin">Japanese · East Asia</div>
+                    <div class="meaning">Remaining spirit. The alertness that continues after the strike.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Śūnyatā</div>
+                    <div class="origin">Sanskrit · South Asia</div>
+                    <div class="meaning">Emptiness. Not nothing — the openness that allows anything to appear.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Baraka</div>
+                    <div class="origin">Arabic · Middle East</div>
+                    <div class="meaning">Blessing as overflow. The abundance that flows through a person to others.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Fas</div>
+                    <div class="origin">Arabic · Middle East</div>
+                    <div class="meaning">Natural moral order. The law written in the nature of things.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Tahara</div>
+                    <div class="origin">Arabic · Middle East</div>
+                    <div class="meaning">Ritual purity as spiritual preparation. Clean body, clear mind.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Tawhid</div>
+                    <div class="origin">Arabic · Middle East</div>
+                    <div class="meaning">Unity. Not monotheism — the seeing of the one in the many.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Ikhwan</div>
+                    <div class="origin">Arabic · Middle East</div>
+                    <div class="meaning">Brothers in spirit. The bonds forged by shared practice, not shared blood.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Fitra</div>
+                    <div class="origin">Arabic · Middle East</div>
+                    <div class="meaning">The original state. The pure awareness you were born with before the world imposed on it.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Hafiza</div>
+                    <div class="origin">Arabic · Middle East</div>
+                    <div class="meaning">Memory as sacred guard. To hold what must not be lost.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Adab</div>
+                    <div class="origin">Arabic · Middle East</div>
+                    <div class="meaning">Right conduct toward others. Not etiquette — the grace of proper presence.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Adl</div>
+                    <div class="origin">Arabic · Middle East</div>
+                    <div class="meaning">Justice as balance. Not fairness — the restoration of equilibrium.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Nyansa</div>
+                    <div class="origin">Yoruba · West Africa</div>
+                    <div class="meaning">Wisdom earned through experience. Knowledge that only time can grant.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Jirga</div>
+                    <div class="origin">Pashtun · Central Asia</div>
+                    <div class="meaning">A circle of elders. The assembly where a community decides its own affairs.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Nguvu</div>
+                    <div class="origin">Swahili · East Africa</div>
+                    <div class="meaning">Inner strength. The force that keeps you standing when everything says fall.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Uwinkonde</div>
+                    <div class="origin">Yoruba · West Africa</div>
+                    <div class="meaning">The directing consciousness. The one who sees and guides from within.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Menfef</div>
+                    <div class="origin">Yoruba · West Africa</div>
+                    <div class="meaning">Complete surrender to the will of the divine. Not defeat — release.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Butsha</div>
+                    <div class="origin">Yoruba · West Africa</div>
+                    <div class="meaning">The inner self that travels at night. The part of you that dreams true.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Ukusus</div>
+                    <div class="origin">Yoruba · West Africa</div>
+                    <div class="meaning">The living dead. Ancestors who remain connected to the world of the living.</div>
+                </div>
+                <div class="concept">
+                    <div class="name">Odu</div>
+                    <div class="origin">Yoruba · West Africa</div>
+                    <div class="meaning">Destiny written in the Ifá verses. The fate that finds you whether you seek it or not.</div>
+                </div>
+            </div>
+
+        </div>
+
+
+<div class="bottom-note">Seven continents · One hundred forty-nine concepts · Every Monday</div>
+    </div>
+</div>
+
+<script>
+    const tabs = document.querySelectorAll('.tab');
+    const allConcepts = document.querySelectorAll('.concepts');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const region = tab.dataset.region;
+
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+
+            allConcepts.forEach(c => {
+                c.classList.remove('active');
+                if (c.dataset.region === region) {
+                    c.classList.add('active');
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html><!-- rebuild Tue Jun  2 00:31:46 UTC 2026 -->
+Sun Jun  7 14:01:10 UTC 2026

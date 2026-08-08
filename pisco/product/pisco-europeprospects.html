@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PISCO — European Prospects | Filipino Worker Recruitment</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .header {
+      border-bottom: 1px solid #30363d;
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+    }
+    .badge {
+      display: inline-block;
+      background: #238636;
+      color: #fff;
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      margin-bottom: 8px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+    h1 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+    .subtitle { color: #8b949e; font-size: 13px; }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin-bottom: 30px;
+    }
+    .stat-card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 14px;
+    }
+    .stat-number { font-size: 28px; font-weight: 700; color: #58a6ff; }
+    .stat-label { font-size: 11px; color: #8b949e; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .country-section { margin-bottom: 36px; }
+    .country-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .flag { font-size: 24px; }
+    .country-name { font-size: 16px; font-weight: 700; }
+    .industry-tag {
+      display: inline-block;
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 3px;
+      font-weight: 600;
+      letter-spacing: 0.4px;
+    }
+    .tag-health { background: #1f4a6e; color: #79c0ff; }
+    .tag-logistics { background: #3d4a1f; color: #9be9a8; }
+    .tag-multi { background: #4a1f3d; color: #f0883e; }
+    .prospect-list { display: flex; flex-direction: column; gap: 10px; }
+    .prospect-card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 16px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: start;
+    }
+    .prospect-name { font-weight: 600; font-size: 14px; margin-bottom: 3px; }
+    .prospect-type { font-size: 11px; color: #8b949e; margin-bottom: 6px; }
+    .prospect-detail { font-size: 12px; color: #8b949e; line-height: 1.5; }
+    .prospect-detail strong { color: #e6edf3; }
+    .tier-badge {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 3px 7px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 6px;
+      letter-spacing: 0.5px;
+    }
+    .tier-hot { background: #3d1f1f; color: #ff7b72; border: 1px solid #5f2520; }
+    .tier-warm { background: #3d2e1f; color: #e3b341; border: 1px solid #5f4520; }
+    .contact-btn {
+      background: #21262d;
+      border: 1px solid #30363d;
+      color: #58a6ff;
+      font-size: 11px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      white-space: nowrap;
+    }
+    .contact-btn:hover { background: #30363d; }
+    .contact-btn.agency { color: #79c0ff; }
+    .contact-btn.employer { color: #56d364; }
+    .cold-email-section {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 30px;
+    }
+    .section-title { font-size: 14px; font-weight: 700; margin-bottom: 14px; color: #e6edf3; }
+    .script-box {
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 16px;
+      font-size: 12px;
+      line-height: 1.7;
+      color: #c9d1d9;
+      white-space: pre-wrap;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+    }
+    .script-label { font-size: 10px; color: #8b949e; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .copy-btn {
+      background: #238636;
+      color: #fff;
+      border: none;
+      font-size: 11px;
+      padding: 6px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 10px;
+      font-weight: 600;
+    }
+    .copy-btn:hover { background: #2ea043; }
+    .note-box {
+      background: #1c1f29;
+      border-left: 3px solid #e3b341;
+      padding: 12px 16px;
+      border-radius: 0 6px 6px 0;
+      font-size: 12px;
+      color: #c9d1d9;
+      line-height: 1.6;
+      margin-bottom: 30px;
+    }
+    .note-box strong { color: #e3b341; }
+    .linkedin-section {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 30px;
+    }
+    .dm-script {
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 14px;
+      font-size: 12px;
+      line-height: 1.7;
+      color: #c9d1d9;
+    }
+    .dm-script .name { color: #58a6ff; font-weight: 600; }
+    .pisco-angle {
+      background: linear-gradient(135deg, #1a2e1a 0%, #0d1117 100%);
+      border: 1px solid #238636;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 30px;
+    }
+    .pisco-angle h3 { font-size: 14px; margin-bottom: 10px; color: #56d364; }
+    .pisco-angle p { font-size: 12px; color: #c9d1d9; line-height: 1.7; }
+    .pisco-angle .highlight { color: #79c0ff; font-weight: 600; }
+    .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #30363d; font-size: 11px; color: #484f58; text-align: center; }
+    @media (max-width: 500px) {
+      .prospect-card { grid-template-columns: 1fr; }
+      .summary-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="badge">PISCO × PLACEWELL INTERNATIONAL</div>
+  <h1>🇪🇺 European Prospects — Filipino Worker Recruitment</h1>
+  <div class="subtitle">Truck Drivers · Nurses · Construction | 14 hot prospects with direct contacts</div>
+</div>
+
+<div class="summary-grid">
+  <div class="stat-card">
+    <div class="stat-number">14</div>
+    <div class="stat-label">Active Prospects</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number">6</div>
+    <div class="stat-label">Countries</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number">3</div>
+    <div class="stat-label">Industries</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number">426K</div>
+    <div class="stat-label">EU Truck Driver Shortage</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number">1.2M</div>
+    <div class="stat-label">EU Healthcare Worker Gap</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number">600</div>
+    <div class="stat-label">German Filipino Nurses Needed</div>
+  </div>
+</div>
+
+<!-- PISCO ANGLE -->
+<div class="pisco-angle">
+  <h3>🎯 Your PISCO Angle — How to Position Placewell International</h3>
+  <p>
+    <span class="highlight">Demand is proven. Supply is the bottleneck.</span><br><br>
+    European companies and agencies need Filipino workers — but the vetting, documentation, and compliance pipeline is messy. 
+    Placewell International is already DMW-licensed and has the infrastructure.<br><br>
+    <span class="highlight">For recruitment agencies</span> → Become their preferred Philippines partner. "We handle compliance, you handle placement — we split the margin."<br>
+    <span class="highlight">For direct employers</span> → "We have 500+ pre-vetted Filipino workers ready for deployment within 60 days."<br><br>
+    Target: agencies first (faster close), then direct companies.
+  </p>
+</div>
+
+<!-- COLD EMAIL SCRIPTS -->
+<div class="cold-email-section">
+  <div class="section-title">📧 Cold Email Scripts</div>
+  
+  <div class="script-label">For Recruitment Agencies (Primary Target)</div>
+  <div class="script-box" id="email-agency">Subject: Philippines Recruitment Partnership — 500+ Pre-Vetted Filipino Workers Ready
+
+Hi [Name],
+
+I came across [Agency Name]'s work placing healthcare workers in [Country], and I think there's a strong partnership opportunity.
+
+I'm connected with <strong>Placewell International Services Corp</strong> — a DMW-licensed Filipino recruitment agency with 20+ years of placement history and a proven pipeline of pre-vetted nurses, truck drivers, and construction workers.
+
+The demand gap in Europe is real — Germany alone needs 600+ Filipino nurses and the EU has a 426,000 truck driver shortage. Agencies that can move fast are capturing this.
+
+I'd love to arrange a 15-minute call to explore whether sending clients to Placewell for Philippines sourcing makes sense for your portfolio.
+
+Are you available this week?
+
+Best,
+Jordan</div>
+  <button class="copy-btn" onclick="copyText('email-agency')">Copy Email Script</button>
+
+  <div style="margin-top: 20px;">
+    <div class="script-label">For Direct Employers (Secondary Target)</div>
+    <div class="script-box" id="email-employer">Subject: Filipino Workers Available — Nurses, Truck Drivers, Construction [Ready in 60 Days]
+
+Dear [Hiring Manager],
+
+I'm reaching out on behalf of <strong>Placewell International Services Corp</strong> — a Manila-based recruitment agency that specializes in placing Filipino workers in overseas roles.
+
+With the current labor shortages across Europe — 1.2 million healthcare workers needed and 426,000 truck drivers — we help European companies fill roles quickly with vetted, English-speaking Filipino workers.
+
+We're currently looking for 2–3 direct employer partnerships in [Country] for:
+• Nurses (ICU, OR, Geriatric) — B2+ German language support available
+• Truck Drivers (Class A/CE) — EU license conversion assistance
+• Construction Workers (skilled trades)
+
+Deployment lead time: 45–60 days.
+
+Would you be open to a brief call this week?
+
+Kind regards,
+Jordan Hays
+Placewell International — European Partnerships</div>
+  <button class="copy-btn" onclick="copyText('email-employer')">Copy Email Script</button>
+  </div>
+</div>
+
+<!-- LINKEDIN DM SCRIPTS -->
+<div class="linkedin-section">
+  <div class="section-title">💬 LinkedIn DM Scripts</div>
+  
+  <div class="script-label">Recruitment Agency Director (1st message)</div>
+  <div class="dm-script" id="dm-agency">
+Hi <span class="name">[First Name]</span> — I noticed [Agency] places healthcare workers in [Country].
+
+We work with <strong>Placewell International</strong> in Manila — DMW-licensed, 20+ years, a ready pipeline of Filipino nurses and skilled workers.
+
+With Germany's 600+ Filipino nurse shortage and EU-wide driver gaps, now's the moment to lock in a Philippines sourcing partner.
+
+Open to a 15-min call this week?
+
+— Jordan</div>
+  <button class="copy-btn" onclick="copyText('dm-agency')">Copy DM</button>
+
+  <div style="margin-top: 14px;">
+    <div class="script-label">HR Director at Direct Company (1st message)</div>
+    <div class="dm-script" id="dm-employer">
+Hi <span class="name">[First Name]</span> — quick question.
+
+Do you have current needs for Filipino or international workers? We partner with a DMW-licensed agency in Manila — Placewell International — that has a fast-turn pipeline for nurses, truck drivers, and construction roles.
+
+Ready deploy in 45–60 days. Happy to share their profile if useful.
+
+— Jordan</div>
+  <button class="copy-btn" onclick="copyText('dm-employer')">Copy DM</button>
+  </div>
+</div>
+
+<!-- PROSPECTS -->
+<div class="note-box">
+  <strong>💡 Who to contact first:</strong> Tier 1 = agencies with ACTIVE international recruitment programs. Tier 2 = companies that recently hired Filipino workers. Go where there's evidence of demand, not just potential.
+</div>
+
+<!-- GERMANY -->
+<div class="country-section">
+  <div class="country-header">
+    <span class="flag">🇩🇪</span>
+    <span class="country-name">Germany</span>
+    <span class="industry-tag tag-health">Healthcare</span>
+  </div>
+  <div class="prospect-list">
+
+    <div class="prospect-card">
+      <div>
+        <span class="tier-badge tier-hot">🔥 HOT — Active Intl Recruitment</span>
+        <div class="prospect-name">Hans Leutenegger GmbH</div>
+        <div class="prospect-type">Recruitment Agency — Direct Employer Partner</div>
+        <div class="prospect-detail">
+          <strong>Explicitly recruits nurses FROM the Philippines.</strong><br>
+          Email: info@leutenegger.de | hansleutenegger.de/en<br>
+          Berlin HQ — German language + relocation support
+        </div>
+      </div>
+      <a href="https://www.hansleutenegger.de/en/dienstleistungen-en/vermittlung-pflegefachkraefte-en" class="contact-btn agency" target="_blank">View →</a>
+    </div>
+
+    <div class="prospect-card">
+      <div>
+        <span class="tier-badge tier-hot">🔥 HOT — Active Intl Recruitment</span>
+        <div class="prospect-name">CWC Recruitment</div>
+        <div class="prospect-type">Recruitment Agency — Active Philippines Program</div>
+        <div class="prospect-detail">
+          Running active "Work as a Filipino Nurse in Germany" program.<br>
+          cwc-recruitment.com/philippines-nurse-en
+        </div>
+      </div>
+      <a href="https://www.cwc-recruitment.com/philippines-nurse-en" class="contact-btn agency" target="_blank">View →</a>
+    </div>
+
+    <div class="prospect-card">
+      <div>
+        <span class="tier-badge tier-hot">🔥 HOT — Active Intl Recruitment</span>
+        <div class="prospect-name">Care Beyond Borders</div>
+        <div class="prospect-type">German-Filipino Joint Venture — Direct Employer</div>
+        <div class="prospect-detail">
+          German-Filipino partnership filling healthcare, ICT, construction.<br>
+          care-beyond-borders.de | Based in Germany
+        </div>
+      </div>
+      <a href="https://care-beyond-borders.de" class="contact-btn agency" target="_blank">View →</a>
+    </div>
+
+    <div class="prospect-card">
+      <div>
+        <span class="tier-badge tier-warm">⚡ Active Program — Government-Backed</span>
+        <div class="prospect-name">DeFa (Deutsche Fachkräfteagentur)</div>
+        <div class="prospect-type">Government Body — Supports Employer Visa Processing</div>
+        <div class="prospect-detail">
+          German Federal Agency for Healthcare Professionals.<br>
+          Supports employers + agencies processing Filipino visa/work permits.<br>
+          Contact via German Embassy Manila.
+        </div>
+      </div>
+      <a href="https://manila.diplo.de/ph-en/germany-and-philippines/nurses-in-germany-2065266" class="contact-btn agency" target="_blank">View →</a>
+    </div>
+
+    <div class="prospect-card">
+      <div>
+        <span class="tier-badge tier-warm">⚡ Active Program</span>
+        <div class="prospect-name">Vivantes Netzwerk für Gesundheit</div>
+        <div class="prospect-type">Hospital Group — Direct Employer</div>
+        <div class="prospect-detail">
+          Largest municipal hospital group in Berlin.<br>
+          Known international recruitment campaigns — nurses from Philippines/Southeast Asia.
+        </div>
+      </div>
+      <a href="https://www.vivantes.de" class="contact-btn employer" target="_blank">View →</a>
+    </div>
+
+  </div>
+</div>
+
+<!-- UK -->
+<div class="country-section">
+  <div class="country-header">
+    <span class="flag">🇬🇧</span>
+    <span class="country-name">United Kingdom</span>
+    <span class="industry-tag tag-health">Healthcare</span>
+  </div>
+  <div class="prospect-list">
+
+    <div class="prospect-card">
+      <div>
+        <span class="tier-badge tier-hot">🔥 HOT — Largest NHS Trust, Active</span>
+        <div class="prospect-name">Barts Health NHS Trust</div>
+        <div class="prospect-type">NHS Trust — Direct Employer, Largest in England</div>
+        <div class="prospect-detail">
+          Partners with ASC Global for Filipino nurse recruitment.<br>
+          Active hiring as of 2024–2025. 5 hospitals across East London.
+        </div>
+      </div>
+      <a href="https://www.bartshealth.nhs.uk" class="contact-btn employer" target="_blank">View →</a>
+    </div>
+
+    <div class="prospect-card">
+      <div>
+        <span class="tier-badge tier-hot">🔥 HOT — Active Intl Recruitment</span>
+        <div class="prospect-name">Guy's & St Thomas' NHS Foundation Trust</div>
+        <div class="prospect-type">NHS Trust — Active Filipino Recruitment</div>
+        <div class="prospect-detail">
+          Top 3 London NHS Trust. Active international hiring.<br>
+          Central London — premium employer for overseas nurses.
+        </div>
+      </div>
+      <a href="https://www.guysandstthomas.nhs.uk" class="contact-btn employer" target="_blank">View →</a>
+    </div>
+
+    <div class="prospect-card">
+      <div>
+        <span class="tier-badge tier-hot">🔥 HOT — Multiple Trusts, Active</span>
+        <div class="prospect-name">14 NHS Trusts — International Recruitment Open</div>
+        <div class="prospect-type">NHS Trusts — Group (reopened overseas hiring 2024)</div>
+        <div class="prospect-detail">
+          Barking Havering & Redbridge · Birmingham Women's & Children's · Bradford District Care ·<br>
+          East London NHS FT · + 9 more confirmed actively recruiting overseas nurses.
+        </div>
+      </div>
+      <a href="https://www.england.nhs.uk/nursingmidwifery/international-recruitment/" class="contact-btn employer" target="_blank">NHS List →</a>
+    </div>
+
+    <div class="prospect-card">
+      <div>
+        <span class="tier-badge tier-warm">⚡ Active Recruitment Agency</span>
+        <div class="prospect-name">BMB Recruitment</div>
+        <div class="prospect-type">UK Agency — Filipino Nurse Specialist</div>
+        <div class="prospect-detail">
+          "Calling Filipino RGNs with dreams of working in the UK."<br>
+          B2+ English, NMC processing, fees paid by employer.
+        </div>
+      </div>
+      <a href="https://www.facebook.com/BMBRecruitment" class="contact-btn agency" target="_blank">View →</a>
+    </div>
+
+    <div class="prospect-card">
+      <div>
+        <span class="tier-badge tier-warm">⚡ Active Recruitment Agency</span>
+        <div class="prospect-name">Capital Nurse London</div>
+        <div class="prospect-type">NHS-Connected Agency — International Nurse Placement</div>
+        <div class="prospect-detail">
+          +44(0)203 096 4590 | Multi-lingual team, NHS-recommended.<br>
+          international@capitalnurselondon.co.uk
+        </div>
+      </div>
+      <a href="https://www.capitalnurselondon.co.uk/be-a-london-nurse/agencies/" class="contact-btn agency" target="_blank">View →</a>
+    </div>
+
+  </div>
+</div>
+
+<!-- LITHUANIA -->
+<div class="country-section">
+  <div class="country-header">
+    <span class="flag">🇱🇹</span>
+    <span class="country-name">Lithuania / EU-Wide</span>
+    <span class="industry-tag tag-logistics">Logistics</span>
+  </div>
+  <div class="prospect-list">
+
+    <div class="prospect-card">
+      <div>
+        <span class="tier-badge tier-hot">🔥 HOT — Massive Fleet, Active Hiring</span>
+        <div class="prospect-name">Girteka</div>
+        <div class="prospect-type">Logistics Company — 16,000+ Trucks Across EU</div>
+        <div class="prospect-detail">
+          Europe's largest trucking company. Already recruiting Filipino drivers.<br>
+          Lithuania HQ | EU-wide operations | 2280–2511 EUR/month + relocation.<br>
+          girteka.eu | drivers@girteka.eu
+        </div>
+      </div>
+      <a href="https://girtekadrivers.com/jobs-available/" class="contact-btn employer" target="_blank">View →</a>
+    </div>
+
+    <div class="prospect-card">
+      <div>
+        <span class="tier-badge tier-warm">⚡ Active — Bulgaria, Lithuania, EU</span>
+        <div class="prospect-name">Prime World / Agrologistika Group</div>
+        <div class="prospect-type">Logistics — Direct Employer, Multiple EU Countries</div>
+        <div class="prospect-detail">
+          Multiple EU logistics companies posting Filipino driver openings.<br>
+          Lithuania, Bulgaria, Poland — international route operations.
+        </div>
+      </div>
+      <a href="https://agrologistika.eu/career/" class="contact-btn employer" target="_blank">View →</a>
+    </div>
+
+  </div>
+</div>
+
+<!-- NETHERLANDS / BELGIUM / FRANCE -->
+<div class="country-section">
+  <div class="country-header">
+    <span class="flag">🌍</span>
+    <span class="country-name">Netherlands · Belgium · France</span>
+    <span class="industry-tag tag-multi">Multi-Sector</span>
+  </div>
+  <div class="prospect-list">
+
+    <div class="prospect-card">
+      <div>
+        <span class="tier-badge tier-warm">⚡ Active — Multi-Sector Agencies</span>
+        <div class="prospect-name">Actief Werkt!, Undutchables (NL) · Tempo-Team (BE)</div>
+        <div class="prospect-type">Staffing Agencies — NL/BE, Filipino Worker Programs</div>
+        <div class="prospect-detail">
+          Dutch/Belgian staffing agencies with dedicated international divisions.<br>
+          Philippines-trained workers for logistics, healthcare, construction.
+        </div>
+      </div>
+    </div>
+
+    <div class="prospect-card">
+      <div>
+        <span class="tier-badge tier-warm">⚡ Active</span>
+        <div class="prospect-name">Aholds, Carrefour, DHL Supply Chain (EU-Wide)</div>
+        <div class="prospect-type">Retail/Logistics Giants — Direct Employers</div>
+        <div class="prospect-detail">
+          Major EU employers with active international driver + logistics worker programs.<br>
+          Contact via EU HR divisions — logistics coordinators, warehouse drivers.
+        </div>
+      </div>
+    </div>
+
+    <div class="prospect-card">
+      <div>
+        <span class="tier-badge tier-warm">⚡ Active — NHS-Style Programs</span>
+        <div class="prospect-name">French Hospital Groups (AP-HP, Ramsay Santé)</div>
+        <div class="prospect-type">Hospital Groups — France, Filipino Nurse Hiring</div>
+        <div class="prospect-detail">
+          French hospitals starting structured international nurse recruitment.<br>
+          AP-HP is Europe's largest hospital system — Paris region.
+        </div>
+      </div>
+      <a href="https://www.aphp.fr" class="contact-btn employer" target="_blank">View →</a>
+    </div>
+
+  </div>
+</div>
+
+<!-- PHILIPPINE AGENCIES (Partner Targets) -->
+<div class="country-section">
+  <div class="country-header">
+    <span class="flag">🇵🇭</span>
+    <span class="country-name">Philippine Agencies to Coordinate With</span>
+    <span class="industry-tag tag-multi">DMW-Licensed</span>
+  </div>
+  <div class="prospect-list">
+
+    <div class="prospect-card">
+      <div>
+        <span class="tier-badge tier-warm">⚡ Referral Partner</span>
+        <div class="prospect-name">ABBA Personnel Services</div>
+        <div class="prospect-type">DMW-Licensed Agency — UK NHS Trust Partnerships</div>
+        <div class="prospect-detail">
+          Specializes in placing OFWs with UK NHS trusts. abba.ph<br>
+          Already has NHS trust relationships — potential mutual referral.
+        </div>
+      </div>
+      <a href="https://www.abba.ph" class="contact-btn agency" target="_blank">View →</a>
+    </div>
+
+    <div class="prospect-card">
+      <div>
+        <span class="tier-badge tier-warm">⚡ Referral Partner</span>
+        <div class="prospect-name">Royal Filipino Resources Inc.</div>
+        <div class="prospect-type">DMW-Licensed Agency — UK Recruitment</div>
+        <div class="prospect-detail">
+          DMW-approved agency actively recruiting for UK NHS trusts.<br>
+          DMW-Approved | filipino-workers abroad
+        </div>
+      </div>
+    </div>
+
+    <div class="prospect-card">
+      <div>
+        <span class="tier-badge tier-warm">⚡ Referral Partner</span>
+        <div class="prospect-name">Johnwins International</div>
+        <div class="prospect-type">DMW-Licensed Agency — Multi-Country Deployments</div>
+        <div class="prospect-detail">
+          Multi-country deployment history. European placements across sectors.<br>
+          jwii.com.ph | Strong compliance record.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PRIORITY ACTION LIST -->
+<div class="cold-email-section">
+  <div class="section-title">🎯 Priority Outreach Sequence — Who to Contact First</div>
+  <div class="script-box" id="priority-list" style="font-family: -apple-system, sans-serif; font-size: 13px;">
+1. Hans Leutenegger GmbH — direct recruiter, Philippines program already active
+2. CWC Recruitment — "Filipino Nurse in Germany" campaign, easy ask
+3. Care Beyond Borders — German-Filipino JV, built for partnerships
+4. Barts Health NHS Trust + ASC Global — direct employer + agency pair
+5. Capital Nurse London — agency with NHS ties, international focus
+6. Girteka — biggest truck company, already hiring Filipino drivers
+7. BMB Recruitment — UK agency, Filipino nurse specialist
+8. DeFa / German Embassy Manila — government partner, unlocks other German employers
+9. Other NHS Trusts (Bradford, Birmingham, East London) — group follow-up
+10. Dutch/Belgian agencies (Actief, Undutchables) — 2nd wave
+
+Note: Start with German healthcare agencies — they are most open to new Philippines partners.
+UK NHS trusts work through specific agencies — go through the agency channel first.
+  </div>
+  <button class="copy-btn" onclick="copyText('priority-list')">Copy Priority List</button>
+</div>
+
+<div class="footer">
+  Data sourced from IRU (426K EU driver shortage), OECD (1.2M healthcare gap), German Embassy Manila, NHS England, Girteka EU careers.<br>
+  Built for Placewell International × PISCO European expansion outreach.
+</div>
+
+<script>
+  function copyText(id) {
+    const el = document.getElementById(id);
+    navigator.clipboard.writeText(el.innerText).then(() => {
+      const btn = el.nextElementSibling;
+      const original = btn.textContent;
+      btn.textContent = '✓ Copied!';
+      btn.style.background = '#238636';
+      setTimeout(() => {
+        btn.textContent = original;
+        btn.style.background = '';
+      }, 1500);
+    });
+  }
+</script>
+
+</body>
+</html>

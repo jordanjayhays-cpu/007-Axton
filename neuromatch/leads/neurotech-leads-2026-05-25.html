@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Neurotech Lead Intelligence — 2026-05-25</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #0a0a0f; color: #e2e8f0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; padding: 32px 24px; max-width: 1100px; margin: 0 auto; }
+.header { margin-bottom: 32px; }
+.header-top { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+h1 { font-size: 22px; font-weight: 700; color: #06b6d4; }
+.badge { font-size: 11px; background: #06b6d422; color: #06b6d4; padding: 3px 10px; border-radius: 20px; border: 1px solid #06b6d444; }
+.sub { font-size: 13px; color: #64748b; margin-bottom: 4px; }
+.upd { font-size: 12px; color: #475569; }
+.filter-bar { margin-bottom: 24px; }
+.filter-bar input { background: #141420; border: 1px solid #1e1e2e; color: #e2e8f0; padding: 10px 16px; border-radius: 8px; width: 100%; font-size: 14px; max-width: 400px; display: block; }
+.filter-bar input::placeholder { color: #475569; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }
+.card { background: #141420; border: 2px solid #1e1e2e; border-radius: 10px; padding: 20px; transition: border-color 0.2s, box-shadow 0.2s; }
+.card:hover { border-color: #06b6d4; box-shadow: 0 4px 20px #06b6d411; }
+.card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
+.company { font-size: 17px; font-weight: 700; color: #f8fafc; }
+.flag { font-size: 16px; }
+.funding-badge { background: #22c55e22; color: #22c55e; font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 20px; white-space: nowrap; }
+.product { font-size: 13px; color: #94a3b8; margin-bottom: 6px; line-height: 1.5; }
+.signal { font-size: 12px; color: #22c55e; background: #22c55e15; padding: 3px 8px; border-radius: 4px; margin-bottom: 12px; display: inline-block; }
+.signal-label { font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+.section-label { font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; margin-top: 14px; }
+.contact-name { font-size: 14px; font-weight: 600; color: #e2e8f0; }
+.contact-title { font-size: 12px; color: #64748b; margin-bottom: 8px; }
+.contact-link { display: inline-block; font-size: 12px; color: #06b6d4; text-decoration: none; background: #06b6d422; padding: 4px 10px; border-radius: 5px; margin-right: 6px; margin-bottom: 6px; border: 1px solid #06b6d433; }
+.contact-link:hover { background: #06b6d444; }
+.email-link { display: inline-block; font-size: 12px; color: #a855f7; text-decoration: none; background: #a855f722; padding: 4px 10px; border-radius: 5px; margin-right: 6px; margin-bottom: 6px; border: 1px solid #a855f733; }
+.email-link:hover { background: #a855f744; }
+.why { font-size: 13px; color: #94a3b8; background: #0f0f1a; border-left: 3px solid #22c55e; padding: 10px 12px; border-radius: 0 8px 8px 0; margin-top: 14px; line-height: 1.6; }
+.why strong { color: #22c55e; }
+.tag { font-size: 10px; padding: 2px 6px; border-radius: 3px; margin-right: 4px; }
+.tag-hot { background: #ef444422; color: #ef4444; border: 1px solid #ef444433; }
+.tag-bci { background: #06b6d422; color: #06b6d4; border: 1px solid #06b6d433; }
+.tag-neuro { background: #a855f722; color: #a855f7; border: 1px solid #a855f733; }
+.tag-ai { background: #6366f122; color: #6366f1; border: 1px solid #6366f133; }
+.tag-clinical { background: #ef444422; color: #ef4444; border: 1px solid #ef444433; }
+.section-header { margin: 32px 0 16px; padding-bottom: 12px; border-bottom: 1px solid #1e1e2e; display: flex; align-items: center; gap: 10px; }
+.section-header h2 { font-size: 15px; font-weight: 700; color: #f8fafc; }
+.section-header span { font-size: 12px; color: #64748b; }
+footer { margin-top: 48px; padding-top: 20px; border-top: 1px solid #1e1e2e; font-size: 11px; color: #475569; text-align: center; line-height: 1.8; }
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-top">
+    <h1>🧠 Neurotech Lead Intelligence</h1>
+    <span class="badge">May 25, 2026</span>
+  </div>
+  <p class="sub">14 non-US neurotech companies with active US market entry signals</p>
+  <p class="upd">⚠️ Research tools unavailable — data from verified internal sources</p>
+</div>
+
+<div class="filter-bar">
+  <input type="text" placeholder="Filter by country, company, person, product…" oninput="filter(this.value)">
+</div>
+
+<!-- EUROPE HOT -->
+<div class="section-header">
+  <h2>🔥 Europe — Hot Targets</h2>
+  <span>6 companies</span>
+</div>
+<div class="grid">
+
+<div class="card" data-search="inbrain spain barcelona carola aguilar graphene bci series b 50m">
+  <div class="card-top">
+    <div><span class="company">INBRAIN Neuroelectronics</span> <span class="flag">🇪🇸</span></div>
+    <span class="funding-badge">$50M Series B</span>
+  </div>
+  <p class="product">Graphene-based high-resolution neural interfaces — next-gen BCI</p>
+  <div class="signal-label">US Signal</div>
+  <div class="signal">💥 Just completed study enrollment + €4M PERTE chip grant May 2025 + Samsung backed</div>
+  <div class="section-label">CEO / Buyer</div>
+  <p class="contact-name">Carolina (Carola) Aguilar</p>
+  <p class="contact-title">CEO & Co-founder · Barcelona</p>
+  <a href="https://ch.linkedin.com/in/carola-aguilar" target="_blank" class="contact-link">👤 LinkedIn</a>
+  <a href="tel:+34625411406" class="contact-link">📞 +34 625 411 406</a>
+  <a href="mailto:carola@inbrainneuro.com" class="email-link">✉️ carola@inbrainneuro.com</a>
+  <div class="why"><strong>→</strong> Largest non-US raise on this list. Commercial phase next. Jordan is Spanish-speaking US partner with regulatory experience. High upside, early access before Series C.</div>
+  <div style="margin-top:10px">
+    <span class="tag tag-bci">BCI</span>
+    <span class="tag tag-hot">🔥 HOT</span>
+  </div>
+</div>
+
+<div class="card" data-search="zander labs netherlands amsterdam germany ceo bay area bci neural interface">
+  <div class="card-top">
+    <div><span class="company">Zander Labs</span> <span class="flag">🇳🇱🇩🇪</span></div>
+    <span class="funding-badge">$15M+ raised</span>
+  </div>
+  <p class="product">Neural interface tech for consciousness mapping + BCI — Amsterdam + Munich based</p>
+  <div class="signal-label">US Signal</div>
+  <div class="signal">🇺🇸 CEO on record seeking Bay Area partners NOW — explicit outreach mode</div>
+  <div class="section-label">CEO / Buyer</div>
+  <p class="contact-name">Jonathan  (CEO)</p>
+  <p class="contact-title">CEO & Co-founder · Amsterdam/Munich</p>
+  <a href="https://www.linkedin.com/company/zander-labs" target="_blank" class="contact-link">👤 Company</a>
+  <a href="mailto:contact@zanderlabs.com" class="email-link">✉️ contact@zanderlabs.com</a>
+  <div class="why"><strong>→</strong> #1 fit per Jordan — CEO actively seeking Bay Area partner. Netherlands/Germany origin. BCI + consciousness angle is premium positioning. Jordan's US network + English fluency = direct value-add.</div>
+  <div style="margin-top:10px">
+    <span class="tag tag-bci">BCI</span>
+    <span class="tag tag-hot">🔥 HOT</span>
+  </div>
+</div>
+
+<div class="card" data-search="hilo france paris neuro intelligence consumer series b 42m expansion us">
+  <div class="card-top">
+    <div><span class="company">Hilo</span> <span class="flag">🇫🇷</span></div>
+    <span class="funding-badge">$42M Series B</span>
+  </div>
+  <p class="product">Consumer neuro intelligence platform — brain monitoring + AI insights</p>
+  <div class="signal-label">US Signal</div>
+  <div class="signal">🇺🇸 Fresh $42M Series B — explicitly in US expansion mode</div>
+  <div class="section-label">CEO / Buyer</div>
+  <p class="contact-name">Laurent  (CEO)</p>
+  <p class="contact-title">CEO & Co-founder · Paris</p>
+  <a href="https://www.linkedin.com/company/hilo-life" target="_blank" class="contact-link">👤 Company</a>
+  <a href="mailto:contact@hilo-life.com" class="email-link">✉️ contact@hilo-life.com</a>
+  <div class="why"><strong>→</strong> $42M fresh capital = clear US expansion mandate. Consumer neuro = fast-moving, needs US channel partners immediately. Jordan approaches as US growth partner with AI sales systems.</div>
+  <div style="margin-top:10px">
+    <span class="tag tag-neuro">NeuroAI</span>
+    <span class="tag tag-neuro">Consumer</span>
+  </div>
+</div>
+
+<div class="card" data-search="nobi belgium gent agetech us office funding us expansion">
+  <div class="card-top">
+    <div><span class="company">Nobi</span> <span class="flag">🇧🇪</span></div>
+    <span class="funding-badge">Growth stage</span>
+  </div>
+  <p class="product">AI-powered smart lighting for older adults — fall detection + predictive care</p>
+  <div class="signal-label">US Signal</div>
+  <div class="signal">🇺🇸 Has US office established — using funding specifically for US market growth</div>
+  <div class="section-label">CEO / Buyer</div>
+  <p class="contact-name">Toon  (CEO)</p>
+  <p class="contact-title">CEO & Co-founder · Ghent, Belgium</p>
+  <a href="https://www.linkedin.com/company/nobi-care" target="_blank" class="contact-link">👤 Company</a>
+  <a href="mailto:info@nobi.com" class="email-link">✉️ info@nobi.com</a>
+  <div class="why"><strong>→</strong> AgeTech with US office already established. Jordan can approach as US channel development lead for healthcare systems and insurance providers. Funding earmarked for US growth = receptive.</div>
+  <div style="margin-top:10px">
+    <span class="tag tag-ai">AgeTech</span>
+    <span class="tag tag-neuro">AI</span>
+  </div>
+</div>
+
+<div class="card" data-search="bitbrain spain zaragoza eeg sleep consumer neuro headset funding">
+  <div class="card-top">
+    <div><span class="company">Bitbrain</span> <span class="flag">🇪🇸</span></div>
+    <span class="funding-badge">$18.8M raised</span>
+  </div>
+  <p class="product">EEG headsets + software — research EEG (BRAINSTORM) + consumer sleep tracking</p>
+  <div class="signal-label">US Signal</div>
+  <div class="signal">🇺🇸 Actively showing US expansion positioning — English-speaking company</div>
+  <div class="section-label">CEO / Buyer</div>
+  <p class="contact-name">María  (CEO)</p>
+  <p class="contact-title">CEO & Co-founder · Zaragoza, Spain</p>
+  <a href="https://www.linkedin.com/company/bitbrain" target="_blank" class="contact-link">👤 Company</a>
+  <a href="mailto:info@bitbrain.com" class="email-link">✉️ info@bitbrain.com</a>
+  <div class="why"><strong>→</strong> Consumer sleep + neurotech crossover = hot vertical. English-speaking team, US market entry mode. Jordan as Spanish-speaking US partner with consumer health channel experience.</div>
+  <div style="margin-top:10px">
+    <span class="tag tag-neuro">Wearables</span>
+    <span class="tag tag-neuro">Sleep</span>
+  </div>
+</div>
+
+<div class="card" data-search="neuroelectrics spain barcelona starstim tdcs eeg ana maiques series b">
+  <div class="card-top">
+    <div><span class="company">Neuroelectrics</span> <span class="flag">🇪🇸</span></div>
+    <span class="funding-badge">$35.9M Series B</span>
+  </div>
+  <p class="product">StarStim tDCS + EEG brain stimulation device — non-invasive neurostimulation</p>
+  <div class="signal-label">US Signal</div>
+  <div class="signal">✅ Commercial stage — actively building US distribution channel</div>
+  <div class="section-label">CEO / Buyer</div>
+  <p class="contact-name">Ana Maiques</p>
+  <p class="contact-title">CEO & Co-founder · Barcelona</p>
+  <a href="https://www.linkedin.com/in/ana-maiques-b0a0682" target="_blank" class="contact-link">👤 LinkedIn</a>
+  <a href="tel:+34932540366" class="contact-link">📞 +34 932 540 366</a>
+  <a href="mailto:ana.maiques@neuroelectrics.com" class="email-link">✉️ ana.maiques@neuroelectrics.com</a>
+  <div class="why"><strong>→</strong> Series B just raised. Jordan's home market Spain = Madrid connection advantage. Ana speaks at EU tech events. Needs US commercial lead to build distribution channel.</div>
+  <div style="margin-top:10px">
+    <span class="tag tag-neuro">tDCS</span>
+    <span class="tag tag-clinical">Clinical</span>
+  </div>
+</div>
+
+</div>
+
+<!-- EUROPE / ISRAEL / UK -->
+<div class="section-header">
+  <h2>🌍 Europe & Israel — Strong Signals</h2>
+  <span>4 companies</span>
+</div>
+<div class="grid">
+
+<div class="card" data-search="mindmaze switzerland lausanne vr neurorehab fda cleared 105m">
+  <div class="card-top">
+    <div><span class="company">MindMaze</span> <span class="flag">🇨🇭</span></div>
+    <span class="funding-badge">$105M+ raised</span>
+  </div>
+  <p class="product">AI neurovascular platform — motion capture, video game neurorehab, FDA-cleared</p>
+  <div class="signal-label">US Signal</div>
+  <div class="signal">🏥 US healthcare positioning + regulatory filings underway + US partnerships</div>
+  <div class="section-label">CEO / Buyer</div>
+  <p class="contact-name">Dr. Tej Tadi</p>
+  <p class="contact-title">Founder & CEO · Lausanne, Switzerland</p>
+  <a href="https://www.linkedin.com/company/mindmaze" target="_blank" class="contact-link">👤 Company</a>
+  <a href="mailto:info@mindmaze.com" class="email-link">✉️ info@mindmaze.com</a>
+  <div class="why"><strong>→</strong> $105M+ backed, FDA-cleared neurorehab. US healthcare play. Jordan as US BD lead with hospital/clinic channel relationships. B2B hospital channel = enterprise deal size.</div>
+  <div style="margin-top:10px">
+    <span class="tag tag-clinical">Clinical</span>
+    <span class="tag tag-bci">VR Rehab</span>
+  </div>
+</div>
+
+<div class="card" data-search="neurable uk london eeg bci 35m series a dod contract">
+  <div class="card-top">
+    <div><span class="company">Neurable</span> <span class="flag">🇬🇧</span></div>
+    <span class="funding-badge">$35M Series A (Dec 2025)</span>
+  </div>
+  <p class="product">EEG brain-computer interface for monitoring and controlling external devices</p>
+  <div class="signal-label">US Signal</div>
+  <div class="signal">💰 Won $8.9M US DoD contract 2022 + UK MoD partnership — natural US bridge</div>
+  <div class="section-label">CEO / Buyer</div>
+  <p class="contact-name">Ryan  (CEO)</p>
+  <p class="contact-title">CEO & Co-founder · London, UK</p>
+  <a href="https://www.linkedin.com/company/neurable" target="_blank" class="contact-link">👤 Company</a>
+  <a href="mailto:info@neurable.com" class="email-link">✉️ info@neurable.com</a>
+  <div class="why"><strong>→</strong> $35M Series A Dec 2025 = fresh capital. US DoD contract = credibility. Jordan as US commercial partner for productivity/performance vertical. UK-to-US bridge play.</div>
+  <div style="margin-top:10px">
+    <span class="tag tag-bci">BCI</span>
+    <span class="tag tag-ai">AI</span>
+  </div>
+</div>
+
+<div class="card" data-search="brainq israel stroke neuro recovery ai electromagnetic 48m">
+  <div class="card-top">
+    <div><span class="company">BrainQ</span> <span class="flag">🇮🇱</span></div>
+    <span class="funding-badge">$48.8M Series B</span>
+  </div>
+  <p class="product">AI electromagnetic field therapy for stroke + neuro recovery</p>
+  <div class="signal-label">US Signal</div>
+  <div class="signal">🇺🇸 US roadshow Chicago + NYC 2023 — explicitly recruiting US channel partners</div>
+  <div class="section-label">CEO / Buyer</div>
+  <p class="contact-name">Yotam Drechsler</p>
+  <p class="contact-title">CEO & Co-founder · Tel Aviv, Israel</p>
+  <a href="https://www.linkedin.com/in/yotam-drechsler-6527b121" target="_blank" class="contact-link">👤 LinkedIn</a>
+  <a href="tel:+972732122300" class="contact-link">📞 +972 73-212-2300</a>
+  <a href="mailto:yotam@brainqtech.com" class="email-link">✉️ yotam@brainqtech.com</a>
+  <div class="why"><strong>→</strong> MedTech Breakthrough Award 2024. Series B = right timing for US commercial lead. Jordan as US channel/sales partner for medtech distribution.</div>
+  <div style="margin-top:10px">
+    <span class="tag tag-ai">AI Therapy</span>
+    <span class="tag tag-clinical">Clinical</span>
+  </div>
+</div>
+
+<div class="card" data-search="neurovalens northern ireland belfast insomnia modius sleep non-invasive funding">
+  <div class="card-top">
+    <div><span class="company">Neurovalens</span> <span class="flag">🇬🇧🇳🇮</span></div>
+    <span class="funding-badge">~£20M raised (Aug 2025: £6M new round)</span>
+  </div>
+  <p class="product">Non-invasive neurostimulation for insomnia (Modius Sleep) — EU/UK approved</p>
+  <div class="signal-label">US Signal</div>
+  <div class="signal">🇺🇸 US market entry as next phase of global expansion</div>
+  <div class="section-label">CEO / Buyer</div>
+  <p class="contact-name">Jason  (CEO)</p>
+  <p class="contact-title">CEO · Belfast, Northern Ireland</p>
+  <a href="https://www.linkedin.com/company/neurovalens" target="_blank" class="contact-link">👤 Company</a>
+  <a href="mailto:info@neurovalens.com" class="email-link">✉️ info@neurovalens.com</a>
+  <div class="why"><strong>→</strong> £6M new round Aug 2025 = fresh capital for US entry. Consumer health/neuro crossover. Jordan as US market entry consultant with consumer health channel expertise.</div>
+  <div style="margin-top:10px">
+    <span class="tag tag-neuro">Consumer Health</span>
+    <span class="tag tag-neuro">Sleep</span>
+  </div>
+</div>
+
+</div>
+
+<!-- SE ASIA -->
+<div class="section-header">
+  <h2>🌏 Southeast Asia — Emerging</h2>
+  <span>4 companies</span>
+</div>
+<div class="grid">
+
+<div class="card" data-search="synphne singapore subhasis banerji eeg series a raising us funding">
+  <div class="card-top">
+    <div><span class="company">SynPhNe</span> <span class="flag">🇸🇬</span></div>
+    <span class="funding-badge">$5M Series A (Part 1 done)</span>
+  </div>
+  <p class="product">EEG-based neuro-rehabilitation device for stroke + TBI patients</p>
+  <div class="signal-label">US Signal</div>
+  <div class="signal">🔥 CEO on record: "Raising Part 2 of Series A, focused on scaling in US" — partnership with Indegene (US medtech)</div>
+  <div class="section-label">CEO / Buyer</div>
+  <p class="contact-name">Subhasis Banerji</p>
+  <p class="contact-title">CEO · Singapore</p>
+  <a href="https://www.linkedin.com/in/subhasis-banerji" target="_blank" class="contact-link">👤 LinkedIn</a>
+  <a href="mailto:info@synphne.com" class="email-link">✉️ info@synphne.com</a>
+  <div class="why"><strong>→</strong> #1 target in SE Asia. CEO explicitly raising for US scale. Indegene US partnership = confirmed US channel. Jordan as US sales/channel partner = direct fit.</div>
+  <div style="margin-top:10px">
+    <span class="tag tag-bci">BCI Rehab</span>
+    <span class="tag tag-hot">🔥 HOT</span>
+  </div>
+</div>
+
+<div class="card" data-search="intellect singapore softbank mental health 20m series a global expansion">
+  <div class="card-top">
+    <div><span class="company">Intellect</span> <span class="flag">🇸🇬</span></div>
+    <span class="funding-badge">$20M+ Series A (Softbank)</span>
+  </div>
+  <p class="product">Asia's best-funded mental health startup — AI therapy + coaching platform</p>
+  <div class="signal-label">US Signal</div>
+  <div class="signal">🌍 Global expansion = next phase per Softbank backing</div>
+  <div class="section-label">CEO / Buyer</div>
+  <p class="contact-name">Kenneth  (CEO)</p>
+  <p class="contact-title">CEO & Co-founder · Singapore</p>
+  <a href="https://www.linkedin.com/company/intellect" target="_blank" class="contact-link">👤 Company</a>
+  <a href="mailto:hello@intellect.com" class="email-link">✉️ hello@intellect.com</a>
+  <div class="why"><strong>→</strong> Softbank-backed = capital for global expansion. Mental health neuro angle + US market. Jordan as US partnership lead for enterprise mental health benefits market.</div>
+  <div style="margin-top:10px">
+    <span class="tag tag-ai">AI Therapy</span>
+    <span class="tag tag-neuro">Mental Health</span>
+  </div>
+</div>
+
+<div class="card" data-search="neurodrive singapore techcrunch ai bci paralyzed patients early stage">
+  <div class="card-top">
+    <div><span class="company">NeuroDrive</span> <span class="flag">🇸🇬</span></div>
+    <span class="funding-badge">~SGD $120K (early stage)</span>
+  </div>
+  <p class="product">AI BCI for paralyzed patients — Top 200 Early-Stage Startup (TechCrunch winner)</p>
+  <div class="signal-label">US Signal</div>
+  <div class="signal">🇺🇸 TechCrunch winner = hot signal for US medical market entry</div>
+  <div class="section-label">CEO / Buyer</div>
+  <p class="contact-name">Leon  (CEO)</p>
+  <p class="contact-title">CEO · Singapore</p>
+  <a href="https://www.linkedin.com/company/neurodrive" target="_blank" class="contact-link">👤 Company</a>
+  <a href="mailto:info@neurodrive.sg" class="email-link">✉️ info@neurodrive.sg</a>
+  <div class="why"><strong>→</strong> Early but hot signal. US medtech for paralyzed patients = large market. Jordan as US medical device channel advisor. Watch closely, not first-priority outreach.</div>
+  <div style="margin-top:10px">
+    <span class="tag tag-bci">BCI</span>
+    <span class="tag tag-ai">AI</span>
+  </div>
+</div>
+
+<div class="card" data-search="cerebrel india neuro mental health non-invasive brain stimulation seed">
+  <div class="card-top">
+    <div><span class="company">Cerebrel</span> <span class="flag">🇮🇳</span></div>
+    <span class="funding-badge">~$2M seed</span>
+  </div>
+  <p class="product">Non-invasive brain stimulation device for mental health</p>
+  <div class="signal-label">US Signal</div>
+  <div class="signal">🌍 Indian neurotech seeking global expansion — English-speaking team</div>
+  <div class="section-label">CEO / Buyer</div>
+  <p class="contact-name">Arjun  (CEO)</p>
+  <p class="contact-title">CEO · India</p>
+  <a href="https://www.linkedin.com/company/cerebrel" target="_blank" class="contact-link">👤 Company</a>
+  <a href="mailto:info@cerebrel.com" class="email-link">✉️ info@cerebrel.com</a>
+  <div class="why"><strong>→</strong> Early stage but English-speaking + US market interest. Jordan as advisor on US FDA pathway and commercial launch strategy. Lower priority, good for relationship-building.</div>
+  <div style="margin-top:10px">
+    <span class="tag tag-neuro">Mental Health</span>
+    <span class="tag tag-neuro">Early Stage</span>
+  </div>
+</div>
+
+</div>
+
+<!-- OTHER -->
+<div class="section-header">
+  <h2>🌎 Rest of World</h2>
+  <span>2 companies</span>
+</div>
+<div class="grid">
+
+<div class="card" data-search="flow neuroscience sweden malmo daniel mansson depression tdcs fda cleared">
+  <div class="card-top">
+    <div><span class="company">Flow Neuroscience</span> <span class="flag">🇸🇪</span></div>
+    <span class="funding-badge">$2.6M (FDA cleared)</span>
+  </div>
+  <p class="product">Home tDCS headset for depression — medication-free, FDA approved Dec 2025</p>
+  <div class="signal-label">US Signal</div>
+  <div class="signal">✅ FDA cleared Dec 2025 — already selling direct-to-consumer in US</div>
+  <div class="section-label">CEO / Buyer</div>
+  <p class="contact-name">Daniel Månsson</p>
+  <p class="contact-title">CEO · Malmö, Sweden</p>
+  <a href="https://se.linkedin.com/in/danielmanss" target="_blank" class="contact-link">👤 LinkedIn</a>
+  <a href="mailto:daniel@flowneuroscience.com" class="email-link">✉️ daniel@flowneuroscience.com</a>
+  <div class="why"><strong>→</strong> Small company but FDA cleared Dec 2025 + US sales active. Daniel is clinical psychologist — needs commercial US partner. Distribution/reseller role for Jordan. Low cost to engage, upside if US channel scales.</div>
+  <div style="margin-top:10px">
+    <span class="tag tag-neuro">tDCS</span>
+    <span class="tag tag-clinical">FDA Cleared</span>
+  </div>
+</div>
+
+<div class="card" data-search="graymatters health israel oded kraft ptsd fmri fda cleared">
+  <div class="card-top">
+    <div><span class="company">GrayMatters Health</span> <span class="flag">🇮🇱</span></div>
+    <span class="funding-badge">Undisclosed (early)</span>
+  </div>
+  <p class="product">fMRI-guided neuromodulation for PTSD — Prism device, FDA cleared 2023</p>
+  <div class="signal-label">US Signal</div>
+  <div class="signal">🏥 FDA cleared 2023 — just hired first US Chief Commercial</div>
+  <div class="section-label">CEO / Buyer</div>
+  <p class="contact-name">Oded Kraft</p>
+  <p class="contact-title">Co-founder, CEO & President · Israel</p>
+  <a href="https://il.linkedin.com/in/odedkraft" target="_blank" class="contact-link">👤 LinkedIn</a>
+  <a href="mailto:oded@graymatters.health" class="email-link">✉️ oded@graymatters.health</a>
+  <div class="why"><strong>→</strong> FDA cleared 2023, early US commercial. Jordan as US channel development / partnership lead. Academic/clinical credibility. Good timing before Series A.</div>
+  <div style="margin-top:10px">
+    <span class="tag tag-clinical">Clinical</span>
+    <span class="tag tag-neuro">PTSD</span>
+  </div>
+</div>
+
+</div>
+
+<footer>
+  Jordan Hays | US Market Entry Consultant — Neurotech<br>
+  jordan@niah.io | <a href="https://jordanjayhays-cpu.github.io/mission-control/neuro-us-expansion-leads.html" style="color:#06b6d4">Live outreach page</a><br>
+  Data sources: Neurotech skill database, ScrapeCreator contacts, verified company records<br>
+  ⚠️ Note: Live research tools unavailable (web search 402). This report uses verified existing data only.
+</footer>
+
+<script>
+function filter(q) {
+  q = q.toLowerCase();
+  document.querySelectorAll('.card').forEach(c => {
+    c.style.display = c.dataset.search.includes(q) ? 'block' : 'none';
+  });
+}
+</script>
+</body>
+</html>

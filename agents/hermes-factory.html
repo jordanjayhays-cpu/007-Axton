@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hermes Agent Factory — Self-Improvement Dashboard</title>
+<style>
+:root {
+  --bg-dark: #0a0e17;
+  --bg-card: #111827;
+  --bg-card-hover: #1a2234;
+  --border: #1e2d40;
+  --accent: #3b82f6;
+  --accent-glow: rgba(59, 130, 246, 0.3);
+  --green: #10b981;
+  --green-dim: #065f46;
+  --yellow: #f59e0b;
+  --yellow-dim: #78350f;
+  --red: #ef4444;
+  --red-dim: #7f1d1d;
+  --text: #e2e8f0;
+  --text-dim: #94a3b8;
+  --text-muted: #64748b;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg-dark);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0 32px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 32px;
+}
+
+.header-left h1 {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.header-left p {
+  color: var(--text-dim);
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.status-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 8px 16px;
+  border-radius: 24px;
+  font-size: 13px;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.2s;
+}
+
+.stat-card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--accent);
+  box-shadow: 0 0 20px var(--accent-glow);
+}
+
+.stat-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.stat-value {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.stat-sub {
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-top: 4px;
+}
+
+.stat-card.green .stat-value { color: var(--green); }
+.stat-card.yellow .stat-value { color: var(--yellow); }
+.stat-card.red .stat-value { color: var(--red); }
+
+/* Main Layout */
+.main-grid {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 24px;
+}
+
+/* Cards */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.card-title {
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-title-icon {
+  width: 18px;
+  height: 18px;
+  opacity: 0.7;
+}
+
+.card-body {
+  padding: 16px 20px;
+}
+
+/* Sessions Table */
+.sessions-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.sessions-table th {
+  text-align: left;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  font-weight: 500;
+}
+
+.sessions-table td {
+  padding: 12px 16px;
+  font-size: 13px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+.sessions-table tr:last-child td { border-bottom: none; }
+
+.sessions-table tr:hover { background: var(--bg-card-hover); }
+
+.score {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 24px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.score.high { background: var(--green-dim); color: var(--green); }
+.score.med { background: var(--yellow-dim); color: var(--yellow); }
+.score.low { background: var(--red-dim); color: var(--red); }
+
+.tag {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  background: var(--border);
+  color: var(--text-dim);
+  margin-right: 4px;
+}
+
+.tag.success { background: var(--green-dim); color: var(--green); }
+.tag.warning { background: var(--yellow-dim); color: var(--yellow); }
+.tag.error { background: var(--red-dim); color: var(--red); }
+
+/* Skills List */
+.skill-item {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.skill-item:last-child { border-bottom: none; }
+
+.skill-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.skill-name {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.skill-version {
+  font-size: 11px;
+  color: var(--text-muted);
+  background: var(--border);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.skill-desc {
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+
+.skill-meta {
+  display: flex;
+  gap: 12px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.reliability-bar {
+  width: 60px;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 6px;
+}
+
+.reliability-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.3s;
+}
+
+/* Memory Status */
+.memory-layer {
+  margin-bottom: 20px;
+}
+
+.memory-layer:last-child { margin-bottom: 0; }
+
+.memory-layer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.memory-layer-name {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-dim);
+}
+
+.memory-layer-size {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.memory-bar {
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+
+.memory-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s;
+}
+
+.memory-detail {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* Error Log */
+.error-item {
+  padding: 12px;
+  background: var(--bg-dark);
+  border-radius: 8px;
+  margin-bottom: 10px;
+  border-left: 3px solid var(--red);
+}
+
+.error-item:last-child { margin-bottom: 0; }
+
+.error-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.error-type {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.error-date {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.error-message {
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+
+.error-recovery {
+  font-size: 11px;
+  color: var(--green);
+  padding: 4px 8px;
+  background: var(--green-dim);
+  border-radius: 4px;
+  display: inline-block;
+}
+
+/* Quick Actions */
+.quick-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.action-btn {
+  padding: 10px 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.action-btn:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.action-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* Loop Visualizer */
+.loop-container {
+  padding: 20px;
+}
+
+.loop-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  position: relative;
+}
+
+.loop-step::after {
+  content: '';
+  position: absolute;
+  left: 19px;
+  top: 40px;
+  width: 2px;
+  height: 20px;
+  background: var(--border);
+}
+
+.loop-step:last-child::after { display: none; }
+
+.loop-num {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.loop-info { flex: 1; }
+
+.loop-name {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.loop-desc {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+
+.loop-status {
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.loop-status.active { background: var(--green-dim); color: var(--green); }
+.loop-status.idle { background: var(--border); color: var(--text-muted); }
+
+/* Forms */
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: var(--text-dim);
+}
+
+.form-input, .form-textarea, .form-select {
+  width: 100%;
+  padding: 10px 12px;
+  background: var(--bg-dark);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 13px;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.form-input:focus, .form-textarea:focus, .form-select:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.form-textarea { resize: vertical; min-height: 80px; }
+
+.btn-primary {
+  width: 100%;
+  padding: 10px;
+  background: var(--accent);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-primary:hover { background: #2563eb; }
+
+/* Tabs */
+.tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+}
+
+.tab {
+  padding: 12px 20px;
+  font-size: 13px;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: all 0.2s;
+}
+
+.tab:hover { color: var(--text); }
+
+.tab.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* Progress */
+.progress-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+}
+
+.progress-label { font-size: 12px; color: var(--text-dim); width: 120px; }
+
+.progress-track {
+  flex: 1;
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 3px;
+  transition: width 0.3s;
+}
+
+.progress-value { font-size: 11px; color: var(--text-muted); width: 40px; text-align: right; }
+
+/* Activity Feed */
+.activity-item {
+  display: flex;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.activity-item:last-child { border-bottom: none; }
+
+.activity-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.activity-icon.reflect { background: var(--yellow-dim); color: var(--yellow); }
+.activity-icon.skill { background: var(--green-dim); color: var(--green); }
+.activity-icon.error { background: var(--red-dim); color: var(--red); }
+.activity-icon.memory { background: var(--accent); color: white; }
+
+.activity-content { flex: 1; }
+
+.activity-text { font-size: 12px; color: var(--text); }
+
+.activity-time { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  display: none;
+}
+
+.modal-overlay.active { display: flex; }
+
+.modal {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  width: 500px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-title { font-size: 16px; font-weight: 600; }
+
+.modal-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.modal-body { padding: 20px; }
+
+/* Notifications */
+.notifications {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 999;
+}
+
+.notification {
+  padding: 12px 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 13px;
+  animation: slideIn 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.notification.success { border-left: 3px solid var(--green); }
+.notification.error { border-left: 3px solid var(--red); }
+.notification.info { border-left: 3px solid var(--accent); }
+
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .main-grid { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <h1>🏭 Hermes Agent Factory</h1>
+      <p>Self-Improvement Dashboard — Jordan's System</p>
+    </div>
+    <div class="header-right">
+      <div class="status-badge">
+        <div class="status-dot"></div>
+        <span>Learning Loop Active</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats Grid -->
+  <div class="stats-grid">
+    <div class="stat-card green">
+      <div class="stat-label">Total Sessions</div>
+      <div class="stat-value" id="stat-sessions">0</div>
+      <div class="stat-sub">Across all time</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Skills Created</div>
+      <div class="stat-value" id="stat-skills">0</div>
+      <div class="stat-sub"><span id="stat-skills-evolved">0</span> evolved from success</div>
+    </div>
+    <div class="stat-card yellow">
+      <div class="stat-label">Avg Quality Score</div>
+      <div class="stat-value" id="stat-quality">0.0</div>
+      <div class="stat-sub">Last 7 sessions</div>
+    </div>
+    <div class="stat-card red">
+      <div class="stat-label">Errors Logged</div>
+      <div class="stat-value" id="stat-errors">0</div>
+      <div class="stat-sub"><span id="stat-errors-recovered">0</span> recovered successfully</div>
+    </div>
+  </div>
+
+  <!-- Main Grid -->
+  <div class="main-grid">
+    
+    <!-- Left Column -->
+    <div>
+      
+      <!-- Sessions & Activity -->
+      <div class="card" style="margin-bottom: 24px;">
+        <div class="card-header">
+          <span class="card-title">
+            <svg class="card-title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            Recent Sessions
+          </span>
+          <button class="action-btn" onclick="openModal('session-modal')">+ Log Session</button>
+        </div>
+        <div style="overflow-x: auto;">
+          <table class="sessions-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Task</th>
+                <th>Quality</th>
+                <th>Tools</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="sessions-body">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Skills Library -->
+      <div class="card" style="margin-bottom: 24px;">
+        <div class="card-header">
+          <span class="card-title">
+            <svg class="card-title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            Skills Library
+          </span>
+          <button class="action-btn" onclick="openModal('skill-modal')">+ New Skill</button>
+        </div>
+        <div class="card-body" id="skills-list">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Learning Loop Visualizer -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">
+            <svg class="card-title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 0 1-9 9m9-9a9 9 0 0 0-9-9m9 9H3m9 9a9 9 0 0 1-9-9m9 9c-1.657 0-3-4.03-3-9s1.343-9 3-9m0 9c1.657 0 3-4.03 3-9s-1.343-9-3-9"/></svg>
+            Self-Improvement Loop
+          </span>
+        </div>
+        <div class="loop-container">
+          <div class="loop-step">
+            <div class="loop-num">1</div>
+            <div class="loop-info">
+              <div class="loop-name">Session Complete</div>
+              <div class="loop-desc">Task finishes with 5+ tool calls or user feedback</div>
+            </div>
+            <div class="loop-status active" id="loop-1">Active</div>
+          </div>
+          <div class="loop-step">
+            <div class="loop-num">2</div>
+            <div class="loop-info">
+              <div class="loop-name">Self-Reflection</div>
+              <div class="loop-desc">Critique own performance, score accuracy/efficiency/recovery</div>
+            </div>
+            <div class="loop-status active" id="loop-2">Active</div>
+          </div>
+          <div class="loop-step">
+            <div class="loop-num">3</div>
+            <div class="loop-info">
+              <div class="loop-name">Skill Factory</div>
+              <div class="loop-desc">Extract successful workflow → new/revised SKILL.md</div>
+            </div>
+            <div class="loop-status idle" id="loop-3">Idle</div>
+          </div>
+          <div class="loop-step">
+            <div class="loop-num">4</div>
+            <div class="loop-info">
+              <div class="loop-name">Memory Compaction</div>
+              <div class="loop-desc">Summarize + synthesize into wiki, update MEMORY.md</div>
+            </div>
+            <div class="loop-status idle" id="loop-4">Idle</div>
+          </div>
+          <div class="loop-step">
+            <div class="loop-num">5</div>
+            <div class="loop-info">
+              <div class="loop-name">Prompt Optimization</div>
+              <div class="loop-desc">Refine SOUL.md / skills if scores < 3.5 avg</div>
+            </div>
+            <div class="loop-status idle" id="loop-5">Idle</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right Column -->
+    <div>
+
+      <!-- Memory Status -->
+      <div class="card" style="margin-bottom: 24px;">
+        <div class="card-header">
+          <span class="card-title">
+            <svg class="card-title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M脑 12a2 2 0 1 0-4 0 2 2 0 0 0 4 0zm0 0v4m-8-4h.01M16 16h.01"/></svg>
+            Memory System
+          </span>
+        </div>
+        <div class="card-body">
+          <div class="memory-layer">
+            <div class="memory-layer-header">
+              <span class="memory-layer-name">Prompt Memory (MEMORY.md)</span>
+              <span class="memory-layer-size" id="memory-mem-size">0%</span>
+            </div>
+            <div class="memory-bar">
+              <div class="memory-fill" id="memory-mem-bar" style="width: 0%; background: var(--green);"></div>
+            </div>
+            <div class="memory-detail">Always-on context · 3,575 char limit</div>
+          </div>
+          <div class="memory-layer">
+            <div class="memory-layer-header">
+              <span class="memory-layer-name">Session Search (FTS5)</span>
+              <span class="memory-layer-size" id="memory-sessions-size">0 sessions</span>
+            </div>
+            <div class="memory-bar">
+              <div class="memory-fill" id="memory-sessions-bar" style="width: 0%; background: var(--accent);"></div>
+            </div>
+            <div class="memory-detail">Full-text search archive</div>
+          </div>
+          <div class="memory-layer">
+            <div class="memory-layer-header">
+              <span class="memory-layer-name">Procedural (Skills)</span>
+              <span class="memory-layer-size" id="memory-skills-size">0 files</span>
+            </div>
+            <div class="memory-bar">
+              <div class="memory-fill" id="memory-skills-bar" style="width: 0%; background: var(--yellow);"></div>
+            </div>
+            <div class="memory-detail">Reusable how-to guides</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Error Recovery Log -->
+      <div class="card" style="margin-bottom: 24px;">
+        <div class="card-header">
+          <span class="card-title">
+            <svg class="card-title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
+            Error Recovery Log
+          </span>
+          <button class="action-btn" onclick="openModal('error-modal')">+ Log Error</button>
+        </div>
+        <div class="card-body" id="error-list" style="max-height: 300px; overflow-y: auto;">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Multi-Agent Status -->
+      <div class="card" style="margin-bottom: 24px;">
+        <div class="card-header">
+          <span class="card-title">
+            <svg class="card-title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8m-4-4v4"/></svg>
+            Multi-Agent
+          </span>
+        </div>
+        <div class="card-body">
+          <div class="progress-item">
+            <span class="progress-label">Hermes → Nanobot</span>
+            <div class="progress-track">
+              <div class="progress-fill" id="hermes-nanobot-flow" style="width: 75%;"></div>
+            </div>
+            <span class="progress-value">75%</span>
+          </div>
+          <div class="progress-item">
+            <span class="progress-label">Nanobot → Hermes</span>
+            <div class="progress-track">
+              <div class="progress-fill" id="nanobot-hermes-flow" style="width: 60%;"></div>
+            </div>
+            <span class="progress-value">60%</span>
+          </div>
+          <div class="progress-item">
+            <span class="progress-label">Shared Skills</span>
+            <div class="progress-track">
+              <div class="progress-fill" id="shared-skills" style="width: 45%;"></div>
+            </div>
+            <span class="progress-value">45%</span>
+          </div>
+          <div class="quick-actions" style="margin-top: 16px;">
+            <button class="action-btn" onclick="notify('Delegation sent to Nanobot', 'info')">📤 Delegate Task</button>
+            <button class="action-btn" onclick="notify('Skill sharing initiated', 'info')">🔗 Share Skill</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Activity Feed -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">
+            <svg class="card-title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            Activity Feed
+          </span>
+        </div>
+        <div class="card-body" id="activity-feed" style="max-height: 250px; overflow-y: auto;">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Session Modal -->
+<div class="modal-overlay" id="session-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">Log New Session</span>
+      <button class="modal-close" onclick="closeModal('session-modal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Date</label>
+        <input type="date" class="form-input" id="session-date">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Task Description</label>
+        <input type="text" class="form-input" id="session-task" placeholder="What did Hermes do?">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Quality Score (1-5)</label>
+        <select class="form-select" id="session-score">
+          <option value="5">5 — Excellent</option>
+          <option value="4">4 — Good</option>
+          <option value="3" selected>3 — OK</option>
+          <option value="2">2 — Below Average</option>
+          <option value="1">1 — Poor</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Tool Calls</label>
+        <input type="number" class="form-input" id="session-tools" placeholder="Number of tool calls" min="0">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Notes</label>
+        <textarea class="form-textarea" id="session-notes" placeholder="What worked? What didn't?"></textarea>
+      </div>
+      <button class="btn-primary" onclick="addSession()">Log Session</button>
+    </div>
+  </div>
+</div>
+
+<!-- Skill Modal -->
+<div class="modal-overlay" id="skill-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">Create New Skill</span>
+      <button class="modal-close" onclick="closeModal('skill-modal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Skill Name (slug)</label>
+        <input type="text" class="form-input" id="skill-name" placeholder="e.g., docker-network-setup">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description</label>
+        <input type="text" class="form-input" id="skill-desc" placeholder="What does this skill do?">
+      </div>
+      <div class="form-group">
+        <label class="form-label">When to Use</label>
+        <textarea class="form-textarea" id="skill-when" placeholder="Trigger scenarios for this skill"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Steps (one per line)</label>
+        <textarea class="form-textarea" id="skill-steps" placeholder="Step 1: ...\nStep 2: ...\nStep 3: ..."></textarea>
+      </div>
+      <button class="btn-primary" onclick="addSkill()">Create Skill</button>
+    </div>
+  </div>
+</div>
+
+<!-- Error Modal -->
+<div class="modal-overlay" id="error-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">Log Error</span>
+      <button class="modal-close" onclick="closeModal('error-modal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Date</label>
+        <input type="date" class="form-input" id="error-date">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Error Type</label>
+        <select class="form-select" id="error-type">
+          <option value="T1">T1: Tool Failure</option>
+          <option value="T2">T2: Context Drift</option>
+          <option value="T3">T3: Prompt Misunderstanding</option>
+          <option value="T4">T4: Knowledge Gap</option>
+          <option value="T5">T5: Environmental</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Error Description</label>
+        <textarea class="form-textarea" id="error-desc" placeholder="What happened?"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Recovery Action</label>
+        <input type="text" class="form-input" id="error-recovery" placeholder="What fixed it?">
+      </div>
+      <button class="btn-primary" onclick="addError()">Log Error</button>
+    </div>
+  </div>
+</div>
+
+<!-- Notifications -->
+<div class="notifications" id="notifications"></div>
+
+<script>
+// ============================================================
+// FACTORY DATA — JSON-based persistence (localStorage)
+// ============================================================
+
+const DEFAULT_DATA = {
+  sessions: [
+    { id: 1, date: '2026-05-16', task: 'Docker network setup for dev environment', score: 5, tools: 12, notes: 'Successfully diagnosed missing bridge network. Created skill docker-networking.', created_skill: true },
+    { id: 2, date: '2026-05-15', task: 'Multi-agent task delegation to Nanobot', score: 4, tools: 8, notes: 'Learned to use acp-delegate skill for inter-agent communication.', created_skill: true },
+    { id: 3, date: '2026-05-14', task: 'Memory compaction after large session', score: 4, tools: 6, notes: 'FTS5 search working well. Pruned MEMORY.md from 4k to 3.2k chars.', created_skill: false },
+    { id: 4, date: '2026-05-13', task: 'SSH remote server management', score: 3, tools: 15, notes: 'Context drift mid-session. Added context-restoration step to SSH skill.', created_skill: true },
+    { id: 5, date: '2026-05-12', task: 'Daily brief automation setup', score: 5, tools: 9, notes: 'Crons working perfectly. User loved the morning briefing.', created_skill: true }
+  ],
+  skills: [
+    { id: 1, name: 'docker-networking', version: '1.0.0', description: 'Set up Docker bridge networks for development environments', reliability: 0.92, uses: 5, last_used: '2026-05-16', evolved_from: null },
+    { id: 2, name: 'acp-delegate', version: '1.1.0', description: 'Delegate tasks to Nanobot via Agent Client Protocol', reliability: 0.85, uses: 3, last_used: '2026-05-15', evolved_from: null },
+    { id: 3, name: 'memory-compaction', version: '1.0.0', description: 'Compress session history into wiki while preserving lineage', reliability: 0.78, uses: 7, last_used: '2026-05-14', evolved_from: null },
+    { id: 4, name: 'ssh-context-restore', version: '1.0.0', description: 'Maintain task context during long SSH sessions', reliability: 0.71, uses: 4, last_used: '2026-05-13', evolved_from: null },
+    { id: 5, name: 'morning-brief', version: '1.2.0', description: 'Generate daily briefing from overnight activity', reliability: 0.95, uses: 12, last_used: '2026-05-12', evolved_from: null },
+    { id: 6, name: 'skill-factory-extract', version: '1.0.0', description: 'Extract successful workflows into reusable skill files', reliability: 0.88, uses: 6, last_used: '2026-05-11', evolved_from: null }
+  ],
+  errors: [
+    { id: 1, date: '2026-05-13', type: 'T2', description: 'Lost task context during 2-hour SSH session. Agent forgot original goal.', recovery: 'Re-summarized from MEMORY.md, restored context in 3 steps.', recovered: true },
+    { id: 2, date: '2026-05-10', type: 'T1', description: 'Docker exec failed with permission denied on mounted volume.', recovery: 'Added --user flag to exec command, updated docker-networking skill.', recovered: true },
+    { id: 3, date: '2026-05-08', type: 'T3', description: 'User said "fix it" — agent misunderstood which problem to fix.', recovery: 'Added clarification step to all ambiguous requests.', recovered: true }
+  ],
+  activity: [
+    { type: 'skill', text: 'Created skill: ssh-context-restore from session on 2026-05-13', time: '2 hours ago' },
+    { type: 'reflect', text: 'Self-reflection completed — avg quality 4.2 for last 5 sessions', time: '5 hours ago' },
+    { type: 'memory', text: 'Memory compaction run — MEMORY.md pruned to 3,200 chars', time: '1 day ago' },
+    { type: 'skill', text: 'Evolved skill: acp-delegate v1.0 → v1.1 (added timeout handling)', time: '1 day ago' },
+    { type: 'error', text: 'Error T2 recovered: Context drift during SSH session', time: '2 days ago' }
+  ],
+  memory: {
+    mem_used: 3200,
+    mem_limit: 3575,
+    sessions_archived: 47,
+    skills_count: 6
+  },
+  multiAgent: {
+    hermes_nanobot: 75,
+    nanobot_hermes: 60,
+    shared_skills: 45
+  }
+};
+
+// Load data
+let data = JSON.parse(localStorage.getItem('hermes-factory') || JSON.stringify(DEFAULT_DATA));
+
+// Save data helper
+function saveData() {
+  localStorage.setItem('hermes-factory', JSON.stringify(data));
+}
+
+// ============================================================
+// RENDER FUNCTIONS
+// ============================================================
+
+function render() {
+  renderSessions();
+  renderSkills();
+  renderErrors();
+  renderActivity();
+  renderStats();
+  renderMemory();
+  renderMultiAgent();
+}
+
+function renderSessions() {
+  const tbody = document.getElementById('sessions-body');
+  tbody.innerHTML = data.sessions.slice(0, 10).map(s => `
+    <tr>
+      <td>${s.date}</td>
+      <td>${s.task}</td>
+      <td><span class="score ${s.score >= 4 ? 'high' : s.score >= 3 ? 'med' : 'low'}">${s.score}</span></td>
+      <td>${s.tools}</td>
+      <td>${s.created_skill ? '<span class="tag success">+Skill</span>' : ''}</td>
+    </tr>
+  `).join('');
+}
+
+function renderSkills() {
+  const list = document.getElementById('skills-list');
+  list.innerHTML = data.skills.map(s => `
+    <div class="skill-item">
+      <div class="skill-header">
+        <span class="skill-name">${s.name}</span>
+        <span class="skill-version">v${s.version}</span>
+      </div>
+      <div class="skill-desc">${s.description}</div>
+      <div class="skill-meta">
+        <span>Used ${s.uses}×</span>
+        <span>Last: ${s.last_used}</span>
+        <span>Reliability: ${Math.round(s.reliability * 100)}%</span>
+        <span class="reliability-bar"><span class="reliability-fill" style="width: ${s.reliability * 100}%; background: ${s.reliability > 0.8 ? 'var(--green)' : s.reliability > 0.6 ? 'var(--yellow)' : 'var(--red)'}"></span></span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderErrors() {
+  const list = document.getElementById('error-list');
+  list.innerHTML = data.errors.map(e => `
+    <div class="error-item">
+      <div class="error-header">
+        <span class="error-type">${e.type}: ${getErrorLabel(e.type)}</span>
+        <span class="error-date">${e.date}</span>
+      </div>
+      <div class="error-message">${e.description}</div>
+      ${e.recovered ? `<span class="error-recovery">✓ ${e.recovery}</span>` : ''}
+    </div>
+  `).join('');
+}
+
+function getErrorLabel(type) {
+  const labels = { T1: 'Tool Failure', T2: 'Context Drift', T3: 'Prompt Misunderstanding', T4: 'Knowledge Gap', T5: 'Environmental' };
+  return labels[type] || type;
+}
+
+function renderActivity() {
+  const feed = document.getElementById('activity-feed');
+  feed.innerHTML = data.activity.map(a => `
+    <div class="activity-item">
+      <div class="activity-icon ${a.type}">${getActivityIcon(a.type)}</div>
+      <div class="activity-content">
+        <div class="activity-text">${a.text}</div>
+        <div class="activity-time">${a.time}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function getActivityIcon(type) {
+  return { reflect: '✎', skill: '⚙', error: '⚠', memory: '🧠' }[type] || '•';
+}
+
+function renderStats() {
+  document.getElementById('stat-sessions').textContent = data.sessions.length;
+  document.getElementById('stat-skills').textContent = data.skills.length;
+  document.getElementById('stat-skills-evolved').textContent = data.skills.filter(s => s.evolved_from).length;
+  
+  const recentScores = data.sessions.slice(0, 7).map(s => s.score);
+  const avgQuality = recentScores.length ? (recentScores.reduce((a, b) => a + b, 0) / recentScores.length).toFixed(1) : '0.0';
+  document.getElementById('stat-quality').textContent = avgQuality;
+  
+  document.getElementById('stat-errors').textContent = data.errors.length;
+  document.getElementById('stat-errors-recovered').textContent = data.errors.filter(e => e.recovered).length;
+}
+
+function renderMemory() {
+  const memPercent = Math.round((data.memory.mem_used / data.memory.mem_limit) * 100);
+  document.getElementById('memory-mem-size').textContent = `${memPercent}%`;
+  document.getElementById('memory-mem-bar').style.width = `${memPercent}%`;
+  document.getElementById('memory-mem-bar').style.background = memPercent > 90 ? 'var(--red)' : memPercent > 70 ? 'var(--yellow)' : 'var(--green)';
+  
+  const sessionsPercent = Math.min(data.memory.sessions_archived, 100);
+  document.getElementById('memory-sessions-size').textContent = `${data.memory.sessions_archived} sessions`;
+  document.getElementById('memory-sessions-bar').style.width = `${sessionsPercent}%`;
+  
+  const skillsPercent = Math.min((data.memory.skills_count / 20) * 100, 100);
+  document.getElementById('memory-skills-size').textContent = `${data.memory.skills_count} files`;
+  document.getElementById('memory-skills-bar').style.width = `${skillsPercent}%`;
+}
+
+function renderMultiAgent() {
+  document.getElementById('hermes-nanobot-flow').style.width = `${data.multiAgent.hermes_nanobot}%`;
+  document.getElementById('nanobot-hermes-flow').style.width = `${data.multiAgent.nanobot_hermes}%`;
+  document.getElementById('shared-skills').style.width = `${data.multiAgent.shared_skills}%`;
+}
+
+// ============================================================
+// ACTION HANDLERS
+// ============================================================
+
+function addSession() {
+  const session = {
+    id: Date.now(),
+    date: document.getElementById('session-date').value || new Date().toISOString().split('T')[0],
+    task: document.getElementById('session-task').value,
+    score: parseInt(document.getElementById('session-score').value),
+    tools: parseInt(document.getElementById('session-tools').value) || 0,
+    notes: document.getElementById('session-notes').value,
+    created_skill: false
+  };
+  
+  if (!session.task) {
+    notify('Please enter a task description', 'error');
+    return;
+  }
+  
+  data.sessions.unshift(session);
+  data.activity.unshift({ type: 'reflect', text: `Session logged: ${session.task}`, time: 'just now' });
+  saveData();
+  render();
+  closeModal('session-modal');
+  notify('Session logged successfully', 'success');
+}
+
+function addSkill() {
+  const skill = {
+    id: Date.now(),
+    name: document.getElementById('skill-name').value.toLowerCase().replace(/\s+/g, '-'),
+    version: '1.0.0',
+    description: document.getElementById('skill-desc').value,
+    reliability: 1.0,
+    uses: 0,
+    last_used: new Date().toISOString().split('T')[0],
+    evolved_from: null
+  };
+  
+  if (!skill.name || !skill.description) {
+    notify('Please fill in name and description', 'error');
+    return;
+  }
+  
+  data.skills.push(skill);
+  data.activity.unshift({ type: 'skill', text: `Created skill: ${skill.name}`, time: 'just now' });
+  data.memory.skills_count = data.skills.length;
+  saveData();
+  render();
+  closeModal('skill-modal');
+  notify('Skill created successfully', 'success');
+}
+
+function addError() {
+  const error = {
+    id: Date.now(),
+    date: document.getElementById('error-date').value || new Date().toISOString().split('T')[0],
+    type: document.getElementById('error-type').value,
+    description: document.getElementById('error-desc').value,
+    recovery: document.getElementById('error-recovery').value,
+    recovered: true
+  };
+  
+  if (!error.description) {
+    notify('Please describe the error', 'error');
+    return;
+  }
+  
+  data.errors.unshift(error);
+  data.activity.unshift({ type: 'error', text: `Error ${error.type} logged: ${error.description.substring(0, 50)}...`, time: 'just now' });
+  saveData();
+  render();
+  closeModal('error-modal');
+  notify('Error logged and recovery documented', 'success');
+}
+
+// ============================================================
+// UI HELPERS
+// ============================================================
+
+function openModal(id) {
+  document.getElementById(id).classList.add('active');
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('active');
+}
+
+function notify(message, type = 'info') {
+  const container = document.getElementById('notifications');
+  const notif = document.createElement('div');
+  notif.className = `notification ${type}`;
+  notif.textContent = message;
+  container.appendChild(notif);
+  setTimeout(() => notif.remove(), 4000);
+}
+
+// Close modals on outside click
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) overlay.classList.remove('active');
+  });
+});
+
+// ============================================================
+// INIT
+// ============================================================
+
+render();
+</script>
+</body>
+</html>

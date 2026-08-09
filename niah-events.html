@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Niah Events — B2B Networking Across Europe</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Inter, sans-serif; background: #030306; color: #b8b8cc; min-height: 100vh; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+    header { text-align: center; padding: 3rem 0; border-bottom: 1px solid #1e1e30; margin-bottom: 2rem; }
+    h1 { font-size: 2rem; color: #fff; margin-bottom: 0.5rem; }
+    .subtitle { color: #505068; font-size: 0.9rem; }
+    .stats { display: flex; gap: 1rem; justify-content: center; margin: 1.5rem 0; flex-wrap: wrap; }
+    .stat { background: #0b0b18; border: 1px solid #1e1e30; border-radius: 8px; padding: 0.75rem 1.25rem; text-align: center; }
+    .stat-num { font-size: 1.5rem; font-weight: 700; color: #6366f1; }
+    .stat-label { font-size: 0.7rem; color: #505068; margin-top: 0.25rem; }
+    .cities { display: flex; gap: 0.5rem; justify-content: center; margin-bottom: 2rem; flex-wrap: wrap; }
+    .city-tag { background: #0b0b18; border: 1px solid #1e1e30; border-radius: 20px; padding: 0.35rem 0.85rem; font-size: 0.75rem; color: #6366f1; }
+    .city-tag.active { background: #6366f1; color: #fff; border-color: #6366f1; }
+    .search-box { width: 100%; max-width: 500px; margin: 0 auto 2rem; display: block; background: #0b0b18; border: 1px solid #1e1e30; border-radius: 8px; padding: 0.75rem 1rem; color: #e2e8f0; font-size: 0.875rem; outline: none; }
+    .search-box:focus { border-color: #6366f1; }
+    .event-card { background: #0b0b18; border: 1px solid #1e1e30; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 0.75rem; transition: border-color 0.2s; }
+    .event-card:hover { border-color: #6366f1; }
+    .event-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap; }
+    .event-name { font-size: 0.9rem; color: #e2e8f0; font-weight: 600; flex: 1; }
+    .event-meta { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+    .tag { font-size: 0.65rem; padding: 2px 8px; border-radius: 4px; font-weight: 600; text-transform: uppercase; }
+    .tag-city { background: #1e1e30; color: #6366f1; }
+    .tag-date { background: #1e1e30; color: #505068; }
+    .tag-email { background: #1e1e30; color: #22c55e; }
+    .event-organizer { font-size: 0.75rem; color: #505068; margin-top: 0.4rem; }
+    .event-contact { margin-top: 0.75rem; display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .contact-btn { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.7rem; padding: 4px 10px; border-radius: 4px; text-decoration: none; font-weight: 600; }
+    .btn-email { background: #22c55e; color: #000; }
+    .btn-web { background: #0f0f1a; color: #8080a0; border: 1px solid #1e1e30; }
+    .cta-section { background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%); border: 1px solid #6366f1; border-radius: 16px; padding: 2.5rem; text-align: center; margin: 3rem 0; }
+    .cta-section h2 { color: #fff; font-size: 1.3rem; margin-bottom: 0.5rem; }
+    .cta-section p { color: #8080a0; font-size: 0.85rem; margin-bottom: 1.5rem; }
+    .cta-section a { display: inline-block; background: #6366f1; color: #fff; padding: 0.75rem 2rem; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 0.9rem; }
+    .footer { text-align: center; padding: 2rem 0; color: #303048; font-size: 0.7rem; border-top: 1px solid #1e1e30; margin-top: 3rem; }
+    @media (max-width: 600px) { .container { padding: 1rem; } h1 { font-size: 1.5rem; } }
+  </style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>🌍 Niah Events</h1>
+    <p class="subtitle">B2B networking events across Europe — find your next sponsorship opportunity</p>
+    <div class="stats">
+      <div class="stat"><div class="stat-num">76</div><div class="stat-label">Events</div></div>
+      <div class="stat"><div class="stat-num">6</div><div class="stat-label">Cities</div></div>
+      <div class="stat"><div class="stat-num">2026</div><div class="stat-label">This Year</div></div>
+    </div>
+    <div class="cities">
+      <span class="city-tag active" onclick="filterCity(this, 'all')">All</span>
+      <span class="city-tag" onclick="filterCity(this, 'Barcelona')">Barcelona</span>
+      <span class="city-tag" onclick="filterCity(this, 'Valencia')">Valencia</span>
+      <span class="city-tag" onclick="filterCity(this, 'Lisbon')">Lisbon</span>
+      <span class="city-tag" onclick="filterCity(this, 'Amsterdam')">Amsterdam</span>
+      <span class="city-tag" onclick="filterCity(this, 'Berlin')">Berlin</span>
+      <span class="city-tag" onclick="filterCity(this, 'Milan')">Milan</span>
+      <span class="city-tag" onclick="filterCity(this, 'Madrid')">Madrid</span>
+    </div>
+    <input type="text" class="search-box" placeholder="Search events, organizers, topics..." oninput="searchEvents(this.value)">
+  </header>
+
+  <div id="events"></div>
+
+  <div class="cta-section">
+    <h2>Want to sponsor an event?</h2>
+    <p>Companies sponsor Niah to reach 50-300+ B2B professionals per event.<br>Package prices from €500 — €3,000. Get in touch.</p>
+    <a href="mailto:jordan@niah.events?subject=Sponsorship%20Inquiry">📧 Email Jordan</a>
+  </div>
+
+  <div class="footer">
+    Niah — B2B Networking Platform · Madrid · Barcelona · Valencia · Lisbon · Amsterdam · Berlin · Milan<br>
+    <a href="https://neurodashboards.com" style="color:#6366f1;">← Back to NeuroDashboards</a>
+  </div>
+</div>
+
+<script>
+const events = [
+{name:"Business Networking - Startups, Investors & Tech",city:"Barcelona",date:"2026-08-11",organizer:"Strive Barcelona",email:"info@strivebarcelona.com",website:"https://strivebarcelona.com"},
+{name:"Barcelona Startup / Investor Open Coffee",city:"Barcelona",date:"Monthly",organizer:"Barcelona Open Coffee",email:"contact@barcelonaopencoffee.com",website:"https://barcelonaopencoffee.com"},
+{name:"Financiación de startups en la era de la tokenización",city:"Barcelona",date:"2026-09-15",organizer:"Aticco Barcelona",email:"barcelona@aticco.es",website:"https://aticco.es"},
+{name:"Bcapital Day: Who Teaches the Future?",city:"Barcelona",date:"2026-10-20",organizer:"Bcombinator",email:"hello@bcombinator.com",website:"https://bcombinator.com"},
+{name:"Tech and Business Networking",city:"Barcelona",date:"2026-09-08",organizer:"Strive Barcelona",email:"info@strivebarcelona.com",website:"https://strivebarcelona.com"},
+{name:"Healthcare and Business Networking",city:"Barcelona",date:"2026-10-14",organizer:"Strive Barcelona",email:"info@strivebarcelona.com",website:"https://strivebarcelona.com"},
+{name:"FutureTravel Summit 2026",city:"Barcelona",date:"2026-11-18",organizer:"FutureTravel",email:"info@futuretravel.io",website:"https://futuretravel.io"},
+{name:"BARCELONA REINVENTS: Digital Nomad Edition",city:"Barcelona",date:"2026-09-22",organizer:"Barcelona Reinvents",email:"info@barcelonareinvents.com",website:"https://barcelonareinvents.com"},
+{name:"Valencia Business Networking - Startups, Investors",city:"Valencia",date:"2026-08-19",organizer:"Strive Valencia",email:"info@strivevalencia.com",website:"https://strivevalencia.com"},
+{name:"Techstars Startup Weekend Valencia",city:"Valencia",date:"2026-07-10",organizer:"Techstars",email:"startupweekend@techstars.com",website:"https://techstars.com"},
+{name:"Lanzadera Demo Day 2026",city:"Valencia",date:"2026-06-25",organizer:"Lanzadera",email:"info@lanzadera.es",website:"https://lanzadera.es"},
+{name:"Valencia Startup Week 2026",city:"Valencia",date:"2026-09-07",organizer:"Startup Valencia",email:"info@startupvalencia.com",website:"https://startupvalencia.com"},
+{name:"Health and Business Networking | Elevating Your Potential",city:"Valencia",date:"2026-10-21",organizer:"Strive Valencia",email:"info@strivevalencia.com",website:"https://strivevalencia.com"},
+{name:"Lisbon Tech Meetup",city:"Lisbon",date:"Monthly",organizer:"Lisbon Tech Meetup",email:"info@lisbontechmeetup.com",website:""},
+{name:"Startup Lisboa Demo Day",city:"Lisbon",date:"2026-06-30",organizer:"Startup Lisboa",email:"info@startuplisboa.com",website:"https://startuplisboa.com"},
+{name:"Web Summit Side Events Lisbon",city:"Lisbon",date:"Nov 2026",organizer:"Various",email:"",website:""},
+{name:"LX Factory Tech & Creative Meetups",city:"Lisbon",date:"Bi-weekly",organizer:"LX Factory",email:"events@lxfactory.com",website:"https://lxfactory.com"},
+{name:"Amsterdam Tech City Meetup",city:"Amsterdam",date:"Monthly",organizer:"Tech City Amsterdam",email:"hello@techcityamsterdam.nl",website:""},
+{name:"Startupbootcamp Amsterdam Demo Day",city:"Amsterdam",date:"2026-11-14",organizer:"Startupbootcamp",email:"info@startupbootcamp.com",website:"https://startupbootcamp.com"},
+{name:"Amsterdam AI & ML Meetup",city:"Amsterdam",date:"2026-09-16",organizer:"Amsterdam AI Community",email:"info@amsterdamai.nl",website:""},
+{name:"Berlin Startup Grind",city:"Berlin",date:"Monthly",organizer:"Startup Grind Berlin",email:"berlin@startupgrind.com",website:"https://startupgrind.com/berlin"},
+{name:"Factory Berlin Tech Events",city:"Berlin",date:"Ongoing",organizer:"Factory Berlin",email:"events@factoryberlin.com",website:"https://factoryberlin.com"},
+{name:"Berlin Blockchain Club",city:"Berlin",date:"Bi-weekly",organizer:"Berlin Blockchain Club",email:"hello@berlinblockchainclub.com",website:""},
+{name:"Milan Startup Day",city:"Milan",date:"2026-09-25",organizer:"Milan Entrepreneurship Network",email:"info@milanstartup.it",website:""},
+{name:"Talent Garden Milan Events",city:"Milan",date:"Monthly",organizer:"Talent Garden Milan",email:"milan@tag.awaiting",website:"https://talentgarden.org"},
+{name:"021bit Incubator Events",city:"Milan",date:"Quarterly",organizer:"021bit",email:"info@021bit.it",website:"https://021bit.it"},
+{name:"South Summit Madrid 2026",city:"Madrid",date:"June 3-5, 2026",organizer:"South Summit",email:"",website:"https://southsummit.co"},
+{name:"Tech Show Madrid 2026",city:"Madrid",date:"Nov 4-5, 2026",organizer:"IFEMA",email:"",website:"https://ifema.es"},
+{name:"PPW Europe Conference - Madrid 2026",city:"Madrid",date:"Oct 28-30, 2026",organizer:"Online Marketplaces",email:"simon@onlinemarketplaces.com",website:""},
+{name:"#TRG26",city:"Madrid",date:"Oct 22-24, 2026",organizer:"Tarugoconf",email:"tarugoconf@bonillaware.com",website:"https://tarugoconf.com"},
+{name:"DISRUPTORES Innovation Awards 2026",city:"Madrid",date:"Oct 15, 2026",organizer:"Disruptores/El Español",email:"",website:""},
+];
+
+let currentCity = 'all';
+
+function renderEvents(filtered) {
+  const container = document.getElementById('events');
+  if (filtered.length === 0) {
+    container.innerHTML = '<p style="text-align:center;color:#505068;padding:2rem;">No events found</p>';
+    return;
+  }
+  container.innerHTML = filtered.map(e => `
+    <div class="event-card" data-city="${e.city}">
+      <div class="event-header">
+        <div class="event-name">${e.name}</div>
+        <div class="event-meta">
+          <span class="tag tag-city">${e.city}</span>
+          <span class="tag tag-date">${e.date}</span>
+          ${e.email ? '<span class="tag tag-email">✓ Email found</span>' : ''}
+        </div>
+      </div>
+      <div class="event-organizer">By ${e.organizer} ${e.date !== 'Monthly' && e.date !== 'Bi-weekly' && e.date !== 'Ongoing' && e.date !== 'Quarterly' && e.date !== 'Bi-weekly' && e.date !== 'Bi-weekly' && e.date !== '2026' ? '' : ''}</div>
+      <div class="event-contact">
+        ${e.email ? `<a href="mailto:${e.email}?subject=Sponsorship%20Partnership%20with%20Niah" class="contact-btn btn-email">📧 Email Organizer</a>` : ''}
+        ${e.website ? `<a href="${e.website}" target="_blank" class="contact-btn btn-web">🔗 Website</a>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterCity(el, city) {
+  currentCity = city;
+  document.querySelectorAll('.city-tag').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  applyFilters();
+}
+
+function searchEvents(q) {
+  applyFilters(q);
+}
+
+function applyFilters(q='') {
+  const qlow = q.toLowerCase();
+  const filtered = events.filter(e => {
+    const matchCity = currentCity === 'all' || e.city === currentCity;
+    const matchQ = !qlow || e.name.toLowerCase().includes(qlow) || e.city.toLowerCase().includes(qlow) || e.organizer.toLowerCase().includes(qlow);
+    return matchCity && matchQ;
+  });
+  renderEvents(filtered);
+}
+
+renderEvents(events);
+</script>
+</body>
+</html>

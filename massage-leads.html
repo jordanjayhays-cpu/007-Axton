@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Massage Club — Lead Scout | Madrid</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      min-height: 100vh;
+      padding: 24px;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .header h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: #f8fafc;
+      margin-bottom: 4px;
+    }
+    .header p {
+      font-size: 14px;
+      color: #64748b;
+    }
+    .stats {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+    .stat {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 16px 24px;
+      text-align: center;
+    }
+    .stat .number {
+      font-size: 28px;
+      font-weight: 700;
+      color: #38bdf8;
+    }
+    .stat .label {
+      font-size: 12px;
+      color: #64748b;
+      margin-top: 2px;
+    }
+    .filter-bar {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #94a3b8;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .filter-btn.active, .filter-btn:hover {
+      background: #38bdf8;
+      border-color: #38bdf8;
+      color: #0f172a;
+      font-weight: 600;
+    }
+    .leads-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 16px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .lead-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 20px;
+      transition: all 0.2s;
+    }
+    .lead-card:hover {
+      border-color: #38bdf8;
+      transform: translateY(-2px);
+    }
+    .lead-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .lead-type {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .lead-type.no-clients {
+      background: #7c3aed20;
+      color: #a78bfa;
+      border: 1px solid #7c3aed40;
+    }
+    .lead-type.looking-work {
+      background: #05966920;
+      color: #34d399;
+      border: 1px solid #05966940;
+    }
+    .lead-type.looking-client {
+      background: #0369a120;
+      color: #38bdf8;
+      border: 1px solid #0369a140;
+    }
+    .platform-badge {
+      font-size: 11px;
+      color: #475569;
+      background: #0f172a;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+    .lead-text {
+      font-size: 14px;
+      line-height: 1.5;
+      color: #cbd5e1;
+      margin-bottom: 16px;
+      font-style: italic;
+    }
+    .lead-text::before { content: '"'; }
+    .lead-text::after { content: '"'; }
+    .lead-meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .meta-tag {
+      font-size: 11px;
+      background: #0f172a;
+      color: #475569;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+    .lead-actions {
+      display: flex;
+      gap: 8px;
+    }
+    .action-btn {
+      flex: 1;
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      text-align: center;
+      text-decoration: none;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .action-btn.primary {
+      background: #38bdf8;
+      color: #0f172a;
+    }
+    .action-btn.primary:hover {
+      background: #7dd3fc;
+    }
+    .action-btn.secondary {
+      background: #334155;
+      color: #e2e8f0;
+    }
+    .action-btn.secondary:hover {
+      background: #475569;
+    }
+    .intent-bar {
+      height: 3px;
+      background: #0f172a;
+      border-radius: 2px;
+      margin-top: 16px;
+      overflow: hidden;
+    }
+    .intent-fill {
+      height: 100%;
+      border-radius: 2px;
+      transition: width 0.3s;
+    }
+    .intent-label {
+      font-size: 10px;
+      color: #475569;
+      margin-top: 4px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .section-title {
+      text-align: center;
+      font-size: 13px;
+      font-weight: 600;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 32px 0 16px;
+    }
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #475569;
+    }
+    .refresh-note {
+      text-align: center;
+      margin-top: 32px;
+      font-size: 12px;
+      color: #334155;
+    }
+    .refresh-note a {
+      color: #38bdf8;
+      text-decoration: none;
+    }
+    @media (max-width: 480px) {
+      .leads-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🎯 Massage Club Lead Scout</h1>
+  <p>Madrid & Spain · Auto-scraped from Facebook Groups, Instagram & TikTok</p>
+</div>
+
+<div class="stats">
+  <div class="stat">
+    <div class="number">8</div>
+    <div class="label">Total Leads</div>
+  </div>
+  <div class="stat">
+    <div class="number">6</div>
+    <div class="label">Sin Clientes</div>
+  </div>
+  <div class="stat">
+    <div class="number">1</div>
+    <div class="label">Busca Trabajo</div>
+  </div>
+  <div class="stat">
+    <div class="number">1</div>
+    <div class="label">Busca Masajista</div>
+  </div>
+</div>
+
+<div class="filter-bar">
+  <button class="filter-btn active" onclick="filter('all')">Todos (8)</button>
+  <button class="filter-btn" onclick="filter('no-clients')">Sin Clientes (6)</button>
+  <button class="filter-btn" onclick="filter('looking-work')">Busca Trabajo (1)</button>
+  <button class="filter-btn" onclick="filter('looking-client')">Busca Masajista (1)</button>
+</div>
+
+<div class="leads-grid" id="leadsGrid"></div>
+
+<div class="section-title">💬 Mensajes de Outreach</div>
+
+<div style="max-width: 700px; margin: 0 auto;">
+
+<div style="background:#1e293b;border:1px solid #334155;border-radius:16px;padding:20px;margin-bottom:16px;">
+  <div style="font-size:13px;font-weight:600;color:#38bdf8;margin-bottom:8px;">Opción 1 — DM a Masajista sin clientes</div>
+  <p style="font-size:14px;color:#94a3b8;line-height:1.6;font-style:italic;">
+    "¡Hola! He visto que buscas más clientes para tu negocio de masajes 🎯 — somos Massage Club, una app que conecta masajistas profesionales con clientes en Madrid. No tiene coste inicial, solo comisión por reserva. ¿Te interesa?"
+  </p>
+</div>
+
+<div style="background:#1e293b;border:1px solid #334155;border-radius:16px;padding:20px;margin-bottom:16px;">
+  <div style="font-size:13px;font-weight:600;color:#a78bfa;margin-bottom:8px;">Opción 2 — DM a quien busca trabajo (alta urgencia)</div>
+  <p style="font-size:14px;color:#94a3b8;line-height:1.6;font-style:italic;">
+    "¡Hola! ¿Sigues buscando trabajo como esteticista/masajista en Madrid? Tenemos studios que buscan profesionales para合作的. ¿Te gustaría aparecer en nuestra plataforma sin coste?"
+  </p>
+</div>
+
+<div style="background:#1e293b;border:1px solid #334155;border-radius:16px;padding:20px;">
+  <div style="font-size:13px;font-weight:600;color:#34d399;margin-bottom:8px;">Opción 3 — DM a quien busca masajista</div>
+  <p style="font-size:14px;color:#94a3b8;line-height:1.6;font-style:italic;">
+    "¡Hola! Somos Massage Club 🎯 — si buscas un masajista profesional en Madrid, podemos ayudarte a encontrar uno disponible ahora mismo. ¿En qué zona estás?"
+  </p>
+</div>
+
+</div>
+
+<div class="refresh-note">
+  Leads actualizados diariamente via cron · Fuente: Facebook Groups, Instagram, TikTok<br>
+  <a href="https://neurodashboards.com/massage-leads.html">neurodashboards.com/massage-leads.html</a>
+</div>
+
+<script>
+const leads = [
+  {
+    id: 1,
+    type: "no-clients",
+    platform: "Facebook Video",
+    location: "Spain",
+    text: "Cuando la masajista tiene zero masajes y no sabe si irse a la compra, a la piscina, al gym o a captar clientes",
+    intent: 95,
+    notes: "Pain exacto — zero flow",
+    url: "#",
+  },
+  {
+    id: 2,
+    type: "no-clients",
+    platform: "Facebook Group",
+    location: "Spain",
+    text: "Cobrar barato no siempre te trae más clientes… muchas veces solo hace que regales tu trabajo",
+    intent: 80,
+    notes: "Precio wrong — готов помочь",
+    url: "#",
+  },
+  {
+    id: 3,
+    type: "no-clients",
+    platform: "Facebook Group",
+    location: "Spain",
+    text: "Quiero un consejo. Apenas voy emprendimiento en el sector...mis clientes son poco",
+    text_eng: "I want advice. I'm barely getting by in this sector... I have very few clients",
+    intent: 90,
+    notes: "Needing guidance, few clients",
+    url: "#",
+  },
+  {
+    id: 4,
+    type: "no-clients",
+    platform: "Instagram Reel",
+    location: "Spain",
+    text: "¿Eres masajista y no tienes clientes? Tienes de 2 a 5 clientes por...",
+    intent: 85,
+    notes: "Marketing account — outreach warm target",
+    url: "#",
+  },
+  {
+    id: 5,
+    type: "no-clients",
+    platform: "Facebook Video",
+    location: "Spain",
+    text: "Porque no llegan clientes a tu spa",
+    intent: 88,
+    text_eng: "Why clients don't come to your spa",
+    notes: "Spa owner — potential partner",
+    url: "#",
+  },
+  {
+    id: 6,
+    type: "looking-client",
+    platform: "Facebook Group",
+    location: "Spain",
+    text: "Busco masaje / Necesito un masajista",
+    intent: 75,
+    notes: "Customer lead — pass to partner network",
+    url: "#",
+  },
+  {
+    id: 7,
+    type: "no-clients",
+    platform: "Facebook Group",
+    location: "Spain",
+    text: "no tengo clientes, en mi ciudad ya hay mucha competencia",
+    text_eng: "I have no clients, there's too much competition in my city",
+    intent: 92,
+    notes: "Competition complaint — direct pain signal",
+    url: "#",
+  },
+  {
+    id: 8,
+    type: "looking-work",
+    platform: "Facebook Group",
+    location: "Madrid",
+    text: "Se busca esteticista con 20+ años experiencia, busco trabajo en Madrid o Madrid Sur",
+    text_eng: "Looking for aesthetician with 20+ years experience, I look for work in Madrid or South Madrid",
+    intent: 98,
+    notes: "HIGH INTENT — 20 yrs exp, explicitly looking for work",
+    url: "#",
+  },
+];
+
+function getTypeLabel(type) {
+  const labels = {
+    "no-clients": "🎱 Sin Clientes",
+    "looking-work": "💼 Busca Trabajo",
+    "looking-client": "🔍 Busca Masajista",
+  };
+  return labels[type] || type;
+}
+
+function getIntentColor(intent) {
+  if (intent >= 90) return "#a78bfa";
+  if (intent >= 75) return "#38bdf8";
+  return "#34d399";
+}
+
+function renderLeads(filterType) {
+  const grid = document.getElementById("leadsGrid");
+  const filtered = filterType === "all" ? leads : leads.filter(l => l.type === filterType);
+
+  if (filtered.length === 0) {
+    grid.innerHTML = '<div class="empty-state">No leads found for this filter</div>';
+    return;
+  }
+
+  grid.innerHTML = filtered.map(lead => `
+    <div class="lead-card" data-type="${lead.type}">
+      <div class="lead-header">
+        <span class="lead-type ${lead.type}">${getTypeLabel(lead.type)}</span>
+        <span class="platform-badge">${lead.platform}</span>
+      </div>
+      <p class="lead-text">${lead.text}</p>
+      <div class="lead-meta">
+        <span class="meta-tag">📍 ${lead.location}</span>
+        <span class="meta-tag">${lead.notes}</span>
+      </div>
+      <div class="lead-actions">
+        <a href="${lead.url}" class="action-btn primary" target="_blank">
+          ✉️ Enviar DM
+        </a>
+        <a href="https://www.facebook.com/search/posts/?q=masajista%20clientes%20madrid" class="action-btn secondary" target="_blank">
+          🔍 Ver grupo
+        </a>
+      </div>
+      <div class="intent-bar">
+        <div class="intent-fill" style="width:${lead.intent}%;background:${getIntentColor(lead.intent)}"></div>
+      </div>
+      <div class="intent-label">
+        <span>Intento de acción</span>
+        <span style="color:${getIntentColor(lead.intent)}">${lead.intent}%</span>
+      </div>
+    </div>
+  `).join("");
+}
+
+function filter(type) {
+  document.querySelectorAll(".filter-btn").forEach(btn => btn.classList.remove("active"));
+  event.target.classList.add("active");
+  renderLeads(type);
+}
+
+renderLeads("all");
+</script>
+
+</body>
+</html>

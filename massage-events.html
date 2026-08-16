@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Massage Club — Event Outreach | Madrid</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      min-height: 100vh;
+      padding: 24px;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .header h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: #f8fafc;
+      margin-bottom: 4px;
+    }
+    .header p {
+      font-size: 14px;
+      color: #64748b;
+    }
+    .stats {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+    .stat {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 16px 24px;
+      text-align: center;
+    }
+    .stat .number {
+      font-size: 28px;
+      font-weight: 700;
+      color: #38bdf8;
+    }
+    .stat .label {
+      font-size: 12px;
+      color: #64748b;
+      margin-top: 2px;
+    }
+    .contacts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 16px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .contact-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 20px;
+      transition: all 0.2s;
+    }
+    .contact-card:hover {
+      border-color: #38bdf8;
+      transform: translateY(-2px);
+    }
+    .contact-card.hot {
+      border-color: #f97316;
+      box-shadow: 0 0 20px #f9731630;
+    }
+    .card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .badge.hot {
+      background: #f9731620;
+      color: #fb923c;
+      border: 1px solid #f9731640;
+    }
+    .badge.warm {
+      background: #38bdf820;
+      color: #38bdf8;
+      border: 1px solid #38bdf840;
+    }
+    .contact-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: #f8fafc;
+      margin-bottom: 4px;
+    }
+    .contact-org {
+      font-size: 13px;
+      color: #64748b;
+      margin-bottom: 16px;
+    }
+    .contact-email {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin-bottom: 12px;
+      font-size: 14px;
+      color: #38bdf8;
+      font-family: monospace;
+    }
+    .contact-email a {
+      color: inherit;
+      text-decoration: none;
+    }
+    .copy-btn {
+      margin-left: auto;
+      background: #334155;
+      border: none;
+      color: #94a3b8;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .copy-btn:hover {
+      background: #475569;
+      color: #e2e8f0;
+    }
+    .contact-meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .meta-tag {
+      font-size: 11px;
+      background: #0f172a;
+      color: #475569;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+    .contact-notes {
+      font-size: 13px;
+      color: #94a3b8;
+      line-height: 1.5;
+      margin-bottom: 16px;
+      font-style: italic;
+    }
+    .contact-actions {
+      display: flex;
+      gap: 8px;
+    }
+    .action-btn {
+      flex: 1;
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      text-align: center;
+      text-decoration: none;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .action-btn.primary {
+      background: #38bdf8;
+      color: #0f172a;
+    }
+    .action-btn.primary:hover {
+      background: #7dd3fc;
+    }
+    .action-btn.secondary {
+      background: #334155;
+      color: #e2e8f0;
+    }
+    .action-btn.secondary:hover {
+      background: #475569;
+    }
+    .email-template {
+      max-width: 700px;
+      margin: 40px auto 0;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 24px;
+    }
+    .email-template h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #38bdf8;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .email-template textarea {
+      width: 100%;
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 14px;
+      color: #94a3b8;
+      font-size: 13px;
+      line-height: 1.6;
+      resize: vertical;
+      min-height: 160px;
+      font-family: monospace;
+    }
+    .pitch-section {
+      margin-top: 32px;
+      text-align: center;
+    }
+    .pitch-section p {
+      font-size: 13px;
+      color: #475569;
+      margin-bottom: 16px;
+    }
+    .section-title {
+      text-align: center;
+      font-size: 13px;
+      font-weight: 600;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 40px 0 20px;
+    }
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #10b981;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; }
+    @media (max-width: 480px) {
+      .contacts-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📅 Massage Club — Event Outreach</h1>
+  <p>Madrid & Spain · Wellness/Spa/Massage events with public contact emails</p>
+</div>
+
+<div class="stats">
+  <div class="stat">
+    <div class="number">5</div>
+    <div class="label">Event Contacts</div>
+  </div>
+  <div class="stat">
+    <div class="number">2</div>
+    <div class="label">🔥 Hot Priority</div>
+  </div>
+  <div class="stat">
+    <div class="number">3</div>
+    <div class="label">Warm</div>
+  </div>
+</div>
+
+<div class="contacts-grid" id="contactsGrid"></div>
+
+<div class="section-title">📧 Email Template</div>
+
+<div class="email-template">
+  <h3>Tu mensaje — personalizado para cada uno</h3>
+  <textarea id="emailBody">Asunto: Oportunidad para tu evento — Niah AI Networking
+
+Hola [Nombre],
+
+Te escribo porque estoy construyendo algo que creo que encaja perfectamente con [EVENTO].
+
+Somos Niah — inteligencia artificial que hace networking en eventos B2B. Nuestra tecnología permite a los asistentes encontrar exactamente a quién necesitan conocer *antes* de que el evento empiece. Esto significa:
+
+  • Mayor satisfacción de asistentes (los datos lo demuestran)
+  • Más conversaciones de negocio reales durante el evento
+  • Datos valiosos para ustedes como organizadores
+
+Estamos haciendo una piloto gratuito para 2-3 eventos seleccionados en Madrid/Europa este trimestre. ¿Te gustaría que te cuente más?
+
+¿Podemos hablar esta semana? 15 minutos.
+
+Saludos,
+Jordan</textarea>
+  <div style="display:flex;gap:8px;margin-top:12px;">
+    <button class="action-btn primary" onclick="copyEmail()" style="flex:1">📋 Copiar email</button>
+    <button class="action-btn secondary" onclick="customizeEmail()">✏️ Personalizar</button>
+  </div>
+</div>
+
+<div class="toast" id="toast">¡Copiado!</div>
+
+<script>
+const contacts = [
+  {
+    id: 1,
+    name: "Campeonato España de Masaje",
+    org: "A Well Spa Massage",
+    email: "cem@awellspamassage.com",
+    priority: "hot",
+    relevance: "Massage competition in Spain — direct target audience",
+    notes: "I Campeonato de España de Masaje, Oct 17-19 IFEMA Madrid — perfect alignment with Massage Club partners",
+    url: "https://www.awellspamassage.com",
+  },
+  {
+    id: 2,
+    name: "Equipo y Talento",
+    org: "Equipos y Talento",
+    email: "comunicacion@equiposytalento.com",
+    priority: "hot",
+    relevance: "Events + HR + wellbeing industry — decision makers for corporate wellness",
+    notes: "Organizan jornadas de bienestar corporativo. Alto valor para Niah B2B networking.",
+    url: "https://www.equiposytalento.com",
+  },
+  {
+    id: 3,
+    name: "Intrama",
+    org: "Intrama",
+    email: "info@intrama.es",
+    priority: "warm",
+    relevance: "Event organizer — wellness/spa sector Spain",
+    notes: "Contacto para eventos de bienestar en España. Posible partner para pilotos.",
+    url: "https://www.intrama.es",
+  },
+  {
+    id: 4,
+    name: "We Work Well — W3Spa",
+    org: "We Work Well Inc.",
+    email: "info@weworkwellevents.com",
+    priority: "warm",
+    relevance: "International hosted buyer events for spa/wellness industry",
+    notes: "Eventos globales de spa y bienestar. Buyer meetings model — Niah could demo here.",
+    url: "https://weworkwellevents.com/w3-spa/",
+  },
+  {
+    id: 5,
+    name: "Weekend Wellness",
+    org: "World Wellness Weekend",
+    email: "info@weekend-wellness.com",
+    priority: "warm",
+    relevance: "Global wellness events network — international reach",
+    notes: "Red global de eventos de bienestar. Oportunidad para exponer Niah internacionalmente.",
+    url: "https://www.world-wellness-weekend.org",
+  },
+];
+
+function getPriorityClass(p) {
+  return p === 'hot' ? 'hot' : 'warm';
+}
+
+function getPriorityLabel(p) {
+  return p === 'hot' ? '🔥 Hot' : '💬 Warm';
+}
+
+function renderContacts() {
+  const grid = document.getElementById('contactsGrid');
+  grid.innerHTML = contacts.map(c => `
+    <div class="contact-card ${c.priority === 'hot' ? 'hot' : ''}">
+      <div class="card-header">
+        <span class="badge ${getPriorityClass(c.priority)}">${getPriorityLabel(c.priority)}</span>
+        <span style="font-size:11px;color:#475569;">#${c.id}</span>
+      </div>
+      <div class="contact-name">${c.name}</div>
+      <div class="contact-org">${c.org}</div>
+      <div class="contact-email">
+        <a href="mailto:${c.email}">${c.email}</a>
+        <button class="copy-btn" onclick="copyEmail('${c.email}')">Copy</button>
+      </div>
+      <div class="contact-meta">
+        <span class="meta-tag">📍 Spain/Intl</span>
+        <span class="meta-tag">🎯 ${c.relevance.split(' — ')[0]}</span>
+      </div>
+      <div class="contact-notes">"${c.notes}"</div>
+      <div class="contact-actions">
+        <a href="mailto:${c.email}?subject=Oportunidad%20Niah%20-%20Networking%20AI&body=${encodeURIComponent(document.getElementById('emailBody').value)}" class="action-btn primary">
+          ✉️ Enviar email
+        </a>
+        <a href="${c.url}" target="_blank" class="action-btn secondary">
+          🌐 Web
+        </a>
+      </div>
+    </div>
+  `).join('');
+}
+
+function copyEmail(text) {
+  if (!text) text = document.getElementById('emailBody').value;
+  navigator.clipboard.writeText(text).then(() => {
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2000);
+  });
+}
+
+function customizeEmail() {
+  const name = prompt('Nombre del contacto:');
+  const event = prompt('Nombre del evento:');
+  if (!name || !event) return;
+  const template = document.getElementById('emailBody').value;
+  const personalized = template
+    .replace(/\[Nombre\]/g, name)
+    .replace(/\[EVENTO\]/g, event);
+  document.getElementById('emailBody').value = personalized;
+  copyEmail(personalized);
+}
+
+renderContacts();
+</script>
+
+</body>
+</html>

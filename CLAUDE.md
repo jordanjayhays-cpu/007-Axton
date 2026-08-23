@@ -2,15 +2,19 @@
 
 Read this first; it saves every session from rediscovering the setup.
 
-## This lane
-- This repo backs **Hermes Agent** on Railway project "Hermes 007" — the live OpenClaw gateway
-  (~5 GB RAM, persistent volume at /data). **Never delete or restart it casually.** Its crons live
-  on the box, not in this repo.
-- The other services that shared its Railway project (Postgres, Redis, Worker, Primary) are a dead
-  n8n stack — staged for deletion; the real n8n is n8n Cloud.
-- Agent coordination happens on Supabase `neurodashboards` (`dprdnrgjkzgfgtcsguuq`):
-  `agent_tasks` (board), `agent_prompts` (bus), `hermes_entries` (feed). The `hermes-responder`
-  edge function polls the bus — gate-before-the-model is the required pattern for any new cron.
+## This lane — DECOMMISSIONED 2026-08-22
+- **Hermes is being retired.** Jordan's call, verbatim intent: it was draining money and he now
+  runs everything through Claude. Status:
+  - `hermes-responder-5min` pg_cron: **unscheduled** (function still deployed if ever needed).
+  - Railway "Hermes 007" → Hermes Agent: **scale-to-0 staged**, awaiting Jordan's 2FA Apply in the
+    Railway dashboard (same batch as the 4 dead n8n service deletions). Until he clicks Apply it is
+    STILL RUNNING AND BILLING — never report it stopped without a metrics read-back.
+  - The `/data` volume (75cbabea) and service config are preserved for a possible future revival.
+  - Revival = Apply replicas back to 1 + re-schedule the pg_cron.
+- Do not create new Hermes tasks, prompts, or crons. The `agent_prompts` bus rows for hermes will
+  sit unclaimed — that is expected now.
+- Agent coordination continues on Supabase `neurodashboards` (`dprdnrgjkzgfgtcsguuq`) with Claude
+  as the single orchestrator.
 
 ## Operator rules (binding)
 - Ambiguous ask → ask up to 5 short questions before building. Never guess constraints.
@@ -22,7 +26,7 @@ Read this first; it saves every session from rediscovering the setup.
 - Anything only Jordan can do → task on `agent_tasks` assigned `jordan` — his 09:00 brief reads it.
 
 ## Token discipline
-One lane per session. Name columns + LIMIT in SQL. Iterate functions locally, deploy once.
-Bulk row analysis (>~20 rows) → the `agent-worker` edge function, not SELECTs into context.
+One lane per session. Name columns + LIMIT in SQL. Bulk row analysis (>~20 rows) → the
+`agent-worker` edge function, not SELECTs into context.
 
 **The master map lives in `mission-control/CLAUDE.md`.**
